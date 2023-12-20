@@ -1,0 +1,25 @@
+image: "node:lts-alpine"
+
+stages:
+  - build
+  - test
+#  - deploy
+
+include:
+- template: Security/SAST.gitlab-ci.yml
+
+sast:
+  stage: test
+
+gatsby-starter-tractstack-builder:
+  variables:
+    SECURE_FILES_DOWNLOAD_PATH: './'
+  stage: build
+  before_script:
+    - apk --no-cache add curl bash tar
+  script:
+    - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
+    - tar -xvf ./gatsby-starter-tractstack-builder-private.tgz
+    - yarn install --non-interactive
+    - yarn run type-check
+    - yarn run build
