@@ -13,17 +13,17 @@ const Account = () => {
       <ul>
         <li>SITE_URL</li>
         <li>gatsby-starter-tractstack location</li>
-        <li>gatsby-starter-tractstack-builder location</li>
-        <li>builder URL</li>
+        <li>gatsby-starter-storykeep location</li>
+        <li>storykeep URL</li>
         <li>tractstack-concierge location</li>
         <li>CONCIERGE_BASE_URL, CONCIERGE_REFERSH_TOKEN_URL</li>
         <li>
-          builder: CONCIERGE_SECRET, CONCIERGE_BASE_URL,
+          storykeep: CONCIERGE_SECRET, CONCIERGE_BASE_URL,
           CONCIERGE_REFERSH_TOKEN_URL
         </li>
         <li>
           DB_HOST, DB_NAME, DB_USER, DB_PASSWORD, SECRET_KEY,
-          BUILDER_SECRET_KEY, NEO4J_URI, NEO4J_USER, NEO4J_SECRET, MODE
+          STORYKEEP_SECRET_KEY, NEO4J_URI, NEO4J_USER, NEO4J_SECRET, MODE
         </li>
         <li>tractstack drupal instance root</li>
         <li>DRUPAL_URL</li>

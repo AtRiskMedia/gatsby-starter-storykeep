@@ -1,18 +1,19 @@
 {
-  "name": "gatsby-starter-tractstack-builder",
-  "description": "Tract Stack Story Keep (Builder) by At Risk Media gatsby starter",
+  "name": "gatsby-starter-storykeep",
+  "description": "Tract Stack Story Keep by At Risk Media gatsby starter",
   "version": "0.1.0",
   "author": "Adon Irani <a@atriskmedia.com>",
   "license": "FSL-1.0-MIT",
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/at-risk-media/gatsby-starter-tractstack-builder"
+    "url": "https://gitlab.com/at-risk-media/gatsby-starter-storykeep"
   },
   "bugs": {
-    "url": "https://gitlab.com/at-risk-media/gatsby-starter-tractstack-builder/issues"
+    "url": "https://gitlab.com/at-risk-media/gatsby-starter-storykeep/issues"
   },
   "keywords": [
     "tractstack",
+    "storykeep",
     "gatsby",
     "starter",
     "typescript",

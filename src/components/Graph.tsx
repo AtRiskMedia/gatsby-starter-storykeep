@@ -5,6 +5,25 @@ import { getGraph } from '../api/services'
 import VisNetwork from './VisNetwork'
 import { useAuthStore } from '../stores/authStore'
 
+const processGraphPayload = (nodes: any, edges: any) => {
+  const graphNodes = nodes.map((e: any) => {
+    return {
+      id: e.id,
+      label: e.properties.object_name,
+      value: 1,
+    }
+  })
+  const graphEdges = edges.map((e: any) => {
+    return {
+      id: e.id,
+      from: e.startNodeId,
+      to: e.endNodeId,
+      value: 1,
+    }
+  })
+  return { nodes: graphNodes, edges: graphEdges }
+}
+
 const goGetGraph = async () => {
   try {
     const response = await getGraph()
@@ -43,28 +62,29 @@ const goGetGraph = async () => {
           graphRelationships.push(row.r)
           graphRelationshipIds.push(row.r.id)
         }
+        if (row?.rsf?.id && !graphRelationshipIds.includes(row.rsf.id)) {
+          graphRelationships.push(row.rsf)
+          graphRelationshipIds.push(row.rsf.id)
+        }
+        if (row?.ts1?.id && !graphRelationshipIds.includes(row.ts1.id)) {
+          graphRelationships.push(row.ts1)
+          graphRelationshipIds.push(row.ts1.id)
+        }
+        if (row?.ts2?.id && !graphRelationshipIds.includes(row.ts2.id)) {
+          graphRelationships.push(row.ts2)
+          graphRelationshipIds.push(row.ts2.id)
+        }
+        if (row?.rc?.id && !graphRelationshipIds.includes(row.rc.id)) {
+          graphRelationships.push(row.rc)
+          graphRelationshipIds.push(row.rc.id)
+        }
       })
       const graph =
         Object.keys(graphNodes).length +
           Object.keys(graphRelationships).length ===
-        0
+          0
           ? null
-          : {
-              results: [
-                {
-                  columns: [`user`, `entity`],
-                  data: [
-                    {
-                      graph: {
-                        nodes: graphNodes,
-                        relationships: graphRelationships,
-                      },
-                    },
-                  ],
-                },
-              ],
-              errors: [],
-            }
+          : processGraphPayload(graphNodes, graphRelationships)
       return { graph, error: null }
     }
     return { graph: null, error: null }
