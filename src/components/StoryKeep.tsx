@@ -227,7 +227,6 @@ const StoryKeep = () => {
     // console.log(payload[e])
     return e
   })
-  // console.log(filterKeys)
 
   const handleClick = (e: any) => {
     console.log(e)

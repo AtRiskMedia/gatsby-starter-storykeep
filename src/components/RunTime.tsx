@@ -6,7 +6,9 @@ import { getTokens } from '../api/axiosClient'
 import { IReactChild } from 'src/types'
 
 const RunTime = ({ children }: IReactChild) => {
-  const [init, setInit] = useState(false)
+  const [init, setInit] = useState(
+    !!(typeof window !== `undefined` && process.env.NODE_ENV === `development`),
+  )
   const [loggingIn, setLoggingIn] = useState(false)
   const login = useAuthStore((state) => state.login)
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn())
@@ -14,7 +16,11 @@ const RunTime = ({ children }: IReactChild) => {
   const setFingerprint = useAuthStore((state) => state.setFingerprint)
 
   useEffect(() => {
-    if (!init && typeof window !== `undefined`) {
+    if (
+      !init &&
+      typeof window !== `undefined` &&
+      process.env.NODE_ENV !== `development`
+    ) {
       setInit(true)
       const fpPromise = FingerprintJS.load()
       ;(async () => {
@@ -23,7 +29,12 @@ const RunTime = ({ children }: IReactChild) => {
         setFingerprint(result.visitorId)
       })()
     }
-    if (fingerprint && !loggingIn && !isLoggedIn) {
+    if (
+      fingerprint &&
+      !loggingIn &&
+      !isLoggedIn &&
+      process.env.NODE_ENV !== `development`
+    ) {
       setLoggingIn(true)
       getTokens(fingerprint).then((res) => login(res))
     }

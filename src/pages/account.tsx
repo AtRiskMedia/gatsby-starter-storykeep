@@ -9,6 +9,7 @@ import DrupalAuth from '../components/DrupalAuth'
 import DrupalUuid from '../components/DrupalUuid'
 import StoryKeepPayload from '../components/StoryKeepPayload'
 import StoryKeepWrapper from '../components/StoryKeepWrapper'
+import { PassThrough } from '../helpers/passthrough'
 import '../styles/default.css'
 
 // import Seo from '../components/Seo'
@@ -17,9 +18,11 @@ const AccountPage = () => {
   const config = {
     url: process.env.DRUPAL_URL || ``,
   }
+  const Provider =
+    process.env.NODE_ENV === `development` ? PassThrough : DrupalProvider
   return (
     <RunTime>
-      <DrupalProvider config={config}>
+      <Provider config={config}>
         <DrupalAuth>
           <DrupalUuid>
             <StoryKeepWrapper>
@@ -31,7 +34,7 @@ const AccountPage = () => {
             </StoryKeepWrapper>
           </DrupalUuid>
         </DrupalAuth>
-      </DrupalProvider>
+      </Provider>
     </RunTime>
   )
 }

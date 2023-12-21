@@ -10,6 +10,7 @@ import DrupalUuid from '../components/DrupalUuid'
 import Dashboard from '../components/Dashboard'
 import StoryKeepPayload from '../components/StoryKeepPayload'
 import StoryKeepWrapper from '../components/StoryKeepWrapper'
+import { PassThrough } from '../helpers/passthrough'
 import '../styles/default.css'
 
 // import Seo from '../components/Seo'
@@ -19,9 +20,11 @@ const DashboardPage = () => {
   const config = {
     url: process.env.DRUPAL_URL || ``,
   }
+  const Provider =
+    process.env.NODE_ENV === `development` ? PassThrough : DrupalProvider
   return (
     <RunTime>
-      <DrupalProvider config={config}>
+      <Provider config={config}>
         <DrupalAuth>
           <DrupalUuid>
             <StoryKeepWrapper>
@@ -33,7 +36,7 @@ const DashboardPage = () => {
             </StoryKeepWrapper>
           </DrupalUuid>
         </DrupalAuth>
-      </DrupalProvider>
+      </Provider>
     </RunTime>
   )
 }

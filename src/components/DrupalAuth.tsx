@@ -62,7 +62,13 @@ const DrupalAuth = ({ children }: IReactChild) => {
       setOauthAuthenticate(false)
       setOpenDemoEnabled(true)
     } else {
-      if (!failed && !loading && !locked && oauthAuthenticate) {
+      if (
+        !failed &&
+        !loading &&
+        !locked &&
+        oauthAuthenticate &&
+        process.env.NODE_ENV !== `development`
+      ) {
         const settings = {
           username: oauthUsername,
           password: oauthPassword,
