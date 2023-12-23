@@ -305,7 +305,7 @@ const EditFormStoryFragment = ({
   return (
     <>
       <section className="relative">
-        <div className="text-xl font-action mb-12 w-full xl:max-w-5xl">
+        <div className="text-xl font-action mb-12 w-full xl:max-w-screen-2xl">
           <div className="font-bold">
             {state.title}
             {isAuthor ? (
@@ -375,7 +375,7 @@ const EditFormStoryFragment = ({
                 </Message>
               ) : null}
             </div>
-            <div className="relative max-w-5xl">
+            <div className="relative max-w-screen-2xl">
               <div
                 className="absolute inset-0 flex items-center"
                 aria-hidden="true"
@@ -384,7 +384,7 @@ const EditFormStoryFragment = ({
               </div>
             </div>
 
-            <div className="relative flex items-center justify-between mt-2 py-2 max-w-5xl">
+            <div className="relative flex items-center justify-between mt-2 py-2 max-w-screen-2xl">
               <span className="font-action pr-3 text-base font-bold leading-6 text-black">
                 toggle advanced settings
               </span>
@@ -409,7 +409,7 @@ const EditFormStoryFragment = ({
             <div
               className={classNames(
                 editEnabled ? `` : `hidden`,
-                `bg-slate-50 w-full px-6 pt-2 max-w-5xl mt-2 ml-2`,
+                `bg-slate-50 w-full px-6 pt-2 max-w-screen-2xl mt-2 ml-2`,
               )}
             >
               <form

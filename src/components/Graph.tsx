@@ -58,7 +58,7 @@ const Graph = () => {
   ])
 
   return (
-    <section className="xl:max-w-5xl">
+    <section className="xl:max-w-screen-2xl">
       <div className="h-screen shadow-sm bg-white">
         {!loaded ? (
           <div className="flex items-center justify-center h-full">

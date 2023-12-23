@@ -349,13 +349,13 @@ const StoryKeep = () => {
   ])
 
   return (
-    <section className="w-full xl:max-w-5xl">
+    <section className="w-full xl:max-w-screen-2xl">
       {childrenTitle ? (
         <EditSlideOver setSelected={setSelected} title={childrenTitle}>
           {children}
         </EditSlideOver>
       ) : null}
-      <div className="w-full xl:max-w-5xl">
+      <div className="w-full xl:max-w-screen-2xl">
         <div className="bg-white px-4 py-4 shadow sm:rounded-md sm:px-6">
           <div className="border-b border-gray-200 pb-1.5 flex items-center justify-between">
             <h3 className="text-base font-action leading-6 text-black">
@@ -479,7 +479,7 @@ const StoryKeep = () => {
       </div>
 
       {displayMode && current === `tractstack` ? (
-        <div className="text-xl font-action mb-12 xl:max-w-5xl mt-16 px-4 xl:px-8">
+        <div className="text-xl font-action mb-12 xl:max-w-screen-2xl mt-16 px-4 xl:px-8">
           <div className="-mx-4">
             <ul
               role="list"
@@ -512,7 +512,7 @@ const StoryKeep = () => {
           </div>
         </div>
       ) : (
-        <div className="text-xl font-action mb-12 xl:max-w-5xl mt-4 px-4 xl:px-8">
+        <div className="text-xl font-action mb-12 xl:max-w-screen-2xl mt-4 px-4 xl:px-8">
           <div className="-mx-4">
             <table className="w-full divide-y divide-slate-200">
               <thead>

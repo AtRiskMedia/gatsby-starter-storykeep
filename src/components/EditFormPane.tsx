@@ -3064,7 +3064,7 @@ const EditFormPane = ({
   return (
     <>
       <section className="relative bg-slate-50">
-        <div className="w-full xl:max-w-5xl flex justify-between">
+        <div className="w-full xl:max-w-screen-2xl flex justify-between">
           <div className="font-bold text-xl font-action">
             {state.title}
             {isAuthor ? (
@@ -3088,7 +3088,7 @@ const EditFormPane = ({
       </section>
       {toggleAdvOpt ? (
         <section className="relative bg-slate-50">
-          <div className="w-full px-6 pt-2 max-w-5xl mt-2 ml-2">
+          <div className="w-full px-6 pt-2 max-w-screen-2xl mt-2 ml-2">
             <form className="max-w-3xl" id="editPane">
               <div className="space-y-12">
                 <div className="border-b border-black/10 pb-12">

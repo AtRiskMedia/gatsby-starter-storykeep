@@ -296,7 +296,7 @@ const RenderStoryFragment = ({
             <div className="fixed inset-0 bg-mydarkgrey/80 transition-opacity" />
           </Transition.Child>
 
-          <div className="fixed inset-0 w-screen overflow-y-auto">
+          <div className="fixed inset-0 max-w-screen overflow-y-auto">
             <div className="flex h-full justify-center items-center">
               <div className="flex bg-mylightgrey h-96 w-full items-end justify-start p-4 text-center sm:items-center sm:p-0">
                 <Transition.Child
@@ -467,7 +467,7 @@ const RenderStoryFragment = ({
     <>
       <section className="my-4">
         <div>
-          <div className="relative max-w-5xl">
+          <div className="relative max-w-screen-2xl">
             <div
               className="absolute inset-0 flex items-center"
               aria-hidden="true"
@@ -475,7 +475,7 @@ const RenderStoryFragment = ({
               <div className="w-full border-t border-slate-200" />
             </div>
           </div>
-          <div className="relative flex items-center justify-between mt-6 py-2 max-w-5xl">
+          <div className="relative flex items-center justify-between mt-6 py-2 max-w-screen-2xl">
             <span className="font-action pr-3 text-base font-bold leading-6 text-black">
               preview/edit this story fragment
             </span>

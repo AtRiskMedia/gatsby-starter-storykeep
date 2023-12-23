@@ -262,7 +262,7 @@ const Dashboard = () => {
   ])
 
   return (
-    <section className="xl:max-w-5xl">
+    <section className="xl:max-w-screen-2xl">
       <ul role="list" className="space-y-5">
         <li className="bg-slate-100 px-4 py-4 shadow sm:rounded-md sm:px-6">
           <div className="border-b border-myblue/10 pb-2 mx-8">

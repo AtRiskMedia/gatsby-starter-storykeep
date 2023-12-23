@@ -211,7 +211,7 @@ const EditMarkdown = ({ uuid }: IEdit) => {
           </span>
         ) : null}
       </div>
-      <div className="bg-slate-50 w-full p-6 max-w-5xl mt-2 ml-2">
+      <div className="bg-slate-50 w-full p-6 max-w-screen-2xl mt-2 ml-2">
         <form className="max-w-3xl" id="editMarkdown" onSubmit={handleSubmit}>
           <div className="space-y-12">
             <div className="border-b border-black/10 pb-12">

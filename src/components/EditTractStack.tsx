@@ -203,7 +203,7 @@ const EditTractStack = ({ uuid }: IEdit) => {
 
   return (
     <section className="relative">
-      <div className="text-xl font-action mb-12 w-full xl:max-w-5xl">
+      <div className="text-xl font-action mb-12 w-full xl:max-w-screen-2xl">
         <span className="font-bold">{state.title}</span>
         {isAuthor ? (
           <span title="You have edit privileges" className="ml-3">
@@ -216,7 +216,7 @@ const EditTractStack = ({ uuid }: IEdit) => {
           </span>
         ) : null}
       </div>
-      <div className="bg-slate-50 w-full p-6 max-w-5xl mt-2 ml-2">
+      <div className="bg-slate-50 w-full p-6 max-w-screen-2xl mt-2 ml-2">
         <form className="max-w-3xl" id="editTractStack" onSubmit={handleSubmit}>
           <div className="space-y-12">
             <div className="border-b border-black/10 pb-12">

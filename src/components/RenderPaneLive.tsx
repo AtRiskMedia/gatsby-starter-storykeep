@@ -670,7 +670,7 @@ const RenderPaneLive = ({
 
   if (emptyPane)
     return (
-      <section className="my-4 max-w-screen-lg">
+      <section className="my-4 max-max-w-screen-lg">
         <div className="mb-4">
           <span className="font-action pr-3 text-base font-bold text-black">
             Pane Details
@@ -923,7 +923,7 @@ const RenderPaneLive = ({
     <>
       <section className="my-4">
         <div>
-          <div className="relative flex items-center justify-between mt-6 py-2 max-w-5xl">
+          <div className="relative flex items-center justify-between mt-6 py-2 max-w-screen-2xl">
             <span className="font-action pr-3 text-base font-bold leading-6 text-black">
               Live Preview
             </span>
@@ -1057,7 +1057,7 @@ const RenderPaneLive = ({
             </span>
           </div>
         </div>
-        <div className="relative max-w-5xl">
+        <div className="relative max-w-screen-2xl">
           <div
             className="absolute inset-0 flex items-center"
             aria-hidden="true"
