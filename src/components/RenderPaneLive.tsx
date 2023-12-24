@@ -217,6 +217,32 @@ const RenderPaneLive = ({
         else setChildGlobalNth(-1)
       }, [])
 
+      const pasteAtCaret = (text:string) => {
+        let range
+        const parser = new DOMParser()
+        const el = parser.parseFromString(text, `text/html`).body
+        if (window?.getSelection) {
+          const sel = window.getSelection()
+          if (sel?.getRangeAt && sel?.rangeCount) {
+            range = sel.getRangeAt(0)
+            range.deleteContents()
+            const frag = document.createDocumentFragment()
+            let node, lastNode
+            while ((node = el.firstChild)) {
+              lastNode = frag.appendChild(node)
+            }
+            range.insertNode(frag)
+            if (lastNode) {
+              range = range.cloneRange()
+              range.setStartAfter(lastNode)
+              range.collapse(true)
+              sel.removeAllRanges()
+              sel.addRange(range)
+            }
+          }
+        }
+      }
+
       return (
         <ContentEditable
           html={text}
@@ -229,6 +255,11 @@ const RenderPaneLive = ({
               const element = e.target as HTMLInputElement
               element.blur()
             }
+          }}
+          onPaste={(e) => {
+            e.preventDefault()
+            const text = e.clipboardData.getData(`text/plain`)
+            pasteAtCaret(text)
           }}
           onChange={handleChange}
           onFocus={handleFocus}
