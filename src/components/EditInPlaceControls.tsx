@@ -401,10 +401,13 @@ const InputTailwindClass = ({
               </label>
               <select
                 name={`${thisId}-mobile`}
+                title="Editing {selector} value on small screens"
                 id={`${thisId}-mobile`}
                 onChange={(e) => handleChangeEditInPlace(e)}
                 className={classNames(
-                  viewportKey === `mobile` ? `bg-myorange/5` : `bg-transparent`,
+                  viewportKey === `mobile`
+                    ? `bg-myorange/5`
+                    : `bg-mylightgrey/50`,
                   `font-action relative block w-full rounded-none rounded-bl-md border-0 py-1.5 text-black ring-1 ring-inset ring-slate-200 placeholder:text-mydarkgrey focus:z-10 focus:ring-2 focus:ring-inset focus:ring-myorange text-xs leading-6`,
                 )}
                 value={
@@ -425,10 +428,13 @@ const InputTailwindClass = ({
               </label>
               <select
                 name={`${thisId}-tablet`}
+                title="Editing {selector} value on medium screens"
                 id={`${thisId}-tablet`}
                 onChange={(e) => handleChangeEditInPlace(e)}
                 className={classNames(
-                  viewportKey === `tablet` ? `bg-myorange/5` : `bg-transparent`,
+                  viewportKey === `tablet`
+                    ? `bg-myorange/5`
+                    : `bg-mylightgrey/50`,
                   `font-action relative block w-full rounded-none rounded-bl-md border-0 py-1.5 text-black ring-1 ring-inset ring-slate-200 placeholder:text-mydarkgrey focus:z-10 focus:ring-2 focus:ring-inset focus:ring-myorange text-xs leading-6`,
                 )}
                 value={
@@ -449,12 +455,13 @@ const InputTailwindClass = ({
               </label>
               <select
                 name={`${thisId}-desktop`}
+                title="Editing {selector} value on large screens"
                 id={`${thisId}-desktop`}
                 onChange={(e) => handleChangeEditInPlace(e)}
                 className={classNames(
                   viewportKey === `desktop`
                     ? `bg-myorange/5`
-                    : `bg-transparent`,
+                    : `bg-mylightgrey/50`,
                   `font-action relative block w-full rounded-none rounded-bl-md border-0 py-1.5 text-black ring-1 ring-inset ring-slate-200 placeholder:text-mydarkgrey focus:z-10 focus:ring-2 focus:ring-inset focus:ring-myorange text-xs leading-6`,
                 )}
                 value={
