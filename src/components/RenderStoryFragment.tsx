@@ -239,23 +239,19 @@ const RenderStoryFragment = ({
   useEffect(() => {
     if (data && Object.keys(data).length === 0 && !loading && !loaded) {
       setLoading(true)
-      setTimeout(
-        () =>
-          goGetPaneDetailsPie(uuid)
-            .then((res: any) => {
-              if (res?.data && res.data?.data) {
-                setData(JSON.parse(res.data.data))
-              }
-            })
-            .catch((e) => {
-              console.log(`An error occurred.`, e)
-            })
-            .finally(() => {
-              setLoaded(true)
-              setLoading(false)
-            }),
-        0,
-      )
+      goGetPaneDetailsPie(uuid)
+        .then((res: any) => {
+          if (res?.data && res.data?.data) {
+            setData(JSON.parse(res.data.data))
+          }
+        })
+        .catch((e) => {
+          console.log(`An error occurred.`, e)
+        })
+        .finally(() => {
+          setLoaded(true)
+          setLoading(false)
+        })
     }
   }, [uuid, data, setData, loaded, loading, setLoaded, setLoading])
 

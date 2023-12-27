@@ -85,6 +85,7 @@ const LoginPage = () => {
     if (e && stage === Stages.CollectionsLoad)
       setStage(Stages.CollectionsLoaded)
   })
+
   // load source
   useDrupalSource().then((e) => {
     if (e && stage === Stages.SourceLoad) setStage(Stages.SourceLoaded)
@@ -98,7 +99,6 @@ const LoginPage = () => {
 
   // handle stages
   useEffect(() => {
-    console.log(`stage: ${Stages[stage]}`)
     switch (stage) {
       case Stages.Authenticated:
         if (process.env.NODE_ENV === `development` || openDemoEnabled)
