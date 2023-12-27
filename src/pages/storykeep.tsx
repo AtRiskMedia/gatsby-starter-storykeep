@@ -6,6 +6,7 @@ import { useDrupalStore } from '../stores/drupal'
 import { navigate } from 'gatsby'
 import Layout from '../components/Layout'
 import StoryKeep from '../components/StoryKeep'
+import DrupalApi from '../components/DrupalApi'
 import { Stages } from '../types'
 import '../styles/default.css'
 
@@ -25,9 +26,11 @@ const StoryKeepPage = () => {
 
   return (
     <DrupalProvider config={drupalConfig}>
-      <Layout current="storykeep">
-        <StoryKeep />
-      </Layout>
+      <DrupalApi>
+        <Layout current="storykeep">
+          <StoryKeep />
+        </Layout>
+      </DrupalApi>
     </DrupalProvider>
   )
 }
