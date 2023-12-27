@@ -140,8 +140,8 @@ const EditTractStack = ({ uuid }: IEdit) => {
         endpoint: `uuid-by-node/${thisTractStack.drupalNid}`,
         method: `GET`,
       }
-      isAuthenticated && setDrupalQueue(thisTractStack.drupalNid, payload)
-      setTimeout(() => setIsAuthorSoftLock(true), 0)
+      if (isAuthenticated) setDrupalQueue(thisTractStack.drupalNid, payload)
+      setIsAuthorSoftLock(true)
       return true
     }
     return false

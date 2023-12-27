@@ -146,8 +146,8 @@ const EditResource = ({ uuid }: IEdit) => {
         endpoint: `uuid-by-node/${thisResource.drupalNid}`,
         method: `GET`,
       }
-      isAuthenticated && setDrupalQueue(thisResource.drupalNid, payload)
-      setTimeout(() => setIsAuthorSoftLock(true), 0)
+      if (isAuthenticated) setDrupalQueue(thisResource.drupalNid, payload)
+      setIsAuthorSoftLock(true)
       return true
     }
     return false

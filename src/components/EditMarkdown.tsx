@@ -135,8 +135,8 @@ const EditMarkdown = ({ uuid }: IEdit) => {
         endpoint: `uuid-by-node/${thisMarkdown.drupalNid}`,
         method: `GET`,
       }
-      isAuthenticated && setDrupalQueue(thisMarkdown.drupalNid, payload)
-      setTimeout(() => setIsAuthorSoftLock(true), 0)
+      if (isAuthenticated) setDrupalQueue(thisMarkdown.drupalNid, payload)
+      setIsAuthorSoftLock(true)
       return true
     }
     return false

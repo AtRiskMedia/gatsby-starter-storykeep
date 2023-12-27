@@ -2968,7 +2968,7 @@ const EditFormPane = ({
         method: `GET`,
       }
       if (isAuthenticated) setDrupalQueue(thisPane.drupalNid, payload)
-      setTimeout(() => setIsAuthorSoftLock(true), 0)
+      setIsAuthorSoftLock(true)
       return true
     }
     return false

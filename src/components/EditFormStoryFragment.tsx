@@ -240,8 +240,8 @@ const EditFormStoryFragment = ({
         endpoint: `uuid-by-node/${thisStoryFragment.drupalNid}`,
         method: `GET`,
       }
-      isAuthenticated && setDrupalQueue(thisStoryFragment.drupalNid, payload)
-      setTimeout(() => setIsAuthorSoftLock(true), 0)
+      if (isAuthenticated) setDrupalQueue(thisStoryFragment.drupalNid, payload)
+      setIsAuthorSoftLock(true)
       return true
     }
     return false
