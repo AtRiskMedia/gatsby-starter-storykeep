@@ -244,13 +244,14 @@ const Dashboard = () => {
           } else {
             if (typeof maxRetryDashboardPayloads === `undefined`) {
               setMaxRetyDashboardPayloads(false)
-              setTimeout(() => setLoadingDashboardPayloads(false), 500)
+              setLoadingDashboardPayloads(false)
             } else if (
               typeof maxRetryDashboardPayloads === `boolean` &&
               !maxRetryDashboardPayloads
             ) {
               setMaxRetyDashboardPayloads(true)
-              setTimeout(() => setLoadingDashboardPayloads(false), 500)
+              setLoadingDashboardPayloads(false)
+              window.reload()
             }
           }
         })
