@@ -41,7 +41,9 @@ const EditSlideOver = ({ children, title, setSelected }: IEditSlideOver) => {
                   </h3>
                   <p className="pt-12 font-main text-mywhite text-xl px-12 max-w-xl">
                     A mobile-first &lsquo;storykeep experience&rsquo; is on our
-                    roadmap. In the meantime, we apologize for this limitation.
+                    roadmap. In the meantime, try requesting the &quot;Desktop
+                    Site$quot; in your mobile browser. We apologize for this
+                    limitation.
                   </p>
                 </div>
               </div>
