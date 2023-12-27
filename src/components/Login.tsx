@@ -40,6 +40,12 @@ const Login = () => {
     ) {
       setStage(Stages.Authenticated)
       setOpenDemoEnabled(true)
+    } else if (
+      !failed &&
+      stage === Stages.Authenticate &&
+      process.env.NODE_ENV === `development`
+    ) {
+      alert(`Credential Login disabled in dev mode; use demo account`)
     } else {
       if (
         !failed &&

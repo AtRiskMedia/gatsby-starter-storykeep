@@ -128,6 +128,9 @@ const LoginPage = () => {
 
       case Stages.Initialized:
         setStage(Stages.Activated)
+        break
+
+      case Stages.Activated:
         navigate(`/`)
         break
     }

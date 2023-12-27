@@ -2541,7 +2541,7 @@ const EditFormPane = ({
     let newMarkdownArray: any
     if (mode === `delete` && childNth === -1) {
       newMarkdownArray =
-        nth === 0
+        oldMarkdownArray.length === 1
           ? [`...\n`]
           : [
               ...oldMarkdownArray.slice(0, nth),
@@ -2549,12 +2549,16 @@ const EditFormPane = ({
             ]
     } else if (mode === `delete`) {
       const current = oldMarkdownArray[nth].split(`\n`).filter((n: any) => n)
-      const newCurrent = [
-        ...current.slice(0, childNth),
-        ...current.slice(childNth + 1),
-      ]
-      newMarkdownArray = [...oldMarkdownArray]
-      newMarkdownArray[nth] = `${newCurrent.join(`\n`)}\n`
+      if (current.length === 1 && oldMarkdownArray.length === 1) {
+        newMarkdownArray = [`...\n`]
+      } else {
+        const newCurrent = [
+          ...current.slice(0, childNth),
+          ...current.slice(childNth + 1),
+        ]
+        newMarkdownArray = [...oldMarkdownArray]
+        newMarkdownArray[nth] = `${newCurrent.join(`\n`)}\n`
+      }
     } else if (
       (childNth === -1 && mode === `pre`) ||
       (childNth > -1 && mode === `parentpre`)
