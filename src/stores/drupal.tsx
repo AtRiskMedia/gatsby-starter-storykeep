@@ -5,6 +5,8 @@ import { toHast } from 'mdast-util-to-hast'
 import { IDrupalState } from '../types'
 
 export const useDrupalStore = create<IDrupalState>((set, get) => ({
+  stage: 0,
+  setStage: (stage: number) => set((state) => ({ ...state, stage })),
   setStoryFragment: (uuid: string, payload: any) =>
     set((state) => ({
       allStoryFragments: {
@@ -26,18 +28,11 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
   drupalResponse: {},
   drupalLocked: ``,
   drupalSoftLock: false,
-  drupalAuthorCheck: false,
   selected: ``,
   selectedCollection: ``,
   openDemoEnabled: false,
-  oauthAuthenticate: false,
-  oauthAuthenticated: false,
   oauthDrupalUuid: ``,
   oauthDrupalRoles: ``,
-  collectionsLoaded: false,
-  collectionsLoading: false,
-  sourceLoaded: false,
-  sourceLoading: false,
   allTractStacks: {},
   allStoryFragments: {},
   allPanes: {},
@@ -152,8 +147,6 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
         break
     }
   },
-  setDrupalAuthorCheck: (drupalAuthorCheck: boolean) =>
-    set((state) => ({ ...state, drupalAuthorCheck })),
   setDrupalLocked: (drupalLocked: string) =>
     set((state) => ({ ...state, drupalLocked })),
   setDrupalSoftLock: (drupalSoftLock: boolean) =>
@@ -193,22 +186,12 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
   setSelected: (selected: string) => set((state) => ({ ...state, selected })),
   setSelectedCollection: (selectedCollection: string) =>
     set((state) => ({ ...state, selectedCollection })),
-  setCollectionsLoaded: () =>
-    set((state) => ({ ...state, collectionsLoaded: true })),
-  setSourceLoaded: () => set((state) => ({ ...state, sourceLoaded: true })),
-  setCollectionsLoading: () =>
-    set((state) => ({ ...state, collectionsLoading: true })),
-  setSourceLoading: () => set((state) => ({ ...state, sourceLoading: true })),
   setOpenDemoEnabled: (openDemoEnabled: boolean) =>
     set((state) => ({ ...state, openDemoEnabled })),
   setOauthDrupalUuid: (oauthDrupalUuid: string) =>
     set((state) => ({ ...state, oauthDrupalUuid })),
   setOauthDrupalRoles: (oauthDrupalRoles: string) =>
     set((state) => ({ ...state, oauthDrupalRoles })),
-  setOauthAuthenticate: (oauthAuthenticate: boolean) =>
-    set((state) => ({ ...state, oauthAuthenticate })),
-  setOauthAuthenticated: (oauthAuthenticated: boolean) =>
-    set((state) => ({ ...state, oauthAuthenticated })),
   updateIngestSource: (payload: any) => {
     // FIX
     const regexp = /(file|node|paragraph)--([_a-z]+[_a-z0-9]*$)/

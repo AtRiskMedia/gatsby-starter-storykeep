@@ -1,6 +1,24 @@
 import { ReactElement } from 'react'
 import { IContentMap, IStoryFragmentId } from '@tractstack/types'
 
+export enum Stages {
+  Booting,
+  Authenticate,
+  Authenticating,
+  Authenticated,
+  UuidConfirm,
+  UuidConfirming,
+  UuidConfirmed,
+  CollectionsLoad,
+  CollectionsLoaded,
+  SourceLoad,
+  SourceLoaded,
+  Initialize,
+  Initializing,
+  Initialized,
+  Activated,
+}
+
 export interface ISiteBuilderConfig {
   openDemo: boolean
 }
@@ -90,6 +108,8 @@ export interface ILayout {
 }
 
 export interface IDrupalState {
+  stage: number
+  setStage: Function
   setStoryFragment: Function
   setPane: Function
   viewportKey: string
@@ -101,18 +121,11 @@ export interface IDrupalState {
   drupalResponse: any // FIX
   drupalLocked: string
   drupalSoftLock: boolean
-  drupalAuthorCheck: boolean
   selected: string
   selectedCollection: string
   openDemoEnabled: boolean
-  oauthAuthenticate: boolean
-  oauthAuthenticated: boolean
   oauthDrupalUuid: string
   oauthDrupalRoles: string
-  collectionsLoaded: boolean
-  sourceLoaded: boolean
-  collectionsLoading: boolean
-  sourceLoading: boolean
   allTractStacks: any // FIX
   allStoryFragments: any // FIX
   allPanes: any // FIX
@@ -128,22 +141,15 @@ export interface IDrupalState {
   removeDrupalResponse: Function
   setDrupalSaveNode: Function
   setDrupalPreSaveQueue: Function
-  setDrupalAuthorCheck: Function
   setDrupalLocked: Function
   setDrupalSoftLock: Function
   setDrupalQueue: Function
   setDrupalResponse: Function
   setSelected: Function
   setSelectedCollection: Function
-  setCollectionsLoaded: Function
-  setSourceLoaded: Function
-  setCollectionsLoading: Function
-  setSourceLoading: Function
   setOpenDemoEnabled: Function
   setOauthDrupalUuid: Function
   setOauthDrupalRoles: Function
-  setOauthAuthenticate: Function
-  setOauthAuthenticated: Function
   updateIngestSource: Function
   updateCollections: Function
   updateTractStacks: Function

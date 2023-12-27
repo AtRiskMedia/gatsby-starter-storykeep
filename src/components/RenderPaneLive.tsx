@@ -217,7 +217,7 @@ const RenderPaneLive = ({
         else setChildGlobalNth(-1)
       }, [])
 
-      const pasteAtCaret = (text:string) => {
+      const pasteAtCaret = (text: string) => {
         let range
         const parser = new DOMParser()
         const el = parser.parseFromString(text, `text/html`).body

@@ -1,72 +1,49 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 import React, { useEffect, useState } from 'react'
-import {
-  useLazyLogin,
-  useLazyLogout,
-  useAuthenticated,
-} from '@tractstack/drupal-react-oauth-provider'
+import { useLazyLogin } from '@tractstack/drupal-react-oauth-provider'
 
-import { IReactChild } from 'src/types'
 import { useDrupalStore } from '../stores/drupal'
 import Wordmark from '../../assets/wordmark.svg'
 import Logo from '../../assets/logo.svg'
 import { config } from '../../data/SiteConfig'
+import { Stages } from '../types'
 
-const DrupalAuth = ({ children }: IReactChild) => {
+const Login = () => {
+  const [isSSR, setIsSSR] = useState(true)
   const openDemo = config.openDemo
   const [login, { loading, error, data }] = useLazyLogin()
-  const [logout] = useLazyLogout()
   const [oauthUsername, setOauthUsername] = useState(openDemo ? `demo` : ``)
   const [oauthPassword, setOauthPassword] = useState(
     openDemo ? `tractstack` : ``,
   )
-  const isAuthenticated = useAuthenticated()
   const [failed, setFailed] = useState(false)
-  const [locked, setLocked] = useState(false)
   const [submitted, setSubmitted] = useState(false)
-  const openDemoEnabled = useDrupalStore((state) => state.openDemoEnabled)
   const setOpenDemoEnabled = useDrupalStore((state) => state.setOpenDemoEnabled)
-  const oauthAuthenticate = useDrupalStore((state) => state.oauthAuthenticate)
-  const oauthAuthenticated = useDrupalStore((state) => state.oauthAuthenticated)
-  const setOauthAuthenticate = useDrupalStore(
-    (state) => state.setOauthAuthenticate,
-  )
-  const setOauthAuthenticated = useDrupalStore(
-    (state) => state.setOauthAuthenticated,
-  )
-  const authInLocalStorage =
-    localStorage.getItem(`token`) !== null &&
-    localStorage.getItem(`oauthSettings`) !== null
-  const tokenOnlyInLocalStorage =
-    (localStorage.getItem(`token`) !== null &&
-      localStorage.getItem(`oauthSettings`) === null) ||
-    (localStorage.getItem(`token`) === null &&
-      localStorage.getItem(`oauthSettings`) !== null)
+  const stage = useDrupalStore((state) => state.stage)
+  const setStage = useDrupalStore((state) => state.setStage)
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
     setFailed(false)
     setSubmitted(true)
-    if (oauthUsername && oauthPassword) setOauthAuthenticate(true)
+    if (oauthUsername && oauthPassword) {
+      setStage(Stages.Authenticate)
+    }
   }
 
   useEffect(() => {
     if (
       openDemo &&
-      oauthAuthenticate &&
+      stage === Stages.Authenticate &&
       oauthUsername === `demo` &&
       oauthPassword === `tractstack`
     ) {
-      setLocked(false)
-      setOauthAuthenticated(true)
-      setOauthAuthenticate(false)
+      setStage(Stages.Authenticated)
       setOpenDemoEnabled(true)
     } else {
       if (
         !failed &&
-        !loading &&
-        !locked &&
-        oauthAuthenticate &&
+        stage === Stages.Authenticate &&
         process.env.NODE_ENV !== `development`
       ) {
         const settings = {
@@ -77,42 +54,42 @@ const DrupalAuth = ({ children }: IReactChild) => {
           grant_type: process.env.DRUPAL_OAUTH_GRANT_TYPE || ``,
           scope: process.env.DRUPAL_OAUTH_SCOPE || ``,
         }
-        setLocked(true)
+        setStage(Stages.Authenticating)
         login(settings)
       }
-      if (data?.access_token && data?.refresh_token && locked) {
-        setLocked(false)
-        setOauthAuthenticated(true)
-        setOauthAuthenticate(false)
-      }
-      if (error && !failed && locked) {
+      if (
+        data?.access_token &&
+        data?.refresh_token &&
+        stage === Stages.Authenticating
+      ) {
+        setStage(Stages.Authenticated)
+      } else if (error && !failed && stage === Stages.Authenticating) {
         setFailed(true)
-        setLocked(false)
-        setOauthAuthenticate(false)
+        setStage(Stages.Booting)
       }
     }
   }, [
+    data,
+    setStage,
+    stage,
+    data?.access_token,
+    data?.refresh_token,
+    error,
+    failed,
+    loading,
+    login,
+    oauthPassword,
+    oauthUsername,
     openDemo,
     setOpenDemoEnabled,
-    authInLocalStorage,
-    tokenOnlyInLocalStorage,
-    oauthAuthenticate,
-    oauthAuthenticated,
-    setOauthAuthenticate,
-    setOauthAuthenticated,
-    oauthUsername,
-    oauthPassword,
-    login,
-    error,
-    loading,
-    data,
-    failed,
-    logout,
-    locked,
-    isAuthenticated,
   ])
 
-  if (authInLocalStorage || isAuthenticated || openDemoEnabled) return children
+  useEffect(() => {
+    if (isSSR && typeof window !== `undefined`) setIsSSR(false)
+  }, [isSSR])
+
+  if (isSSR) return null
+
   return (
     <div className="flex items-center justify-center h-full py-24 px-12 bg-mydarkgrey/80">
       <form id="login" onSubmit={handleSubmit} method="POST">
@@ -132,7 +109,8 @@ const DrupalAuth = ({ children }: IReactChild) => {
               </h2>
               {openDemo ? (
                 <p className="mt-6 leading-6 max-w-sm">
-                  This is an open sandbox for tractstack dot com. Have fun!{` `}
+                  This is an open sandbox for tractstack dot com. Have fun!
+                  {` `}
                   <span className="text-mydarkgrey">
                     (Don&apos;t worry, your changes won&apos;t actually be
                     saved.)
@@ -225,4 +203,4 @@ const DrupalAuth = ({ children }: IReactChild) => {
   )
 }
 
-export default DrupalAuth
+export default Login
