@@ -5,17 +5,16 @@ import {
   useLazyLogout,
   useAuthenticated,
 } from '@tractstack/drupal-react-oauth-provider'
+import { Stages } from '../types'
 
 import { useDrupalStore } from '../stores/drupal'
 
 const Logout = () => {
   const [logout] = useLazyLogout()
   const isAuthenticated = useAuthenticated()
-  const setOauthAuthenticated = useDrupalStore(
-    (state) => state.setOauthAuthenticated,
-  )
   const openDemoEnabled = useDrupalStore((state) => state.openDemoEnabled)
   const setOpenDemoEnabled = useDrupalStore((state) => state.setOpenDemoEnabled)
+  const setStage = useDrupalStore((state) => state.setStage)
 
   return (
     <section>
@@ -23,8 +22,8 @@ const Logout = () => {
         <button
           className="font-action rounded-md bg-black px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-mygreen hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mygreen"
           onClick={() => {
+            setStage(Stages.Booting)
             if (openDemoEnabled) {
-              setOauthAuthenticated(false)
               setOpenDemoEnabled(false)
               navigate(`/`, { replace: true })
             } else {

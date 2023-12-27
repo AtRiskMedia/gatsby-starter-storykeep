@@ -8,6 +8,7 @@ import {
   RecentDailyActivity,
 } from '@tractstack/nivo'
 
+import { useAuthStore } from '../stores/authStore'
 import { useDrupalStore } from '../stores/drupal'
 import { useProductData } from '../hooks/use-product-data'
 import { getDashboardPayloads } from '../api/services'
@@ -130,6 +131,7 @@ const processStoryFragmentSwarm = (data: any) => {
 }
 
 const Dashboard = () => {
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn())
   const allTractStacks = useDrupalStore((state) => state.allTractStacks)
   const allStoryFragments = useDrupalStore((state) => state.allStoryFragments)
   const allPanes = useDrupalStore((state) => state.allPanes)
@@ -222,7 +224,8 @@ const Dashboard = () => {
     if (
       !loadingDashboardPayloads &&
       !loadedDashboardPayloads &&
-      !maxRetryDashboardPayloads
+      !maxRetryDashboardPayloads &&
+      isLoggedIn
     ) {
       setLoadingDashboardPayloads(true)
       goGetDashboardPayloads()
@@ -256,6 +259,7 @@ const Dashboard = () => {
         })
     }
   }, [
+    isLoggedIn,
     loadedDashboardPayloads,
     loadingDashboardPayloads,
     maxRetryDashboardPayloads,

@@ -12,10 +12,7 @@ export async function connect({ fingerprint }: IAxiosConnectProps) {
     secret,
   }
   const options: any = { authorization: false }
-  if (process.env.NODE_ENV !== `development`)
-    return client.post(`/auth/builderConnect`, payload, options)
-  console.log(`dev mode: skipping builderConnect`)
-  return null
+  return client.post(`/auth/builderConnect`, payload, options)
 }
 
 export async function getGraph() {

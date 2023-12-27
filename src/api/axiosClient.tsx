@@ -49,6 +49,7 @@ export const getTokens = async (fingerprint: string) => {
       error: null,
     }
   } catch (error: any) {
+    console.log(`error`, error)
     return {
       error: error?.response?.data?.message || error?.message || error,
       tokens: null,
