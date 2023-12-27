@@ -391,8 +391,9 @@ const EditResource = ({ uuid }: IEdit) => {
                 }
                 onClick={() => {
                   if (
+                    process.env.NODE_ENV === `development` ||
                     window.confirm(`You have unsaved changes. Proceed?`) ===
-                    true
+                      true
                   ) {
                     setLocked(false)
                     setSelected(``)

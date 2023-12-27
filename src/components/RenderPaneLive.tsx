@@ -262,11 +262,12 @@ const RenderPaneLive = ({
             pasteAtCaret(text)
           }}
           onChange={handleChange}
-          onFocus={handleFocus}
+          onMouseEnter={handleFocus}
         />
       )
     }
 
+    const deepEqual = require(`deep-equal`)
     const interceptEdit = ({ nth, childNth, payload }: IInterceptOverride) => {
       const tag =
         typeof childNth === `number` && childNth > 1
@@ -339,6 +340,7 @@ const RenderPaneLive = ({
           }
         })
       }
+      if(!deepEqual(newArray, oldArray))
       handleEditMarkdown(newArray)
     }
     const interceptInsert = ({ nth, childNth, mode }: IInterceptOverride) => {

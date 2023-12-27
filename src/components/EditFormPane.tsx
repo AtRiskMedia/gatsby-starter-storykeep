@@ -3886,7 +3886,10 @@ const EditFormPane = ({
               : `text-sm font-bold leading-6 text-black`
           }
           onClick={() => {
-            if (window.confirm(`You have unsaved changes. Proceed?`) === true) {
+            if (
+              process.env.NODE_ENV === `development` ||
+              window.confirm(`You have unsaved changes. Proceed?`) === true
+            ) {
               setLocked(false)
               handleToggle(``)
             }
