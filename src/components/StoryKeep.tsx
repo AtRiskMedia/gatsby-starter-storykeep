@@ -267,8 +267,8 @@ const StoryKeep = () => {
           console.log(`missed on`, selectedCollection, selected)
       }
     } else if (selectedCollection && selected === ``) {
-      setTimeout(() => setChildren(null), 250)
-      setTimeout(() => setChildrenTitle(``), 250)
+      setChildren(null)
+      setChildrenTitle(``)
     }
   }, [selected, setSelected, selectedCollection, setSelectedCollection])
 
@@ -291,10 +291,10 @@ const StoryKeep = () => {
           } else {
             if (typeof maxRetryStoryFragments === `undefined`) {
               setMaxRetryStoryFragments(false)
-              setTimeout(() => setLoadingStoryFragmentDaysSince(false), 500)
+              setLoadingStoryFragmentDaysSince(false)
             } else if (typeof maxRetryStoryFragments === `undefined`) {
               setMaxRetryStoryFragments(true)
-              setTimeout(() => setLoadingStoryFragmentDaysSince(false), 500)
+              setLoadingStoryFragmentDaysSince(false)
             }
           }
         })
@@ -329,10 +329,10 @@ const StoryKeep = () => {
           } else {
             if (typeof maxRetryPanes === `undefined`) {
               setMaxRetryPanes(false)
-              setTimeout(() => setLoadingPanesDaysSince(false), 500)
+              setLoadingPanesDaysSince(false)
             } else if (typeof maxRetryPanes === `undefined`) {
               setMaxRetryPanes(true)
-              setTimeout(() => setLoadingPanesDaysSince(false), 500)
+              setLoadingPanesDaysSince(false)
             }
           }
         })
