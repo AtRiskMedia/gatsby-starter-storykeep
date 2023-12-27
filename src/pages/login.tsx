@@ -72,15 +72,6 @@ const LoginPage = () => {
     setOauthDrupalUuid,
   ])
   useEffect(() => {
-    window.onerror = function (msg, url, line, col, error) {
-      let extra = !col ? `` : `\ncolumn: ` + col
-      extra += !error ? `` : `\nerror: ` + error
-      // You can view the information in an alert to see things working like this:
-      alert(`Error: ` + msg + `\nurl: ` + url + `\nline: ` + line + extra)
-      const suppressErrorAlert = true
-      return suppressErrorAlert
-    }
-
     const authInLocalStorage =
       typeof window !== `undefined` &&
       localStorage.getItem(`token`) !== null &&
