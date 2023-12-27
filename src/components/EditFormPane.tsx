@@ -3886,8 +3886,10 @@ const EditFormPane = ({
               : `text-sm font-bold leading-6 text-black`
           }
           onClick={() => {
-            setLocked(false)
-            handleToggle(``)
+            if (window.confirm(`You have unsaved changes. Proceed?`) === true) {
+              setLocked(false)
+              handleToggle(``)
+            }
           }}
         >
           {formState.changes ? <span>Cancel</span> : <span>Close</span>}

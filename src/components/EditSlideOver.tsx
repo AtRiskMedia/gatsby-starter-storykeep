@@ -42,7 +42,7 @@ const EditSlideOver = ({ children, title, setSelected }: IEditSlideOver) => {
                   <p className="pt-12 font-main text-mywhite text-xl px-12 max-w-xl">
                     A mobile-first &lsquo;storykeep experience&rsquo; is on our
                     roadmap. In the meantime, try requesting the &quot;Desktop
-                    Site$quot; in your mobile browser. We apologize for this
+                    Site&quot; in your mobile browser. We apologize for this
                     limitation.
                   </p>
                 </div>

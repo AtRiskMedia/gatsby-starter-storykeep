@@ -345,9 +345,14 @@ const EditFormStoryFragment = ({
                     : `text-sm font-bold leading-6 text-black`
                 }
                 onClick={() => {
-                  setLocked(false)
-                  setSelected(``)
-                  handleToggle(``)
+                  if (
+                    window.confirm(`You have unsaved changes. Proceed?`) ===
+                    true
+                  ) {
+                    setLocked(false)
+                    setSelected(``)
+                    handleToggle(``)
+                  }
                 }}
               >
                 {formState.changes ? <span>Cancel</span> : <span>Close</span>}
