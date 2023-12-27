@@ -2754,7 +2754,7 @@ const EditFormPane = ({
           initialStateHeldBeliefs: stateHeldBeliefs,
           initialStateWithheldBeliefs: stateWithheldBeliefs,
         })
-        setTimeout(() => setToggleCheck(true), 0)
+        setToggleCheck(true)
       } else {
         // save to Drupal
         if (
@@ -2922,7 +2922,7 @@ const EditFormPane = ({
             initialStateHeldBeliefs: stateHeldBeliefs,
             initialStateWithheldBeliefs: stateWithheldBeliefs,
           })
-          setTimeout(() => setToggleCheck(true), 0)
+          setToggleCheck(true)
         }
       }
     }
