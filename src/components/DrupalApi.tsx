@@ -36,13 +36,15 @@ const DrupalAPI = ({ children }: IReactChild) => {
       if (process.env.NODE_ENV === `development`)
         console.log(`skipping API call to drupal`, thisPayload)
       else lazyAPI(thisPayload)
-      setDrupalSoftLock(true)
-    } else if (data && drupalLocked !== `` && drupalSoftLock && !loading) {
+      setTimeout(() => setDrupalSoftLock(true), 500)
+    }
+    if (data && drupalLocked !== `` && drupalSoftLock && !loading) {
       setDrupalResponse(drupalLocked, data)
       removeDrupalQueue(drupalLocked)
-      setDrupalSoftLock(false)
+      setTimeout(() => setDrupalSoftLock(false), 0)
       setDrupalLocked(``)
-    } else if (drupalLocked && error && !failed) {
+    }
+    if (drupalLocked && error && !failed) {
       setFailed(true)
       console.log(`error in api call to drupal`, error)
     }

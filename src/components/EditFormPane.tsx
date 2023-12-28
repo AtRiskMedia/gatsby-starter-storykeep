@@ -2761,6 +2761,7 @@ const EditFormPane = ({
         setToggleCheck(true)
       } else {
         // save to Drupal
+
         if (
           typeof drupalPreSaveQueue?.markdown !== `undefined` &&
           Object.keys(drupalPreSaveQueue?.markdown).length
@@ -2831,7 +2832,10 @@ const EditFormPane = ({
               drupalPreSaveQueue.pane[uuid].wait))
         ) {
           const newMarkdownId = drupalPreSaveQueue.pane[uuid].markdownId
-          if (newMarkdownId !== thisPane.relationships.markdown[0]) {
+          if (
+            newMarkdownId &&
+            newMarkdownId !== thisPane.relationships.markdown[0]
+          ) {
             const fullOptionsPayload = ParseOptions(state.optionsPayloadString)
             const currentOptionsPayload =
               fullOptionsPayload.paneFragmentsPayload
@@ -2884,8 +2888,11 @@ const EditFormPane = ({
               newMarkdownId,
             )
           }
+          const drupalNode = { ...drupalPreSaveQueue.pane[uuid].payload }
+          if (newMarkdownId)
+            drupalNode.relationships.field_markdown.data.id = newMarkdownId
           setDrupalSaveNode(
-            drupalPreSaveQueue.pane[uuid].payload,
+            drupalNode,
             `pane`,
             uuid,
             drupalPreSaveQueue.pane[uuid].drupalNid,
@@ -3888,6 +3895,7 @@ const EditFormPane = ({
           onClick={() => {
             if (
               process.env.NODE_ENV === `development` ||
+              !formState.changes ||
               window.confirm(`You have unsaved changes. Proceed?`) === true
             ) {
               setLocked(false)

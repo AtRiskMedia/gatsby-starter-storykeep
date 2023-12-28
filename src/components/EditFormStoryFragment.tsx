@@ -19,6 +19,7 @@ const EditFormStoryFragment = ({
   payload,
 }: IEditForm) => {
   const [state, setState] = useState(payload.initialState)
+  const [payloadLast, setPayloadLast] = useState(payload.initialState)
   const [formState, setFormState] = useState(payload.initialFormState)
   const deepEqual = require(`deep-equal`)
   const setLocked = useDrupalStore((state) => state.setLocked)
@@ -152,7 +153,7 @@ const EditFormStoryFragment = ({
     e.preventDefault()
     // FIX
     let success = false
-    if (!deepEqual(state, payload.initialState)) {
+    if (!deepEqual(state, payloadLast)) {
       const relationships = (panes: string[]) => {
         if (!panes.length) return {}
         return {
@@ -188,13 +189,13 @@ const EditFormStoryFragment = ({
       }
       if (process.env.NODE_ENV === `development` || openDemoEnabled)
         console.log(`skip setDrupalQueue`, uuid, payload)
-      else isAuthenticated && setDrupalQueue(uuid, payload)
+      else if (isAuthenticated) setDrupalQueue(uuid, payload)
       const newStoryFragment = {
         ...thisStoryFragment,
         id: uuid,
         contextPanes: thisStoryFragment.contextPanes,
         tractstack: thisStoryFragment.tractstack,
-        panes: thisStoryFragment.panes,
+        panes: state.panes,
         menu: thisStoryFragment.menu,
       }
       if (state.title !== thisStoryFragment.title)
@@ -212,6 +213,7 @@ const EditFormStoryFragment = ({
     setFormState((prev: any) => {
       return { ...prev, submitted: true, success }
     })
+    setPayloadLast(state)
   }
 
   useEffect(() => {
@@ -282,7 +284,7 @@ const EditFormStoryFragment = ({
 
   useEffect(() => {
     if (toggleCheck) {
-      const hasChanges = !deepEqual(state, payload.initialState)
+      const hasChanges = !deepEqual(state, payloadLast)
       setLocked(hasChanges)
       setFormState((prev: any) => {
         return {
@@ -298,7 +300,7 @@ const EditFormStoryFragment = ({
     formState,
     state,
     deepEqual,
-    payload.initialState,
+    payloadLast,
     toggleCheck,
   ])
 
@@ -347,6 +349,7 @@ const EditFormStoryFragment = ({
                 onClick={() => {
                   if (
                     process.env.NODE_ENV === `development` ||
+                    !formState.changes ||
                     window.confirm(`You have unsaved changes. Proceed?`) ===
                       true
                   ) {

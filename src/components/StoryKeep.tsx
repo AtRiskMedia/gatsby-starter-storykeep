@@ -122,7 +122,6 @@ const StoryKeep = () => {
   const allResources = useDrupalStore((state) => state.allResources)
   const allMarkdown = useDrupalStore((state) => state.allMarkdown)
   const allMenus = useDrupalStore((state) => state.allMenus)
-
   const [storyFragmentDaysSinceData, setStoryFragmentDaysSinceData] =
     useState<IActivityDetails>({})
   const [loadingStoryFragmentDaysSince, setLoadingStoryFragmentDaysSince] =

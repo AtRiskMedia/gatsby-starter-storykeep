@@ -340,8 +340,7 @@ const RenderPaneLive = ({
           }
         })
       }
-      if(!deepEqual(newArray, oldArray))
-      handleEditMarkdown(newArray)
+      if (!deepEqual(newArray, oldArray)) handleEditMarkdown(newArray)
     }
     const interceptInsert = ({ nth, childNth, mode }: IInterceptOverride) => {
       handleMutateMarkdown(nth, childNth, mode, interceptModeTag)

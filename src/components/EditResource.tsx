@@ -392,6 +392,7 @@ const EditResource = ({ uuid }: IEdit) => {
                 onClick={() => {
                   if (
                     process.env.NODE_ENV === `development` ||
+                    !formState.changes ||
                     window.confirm(`You have unsaved changes. Proceed?`) ===
                       true
                   ) {

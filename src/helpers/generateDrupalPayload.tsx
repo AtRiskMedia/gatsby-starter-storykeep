@@ -46,7 +46,24 @@ export function panePayload(
   if (state?.hiddenPane) thisOptionsRaw.hiddenPane = true
   if (state?.overflowHidden) thisOptionsRaw.overflowHidden = true
   if (state?.maxHeightScreen) thisOptionsRaw[`max-h-screen`] = true
-  return {
+  let markdownId = null
+  Object.keys(paneFragments).forEach((e: any) => {
+    if (paneFragments[e].internal?.type === `markdown`)
+      markdownId = paneFragments[e].markdownId
+  })
+  const relationships = markdownId
+    ? {
+        relationships: {
+          field_markdown: {
+            data: {
+              type: `node--markdown`,
+              id: markdownId,
+            },
+          },
+        },
+      }
+    : {}
+  const drupalNode = {
     id: uuid,
     type: `node--pane`,
     attributes: {
@@ -61,9 +78,11 @@ export function panePayload(
       field_is_context_pane: state.isContextPane,
       field_options: JSON.stringify(thisOptionsRaw),
     },
-    // relationships: g.relationships, *** THIS NEEDS WORK: field_image, field_image_svg,field_markdown
-    // FOR NOW, the relationships are untouched on save
+    ...relationships,
+    // relationships: g.relationships, *** THIS NEEDS WORK: field_image, field_image_svg
+    // FOR NOW, only markdown is touched
   }
+  return drupalNode
 }
 
 export function markdownPayload(
