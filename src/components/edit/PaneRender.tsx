@@ -419,7 +419,7 @@ const PaneRender = ({
         return (
           <>
             <button
-              className="absolute top-0 left-0 w-full h-full hover:border-2 hover:border-black z-8 hover:bg-red-900 hover:bg-opacity-20"
+              className="absolute top-0 left-0 w-full h-full border hover:border-black border-transparent z-8 hover:bg-red-900 hover:bg-opacity-20"
               title={`Edit this ${thisTagType}`}
               onClick={() => {
                 setPageStylesPagination(-1)
@@ -466,7 +466,7 @@ const PaneRender = ({
         return (
           <>
             <button
-              className="absolute top-0 left-0 w-full h-full hover:border-2 hover:border-red-900 hover:border-dashed z-8 hover:bg-red-900 hover:bg-opacity-20"
+              className="absolute top-0 left-0 w-full h-full border border-transparent hover:border-red-900 border-dashed z-8 hover:bg-red-900 hover:bg-opacity-20"
               title={`Delete this ${thisTagType}`}
               onClick={() =>
                 interceptDelete({
@@ -486,7 +486,7 @@ const PaneRender = ({
           <>
             {specialModePre ? (
               <button
-                className="absolute top-0 left-0 w-1/2 h-full hover:border-2 hover:border-myorange hover:border-dashed z-8 hover:bg-myorange hover:bg-opacity-20"
+                className="absolute top-0 left-0 w-1/2 h-full border border-transparent hover:border-myorange border-dashed z-8 hover:bg-myorange hover:bg-opacity-20"
                 title={`Insert before ${thisTagType}`}
                 onClick={() =>
                   interceptInsert({
@@ -502,7 +502,7 @@ const PaneRender = ({
             ) : null}
             {specialModePost ? (
               <button
-                className="absolute top-0 right-0 w-1/2 h-full hover:border-2 hover:border-myorange hover:border-dashed z-8 hover:bg-myorange hover:bg-opacity-20"
+                className="absolute top-0 right-0 w-1/2 h-full border border-transparent hover:border-myorange border-dashed z-8 hover:bg-myorange hover:bg-opacity-20"
                 title={`Insert after this ${thisTagType}`}
                 onClick={() =>
                   interceptInsert({
@@ -659,18 +659,16 @@ const PaneRender = ({
     if (focus > -1) {
       const thisId = `${stateLivePreviewMarkdown.markdownTags[focus]}-${focus}`
       const el = document?.getElementById(thisId)
-      el?.classList.remove(`border`)
-      el?.classList.remove(`border-2`)
-      el?.classList.remove(`border-dashed`)
       el?.classList.remove(`border-myblue/20`)
+      el?.classList.add(`border`)
+      el?.classList.add(`border-transparent`)
     }
     const thisId =
       nth > -1 ? `${stateLivePreviewMarkdown.markdownTags[nth]}-${nth}` : null
     const el =
       typeof thisId === `string` ? document?.getElementById(thisId) : null
+    el?.classList.remove(`border-transparent`)
     el?.classList.add(`border`)
-    el?.classList.add(`border-2`)
-    el?.classList.add(`border-dashed`)
     el?.classList.add(`border-myblue/20`)
     setFocus(nth)
   }, [nth, focus, stateLivePreviewMarkdown.markdownTags])
@@ -683,18 +681,16 @@ const PaneRender = ({
     ) {
       const thisId = `li-${childFocusNth}-${childFocus}`
       const el = document?.getElementById(thisId)
-      el?.classList.remove(`border`)
-      el?.classList.remove(`border-1`)
-      el?.classList.remove(`border-solid`)
-      el?.classList.remove(`border-myblue/10`)
+      el?.classList.remove(`border-myblue/50`)
+      el?.classList.add(`border`)
+      el?.classList.add(`border-transparent`)
     }
     if (childNth > -1) {
       const thisId = `li-${nth}-${childNth}`
       const el = document?.getElementById(thisId)
+      el?.classList.remove(`border-transparent`)
       el?.classList.add(`border`)
-      el?.classList.add(`border-1`)
-      el?.classList.add(`border-solid`)
-      el?.classList.add(`border-myblue/10`)
+      el?.classList.add(`border-myblue/50`)
       setChildFocus(childNth)
       setChildFocusNth(nth)
     }
