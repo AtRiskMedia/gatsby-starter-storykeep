@@ -97,7 +97,7 @@ const Login = () => {
   if (isSSR) return null
 
   return (
-    <div className="flex items-center justify-center h-full py-24 px-12 bg-mydarkgrey/80">
+    <div className="h-screen flex items-center justify-center h-full py-24 px-12 bg-mydarkgrey/80">
       <form id="login" onSubmit={handleSubmit} method="POST">
         <div className="space-y-12 bg-mywhite/95 rounded-xl p-12">
           <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-black/10 pb-12 md:grid-cols-3 items-center">
