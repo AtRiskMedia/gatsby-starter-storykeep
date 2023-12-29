@@ -19,6 +19,64 @@ export enum Stages {
   Activated,
 }
 
+export enum EditStages {
+  Booting,
+  AuthorCheck,
+  AuthorChecking,
+  AuthorChecked,
+  CheckEmbedded,
+  Cleanup,
+  SetInitialState,
+  SettingInitialState,
+  InitialStateSet,
+  LoadState,
+  Activated,
+}
+
+export enum SaveStages {
+  NoChanges,
+  UnsavedChanges,
+  Submit,
+  PrepareNodes,
+  SaveFiles,
+  SavingFiles,
+  SavedFiles,
+  FilesUpdateAffectedNodes,
+  SaveMarkdown,
+  SavingMarkdown,
+  SavedMarkdown,
+  MarkdownUpdateAffectedNodes,
+  SavePane,
+  SavingPane,
+  SavedPane,
+  PaneUpdateAffectedNodes,
+  SaveStoryFragment,
+  SavingStoryFragment,
+  SavedStoryFragment,
+  StoryFragmentUpdateAffectedNodes,
+  SaveTractStack,
+  SavingTractStack,
+  SavedTractStack,
+  Success,
+  Error,
+}
+
+export interface IEditPanePayload {
+  initialState: any
+  initialFormState: any
+  initialStatePaneFragments: any
+  initialStateImpressions: any
+  initialStateHeldBeliefs: any
+  initialStateWithheldBeliefs: any
+  initialStateLivePreview: any
+  initialStateLivePreviewMarkdown: any
+}
+
+export interface IEditPaneFlags {
+  isAuthor: boolean
+  isEmbeddedEdit: boolean
+}
+
 export interface ISiteBuilderConfig {
   openDemo: boolean
 }
@@ -60,7 +118,7 @@ export interface IAdd {
 
 export interface IRenderPane {
   uuid: string
-  toggleCheck: boolean
+  toggleCheck?: boolean
   handlers?: any // FIX
   previewPayload?: any | null // FIX
 }
@@ -107,9 +165,25 @@ export interface ILayout {
   openDemo?: boolean
 }
 
+export interface ICleanerNode {
+  [key: string]: string
+}
+
 export interface IDrupalState {
   stage: number
   setStage: Function
+  editStage: number
+  setEditStage: Function
+  embeddedEdit: {
+    child: null | string
+    childType: null | string
+    parent: null | string
+    parentType: null | string
+  }
+  setEmbeddedEdit: Function
+  cleanerQueue: ICleanerNode[]
+  setCleanerQueue: Function
+  removeCleanerQueue: Function
   setStoryFragment: Function
   setPane: Function
   viewportKey: string

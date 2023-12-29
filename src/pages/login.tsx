@@ -76,9 +76,10 @@ const LoginPage = () => {
       typeof window !== `undefined` &&
       localStorage.getItem(`token`) !== null &&
       localStorage.getItem(`oauthSettings`) !== null
-    if (authInLocalStorage) setStage(Stages.Authenticated)
+    if (authInLocalStorage && stage < Stages.Authenticated)
+      setStage(Stages.Authenticated)
     if (isSSR && typeof window !== `undefined`) setIsSSR(false)
-  }, [isSSR, setStage])
+  }, [isSSR, setStage, stage])
 
   // load collections
   useDrupalCollections().then((e) => {

@@ -7,6 +7,39 @@ import { IDrupalState } from '../types'
 export const useDrupalStore = create<IDrupalState>((set, get) => ({
   stage: 0,
   setStage: (stage: number) => set((state) => ({ ...state, stage })),
+  editStage: 0,
+  setEditStage: (editStage: number) =>
+    set((state) => ({ ...state, editStage })),
+  embeddedEdit: {
+    child: null,
+    childType: null,
+    parent: null,
+    parentType: null,
+  },
+  setEmbeddedEdit: (
+    child: string,
+    childType: string,
+    parent: string,
+    parentType: string,
+  ) =>
+    set((state) => ({
+      ...state,
+      embeddedEdit: { child, childType, parent, parentType },
+    })),
+  cleanerQueue: [],
+  setCleanerQueue: (uuid: string, payload: any) =>
+    set((state) => ({
+      cleanerQueue: {
+        ...state.cleanerQueue,
+        [uuid]: payload,
+      },
+    })),
+  removeCleanerQueue: (key: string) =>
+    set((state) => {
+      const newData = { ...state.cleanerQueue }
+      delete newData[key as keyof typeof newData]
+      return { ...state, cleanerQueue: newData }
+    }),
   setStoryFragment: (uuid: string, payload: any) =>
     set((state) => ({
       allStoryFragments: {

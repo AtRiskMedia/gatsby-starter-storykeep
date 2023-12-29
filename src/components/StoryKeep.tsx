@@ -1,5 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 import React, { useState, useEffect, Fragment } from 'react'
+import { navigate } from 'gatsby'
 import { Menu, Transition } from '@headlessui/react'
 import { classNames } from '@tractstack/helpers'
 import {
@@ -809,8 +810,12 @@ const StoryKeep = () => {
                       <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm">
                         <button
                           onClick={() => {
-                            setSelectedCollection(current)
-                            setSelected(record)
+                            if (current === `pane`)
+                              navigate(`/storykeep/panes/${record}`)
+                            else {
+                              setSelectedCollection(current)
+                              setSelected(record)
+                            }
                           }}
                           className="text-myblue underline underline-offset-2 text-sm hover:text-myorange"
                         >
