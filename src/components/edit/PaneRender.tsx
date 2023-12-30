@@ -729,7 +729,9 @@ const PaneRender = ({ uuid, handlers, previewPayload, fn, flags }: any) => {
           </form>
         </div>
 
-        {previewPayload.state.slug && previewPayload.state.title && !flags.slugCollision ? (
+        {previewPayload.state.slug &&
+        previewPayload.state.title &&
+        !flags.slugCollision ? (
           <>
             <div className="mb-4">
               <span className="font-action pr-3 text-base font-bold text-black">

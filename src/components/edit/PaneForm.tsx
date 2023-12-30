@@ -117,7 +117,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
     interceptMode,
     interceptModeTag,
     width,
-    slugCollision: formState.slugCollision
+    slugCollision: formState.slugCollision,
   }
 
   return (

@@ -89,6 +89,7 @@ export interface IEditPaneFlags {
 
 export interface ISiteBuilderConfig {
   openDemo: boolean
+  messageDelay: number
 }
 
 export interface IUseDrupalJSONAPI {
