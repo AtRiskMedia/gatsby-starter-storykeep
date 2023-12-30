@@ -13,6 +13,7 @@ import {
   ComputerDesktopIcon,
   PlusCircleIcon,
   XMarkIcon,
+  SunIcon,
 } from '@heroicons/react/24/outline'
 import {
   CheckIcon,
@@ -43,6 +44,7 @@ const insertModeTags = [
 ]
 
 const PaneForm = ({ uuid, payload, flags, fn }: any) => {
+  console.log(flags.saveStage, SaveStages[flags.saveStage])
   const {
     state,
     formState,
@@ -969,8 +971,14 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                   <span className="hidden xs:block">
                     <button
                       type="button"
+                      disabled={flags.saveStage >= SaveStages.PrepareSave}
                       onClick={() => setToggleAdvOpt(!toggleAdvOpt)}
-                      className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-100"
+                      className={classNames(
+                        flags.saveStage >= SaveStages.PrepareSave
+                          ? ``
+                          : `hover:bg-slate-100`,
+                        `inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200`,
+                      )}
                     >
                       <CogIcon
                         className="-ml-0.5 mr-1.5 h-5 w-5 text-mydarkgrey"
@@ -1000,23 +1008,45 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                     <span className="xs:ml-3">
                       <button
                         type="button"
+                        onClick={handleSubmit}
+                        disabled={flags.saveStage >= SaveStages.PrepareSave}
                         className={classNames(
                           flags.saveStage === SaveStages.UnsavedChanges
-                            ? `bg-myblue`
+                            ? `bg-myblue hover:bg-myorange/20 text-white hover:text-myblue`
                             : flags.saveStage < SaveStages.Error
-                              ? `bg-yellow-300`
+                              ? `bg-myorange/5 hover:bg-myorange/5 text-myorange hover:text-myorange`
                               : flags.saveStage === SaveStages.Error
-                                ? `bg-red-300`
-                                : `bg-mygreen`,
-                          `inline-flex items-center rounded-md bg-myblue px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-myorange hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-myorange`,
+                                ? `bg-red-300 hover:bg-red-300 text-white hover:text-white`
+                                : `bg-mygreen hover:bg-mygreen text-black hover:text-white`,
+                          `inline-flex items-center rounded-md bg-myblue px-3 py-2 text-sm font-bold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-myorange`,
                         )}
                       >
-                        <CheckIcon
-                          className="-ml-0.5 mr-1.5 h-5 w-5"
-                          aria-hidden="true"
-                          onClick={(e) => handleSubmit(e)}
-                        />
-                        Save
+                        <>
+                          {flags.saveStage < SaveStages.PrepareSave ||
+                          flags.saveStage === SaveStages.Success ? (
+                            <CheckIcon
+                              className="-ml-0.5 mr-1.5 h-5 w-5"
+                              aria-hidden="true"
+                            />
+                          ) : flags.saveStage < SaveStages.Error ? (
+                            <SunIcon
+                              className="text-myorange/50 motion-safe:animate-ping -ml-0.5 mr-1.5 h-5 w-5"
+                              aria-hidden="true"
+                            />
+                          ) : flags.saveStage === SaveStages.Error ? (
+                            <XMarkIcon
+                              className="-ml-0.5 mr-1.5 h-5 w-5"
+                              aria-hidden="true"
+                            />
+                          ) : null}
+                          {flags.saveStage < SaveStages.PrepareSave
+                            ? `Save`
+                            : flags.saveStage < SaveStages.Error
+                              ? `Saving`
+                              : flags.saveStage === SaveStages.Success
+                                ? `Error`
+                                : `Saved`}
+                        </>
                       </button>
                     </span>
                   ) : null}
@@ -1025,8 +1055,14 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                     {flags.saveStage === SaveStages.NoChanges ? (
                       <button
                         type="button"
+                        disabled={flags.saveStage >= SaveStages.PrepareSave}
                         onClick={() => navigate(`/storykeep`)}
-                        className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-100"
+                        className={classNames(
+                          flags.saveStage >= SaveStages.PrepareSave
+                            ? ``
+                            : `hover:bg-slate-100`,
+                          `inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200`,
+                        )}
                       >
                         <XMarkIcon
                           className="-ml-0.5 mr-1.5 h-5 w-5"
@@ -1037,6 +1073,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                     ) : (
                       <button
                         type="button"
+                        disabled={flags.saveStage >= SaveStages.PrepareSave}
                         onClick={() => {
                           if (
                             window.confirm(
@@ -1045,7 +1082,12 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                           )
                             navigate(`/storykeep`)
                         }}
-                        className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-100"
+                        className={classNames(
+                          flags.saveStage >= SaveStages.PrepareSave
+                            ? ``
+                            : `hover:bg-slate-100`,
+                          `inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200`,
+                        )}
                       >
                         <XMarkIcon
                           className="-ml-0.5 mr-1.5 h-5 w-5"
@@ -1120,10 +1162,14 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                   <button
                     type="button"
                     title="Mobile or small screens"
+                    disabled={flags.saveStage >= SaveStages.PrepareSave}
                     className={classNames(
+                      flags.saveStage >= SaveStages.PrepareSave
+                        ? ``
+                        : `hover:bg-myorange hover:text-white`,
                       viewportKey === `mobile`
                         ? `bg-white text-allblack`
-                        : `bg-mylightgrey/50 text-mydarkgrey ring-1 ring-inset ring-slate-200 hover:bg-myorange hover:text-white focus:z-10`,
+                        : `bg-mylightgrey/50 text-mydarkgrey ring-1 ring-inset ring-slate-200 focus:z-10`,
                       `relative inline-flex items-center rounded-l-md px-3 py-2`,
                     )}
                     onClick={() => {
@@ -1140,10 +1186,14 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                   <button
                     type="button"
                     title="Tablet or medium screens"
+                    disabled={flags.saveStage >= SaveStages.PrepareSave}
                     className={classNames(
+                      flags.saveStage >= SaveStages.PrepareSave
+                        ? ``
+                        : `hover:bg-myorange hover:text-white`,
                       viewportKey === `tablet`
                         ? `bg-white text-allblack`
-                        : `bg-mylightgrey/50 text-mydarkgrey ring-1 ring-inset ring-slate-200 hover:bg-myorange hover:text-white focus:z-10`,
+                        : `bg-mylightgrey/50 text-mydarkgrey ring-1 ring-inset ring-slate-200 focus:z-10`,
                       `relative inline-flex items-center px-3 py-2`,
                     )}
                     onClick={() => {
@@ -1157,10 +1207,14 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                   <button
                     type="button"
                     title="Desktop or large screens"
+                    disabled={flags.saveStage >= SaveStages.PrepareSave}
                     className={classNames(
+                      flags.saveStage >= SaveStages.PrepareSave
+                        ? ``
+                        : `hover:bg-myorange hover:text-white`,
                       viewportKey === `desktop`
                         ? `bg-white text-allblack`
-                        : `bg-mylightgrey/50 text-mydarkgrey ring-1 ring-inset ring-slate-200 hover:bg-myorange hover:text-white focus:z-10`,
+                        : `bg-mylightgrey/50 text-mydarkgrey ring-1 ring-inset ring-slate-200 focus:z-10`,
                       `relative inline-flex items-center rounded-r-md px-3 py-2`,
                     )}
                     onClick={() => {
@@ -1189,10 +1243,14 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                 <span className="isolate inline-flex -space-x-px rounded-md shadow-sm">
                   <button
                     type="button"
+                    disabled={flags.saveStage >= SaveStages.PrepareSave}
                     className={classNames(
+                      flags.saveStage >= SaveStages.PrepareSave
+                        ? ``
+                        : `hover:bg-myorange hover:text-white`,
                       interceptMode === `edit`
                         ? `bg-myorange/20 text-allblack`
-                        : `bg-white text-mydarkgrey ring-1 ring-inset ring-slate-200 hover:bg-myorange hover:text-white focus:z-10`,
+                        : `bg-white text-mydarkgrey ring-1 ring-inset ring-slate-200 focus:z-10`,
                       `relative inline-flex items-center rounded-l-md px-3 py-2`,
                     )}
                     title="Edit in Place"
@@ -1205,10 +1263,14 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                     <>
                       <button
                         type="button"
+                        disabled={flags.saveStage >= SaveStages.PrepareSave}
                         className={classNames(
+                          flags.saveStage >= SaveStages.PrepareSave
+                            ? ``
+                            : `hover:bg-myorange hover:text-white`,
                           interceptMode === `delete`
                             ? `bg-myorange/20 text-allblack`
-                            : `bg-white text-mydarkgrey ring-1 ring-inset ring-slate-200 hover:bg-myorange hover:text-white focus:z-10`,
+                            : `bg-white text-mydarkgrey ring-1 ring-inset ring-slate-200 focus:z-10`,
                           `relative inline-flex items-center px-3 py-2`,
                         )}
                         title="Delete Mode"
@@ -1220,7 +1282,13 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                       {interceptMode !== `insert` ? (
                         <button
                           type="button"
-                          className="bg-white text-mydarkgrey ring-1 ring-inset ring-slate-200 hover:bg-myorange hover:text-white focus:z-10 relative inline-flex items-center rounded-l-md px-3 py-2"
+                          disabled={flags.saveStage >= SaveStages.PrepareSave}
+                          className={classNames(
+                            flags.saveStage >= SaveStages.PrepareSave
+                              ? ``
+                              : `hover:bg-myorange hover:text-white`,
+                            `bg-white text-mydarkgrey ring-1 ring-inset ring-slate-200 focus:z-10 relative inline-flex items-center rounded-l-md px-3 py-2`,
+                          )}
                           title="Insert Mode"
                           onClick={() => setInterceptMode(`insert`)}
                         >
@@ -1242,6 +1310,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                           <select
                             id="interceptModeEdit"
                             name="interceptModeEdit"
+                            disabled={flags.saveStage >= SaveStages.PrepareSave}
                             className="block w-full bg-white rounded-r-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-myorange xs:text-sm xs:leading-6"
                             value={interceptModeTag}
                             onChange={(e) =>
@@ -1274,29 +1343,34 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
         </section>
 
         <section className="relative py-4 bg-slate-100">
-          <PaneRender
-            uuid={uuid}
-            handlers={{
-              handleEditMarkdown,
-              handleMutateMarkdown,
-              handleChangeEditInPlace,
-              handleChange,
-            }}
-            previewPayload={{
-              state,
-              statePaneFragments,
-              stateImpressions,
-              stateLivePreview,
-              stateLivePreviewMarkdown,
-              stateHeldBeliefs,
-              stateWithheldBeliefs,
-              allMarkdown,
-              viewportKey,
-              setViewportKey,
-            }}
-            fn={passFn}
-            flags={passFlags}
-          />
+          <>
+            {flags.saveStage >= SaveStages.PrepareSave ? (
+              <div className="z-50 absolute top-0 bg-mydarkgrey/95 inset-y-0 right-0 w-full h-screen"></div>
+            ) : null}
+            <PaneRender
+              uuid={uuid}
+              handlers={{
+                handleEditMarkdown,
+                handleMutateMarkdown,
+                handleChangeEditInPlace,
+                handleChange,
+              }}
+              previewPayload={{
+                state,
+                statePaneFragments,
+                stateImpressions,
+                stateLivePreview,
+                stateLivePreviewMarkdown,
+                stateHeldBeliefs,
+                stateWithheldBeliefs,
+                allMarkdown,
+                viewportKey,
+                setViewportKey,
+              }}
+              fn={passFn}
+              flags={passFlags}
+            />
+          </>
         </section>
       </>
     </>

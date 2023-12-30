@@ -36,7 +36,7 @@ const DrupalAPI = ({ children }: IReactChild) => {
       if (process.env.NODE_ENV === `development`)
         console.log(`skipping API call to drupal`, thisPayload)
       else lazyAPI(thisPayload)
-      setTimeout(() => setDrupalSoftLock(true), 500)
+      setTimeout(() => setDrupalSoftLock(true), 0)
     }
     if (data && drupalLocked !== `` && drupalSoftLock && !loading) {
       setDrupalResponse(drupalLocked, data)

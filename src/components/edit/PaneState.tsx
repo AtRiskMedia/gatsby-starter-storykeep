@@ -2686,7 +2686,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
   const handleSubmit = (e: MouseEvent<HTMLButtonElement>) => {
     console.log(`submit`)
     e.preventDefault()
-    setSaveStage(SaveStages.Submitted)
+    setSaveStage(SaveStages.PrepareSave)
   }
   /*
   const handleSubmit = (e: any) => {
@@ -3010,7 +3010,8 @@ const PaneState = ({ uuid, payload, flags }: any) => {
     state,
   ])
 
-  if (saveStage < SaveStages.NoChanges) return null
+  if (saveStage < SaveStages.NoChanges)
+    return <div className="h-6 bg-myblue w-full" />
 
   return (
     <PaneForm

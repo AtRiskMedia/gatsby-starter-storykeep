@@ -36,7 +36,7 @@ export enum SaveStages {
   Booting,
   NoChanges,
   UnsavedChanges,
-  Submit,
+  PrepareSave,
   PrepareNodes,
   SaveFiles,
   SavingFiles,

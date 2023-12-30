@@ -905,67 +905,65 @@ const PaneRender = ({ uuid, handlers, previewPayload, fn, flags }: any) => {
     )
 
   return (
-    <>
-      <div className="px-6 mx-auto w-full grow flex flex-row">
-        <div className="flex-0 shrink">
-          <StyledWrapperDiv
-            key={`${viewportKey}-${uuid}-wrapper-outer`}
+    <div className="px-6 mx-auto w-full grow flex flex-row">
+      <div className="flex-0 shrink">
+        <StyledWrapperDiv
+          key={`${viewportKey}-${uuid}-wrapper-outer`}
+          className={classNames(
+            `bg-mylightgrey/20 sticky top-0`,
+            viewportClasses,
+          )}
+          ref={elementRef as React.RefObject<HTMLDivElement>}
+          css={overrideWidthCss}
+        >
+          <StyledWrapperSection
+            key={`${viewportKey}-${uuid}-wrapper`}
             className={classNames(
-              `bg-mylightgrey/20 sticky top-0`,
               viewportClasses,
+              `shadow-sm builder border border-myblue/10 border-dashed`,
             )}
-            ref={elementRef as React.RefObject<HTMLDivElement>}
-            css={overrideWidthCss}
+            css={`
+              ${renderedPayload?.storyFragment?.css}
+            `}
           >
-            <StyledWrapperSection
-              key={`${viewportKey}-${uuid}-wrapper`}
+            <div
+              id={`${viewportKey}-${uuid}`}
+              key={`${viewportKey}-${uuid}`}
               className={classNames(
-                viewportClasses,
-                `shadow-sm builder border border-myblue/10 border-dashed`,
+                `w-full h-full grid grid-rows-1 grid-cols-1 relative`,
+                hasMaxHScreen ? `max-h-screen` : ``,
               )}
-              css={`
-                ${renderedPayload?.storyFragment?.css}
-              `}
             >
-              <div
-                id={`${viewportKey}-${uuid}`}
-                key={`${viewportKey}-${uuid}`}
-                className={classNames(
-                  `w-full h-full grid grid-rows-1 grid-cols-1 relative`,
-                  hasMaxHScreen ? `max-h-screen` : ``,
-                )}
-              >
-                {renderedPayload.contentChildren[thisId]}
-              </div>
-            </StyledWrapperSection>
-          </StyledWrapperDiv>
-        </div>
-
-        {!emptyPane && !codeHook && interceptMode === `edit` ? (
-          <div className="pl-4 flex-1 flex-shrink">
-            <div className="w-80 xl:w-96 mb-6 sticky top-4">
-              <PaneEditInPlace
-                tag={tag}
-                tagType={tagType}
-                nth={nth}
-                childNth={childNth}
-                childGlobalNth={childGlobalNth}
-                stateLivePreview={stateLivePreview}
-                stateLivePreviewMarkdown={stateLivePreviewMarkdown}
-                handleChangeEditInPlace={handleChangeEditInPlace}
-                viewportKey={viewportKey}
-                reset={EditInPlaceReset}
-                pageStylesPagination={pageStylesPagination}
-                setPageStylesPagination={setPageStylesPagination}
-                hasBgColour={thisPane.hasBgColour}
-                hasBgColourId={thisPane.hasBgColourId}
-                hasBreaks={thisPane.hasBreaks}
-              />
+              {renderedPayload.contentChildren[thisId]}
             </div>
-          </div>
-        ) : null}
+          </StyledWrapperSection>
+        </StyledWrapperDiv>
       </div>
-    </>
+
+      {!emptyPane && !codeHook && interceptMode === `edit` ? (
+        <div className="pl-4 flex-1 flex-shrink">
+          <div className="w-80 xl:w-96 mb-6 sticky top-4">
+            <PaneEditInPlace
+              tag={tag}
+              tagType={tagType}
+              nth={nth}
+              childNth={childNth}
+              childGlobalNth={childGlobalNth}
+              stateLivePreview={stateLivePreview}
+              stateLivePreviewMarkdown={stateLivePreviewMarkdown}
+              handleChangeEditInPlace={handleChangeEditInPlace}
+              viewportKey={viewportKey}
+              reset={EditInPlaceReset}
+              pageStylesPagination={pageStylesPagination}
+              setPageStylesPagination={setPageStylesPagination}
+              hasBgColour={thisPane.hasBgColour}
+              hasBgColourId={thisPane.hasBgColourId}
+              hasBreaks={thisPane.hasBreaks}
+            />
+          </div>
+        </div>
+      ) : null}
+    </div>
   )
 }
 
