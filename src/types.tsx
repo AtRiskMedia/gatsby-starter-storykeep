@@ -1,4 +1,4 @@
-import { ReactElement } from 'react'
+import { ReactElement, JSX } from 'react'
 import { IContentMap, IStoryFragmentId } from '@tractstack/types'
 
 export enum Stages {
@@ -29,11 +29,11 @@ export enum EditStages {
   SetInitialState,
   SettingInitialState,
   InitialStateSet,
-  LoadState,
   Activated,
 }
 
 export enum SaveStages {
+  Booting,
   NoChanges,
   UnsavedChanges,
   Submit,
@@ -57,8 +57,13 @@ export enum SaveStages {
   SaveTractStack,
   SavingTractStack,
   SavedTractStack,
-  Success,
   Error,
+  Success,
+}
+
+export interface ISlideOver {
+  children: JSX.Element
+  setToggle: Function
 }
 
 export interface IEditPanePayload {
@@ -75,6 +80,10 @@ export interface IEditPanePayload {
 export interface IEditPaneFlags {
   isAuthor: boolean
   isEmbeddedEdit: boolean
+  isAdmin: boolean
+  isBuilder: boolean
+  isOpenDemo: boolean
+  editStage: number
 }
 
 export interface ISiteBuilderConfig {
@@ -172,8 +181,6 @@ export interface ICleanerNode {
 export interface IDrupalState {
   stage: number
   setStage: Function
-  editStage: number
-  setEditStage: Function
   embeddedEdit: {
     child: null | string
     childType: null | string
@@ -250,8 +257,8 @@ export interface IEditBelief {
 }
 
 export interface IMessage {
-  className: string
   children: ReactElement
+  className?: string
 }
 
 export interface IEditSlideOver {

@@ -50,10 +50,10 @@ const EditSlideOver = ({ children, title, setSelected }: IEditSlideOver) => {
               <div className="pointer-events-none fixed inset-y-0 right-0 max-w-full pl-10 hidden xs:flex">
                 <Transition.Child
                   as={Fragment}
-                  enter="transform transition ease-in-out duration-500 sm:duration-700"
+                  enter="transform transition ease-in-out duration-500 xs:duration-700"
                   enterFrom="translate-x-full"
                   enterTo="translate-x-0"
-                  leave="transform transition ease-in-out duration-500 sm:duration-700"
+                  leave="transform transition ease-in-out duration-500 xs:duration-700"
                   leaveFrom="translate-x-0"
                   leaveTo="translate-x-full"
                 >
@@ -67,7 +67,7 @@ const EditSlideOver = ({ children, title, setSelected }: IEditSlideOver) => {
                       leaveFrom="opacity-100"
                       leaveTo="opacity-0"
                     >
-                      <div className="absolute left-1 top-0 -ml-8 flex pr-2 pt-4 sm:-ml-10 sm:pr-4">
+                      <div className="absolute left-1 top-0 -ml-8 flex pr-2 pt-4 xs:-ml-10 xs:pr-4">
                         <button
                           type="button"
                           className="relative rounded-md text-mygreen hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
@@ -89,12 +89,12 @@ const EditSlideOver = ({ children, title, setSelected }: IEditSlideOver) => {
                       </div>
                     </Transition.Child>
                     <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
-                      <div className="px-4 sm:px-6">
+                      <div className="px-4 xs:px-6">
                         <Dialog.Title className="text-base font-bold leading-6 text-black">
                           {title}
                         </Dialog.Title>
                       </div>
-                      <div className="relative mt-6 flex-1 px-4 sm:px-6">
+                      <div className="relative mt-6 flex-1 px-4 xs:px-6">
                         {children}
                       </div>
                     </div>

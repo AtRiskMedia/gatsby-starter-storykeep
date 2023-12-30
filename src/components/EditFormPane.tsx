@@ -3103,8 +3103,8 @@ const EditFormPane = ({
             <form className="max-w-3xl" id="editPane">
               <div className="space-y-12">
                 <div className="border-b border-black/10 pb-12">
-                  <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                    <div className="sm:col-span-3">
+                  <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 xs:grid-cols-6">
+                    <div className="xs:col-span-3">
                       <label
                         htmlFor="title"
                         className="text-sm leading-6 text-black inline-block"
@@ -3121,12 +3121,12 @@ const EditFormPane = ({
                         </span>
                       ) : null}
                       <div className="mt-2">
-                        <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange sm:max-w-md">
+                        <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
                           <input
                             type="text"
                             name="title"
                             id="title"
-                            className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                            className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                             value={state.title}
                             onChange={handleChange}
                           />
@@ -3134,7 +3134,7 @@ const EditFormPane = ({
                       </div>
                     </div>
 
-                    <div className="sm:col-span-2">
+                    <div className="xs:col-span-2">
                       <label
                         htmlFor="slug"
                         className="text-sm leading-6 text-black inline-block"
@@ -3158,13 +3158,13 @@ const EditFormPane = ({
                         </span>
                       ) : null}
                       <div className="mt-2">
-                        <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange sm:max-w-md">
+                        <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
                           <input
                             type="text"
                             name="slug"
                             id="slug"
                             pattern="[a-zA-Z\-]+"
-                            className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                            className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                             value={state.slug}
                             onChange={handleChange}
                           />
@@ -3172,11 +3172,11 @@ const EditFormPane = ({
                       </div>
                     </div>
 
-                    <div className="sm:col-span-full">
+                    <div className="xs:col-span-full">
                       <p className="block text-sm leading-6 text-black font-bold">
                         Options Payload
                       </p>
-                      <div className="mt-2 sm:col-span-full">
+                      <div className="mt-2 xs:col-span-full">
                         <Switch.Group
                           as="div"
                           className="flex items-center justify-between"
@@ -3226,8 +3226,8 @@ const EditFormPane = ({
                         </Switch.Group>
                       </div>
                       {state.hasCodeHook ? (
-                        <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 p-4 shadow bg-white mb-4">
-                          <div className="sm:col-span-2">
+                        <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 xs:grid-cols-6 p-4 shadow bg-white mb-4">
+                          <div className="xs:col-span-2">
                             <label
                               htmlFor="codeHookTarget"
                               className="block text-sm leading-6 text-black"
@@ -3241,7 +3241,7 @@ const EditFormPane = ({
                                   name="codeHookTarget"
                                   id="codeHookTarget"
                                   pattern="([A-Za-z]|h5p)+"
-                                  className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                                  className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                                   value={state.codeHookTarget}
                                   onChange={handleChange}
                                 />
@@ -3250,7 +3250,7 @@ const EditFormPane = ({
                           </div>
                           {state.codeHookTarget === `h5p` ? (
                             <>
-                              <div className="sm:col-span-4">
+                              <div className="xs:col-span-4">
                                 <label
                                   htmlFor="codeHookTarget"
                                   className="block text-sm leading-6 text-black"
@@ -3263,14 +3263,14 @@ const EditFormPane = ({
                                       type="text"
                                       name="codeHookTargetUrl"
                                       id="codeHookTargetUrl"
-                                      className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                                      className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                                       value={state.codeHookTargetUrl}
                                       onChange={handleChange}
                                     />
                                   </div>
                                 </div>
                               </div>
-                              <div className="sm:col-span-2">
+                              <div className="xs:col-span-2">
                                 <label
                                   htmlFor="codeHookHeight"
                                   className="block text-sm leading-6 text-black"
@@ -3283,14 +3283,14 @@ const EditFormPane = ({
                                       type="number"
                                       name="codeHookHeight"
                                       id="codeHookHeight"
-                                      className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                                      className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                                       value={state.codeHookHeight}
                                       onChange={handleChange}
                                     />
                                   </div>
                                 </div>
                               </div>
-                              <div className="sm:col-span-2">
+                              <div className="xs:col-span-2">
                                 <label
                                   htmlFor="codeHookWidth"
                                   className="block text-sm leading-6 text-black"
@@ -3303,7 +3303,7 @@ const EditFormPane = ({
                                       type="number"
                                       name="codeHookWidth"
                                       id="codeHookWidth"
-                                      className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                                      className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                                       value={state.codeHookWidth}
                                       onChange={handleChange}
                                     />
@@ -3314,7 +3314,7 @@ const EditFormPane = ({
                           ) : null}
                         </div>
                       ) : null}
-                      <div className="mt-2 sm:col-span-full">
+                      <div className="mt-2 xs:col-span-full">
                         <Switch.Group
                           as="div"
                           className="flex items-center justify-between"
@@ -3361,7 +3361,7 @@ const EditFormPane = ({
                           </span>
                         </Switch.Group>
                       </div>
-                      <div className="mt-2 sm:col-span-full">
+                      <div className="mt-2 xs:col-span-full">
                         <Switch.Group
                           as="div"
                           className="flex items-center justify-between"
@@ -3410,7 +3410,7 @@ const EditFormPane = ({
                           </span>
                         </Switch.Group>
                       </div>
-                      <div className="mt-2 sm:col-span-full">
+                      <div className="mt-2 xs:col-span-full">
                         <Switch.Group
                           as="div"
                           className="flex items-center justify-between"
@@ -3476,7 +3476,7 @@ const EditFormPane = ({
                           </button>
                         </div>
                       ) : null}
-                      <div className="mt-2 sm:col-span-full">
+                      <div className="mt-2 xs:col-span-full">
                         <Switch.Group
                           as="div"
                           className="flex items-center justify-between"
@@ -3543,7 +3543,7 @@ const EditFormPane = ({
                           </button>
                         </div>
                       ) : null}
-                      <div className="mt-2 sm:col-span-full">
+                      <div className="mt-2 xs:col-span-full">
                         <Switch.Group
                           as="div"
                           className="flex items-center justify-between"
@@ -3593,8 +3593,8 @@ const EditFormPane = ({
                           </span>
                         </Switch.Group>
                         {state.hasImpressions ? (
-                          <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 p-4 shadow bg-white mb-4">
-                            <div className="sm:col-span-4">
+                          <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 xs:grid-cols-6 p-4 shadow bg-white mb-4">
+                            <div className="xs:col-span-4">
                               <label
                                 htmlFor="title"
                                 className="block text-sm leading-6 text-black"
@@ -3607,14 +3607,14 @@ const EditFormPane = ({
                                     type="text"
                                     name="title"
                                     id="title"
-                                    className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                                    className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                                     value={stateImpressions.title}
                                     onChange={handleChangeImpression}
                                   />
                                 </div>
                               </div>
                             </div>
-                            <div className="sm:col-span-2">
+                            <div className="xs:col-span-2">
                               <label
                                 htmlFor="buttonText"
                                 className="block text-sm leading-6 text-black"
@@ -3627,7 +3627,7 @@ const EditFormPane = ({
                                     type="text"
                                     name="buttonText"
                                     id="buttonText"
-                                    className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                                    className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                                     value={stateImpressions.buttonText}
                                     onChange={handleChangeImpression}
                                     maxLength={32}
@@ -3635,7 +3635,7 @@ const EditFormPane = ({
                                 </div>
                               </div>
                             </div>
-                            <div className="sm:col-span-6">
+                            <div className="xs:col-span-6">
                               <label
                                 htmlFor="actionsLisp"
                                 className="block text-sm leading-6 text-black"
@@ -3649,14 +3649,14 @@ const EditFormPane = ({
                                     name="actionsLisp"
                                     id="actionsLisp"
                                     pattern="[A-Za-z\(\) ]+"
-                                    className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                                    className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                                     value={stateImpressions.actionsLisp}
                                     onChange={handleChangeImpression}
                                   />
                                 </div>
                               </div>
                             </div>
-                            <div className="sm:col-span-6">
+                            <div className="xs:col-span-6">
                               <label
                                 htmlFor="body"
                                 className="block text-sm leading-6 text-black"
@@ -3669,7 +3669,7 @@ const EditFormPane = ({
                                     type="text"
                                     name="body"
                                     id="body"
-                                    className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                                    className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                                     value={stateImpressions.body}
                                     onChange={handleChangeImpression}
                                     maxLength={140}
@@ -3727,128 +3727,128 @@ const EditFormPane = ({
                         ) : null}
                       </div>
 
-                      <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 p-4 shadow bg-white mb-4">
-                        <div className="sm:col-span-1 sm:col-start-1">
+                      <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 xs:grid-cols-6 p-4 shadow bg-white mb-4">
+                        <div className="xs:col-span-1 xs:col-start-1">
                           <p className="block text-sm leading-6 text-black font-bold">
                             Height Ratio
                           </p>
                         </div>
-                        <div className="sm:col-span-1">
+                        <div className="xs:col-span-1">
                           <label
                             htmlFor="heightRatioDesktop"
                             className="block text-sm leading-6 text-black"
                           >
                             Desktop
                           </label>
-                          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange sm:max-w-md">
+                          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
                             <input
                               type="number"
                               step=".01"
                               name="heightRatioDesktop"
                               id="heightRatioDesktop"
-                              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                               onChange={handleChange}
                               value={state.heightRatioDesktop}
                             />
                           </div>
                         </div>
 
-                        <div className="sm:col-span-1">
+                        <div className="xs:col-span-1">
                           <label
                             htmlFor="heightRatioTablet"
                             className="block text-sm leading-6 text-black"
                           >
                             Tablet
                           </label>
-                          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange sm:max-w-md">
+                          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
                             <input
                               type="number"
                               step=".01"
                               name="heightRatioTablet"
                               id="heightRatioTablet"
-                              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                               onChange={handleChange}
                               value={state.heightRatioTablet}
                             />
                           </div>
                         </div>
 
-                        <div className="sm:col-span-1">
+                        <div className="xs:col-span-1">
                           <label
                             htmlFor="heightRatioMobile"
                             className="block text-sm leading-6 text-black"
                           >
                             Mobile
                           </label>
-                          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange sm:max-w-md">
+                          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
                             <input
                               type="number"
                               step=".01"
                               name="heightRatioMobile"
                               id="heightRatioMobile"
-                              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                               onChange={handleChange}
                               value={state.heightRatioMobile}
                             />
                           </div>
                         </div>
 
-                        <div className="sm:col-span-1 sm:col-start-1">
+                        <div className="xs:col-span-1 xs:col-start-1">
                           <p className="block text-sm leading-6 text-black font-bold">
                             Height Offset (number of pixels)
                           </p>
                         </div>
-                        <div className="sm:col-span-1">
+                        <div className="xs:col-span-1">
                           <label
                             htmlFor="heightOffsetDesktop"
                             className="block text-sm leading-6 text-black"
                           >
                             Desktop
                           </label>
-                          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange sm:max-w-md">
+                          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
                             <input
                               type="number"
                               name="heightOffsetDesktop"
                               id="heightOffsetDesktop"
-                              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                               onChange={handleChange}
                               value={state.heightOffsetDesktop}
                             />
                           </div>
                         </div>
 
-                        <div className="sm:col-span-1">
+                        <div className="xs:col-span-1">
                           <label
                             htmlFor="heightOffsetTablet"
                             className="block text-sm leading-6 text-black"
                           >
                             Tablet
                           </label>
-                          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange sm:max-w-md">
+                          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
                             <input
                               type="number"
                               name="heightOffsetTablet"
                               id="heightOffsetTablet"
-                              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                               onChange={handleChange}
                               value={state.heightOffsetTablet}
                             />
                           </div>
                         </div>
 
-                        <div className="sm:col-span-1">
+                        <div className="xs:col-span-1">
                           <label
                             htmlFor="heightOffsetMobile"
                             className="block text-sm leading-6 text-black"
                           >
                             Mobile
                           </label>
-                          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange sm:max-w-md">
+                          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
                             <input
                               type="number"
                               name="heightOffsetMobile"
                               id="heightOffsetMobile"
-                              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                               onChange={handleChange}
                               value={state.heightOffsetMobile}
                             />
@@ -3857,7 +3857,7 @@ const EditFormPane = ({
                       </div>
                     </div>
 
-                    <div className="sm:col-start-1 sm:col-span-full">
+                    <div className="xs:col-start-1 xs:col-span-full">
                       <p className="block text-sm leading-6 text-black font-bold">
                         Pane Fragments
                       </p>

@@ -11,8 +11,8 @@ const EditBelief = ({
   handleChangeBelief,
 }: IEditBelief) => {
   return (
-    <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 p-4 shadow bg-white mb-2">
-      <div className="sm:col-span-2 col-span-1">
+    <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 xs:grid-cols-6 p-4 shadow bg-white mb-2">
+      <div className="xs:col-span-2 col-span-1">
         <label
           htmlFor={`${mode}-${index}-selector`}
           className="block text-sm leading-6 text-black"
@@ -20,12 +20,12 @@ const EditBelief = ({
           Selector (allowed: A-Z, a-z)
         </label>
         <div className="mt-2">
-          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange sm:max-w-md">
+          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
             <input
               type="text"
               name="selector"
               id={`${mode}-${index}-selector`}
-              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
               value={selector}
               pattern="[A-Za-z]+"
               onChange={(event) =>
@@ -41,7 +41,7 @@ const EditBelief = ({
           </div>
         </div>
       </div>
-      <div className="sm:col-span-2 col-span-1">
+      <div className="xs:col-span-2 col-span-1">
         <label
           htmlFor={`${mode}-${index}-value`}
           className="block text-sm leading-6 text-black"
@@ -49,12 +49,12 @@ const EditBelief = ({
           Value (allowed: A-Z, or * | csv)
         </label>
         <div className="mt-2">
-          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange sm:max-w-md">
+          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
             <input
               type="text"
               name="value"
               id={`${mode}-${index}-value`}
-              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
               value={value}
               pattern="[A-Z*,_]+"
               onChange={(event) =>

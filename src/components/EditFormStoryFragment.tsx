@@ -428,8 +428,8 @@ const EditFormStoryFragment = ({
               >
                 <div className="space-y-12">
                   <div className="border-b border-black/10 pb-12">
-                    <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                      <div className="sm:col-span-3">
+                    <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 xs:grid-cols-6">
+                      <div className="xs:col-span-3">
                         <label
                           htmlFor="title"
                           className="text-sm leading-6 text-black inline-block"
@@ -446,12 +446,12 @@ const EditFormStoryFragment = ({
                           </span>
                         ) : null}
                         <div className="mt-2">
-                          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange sm:max-w-md">
+                          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
                             <input
                               type="text"
                               name="title"
                               id="title"
-                              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                               value={state.title}
                               onChange={handleChange}
                             />
@@ -459,7 +459,7 @@ const EditFormStoryFragment = ({
                         </div>
                       </div>
 
-                      <div className="sm:col-span-2">
+                      <div className="xs:col-span-2">
                         <label
                           htmlFor="slug"
                           className="text-sm leading-6 text-black inline-block"
@@ -483,20 +483,20 @@ const EditFormStoryFragment = ({
                           </span>
                         ) : null}
                         <div className="mt-2">
-                          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange sm:max-w-md">
+                          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
                             <input
                               type="text"
                               name="slug"
                               id="slug"
                               pattern="[a-zA-Z\-]+"
-                              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                               value={state.slug}
                               onChange={handleChange}
                             />
                           </div>
                         </div>
                       </div>
-                      <div className="sm:col-span-2">
+                      <div className="xs:col-span-2">
                         <label
                           htmlFor="tailwindBgColour"
                           className="block text-sm leading-6 text-black"
@@ -504,12 +504,12 @@ const EditFormStoryFragment = ({
                           Tailwind Background Colour
                         </label>
                         <div className="mt-2">
-                          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange sm:max-w-md">
+                          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
                             <input
                               type="text"
                               name="tailwindBgColour"
                               id="tailwindBgColour"
-                              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                               value={state.tailwindBgColour}
                               onChange={handleChange}
                             />
@@ -517,7 +517,7 @@ const EditFormStoryFragment = ({
                         </div>
                       </div>
 
-                      <div className="sm:col-span-3">
+                      <div className="xs:col-span-3">
                         <label
                           htmlFor="socialImagePath"
                           className="block text-sm leading-6 text-black"
@@ -531,12 +531,12 @@ const EditFormStoryFragment = ({
                           </span>
                         </label>
                         <div className="mt-2">
-                          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange sm:max-w-md">
+                          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
                             <input
                               type="text"
                               name="socialImagePath"
                               id="socialImagePath"
-                              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                               value={state.socialImagePath}
                               onChange={handleChange}
                             />
@@ -544,7 +544,7 @@ const EditFormStoryFragment = ({
                         </div>
                       </div>
 
-                      <div className="sm:col-span-full">
+                      <div className="xs:col-span-full">
                         <p className="block text-sm leading-6 text-black">
                           Panes
                         </p>
@@ -574,7 +574,7 @@ const EditFormStoryFragment = ({
                         )}
                       </div>
 
-                      <div className="sm:col-span-full">
+                      <div className="xs:col-span-full">
                         <p className="block text-sm leading-6 text-black">
                           Context Panes
                         </p>
@@ -604,7 +604,7 @@ const EditFormStoryFragment = ({
                         )}
                       </div>
 
-                      <div className="sm:col-span-full">
+                      <div className="xs:col-span-full">
                         <p className="block text-sm leading-6 text-black">
                           Menu
                         </p>

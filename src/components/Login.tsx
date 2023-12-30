@@ -125,8 +125,8 @@ const Login = () => {
               ) : null}
             </div>
 
-            <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
-              <div className="sm:col-span-4">
+            <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 xs:grid-cols-6 md:col-span-2">
+              <div className="xs:col-span-4">
                 <div className="inline-flex">
                   <label
                     htmlFor="username"
@@ -143,13 +143,13 @@ const Login = () => {
                   ) : null}
                 </div>
                 <div className="mt-2">
-                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen xs:max-w-md">
                     <input
                       type="text"
                       name="username"
                       id="username"
                       autoComplete="username"
-                      className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-mylightgrey focus:ring-2 focus:ring-inset focus:ring-mygreen sm:text-sm sm:leading-6"
+                      className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-mylightgrey focus:ring-2 focus:ring-inset focus:ring-mygreen xs:text-sm xs:leading-6"
                       onChange={(e) => setOauthUsername(e.target.value)}
                       value={oauthUsername}
                     />
@@ -157,7 +157,7 @@ const Login = () => {
                 </div>
               </div>
 
-              <div className="sm:col-span-4">
+              <div className="xs:col-span-4">
                 <div className="inline-flex">
                   <label
                     htmlFor="password"
@@ -181,19 +181,19 @@ const Login = () => {
                     name="password"
                     type="password"
                     autoComplete="current-password"
-                    className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-mylightgrey focus:ring-2 focus:ring-inset focus:ring-mygreen sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-mylightgrey focus:ring-2 focus:ring-inset focus:ring-mygreen xs:text-sm xs:leading-6"
                     onChange={(e) => setOauthPassword(e.target.value)}
                     value={oauthPassword}
                   />
                 </div>
               </div>
               {failed ? (
-                <div className="sm:col-span-4">
+                <div className="xs:col-span-4">
                   Those credentials were not accepted.
                 </div>
               ) : null}
 
-              <div className="sm:col-span-4">
+              <div className="xs:col-span-4">
                 <button
                   type="submit"
                   className="font-action rounded-md bg-black px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-mygreen hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mygreen"

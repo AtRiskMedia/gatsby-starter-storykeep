@@ -9,14 +9,6 @@ import React, {
 } from 'react'
 import { renderToString } from 'react-dom/server'
 import styled from 'styled-components'
-import {
-  DevicePhoneMobileIcon,
-  DeviceTabletIcon,
-  ComputerDesktopIcon,
-  ArrowPathRoundedSquareIcon,
-  PlusCircleIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline'
 import { classNames, Compositor } from '@tractstack/helpers'
 import { fromMarkdown } from 'mdast-util-from-markdown'
 import { toHast } from 'mdast-util-to-hast'
@@ -27,7 +19,6 @@ import { generateLivePreviewPayload } from '../../helpers/generateLivePreviewPay
 import { htmlToMarkdown } from '../../helpers/htmlToMarkdown'
 import { useDrupalStore } from '../../stores/drupal'
 import {
-  IRenderPane,
   IEditInPlace,
   IInterceptOverride,
   IContentEditableContainer,
@@ -57,17 +48,6 @@ const tags = {
   ul: `Unordered List`,
   ol: `Ordered List`,
 }
-const insertModeTags = [
-  { name: `p`, title: `Paragraph` },
-  { name: `li`, title: `List Item` },
-  { name: `h2`, title: `Heading 2` },
-  { name: `h3`, title: `Heading 3` },
-  { name: `h4`, title: `Heading 4` },
-  { name: `h5`, title: `Heading 5` },
-  { name: `h6`, title: `Heading 6` },
-  { name: `ul`, title: `List` },
-  { name: `ol`, title: `Ordered List` },
-]
 
 const useRefCallback = <T extends any[]>(
   value: ((...args: T) => void) | undefined,
@@ -91,12 +71,12 @@ const PaneRender = ({
   handlers,
   previewPayload,
   toggleCheck,
-}: IRenderPane) => {
+  fn,
+}: any) => {
+  const { width, interceptMode, setInterceptMode, interceptModeTag } = fn
   const handleEditMarkdown = handlers.handleEditMarkdown
   const handleMutateMarkdown = handlers.handleMutateMarkdown
   const handleChangeEditInPlace = handlers.handleChangeEditInPlace
-  const [interceptMode, setInterceptMode] = useState(`edit`)
-  const [interceptModeTag, setInterceptModeTag] = useState(`p`)
   const [pageStylesPagination, setPageStylesPagination] = useState(-1)
   const thisPane = previewPayload.state
   const paneFragmentsPayload = previewPayload.statePaneFragments
@@ -112,25 +92,6 @@ const PaneRender = ({
   const codeItemsLookup =
     previewPayload.stateLivePreviewMarkdown.codeItemsLookup
   const viewportKey = previewPayload.viewportKey
-  const innerViewportMobile = Math.min(
-    typeof window !== `undefined` ? window.innerWidth * 0.5 : 400,
-    400,
-  )
-  const innerViewportTablet = Math.min(
-    typeof window !== `undefined` ? window.innerWidth * 0.6 : 500,
-    500,
-  )
-  const innerViewportDesktop = Math.max(
-    typeof window !== `undefined` ? window.innerWidth * 0.6 : 700,
-    700,
-  )
-  const innerViewport =
-    viewportKey === `mobile`
-      ? innerViewportMobile
-      : viewportKey === `tablet`
-        ? innerViewportTablet
-        : innerViewportDesktop
-  const [width, setWidth] = useState(innerViewport)
   const [nth, setNth] = useState(-1)
   const [focus, setFocus] = useState(-1)
   const [childFocus, setChildFocus] = useState(-1)
@@ -145,7 +106,6 @@ const PaneRender = ({
     setTag(``)
   }
   const overrideWidthCss = `width:${width}px;`
-  const setViewportKey = previewPayload.setViewportKey
   const thisId = `${viewportKey}-${uuid}`
   const elementRef = useRef<HTMLElement>(null)
   const allMarkdown = useDrupalStore((state) => state.allMarkdown)
@@ -634,6 +594,7 @@ const PaneRender = ({
     stateLivePreviewMarkdown.markdownTags,
     stateLivePreviewMarkdown.links,
     stateLivePreviewMarkdown.linksLookup,
+    setInterceptMode,
   ])
 
   useEffect(() => {
@@ -706,8 +667,8 @@ const PaneRender = ({
           <form className="max-w-3xl" id="editPaneDetails">
             <div className="space-y-12">
               <div className="border-b border-black/10 pb-12">
-                <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                  <div className="sm:col-span-3">
+                <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 xs:grid-cols-6">
+                  <div className="xs:col-span-3">
                     <label
                       htmlFor="title"
                       className="block text-sm leading-6 text-black"
@@ -723,12 +684,12 @@ const PaneRender = ({
                       ) : null}
                     </label>
                     <div className="mt-2">
-                      <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange sm:max-w-md">
+                      <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
                         <input
                           type="text"
                           name="title"
                           id="title"
-                          className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                          className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                           value={previewPayload?.state?.title}
                           onChange={handlers.handleChange}
                         />
@@ -736,7 +697,7 @@ const PaneRender = ({
                     </div>
                   </div>
 
-                  <div className="sm:col-span-2">
+                  <div className="xs:col-span-2">
                     <label
                       htmlFor="slug"
                       className="block text-sm leading-6 text-black"
@@ -755,13 +716,13 @@ const PaneRender = ({
                       </span>
                     ) : null}
                     <div className="mt-2">
-                      <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange sm:max-w-md">
+                      <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
                         <input
                           type="text"
                           name="slug"
                           id="slug"
                           pattern="[a-zA-Z\-]+"
-                          className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                          className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                           value={previewPayload.state.slug}
                           onChange={handlers.handleChange}
                         />
@@ -949,152 +910,7 @@ const PaneRender = ({
 
   return (
     <>
-      <section className="my-4">
-        <div>
-          <div className="relative flex items-center justify-between mt-6 py-2 max-w-screen-2xl">
-            <span className="font-action pr-3 text-base font-bold leading-6 text-black">
-              Live Preview
-            </span>
-
-            <span className="isolate inline-flex -space-x-px rounded-md shadow-sm">
-              <div className="inline-flex items-center rounded-l-md px-3 py-2 text-mydarkgrey font-action text-xs">
-                Mode:
-              </div>
-              <button
-                type="button"
-                className={classNames(
-                  interceptMode === `edit`
-                    ? `bg-myorange/10 text-allblack`
-                    : `bg-white text-mydarkgrey ring-1 ring-inset ring-slate-200 hover:bg-myorange hover:text-white focus:z-10`,
-                  `relative inline-flex items-center rounded-l-md px-3 py-2`,
-                )}
-                title="Edit in Place"
-                onClick={() => setInterceptMode(`edit`)}
-              >
-                <span className="sr-only">Toggle Edit in Place Mode</span>
-                <ArrowPathRoundedSquareIcon
-                  className="h-5 w-5"
-                  aria-hidden="true"
-                />
-              </button>
-              <button
-                type="button"
-                className={classNames(
-                  interceptMode === `delete`
-                    ? `bg-myorange/10 text-allblack`
-                    : `bg-white text-mydarkgrey ring-1 ring-inset ring-slate-200 hover:bg-myorange hover:text-white focus:z-10`,
-                  `relative inline-flex items-center px-3 py-2`,
-                )}
-                title="Delete Mode"
-                onClick={() => setInterceptMode(`delete`)}
-              >
-                <span className="sr-only">Toggle Delete Mode</span>
-                <XMarkIcon className="h-5 w-5" aria-hidden="true" />
-              </button>
-              {interceptMode !== `insert` ? (
-                <button
-                  type="button"
-                  className="bg-white text-mydarkgrey ring-1 ring-inset ring-slate-200 hover:bg-myorange hover:text-white focus:z-10 relative inline-flex items-center rounded-l-md px-3 py-2"
-                  title="Insert Mode"
-                  onClick={() => setInterceptMode(`insert`)}
-                >
-                  <span className="sr-only">Toggle Insert Mode</span>
-                  <PlusCircleIcon className="h-5 w-5" aria-hidden="true" />
-                </button>
-              ) : (
-                <>
-                  <span className="relative inline-flex items-center pl-3 pr-2 py-2 bg-myorange/10">
-                    <PlusCircleIcon className="h-5 w-5" aria-hidden="true" />
-                  </span>
-                  <span className="w-4" />
-                  <select
-                    id="interceptModeEdit"
-                    name="interceptModeEdit"
-                    className="block w-full bg-myorange/5 rounded-r-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-myorange sm:text-sm sm:leading-6"
-                    value={interceptModeTag}
-                    onChange={(e) => setInterceptModeTag(e.target.value)}
-                  >
-                    {insertModeTags.map((e) => (
-                      <option key={e.name} value={e.name}>
-                        {e.title}
-                      </option>
-                    ))}
-                  </select>
-                </>
-              )}
-            </span>
-
-            <span className="isolate inline-flex -space-x-px rounded-md shadow-sm">
-              <div className="inline-flex items-center rounded-l-md px-3 py-2 text-mydarkgrey font-action text-xs">
-                Viewport:
-              </div>
-              <button
-                type="button"
-                title="Mobile or small screens"
-                className={classNames(
-                  viewportKey === `mobile`
-                    ? `bg-myorange/10 text-allblack`
-                    : `bg-white text-mydarkgrey ring-1 ring-inset ring-slate-200 hover:bg-myorange hover:text-white focus:z-10`,
-                  `relative inline-flex items-center rounded-l-md px-3 py-2`,
-                )}
-                onClick={() => {
-                  setViewportKey(`mobile`)
-                  setWidth(innerViewportMobile)
-                }}
-              >
-                <span className="sr-only">Edit</span>
-                <DevicePhoneMobileIcon className="h-5 w-5" aria-hidden="true" />
-              </button>
-              <button
-                type="button"
-                title="Tablet or medium screens"
-                className={classNames(
-                  viewportKey === `tablet`
-                    ? `bg-myorange/10 text-allblack`
-                    : `bg-white text-mydarkgrey ring-1 ring-inset ring-slate-200 hover:bg-myorange hover:text-white focus:z-10`,
-                  `relative inline-flex items-center rounded-l-md px-3 py-2`,
-                )}
-                onClick={() => {
-                  setViewportKey(`tablet`)
-                  setWidth(innerViewportTablet)
-                }}
-              >
-                <span className="sr-only">Edit</span>
-                <DeviceTabletIcon className="h-5 w-5" aria-hidden="true" />
-              </button>
-              <button
-                type="button"
-                title="Desktop or large screens"
-                className={classNames(
-                  viewportKey === `desktop`
-                    ? `bg-myorange/10 text-allblack`
-                    : `bg-white text-mydarkgrey ring-1 ring-inset ring-slate-200 hover:bg-myorange hover:text-white focus:z-10`,
-                  `relative inline-flex items-center rounded-l-md px-3 py-2`,
-                )}
-                onClick={() => {
-                  setViewportKey(`desktop`)
-                  setWidth(innerViewportDesktop)
-                }}
-              >
-                <span className="sr-only">Edit</span>
-                <ComputerDesktopIcon className="h-5 w-5" aria-hidden="true" />
-              </button>
-              <span className="relative inline-flex items-center px-3 py-2">
-                at {Math.round(width)}px
-              </span>
-            </span>
-          </div>
-        </div>
-        <div className="relative max-w-screen-2xl">
-          <div
-            className="absolute inset-0 flex items-center"
-            aria-hidden="true"
-          >
-            <div className="w-full border-t border-slate-200" />
-          </div>
-        </div>
-      </section>
-      <div className="mx-auto w-full grow flex flex-row">
+      <div className="px-6 mx-auto w-full grow flex flex-row">
         <div className="flex-0 shrink">
           <StyledWrapperDiv
             key={`${viewportKey}-${uuid}-wrapper-outer`}

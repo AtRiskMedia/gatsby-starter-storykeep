@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { DrupalProvider } from '@tractstack/drupal-react-oauth-provider'
 import { ParseOptions, ParseImpressions } from '@tractstack/helpers'
+import { navigate } from 'gatsby'
 import { v4 as uuidv4 } from 'uuid'
 
 import { useDrupalStore } from '../../../stores/drupal'
@@ -10,6 +11,7 @@ import DrupalApi from '../../../components/DrupalApi'
 import PaneState from '../../../components/edit/PaneState'
 import {
   EditStages,
+  SaveStages,
   IEditPanePayload,
   IEditPaneFlags,
   ICleanerNode,
@@ -23,10 +25,10 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
   const cleanerQueue = useDrupalStore((state) => state.cleanerQueue)
   const removeCleanerQueue = useDrupalStore((state) => state.removeCleanerQueue)
   const embeddedEdit = useDrupalStore((state) => state.embeddedEdit)
-  const editStage = useDrupalStore((state) => state.editStage)
-  const setEditStage = useDrupalStore((state) => state.setEditStage)
+  const [editStage, setEditStage] = useState(EditStages.Booting)
   const openDemoEnabled = useDrupalStore((state) => state.openDemoEnabled)
   const oauthDrupalUuid = useDrupalStore((state) => state.oauthDrupalUuid)
+  const oauthDrupalRoles = useDrupalStore((state) => state.oauthDrupalRoles)
   const setDrupalQueue = useDrupalStore((state) => state.setDrupalQueue)
   const drupalResponse = useDrupalStore((state) => state.drupalResponse)
   const removeDrupalResponse = useDrupalStore(
@@ -49,12 +51,18 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
   const [flags, setFlags] = useState<IEditPaneFlags>({
     isAuthor: false,
     isEmbeddedEdit: false,
+    isAdmin: false,
+    isBuilder: false,
+    isOpenDemo: openDemoEnabled,
+    editStage: EditStages.Booting,
   })
   const [isSSR, setIsSSR] = useState(true)
 
   // SSR check
   useEffect(() => {
-    if (isSSR && typeof window !== `undefined`) setIsSSR(false)
+    if (isSSR && typeof window !== `undefined`) {
+      setIsSSR(false)
+    }
   }, [isSSR])
 
   // AuthorCheck
@@ -83,11 +91,18 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
           if (e?.uuid === oauthDrupalUuid)
             setFlags((prev) => ({ ...prev, isAuthor: true }))
         })
+        oauthDrupalRoles.split(`, `).forEach((e: any) => {
+          if (e === `Administrator`)
+            setFlags((prev) => ({ ...prev, isAdmin: true }))
+          if (e === `Builder`)
+            setFlags((prev) => ({ ...prev, isBuilder: true }))
+        })
         removeDrupalResponse(thisPane.drupalNid)
         setEditStage(EditStages.AuthorChecked)
       }
     }
   }, [
+    oauthDrupalRoles,
     oauthDrupalUuid,
     drupalResponse,
     removeDrupalResponse,
@@ -291,7 +306,7 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
           break
 
         case EditStages.InitialStateSet:
-          setEditStage(EditStages.LoadState)
+          setEditStage(EditStages.Activated)
           break
       }
   }, [
@@ -306,14 +321,19 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
   ])
 
   if (isSSR) return null
+  if (!thisPane) navigate(`/storykeep`)
 
   return (
     <DrupalProvider config={drupalConfig}>
       <DrupalApi>
-        {editStage < EditStages.LoadState ? (
+        {editStage < EditStages.Activated ? (
           <></>
         ) : (
-          <PaneState uuid={uuid} payload={payload} flags={flags} />
+          <PaneState
+            uuid={uuid}
+            payload={payload}
+            flags={{ ...flags, editStage }}
+          />
         )}
       </DrupalApi>
     </DrupalProvider>

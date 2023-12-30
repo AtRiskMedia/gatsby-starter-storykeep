@@ -18,7 +18,7 @@ const RenderStoryFragmentPane = ({
   const hasCodeHook: any = thisPane.hasCodeHook
   const codeHookDiv = (
     <div className="overflow-hidden rounded-lg bg-white shadow">
-      <div className="px-4 py-5 sm:p-6">Code Hook</div>
+      <div className="px-4 py-5 xs:p-6">Code Hook</div>
     </div>
   )
   const thisPaneChildren =

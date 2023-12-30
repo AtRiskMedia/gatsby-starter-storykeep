@@ -17,7 +17,7 @@ import {
 } from '../../helpers/allowedShapeNames'
 import { starterTemplate } from '../../helpers/starterTemplates'
 import PaneForm from './PaneForm'
-import { EditStages } from '../../types'
+import { EditStages, SaveStages } from '../../types'
 
 const PaneState = ({ uuid, payload, flags }: any) => {
   const [stateHeldBeliefs, setStateHeldBeliefs] = useState(
@@ -27,26 +27,25 @@ const PaneState = ({ uuid, payload, flags }: any) => {
     payload.initialStateWithheldBeliefs,
   )
   const [stateImpressions, setStateImpressions] = useState(
-    payload.initialStateImpressions,
+    payload.stateImpressions,
   )
   const [stateLivePreview, setStateLivePreview] = useState(
-    payload.initialStateLivePreview,
+    payload.stateLivePreview,
   )
   const [stateLivePreviewMarkdown, setStateLivePreviewMarkdown] = useState(
-    payload.initialStateLivePreviewMarkdown,
+    payload.stateLivePreviewMarkdown,
   )
   const [statePaneFragments, setStatePaneFragments] = useState(
-    payload.initialStatePaneFragments,
+    payload.statePaneFragments,
   )
-  const [state, setState] = useState(payload.initialState)
-  const [formState, setFormState] = useState(payload.initialFormState)
+  const [state, setState] = useState(payload.state)
+  const [formState, setFormState] = useState(payload.formState)
+  const [saveStage, setSaveStage] = useState(SaveStages.Booting)
   const [settingPane, setSettingPane] = useState(false)
   const [hasProcessedMarkdownResponse, setHasProcessedMarkdownResponse] =
     useState(false)
   const deepEqual = require(`deep-equal`)
   const openDemoEnabled = useDrupalStore((state) => state.openDemoEnabled)
-  const editStage = useDrupalStore((state) => state.editStage)
-  const setEditStage = useDrupalStore((state) => state.setEditStage)
   const allPanes = useDrupalStore((state) => state.allPanes)
   const thisPane = typeof allPanes[uuid] !== `undefined` ? allPanes[uuid] : null
   const allFiles = useDrupalStore((state) => state.allFiles)
@@ -176,12 +175,12 @@ const PaneState = ({ uuid, payload, flags }: any) => {
     [
       allFiles,
       allMarkdown,
-      state.hiddenPane,
+      state?.hiddenPane,
       stateHeldBeliefs,
       stateImpressions,
       stateLivePreviewMarkdown?.markdownArray,
       stateLivePreviewMarkdown?.markdownId,
-      stateLivePreviewMarkdown.paneFragmentId,
+      stateLivePreviewMarkdown?.paneFragmentId,
       statePaneFragments,
       stateWithheldBeliefs,
     ],
@@ -346,6 +345,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
     })
   }
 
+  /*
   const handleChangePaneFragment = (e: any) => {
     const value = e.target.value
     const target = e.target.id
@@ -377,6 +377,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
       // setToggleCheck(true)
     }
   }
+*/
 
   const handleChange = (e: any) => {
     // FIX
@@ -2691,7 +2692,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
   }, [drupalResponse, uuid, removeDrupalResponse])
 
   useEffect(() => {
-    if (formState.saving && !settingPane) {
+    if (formState?.saving && !settingPane) {
       const markdownId = stateLivePreviewMarkdown?.markdownId
       let success = false
       if (process.env.NODE_ENV === `development` || openDemoEnabled) {
@@ -2909,7 +2910,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
     thisPane,
     allMarkdown,
     stateLivePreviewMarkdown,
-    formState.saving,
+    formState?.saving,
     hasProcessedMarkdownResponse,
     drupalResponse,
     drupalPreSaveQueue,
@@ -2922,7 +2923,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
     removeDrupalPreSaveQueue,
     removeDrupalResponse,
     regenerateState,
-    stateLivePreviewMarkdown.paneFragmentId,
+    stateLivePreviewMarkdown?.paneFragmentId,
     state,
     stateHeldBeliefs,
     stateImpressions,
@@ -2933,7 +2934,10 @@ const PaneState = ({ uuid, payload, flags }: any) => {
   ])
 
   useEffect(() => {
-    if (editStage === EditStages.LoadState && Object.keys(state).length === 0) {
+    if (
+      flags?.editStage === EditStages.Activated &&
+      (!state || Object.keys(state).length === 0)
+    ) {
       setStateHeldBeliefs(payload.initialStateHeldBeliefs)
       setStateWithheldBeliefs(payload.initialStateWithheldBeliefs)
       setStateImpressions(payload.initialStateImpressions)
@@ -2943,12 +2947,17 @@ const PaneState = ({ uuid, payload, flags }: any) => {
       setState(payload.initialState)
       setFormState(payload.initialFormState)
     }
-    if (editStage === EditStages.LoadState && Object.keys(state).length) {
-      setEditStage(EditStages.Activated)
-    }
+    if (
+      flags.editStage === EditStages.Activated &&
+      state &&
+      Object.keys(state).length &&
+      saveStage < SaveStages.NoChanges
+    )
+      setSaveStage(SaveStages.NoChanges)
   }, [
-    editStage,
-    setEditStage,
+    flags.editStage,
+    saveStage,
+    setSaveStage,
     payload.initialState,
     payload.initialFormState,
     payload.initialStateImpressions,
@@ -2960,7 +2969,8 @@ const PaneState = ({ uuid, payload, flags }: any) => {
     state,
   ])
 
-  if (editStage !== EditStages.Activated) return null
+  if (saveStage < SaveStages.NoChanges) return null
+
   return (
     <PaneForm
       uuid={uuid}
@@ -2974,7 +2984,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
         stateLivePreview,
         stateLivePreviewMarkdown,
       }}
-      flags={flags}
+      flags={{ ...flags }}
       fn={{
         toggleBelief,
         handleChangeBelief,
@@ -2984,7 +2994,6 @@ const PaneState = ({ uuid, payload, flags }: any) => {
         handleEditMarkdown,
         handleMutateMarkdown,
         handleChangeEditInPlace,
-        handleChangePaneFragment,
         handleChange,
       }}
     />

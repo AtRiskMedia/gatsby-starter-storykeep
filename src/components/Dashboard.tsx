@@ -272,7 +272,7 @@ const Dashboard = () => {
   return (
     <section className="xl:max-w-screen-2xl">
       <ul role="list" className="space-y-5">
-        <li className="bg-slate-100 px-4 py-4 shadow sm:rounded-md sm:px-6">
+        <li className="bg-slate-100 px-4 py-4 shadow xs:rounded-md xs:px-6">
           <div className="border-b border-myblue/10 pb-2 mx-8">
             <h3 className="font-action text-xl text-myblue">
               Total activity | past 7 days
@@ -295,7 +295,7 @@ const Dashboard = () => {
           </dl>
         </li>
 
-        <li className="bg-slate-100 px-4 py-4 shadow sm:rounded-md sm:px-6">
+        <li className="bg-slate-100 px-4 py-4 shadow xs:rounded-md xs:px-6">
           <div>
             <div className="border-b border-myblue/10 pb-2 mx-8">
               <h3 className="font-action text-xl text-myblue">
@@ -309,7 +309,7 @@ const Dashboard = () => {
             </div>
           </div>
         </li>
-        <li className="bg-slate-100 px-4 py-4 shadow sm:rounded-md sm:px-6">
+        <li className="bg-slate-100 px-4 py-4 shadow xs:rounded-md xs:px-6">
           <div className="md:grid md:grid-cols-2 md:gap-2">
             <div>
               <div className="border-b border-myblue/10 pb-2 mx-8">
@@ -346,7 +346,7 @@ const Dashboard = () => {
             </div>
           </div>
         </li>
-        <li className="bg-slate-100 px-4 py-4 shadow sm:rounded-md sm:px-6">
+        <li className="bg-slate-100 px-4 py-4 shadow xs:rounded-md xs:px-6">
           <div className="border-b border-myblue/10 pb-2 mx-8">
             <h3 className="font-action text-xl text-myblue">
               Story Keep at a glance

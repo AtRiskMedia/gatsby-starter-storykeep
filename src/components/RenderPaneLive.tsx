@@ -710,8 +710,8 @@ const RenderPaneLive = ({
           <form className="max-w-3xl" id="editPaneDetails">
             <div className="space-y-12">
               <div className="border-b border-black/10 pb-12">
-                <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                  <div className="sm:col-span-3">
+                <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 xs:grid-cols-6">
+                  <div className="xs:col-span-3">
                     <label
                       htmlFor="title"
                       className="block text-sm leading-6 text-black"
@@ -727,12 +727,12 @@ const RenderPaneLive = ({
                       ) : null}
                     </label>
                     <div className="mt-2">
-                      <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange sm:max-w-md">
+                      <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
                         <input
                           type="text"
                           name="title"
                           id="title"
-                          className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                          className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                           value={previewPayload.state.title}
                           onChange={handlers.handleChange}
                         />
@@ -740,7 +740,7 @@ const RenderPaneLive = ({
                     </div>
                   </div>
 
-                  <div className="sm:col-span-2">
+                  <div className="xs:col-span-2">
                     <label
                       htmlFor="slug"
                       className="block text-sm leading-6 text-black"
@@ -759,13 +759,13 @@ const RenderPaneLive = ({
                       </span>
                     ) : null}
                     <div className="mt-2">
-                      <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange sm:max-w-md">
+                      <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
                         <input
                           type="text"
                           name="slug"
                           id="slug"
                           pattern="[a-zA-Z\-]+"
-                          className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                          className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                           value={previewPayload.state.slug}
                           onChange={handlers.handleChange}
                         />
@@ -1014,7 +1014,7 @@ const RenderPaneLive = ({
                   <select
                     id="interceptModeEdit"
                     name="interceptModeEdit"
-                    className="block w-full bg-myorange/5 rounded-r-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-myorange sm:text-sm sm:leading-6"
+                    className="block w-full bg-myorange/5 rounded-r-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-myorange xs:text-sm xs:leading-6"
                     value={interceptModeTag}
                     onChange={(e) => setInterceptModeTag(e.target.value)}
                   >

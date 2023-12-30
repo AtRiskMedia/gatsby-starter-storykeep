@@ -7,8 +7,8 @@ import { IEditFormPaneFragment, IFormHandler } from '../types'
 
 const BackgroundPane = ({ state, handleChange }: IFormHandler) => (
   <>
-    <div className="sm:col-span-1">Background Pane</div>
-    <div className="sm:col-span-2 sm:col-start-2">
+    <div className="xs:col-span-1">Background Pane</div>
+    <div className="xs:col-span-2 xs:col-start-2">
       <label
         htmlFor={`shapeDesktop--${state.id}`}
         className="block text-sm leading-6 text-black"
@@ -29,7 +29,7 @@ const BackgroundPane = ({ state, handleChange }: IFormHandler) => (
         </div>
       </div>
     </div>
-    <div className="sm:col-span-2">
+    <div className="xs:col-span-2">
       <label
         htmlFor={`shapeTablet--${state.id}`}
         className="block text-sm leading-6 text-black"
@@ -50,7 +50,7 @@ const BackgroundPane = ({ state, handleChange }: IFormHandler) => (
         </div>
       </div>
     </div>
-    <div className="sm:col-start-2 sm:col-span-2">
+    <div className="xs:col-start-2 xs:col-span-2">
       <label
         htmlFor={`shapeMobile--${state.id}`}
         className="block text-sm leading-6 text-black"
@@ -71,25 +71,25 @@ const BackgroundPane = ({ state, handleChange }: IFormHandler) => (
         </div>
       </div>
     </div>
-    <div className="sm:col-span-2">
+    <div className="xs:col-span-2">
       <label
         htmlFor={`hiddenViewports--${state.id}`}
         className="block text-sm leading-6 text-black"
       >
         Hidden Viewports
       </label>
-      <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-green sm:max-w-md">
+      <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-green xs:max-w-md">
         <input
           type="text"
           name={`hiddenViewports--${state.id}`}
           id={`hiddenViewports--${state.id}`}
-          className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+          className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
           value={state.hiddenViewports}
           onChange={(e) => handleChange(e)}
         />
       </div>
     </div>
-    <div className="sm:col-start-2 sm:col-span-5">
+    <div className="xs:col-start-2 xs:col-span-5">
       <label
         htmlFor={`optionsPayloadString--${state.id}`}
         className="block text-sm leading-6 text-black"
@@ -101,7 +101,7 @@ const BackgroundPane = ({ state, handleChange }: IFormHandler) => (
           name={`optionsPayloadString--${state.id}`}
           id={`optionsPayloadString--${state.id}`}
           rows={5}
-          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-mylightgrey focus:ring-2 focus:ring-inset focus:ring-green sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-mylightgrey focus:ring-2 focus:ring-inset focus:ring-green xs:text-sm xs:leading-6"
           value={state.optionsPayloadString}
           onChange={(e) => handleChange(e)}
         />
@@ -112,8 +112,8 @@ const BackgroundPane = ({ state, handleChange }: IFormHandler) => (
 
 const Markdown = ({ state, handleChange }: IFormHandler) => (
   <>
-    <div className="sm:col-span-1">Markdown Copy</div>
-    <div className="sm:col-start-2 sm:col-span-5">
+    <div className="xs:col-span-1">Markdown Copy</div>
+    <div className="xs:col-start-2 xs:col-span-5">
       <label
         htmlFor={`markdownBody--${state.id}`}
         className="block text-sm leading-6 text-black"
@@ -125,13 +125,13 @@ const Markdown = ({ state, handleChange }: IFormHandler) => (
           id={`markdownBody--${state.id}`}
           name={`markdownBody--${state.id}`}
           rows={5}
-          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-mylightgrey focus:ring-2 focus:ring-inset focus:ring-green sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-mylightgrey focus:ring-2 focus:ring-inset focus:ring-green xs:text-sm xs:leading-6"
           value={state.markdownBody}
           onChange={(e) => handleChange(e)}
         />
       </div>
     </div>
-    <div className="sm:col-start-2 sm:col-span-5">
+    <div className="xs:col-start-2 xs:col-span-5">
       <label
         htmlFor={`optionsPayloadString--${state.id}`}
         className="block text-sm leading-6 text-black"
@@ -143,13 +143,13 @@ const Markdown = ({ state, handleChange }: IFormHandler) => (
           id={`optionsPayloadString--${state.id}`}
           name={`optionsPayloadString--${state.id}`}
           rows={7}
-          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-mylightgrey focus:ring-2 focus:ring-inset focus:ring-green sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-mylightgrey focus:ring-2 focus:ring-inset focus:ring-green xs:text-sm xs:leading-6"
           value={state.optionsPayloadString}
           onChange={(e) => handleChange(e)}
         />
       </div>
     </div>
-    <div className="sm:col-span-2 sm:col-start-2">
+    <div className="xs:col-span-2 xs:col-start-2">
       <label
         htmlFor={`imageMaskShapeDesktop--${state.id}`}
         className="block text-sm leading-6 text-black"
@@ -170,7 +170,7 @@ const Markdown = ({ state, handleChange }: IFormHandler) => (
         </div>
       </div>
     </div>
-    <div className="sm:col-span-2">
+    <div className="xs:col-span-2">
       <label
         htmlFor={`imageMaskShapeTablet--${state.id}`}
         className="block text-sm leading-6 text-black"
@@ -191,7 +191,7 @@ const Markdown = ({ state, handleChange }: IFormHandler) => (
         </div>
       </div>
     </div>
-    <div className="sm:col-start-2 sm:col-span-2">
+    <div className="xs:col-start-2 xs:col-span-2">
       <label
         htmlFor={`imageMaskShapeMobile--${state.id}`}
         className="block text-sm leading-6 text-black"
@@ -212,7 +212,7 @@ const Markdown = ({ state, handleChange }: IFormHandler) => (
         </div>
       </div>
     </div>
-    <div className="sm:col-span-2 sm:col-start-2">
+    <div className="xs:col-span-2 xs:col-start-2">
       <label
         htmlFor={`textShapeOutsideDesktop--${state.id}`}
         className="block text-sm leading-6 text-black"
@@ -233,7 +233,7 @@ const Markdown = ({ state, handleChange }: IFormHandler) => (
         </div>
       </div>
     </div>
-    <div className="sm:col-span-2">
+    <div className="xs:col-span-2">
       <label
         htmlFor={`textShapeOutsideTablet--${state.id}`}
         className="block text-sm leading-6 text-black"
@@ -254,7 +254,7 @@ const Markdown = ({ state, handleChange }: IFormHandler) => (
         </div>
       </div>
     </div>
-    <div className="sm:col-start-2 sm:col-span-2">
+    <div className="xs:col-start-2 xs:col-span-2">
       <label
         htmlFor={`textShapeOutsideMobile--${state.id}`}
         className="block text-sm leading-6 text-black"
@@ -275,25 +275,25 @@ const Markdown = ({ state, handleChange }: IFormHandler) => (
         </div>
       </div>
     </div>
-    <div className="sm:col-span-2 sm:col-start-2">
+    <div className="xs:col-span-2 xs:col-start-2">
       <label
         htmlFor={`hiddenViewports--${state.id}`}
         className="block text-sm leading-6 text-black"
       >
         Hidden Viewports
       </label>
-      <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-green sm:max-w-md">
+      <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-green xs:max-w-md">
         <input
           type="text"
           name={`hiddenViewports--${state.id}`}
           id={`hiddenViewports--${state.id}`}
-          className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+          className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
           value={state.hiddenViewports}
           onChange={(e) => handleChange(e)}
         />
       </div>
     </div>
-    <div className="sm:col-span-5 sm:col-start-2">
+    <div className="xs:col-span-5 xs:col-start-2">
       <Switch.Group as="div" className="flex items-center justify-between">
         <Switch
           checked={state.isContextPane}
@@ -334,8 +334,8 @@ const Markdown = ({ state, handleChange }: IFormHandler) => (
 
 const BgColour = ({ state, handleChange }: IFormHandler) => (
   <>
-    <div className="sm:col-span-1">Background Colour</div>
-    <div className="sm:col-span-1">
+    <div className="xs:col-span-1">Background Colour</div>
+    <div className="xs:col-span-1">
       <label
         htmlFor={`bgColour--${state.id}`}
         className="block text-sm leading-6 text-black"
@@ -355,19 +355,19 @@ const BgColour = ({ state, handleChange }: IFormHandler) => (
         </div>
       </div>
     </div>
-    <div className="sm:col-span-2">
+    <div className="xs:col-span-2">
       <label
         htmlFor={`hiddenViewports--${state.id}`}
         className="block text-sm leading-6 text-black"
       >
         Hidden Viewports
       </label>
-      <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-green sm:max-w-md">
+      <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-green xs:max-w-md">
         <input
           type="text"
           name={`hiddenViewports--${state.id}`}
           id={`hiddenViewports--${state.id}`}
-          className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+          className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
           value={state.hiddenViewports}
           onChange={(e) => handleChange(e)}
         />
@@ -392,7 +392,7 @@ const EditFormPaneFragment = ({
   return (
     <div
       key={`EditFormPaneFragment-${state.id}`}
-      className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 p-4 shadow bg-white mb-4"
+      className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 xs:grid-cols-6 p-4 shadow bg-white mb-4"
     >
       <FormHandler state={state} handleChange={handleChange} />
     </div>

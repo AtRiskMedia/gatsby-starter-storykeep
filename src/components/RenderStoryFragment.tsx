@@ -294,27 +294,27 @@ const RenderStoryFragment = ({
 
           <div className="fixed inset-0 max-w-screen overflow-y-auto">
             <div className="flex h-full justify-center items-center">
-              <div className="flex bg-mylightgrey h-96 w-full items-end justify-start p-4 text-center sm:items-center sm:p-0">
+              <div className="flex bg-mylightgrey h-96 w-full items-end justify-start p-4 text-center xs:items-center xs:p-0">
                 <Transition.Child
                   as={Fragment}
                   enter="ease-out duration-300"
-                  enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                  enterTo="opacity-100 translate-y-0 sm:scale-100"
+                  enterFrom="opacity-0 translate-y-4 xs:translate-y-0 xs:scale-95"
+                  enterTo="opacity-100 translate-y-0 xs:scale-100"
                   leave="ease-in duration-200"
-                  leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-                  leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  leaveFrom="opacity-100 translate-y-0 xs:scale-100"
+                  leaveTo="opacity-0 translate-y-4 xs:translate-y-0 xs:scale-95"
                 >
-                  <Dialog.Panel className="max-w-3xl relative transform px-4 pb-4 pt-5 text-left transition-all sm:my-8 sm:w-full sm:p-6">
+                  <Dialog.Panel className="max-w-3xl relative transform px-4 pb-4 pt-5 text-left transition-all xs:my-8 xs:w-full xs:p-6">
                     <div className="flex flex-row">
-                      <div className="h-fit rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:p-6">
-                        <div className="sm:flex sm:items-start">
-                          <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-myorange/20 sm:mx-0 sm:h-10 sm:w-10">
+                      <div className="h-fit rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all xs:my-8 xs:w-full xs:p-6">
+                        <div className="xs:flex xs:items-start">
+                          <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-myorange/20 xs:mx-0 xs:h-10 xs:w-10">
                             <RectangleGroupIcon
                               className="h-6 w-6 text-myorange"
                               aria-hidden="true"
                             />
                           </div>
-                          <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                          <div className="mt-3 text-center xs:ml-4 xs:mt-0 xs:text-left">
                             <Dialog.Title
                               as="h3"
                               className="text-lg font-main leading-6 text-black"
@@ -323,17 +323,17 @@ const RenderStoryFragment = ({
                             </Dialog.Title>
                           </div>
                         </div>
-                        <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                        <div className="mt-5 xs:mt-4 xs:flex xs:flex-row-reverse">
                           <button
                             type="button"
-                            className="inline-flex w-full justify-center rounded-md bg-mydarkgrey px-3 py-2 text-sm font-bold text-mywhite shadow-sm hover:bg-myorange sm:ml-3 sm:w-auto"
+                            className="inline-flex w-full justify-center rounded-md bg-mydarkgrey px-3 py-2 text-sm font-bold text-mywhite shadow-sm hover:bg-myorange xs:ml-3 xs:w-auto"
                             onClick={() => handleAdd(`new`)}
                           >
                             New Pane
                           </button>
                           <button
                             type="button"
-                            className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 sm:mt-0 sm:w-auto"
+                            className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 xs:mt-0 xs:w-auto"
                             onClick={() => setAddModalOpen(false)}
                           >
                             Cancel
@@ -343,15 +343,15 @@ const RenderStoryFragment = ({
                       <span className="mt-16 px-4 text-2xl font-action text-white">
                         OR
                       </span>
-                      <div className="rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:p-6">
-                        <div className="sm:flex sm:items-start">
-                          <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-myorange/20 sm:mx-0 sm:h-10 sm:w-10">
+                      <div className="rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all xs:my-8 xs:w-full xs:p-6">
+                        <div className="xs:flex xs:items-start">
+                          <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-myorange/20 xs:mx-0 xs:h-10 xs:w-10">
                             <RectangleGroupIcon
                               className="h-6 w-6 text-myorange"
                               aria-hidden="true"
                             />
                           </div>
-                          <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                          <div className="mt-3 text-center xs:ml-4 xs:mt-0 xs:text-left">
                             <Dialog.Title
                               as="h3"
                               className="text-lg font-main leading-6 text-black"
@@ -370,7 +370,7 @@ const RenderStoryFragment = ({
                           </Combobox.Label>
                           <div className="relative mt-2">
                             <Combobox.Input
-                              className="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-10 text-black shadow-sm ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-mygreen sm:text-sm sm:leading-6"
+                              className="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-10 text-black shadow-sm ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-mygreen xs:text-sm xs:leading-6"
                               onChange={(event) => setQuery(event.target.value)}
                               displayValue={(pane: any) => pane?.title}
                             />
@@ -382,7 +382,7 @@ const RenderStoryFragment = ({
                             </Combobox.Button>
 
                             {filteredPanes.length > 0 && (
-                              <Combobox.Options className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                              <Combobox.Options className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none xs:text-sm">
                                 {filteredPanes.map((pane: any) => (
                                   <Combobox.Option
                                     key={pane.id}
@@ -431,11 +431,11 @@ const RenderStoryFragment = ({
                           </div>
                         </Combobox>
 
-                        <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                        <div className="mt-5 xs:mt-4 xs:flex xs:flex-row-reverse">
                           {selectedPane ? (
                             <button
                               type="button"
-                              className="inline-flex w-full justify-center rounded-md bg-mydarkgrey px-3 py-2 text-sm font-bold text-mywhite shadow-sm hover:bg-myorange sm:ml-3 sm:w-auto"
+                              className="inline-flex w-full justify-center rounded-md bg-mydarkgrey px-3 py-2 text-sm font-bold text-mywhite shadow-sm hover:bg-myorange xs:ml-3 xs:w-auto"
                               onClick={() => handleAdd(`existing`)}
                             >
                               Insert
@@ -443,7 +443,7 @@ const RenderStoryFragment = ({
                           ) : null}
                           <button
                             type="button"
-                            className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 sm:mt-0 sm:w-auto"
+                            className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 xs:mt-0 xs:w-auto"
                             onClick={() => setAddModalOpen(false)}
                           >
                             Cancel

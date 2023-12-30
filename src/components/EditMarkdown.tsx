@@ -215,8 +215,8 @@ const EditMarkdown = ({ uuid }: IEdit) => {
         <form className="max-w-3xl" id="editMarkdown" onSubmit={handleSubmit}>
           <div className="space-y-12">
             <div className="border-b border-black/10 pb-12">
-              <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                <div className="sm:col-span-full">
+              <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 xs:grid-cols-6">
+                <div className="xs:col-span-full">
                   <label
                     htmlFor="title"
                     className="text-sm leading-6 text-black inline-block"
@@ -233,12 +233,12 @@ const EditMarkdown = ({ uuid }: IEdit) => {
                     </span>
                   ) : null}
                   <div className="mt-2">
-                    <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange sm:max-w-md">
+                    <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
                       <input
                         type="text"
                         name="title"
                         id="title"
-                        className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black focus:ring-0 sm:text-sm sm:leading-6"
+                        className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black focus:ring-0 xs:text-sm xs:leading-6"
                         value={state.title}
                         onChange={handleChange}
                       />
@@ -246,7 +246,7 @@ const EditMarkdown = ({ uuid }: IEdit) => {
                   </div>
                 </div>
 
-                <div className="sm:col-span-2">
+                <div className="xs:col-span-2">
                   <label
                     htmlFor="slug"
                     className="text-sm leading-6 text-black inline-block"
@@ -270,13 +270,13 @@ const EditMarkdown = ({ uuid }: IEdit) => {
                     </span>
                   ) : null}
                   <div className="mt-2">
-                    <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange sm:max-w-md">
+                    <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
                       <input
                         type="text"
                         name="slug"
                         id="slug"
                         pattern="[a-zA-Z\-]+"
-                        className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                        className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                         value={state.slug}
                         onChange={handleChange}
                       />
@@ -284,7 +284,7 @@ const EditMarkdown = ({ uuid }: IEdit) => {
                   </div>
                 </div>
 
-                <div className="sm:col-span-2">
+                <div className="xs:col-span-2">
                   <label
                     htmlFor="categorySlug"
                     className="block text-sm leading-6 text-black"
@@ -292,13 +292,13 @@ const EditMarkdown = ({ uuid }: IEdit) => {
                     Category Slug
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange sm:max-w-md">
+                    <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
                       <input
                         type="text"
                         name="categorySlug"
                         id="categorySlug"
                         pattern="[a-zA-Z0-9\-]+"
-                        className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 sm:text-sm sm:leading-6"
+                        className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                         value={state.categorySlug}
                         onChange={handleChange}
                       />
@@ -306,7 +306,7 @@ const EditMarkdown = ({ uuid }: IEdit) => {
                   </div>
                 </div>
 
-                <div className="sm:col-span-full">
+                <div className="xs:col-span-full">
                   <label
                     htmlFor="markdownBody"
                     className="block text-sm leading-6 text-black"
@@ -318,14 +318,14 @@ const EditMarkdown = ({ uuid }: IEdit) => {
                       id="markdownBody"
                       name="markdownBody"
                       rows={13}
-                      className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-mylightgrey focus:ring-2 focus:ring-inset focus:ring-myorange sm:text-sm sm:leading-6"
+                      className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-mylightgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
                       value={state.markdownBody}
                       onChange={handleChange}
                     />
                   </div>
                 </div>
 
-                <div className="sm:col-span-full">
+                <div className="xs:col-span-full">
                   <p className="block text-sm leading-6 text-black">Images</p>
                   {state.hasImages ? (
                     state.images?.map((e: any) => {
@@ -342,7 +342,7 @@ const EditMarkdown = ({ uuid }: IEdit) => {
                     <p>none</p>
                   )}
                 </div>
-                <div className="sm:col-span-full">
+                <div className="xs:col-span-full">
                   <p className="block text-sm leading-6 text-black">
                     Svg Images
                   </p>

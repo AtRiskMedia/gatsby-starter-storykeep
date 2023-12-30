@@ -36,7 +36,7 @@ const EditCodeHook = ({ id, payload, handleChangeEditInPlace }: any) => {
           type="text"
           name={`${id}--title`}
           id={`${id}--title`}
-          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
           onChange={(e) => handleChangeEditInPlace(e)}
           value={payload.hook}
         />
@@ -52,7 +52,7 @@ const EditCodeHook = ({ id, payload, handleChangeEditInPlace }: any) => {
           type="text"
           name={`${id}--val1`}
           id={`${id}--val1`}
-          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
           onChange={(e) => handleChangeEditInPlace(e)}
           value={
             typeof payload.values[0] !== `undefined` ? payload.values[0] : ``
@@ -70,7 +70,7 @@ const EditCodeHook = ({ id, payload, handleChangeEditInPlace }: any) => {
           type="text"
           name={`${id}--val2`}
           id={`${id}--val2`}
-          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
           onChange={(e) => handleChangeEditInPlace(e)}
           value={
             typeof payload.values[1] !== `undefined` ? payload.values[1] : ``
@@ -88,7 +88,7 @@ const EditCodeHook = ({ id, payload, handleChangeEditInPlace }: any) => {
           type="text"
           name={`${id}--val3`}
           id={`${id}--val3`}
-          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
           onChange={(e) => handleChangeEditInPlace(e)}
           value={
             typeof payload.values[2] !== `undefined` ? payload.values[2] : ``
@@ -118,7 +118,7 @@ const EditLink = ({
           type="text"
           name={`${id}--title`}
           id={`${id}--title`}
-          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
           onChange={(e) => handleChangeEditInPlace(e)}
           value={payload.value}
         />
@@ -134,7 +134,7 @@ const EditLink = ({
           type="text"
           name={`${id}--callback`}
           id={`${id}--callback`}
-          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
           onChange={(e) => handleChangeEditInPlace(e)}
           value={payload.callbackPayload}
         />
@@ -175,7 +175,7 @@ const EditLink = ({
         <select
           id={`add---${id}`}
           name={`add---${id}`}
-          className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
           onChange={(e) => handleChangeEditInPlace(e)}
           value={` `}
         >
@@ -223,7 +223,7 @@ const EditLink = ({
         <select
           id={`add---hover---${id}`}
           name={`add---hover---${id}`}
-          className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
           onChange={(e) => handleChangeEditInPlace(e)}
           value={` `}
         >
@@ -1196,7 +1196,7 @@ const EditInPlaceControls = ({
                   <select
                     id={`add---${id}`}
                     name={`add---${id}`}
-                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
                     onChange={(e) => handleChangeEditInPlace(e)}
                     value={` `}
                   >
@@ -1246,7 +1246,7 @@ const EditInPlaceControls = ({
                   <select
                     id={`add---${id}`}
                     name={`add---${id}`}
-                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
                     onChange={(e) => handleChangeEditInPlace(e)}
                     value={` `}
                   >
@@ -1289,7 +1289,7 @@ const EditInPlaceControls = ({
                   <select
                     id={`add---${listItemId}`}
                     name={`add---${listItemId}`}
-                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
                     onChange={(e) => handleChangeEditInPlace(e)}
                     value={` `}
                   >
@@ -1330,7 +1330,7 @@ const EditInPlaceControls = ({
                   <select
                     id={`add---${outerListId}`}
                     name={`add---${outerListId}`}
-                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
                     onChange={(e) => handleChangeEditInPlace(e)}
                     value={` `}
                   >
@@ -1421,7 +1421,7 @@ const EditInPlaceControls = ({
                   <select
                     id={`paneShapeClasses---${shapesData[s].paneFragmentId}-add`}
                     name={`paneShapeClasses---${shapesData[s].paneFragmentId}-add`}
-                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
                     onChange={(e) => handleChangeEditInPlace(e)}
                     value={` `}
                   >
@@ -1481,7 +1481,7 @@ const EditInPlaceControls = ({
               <select
                 id={`modalShape---0-add`}
                 name={`modalShape---0-add`}
-                className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen sm:text-sm sm:leading-6"
+                className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
                 onChange={(e) => handleChangeEditInPlace(e)}
                 value={` `}
               >
@@ -1583,7 +1583,7 @@ const EditInPlaceControls = ({
                 <select
                   id={`addd---${parentId}`}
                   name={`add---${parentId}`}
-                  className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
                   onChange={(e) => handleChangeEditInPlace(e)}
                   value={` `}
                 >
@@ -1661,7 +1661,7 @@ const EditInPlaceControls = ({
                 <select
                   id={`add---special`}
                   name={`add---special`}
-                  className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
                   onChange={(e) => handleChangeEditInPlace(e)}
                   value={` `}
                 >

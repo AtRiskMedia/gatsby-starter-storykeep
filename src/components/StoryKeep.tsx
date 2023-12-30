@@ -356,7 +356,7 @@ const StoryKeep = () => {
         </EditSlideOver>
       ) : null}
       <div className="w-full xl:max-w-screen-2xl">
-        <div className="bg-white px-4 py-4 shadow sm:rounded-md sm:px-6">
+        <div className="bg-white px-4 py-4 shadow xs:rounded-md xs:px-6">
           <div className="border-b border-gray-200 pb-1.5 flex items-center justify-between">
             <h3 className="text-base font-action leading-6 text-black">
               Carry the conversation with Tract Stack
@@ -483,7 +483,7 @@ const StoryKeep = () => {
           <div className="-mx-4">
             <ul
               role="list"
-              className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+              className="grid grid-cols-1 gap-6 xs:grid-cols-2 lg:grid-cols-3"
             >
               {Object.keys(payload).map((record: string) => (
                 <li key={payload[record].slug} className="col-span-1">
@@ -528,7 +528,7 @@ const StoryKeep = () => {
                     loadedStoryFragmentDaysSince) ? (
                     <th
                       scope="col"
-                      className="hidden whitespace-nowrap px-3 py-4 text-left text-sm text-mydarkgrey sm:table-cell"
+                      className="hidden whitespace-nowrap px-3 py-4 text-left text-sm text-mydarkgrey xs:table-cell"
                     >
                       Activity
                     </th>
@@ -602,7 +602,7 @@ const StoryKeep = () => {
                       {(current === `pane` && loadedPanesDaysSince) ||
                       (current === `storyfragment` &&
                         loadedStoryFragmentDaysSince) ? (
-                        <td className="hidden whitespace-nowrap pt-4 pb-2 text-sm text-mydarkgrey sm:table-cell">
+                        <td className="hidden whitespace-nowrap pt-4 pb-2 text-sm text-mydarkgrey xs:table-cell">
                           <div
                             className={classNames(
                               `grid`,

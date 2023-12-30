@@ -36,7 +36,7 @@ const EditCodeHook = ({ id, payload, handleChangeEditInPlace }: any) => {
           type="text"
           name={`${id}--title`}
           id={`${id}--title`}
-          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
           onChange={(e) => handleChangeEditInPlace(e)}
           value={payload.hook}
         />
@@ -52,7 +52,7 @@ const EditCodeHook = ({ id, payload, handleChangeEditInPlace }: any) => {
           type="text"
           name={`${id}--val1`}
           id={`${id}--val1`}
-          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
           onChange={(e) => handleChangeEditInPlace(e)}
           value={
             typeof payload.values[0] !== `undefined` ? payload.values[0] : ``
@@ -70,7 +70,7 @@ const EditCodeHook = ({ id, payload, handleChangeEditInPlace }: any) => {
           type="text"
           name={`${id}--val2`}
           id={`${id}--val2`}
-          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
           onChange={(e) => handleChangeEditInPlace(e)}
           value={
             typeof payload.values[1] !== `undefined` ? payload.values[1] : ``
@@ -88,7 +88,7 @@ const EditCodeHook = ({ id, payload, handleChangeEditInPlace }: any) => {
           type="text"
           name={`${id}--val3`}
           id={`${id}--val3`}
-          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
           onChange={(e) => handleChangeEditInPlace(e)}
           value={
             typeof payload.values[2] !== `undefined` ? payload.values[2] : ``
@@ -118,7 +118,7 @@ const EditLink = ({
           type="text"
           name={`${id}--title`}
           id={`${id}--title`}
-          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
           onChange={(e) => handleChangeEditInPlace(e)}
           value={payload.value}
         />
@@ -134,7 +134,7 @@ const EditLink = ({
           type="text"
           name={`${id}--callback`}
           id={`${id}--callback`}
-          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
           onChange={(e) => handleChangeEditInPlace(e)}
           value={payload.callbackPayload}
         />
@@ -175,7 +175,7 @@ const EditLink = ({
         <select
           id={`add---${id}`}
           name={`add---${id}`}
-          className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
           onChange={(e) => handleChangeEditInPlace(e)}
           value={` `}
         >
@@ -223,7 +223,7 @@ const EditLink = ({
         <select
           id={`add---hover---${id}`}
           name={`add---hover---${id}`}
-          className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
           onChange={(e) => handleChangeEditInPlace(e)}
           value={` `}
         >
@@ -577,7 +577,9 @@ const InputShapeName = ({
                 id={`${thisId}-mobile`}
                 onChange={(e) => handleChangeEditInPlace(e)}
                 className={classNames(
-                  viewportKey === `mobile` ? `bg-myorange/5` : `bg-transparent`,
+                  viewportKey === `mobile`
+                    ? `bg-myorange/5`
+                    : `bg-mylightgrey/50`,
                   `relative block w-full rounded-none rounded-bl-md border-0 py-1.5 text-black ring-1 ring-inset ring-slate-200 placeholder:text-mydarkgrey focus:z-10 focus:ring-2 focus:ring-inset focus:ring-myorange text-xs leading-6`,
                 )}
                 value={mobileValue}
@@ -595,7 +597,9 @@ const InputShapeName = ({
                 id={`${thisId}-tablet`}
                 onChange={(e) => handleChangeEditInPlace(e)}
                 className={classNames(
-                  viewportKey === `tablet` ? `bg-myorange/5` : `bg-transparent`,
+                  viewportKey === `tablet`
+                    ? `bg-myorange/5`
+                    : `bg-mylightgrey/50`,
                   `relative block w-full rounded-none rounded-bl-md border-0 py-1.5 text-black ring-1 ring-inset ring-slate-200 placeholder:text-mydarkgrey focus:z-10 focus:ring-2 focus:ring-inset focus:ring-myorange text-xs leading-6`,
                 )}
                 value={tabletValue}
@@ -615,7 +619,7 @@ const InputShapeName = ({
                 className={classNames(
                   viewportKey === `desktop`
                     ? `bg-myorange/5`
-                    : `bg-transparent`,
+                    : `bg-mylightgrey/50`,
                   `relative block w-full rounded-none rounded-bl-md border-0 py-1.5 text-black ring-1 ring-inset ring-slate-200 placeholder:text-mydarkgrey focus:z-10 focus:ring-2 focus:ring-inset focus:ring-myorange text-xs leading-6`,
                 )}
                 value={desktopValue}
@@ -934,7 +938,7 @@ const InputArtpackImagePayload = ({
 
   return (
     <div key={id}>
-      <div className="my-2">
+      <div className="mb-4">
         <label
           htmlFor={`${id}--collection`}
           className="block text-sm leading-6 text-black"
@@ -953,7 +957,7 @@ const InputArtpackImagePayload = ({
           ))}
         </select>
       </div>
-      <div className="my-2">
+      <div className="mb-4">
         <label
           htmlFor={`${id}--image`}
           className="block text-sm leading-6 text-black"
@@ -978,7 +982,7 @@ const InputArtpackImagePayload = ({
           ))}
         </select>
       </div>
-      <div className="my-2">
+      <div className="mb-4">
         <label
           htmlFor={`${id}--objectFit`}
           className="block text-sm leading-6 text-black"
@@ -1123,7 +1127,7 @@ const PaneEditInPlace = ({
   return (
     <>
       {state && id && tag ? (
-        <div className="my-2 bg-white shadow rounded-lg max-w-md">
+        <div className="mb-4 bg-white shadow rounded-lg max-w-md">
           <div className="px-3 py-5 p-6">
             {tagType ? (
               <div className="inline-flex">
@@ -1196,7 +1200,7 @@ const PaneEditInPlace = ({
                   <select
                     id={`add---${id}`}
                     name={`add---${id}`}
-                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
                     onChange={(e) => handleChangeEditInPlace(e)}
                     value={` `}
                   >
@@ -1246,7 +1250,7 @@ const PaneEditInPlace = ({
                   <select
                     id={`add---${id}`}
                     name={`add---${id}`}
-                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
                     onChange={(e) => handleChangeEditInPlace(e)}
                     value={` `}
                   >
@@ -1289,7 +1293,7 @@ const PaneEditInPlace = ({
                   <select
                     id={`add---${listItemId}`}
                     name={`add---${listItemId}`}
-                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
                     onChange={(e) => handleChangeEditInPlace(e)}
                     value={` `}
                   >
@@ -1330,7 +1334,7 @@ const PaneEditInPlace = ({
                   <select
                     id={`add---${outerListId}`}
                     name={`add---${outerListId}`}
-                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
                     onChange={(e) => handleChangeEditInPlace(e)}
                     value={` `}
                   >
@@ -1347,7 +1351,7 @@ const PaneEditInPlace = ({
 
             {stateLivePreviewMarkdown.hasTextShapeOutside ? (
               <>
-                <div className="block mb-2 mt-4">
+                <div className="block mb-4 mt-4">
                   <span className="font-action">Text has inside shape</span>
                 </div>
                 <EditShape
@@ -1366,10 +1370,10 @@ const PaneEditInPlace = ({
         Object.keys(linksData).map((l: any, idx: number) => (
           <div
             key={idx}
-            className="my-2 bg-white shadow rounded-lg w-full max-w-md"
+            className="mb-4 bg-white shadow rounded-lg w-full max-w-md"
           >
             <div className="px-4 py-5 p-6">
-              <div className="block mb-2">
+              <div className="block mb-4">
                 <span className="font-action">Has Link</span>
               </div>
               <EditLink
@@ -1386,10 +1390,10 @@ const PaneEditInPlace = ({
         Object.keys(shapesData).map((s: any, idx: number) => (
           <div
             key={idx}
-            className="my-2 bg-white shadow rounded-lg w-full max-w-md"
+            className="mb-4 bg-white shadow rounded-lg w-full max-w-md"
           >
             <div className="px-4 py-5 p-6">
-              <div className="block mb-2">
+              <div className="block mb-4">
                 <span className="font-action">Background Shape</span>
               </div>
               <EditShape
@@ -1421,7 +1425,7 @@ const PaneEditInPlace = ({
                   <select
                     id={`paneShapeClasses---${shapesData[s].paneFragmentId}-add`}
                     name={`paneShapeClasses---${shapesData[s].paneFragmentId}-add`}
-                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
                     onChange={(e) => handleChangeEditInPlace(e)}
                     value={` `}
                   >
@@ -1439,9 +1443,9 @@ const PaneEditInPlace = ({
         ))}
 
       {hasModalClasses ? (
-        <div className="my-2 bg-white shadow rounded-lg w-full max-w-md">
+        <div className="mb-4 bg-white shadow rounded-lg w-full max-w-md">
           <div className="px-4 py-5 p-6">
-            <div className="block mb-2">
+            <div className="block mb-4">
               <span className="pr-2 font-action">Modal Styles</span>
             </div>
 
@@ -1481,7 +1485,7 @@ const PaneEditInPlace = ({
               <select
                 id={`modalShape---0-add`}
                 name={`modalShape---0-add`}
-                className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen sm:text-sm sm:leading-6"
+                className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
                 onChange={(e) => handleChangeEditInPlace(e)}
                 value={` `}
               >
@@ -1497,7 +1501,7 @@ const PaneEditInPlace = ({
         </div>
       ) : null}
       {hasParentClasses && pageStylesPagination === -1 ? (
-        <div className="my-2 bg-white shadow rounded-lg w-full max-w-md">
+        <div className="mb-4 bg-white shadow rounded-lg w-full max-w-md">
           <div className="px-4 py-5 p-6">
             <span className="pr-2 font-action">Pane Styles</span>
             <button
@@ -1512,7 +1516,7 @@ const PaneEditInPlace = ({
           </div>
         </div>
       ) : hasParentClasses && pageStylesPagination > -1 ? (
-        <div className="my-2 bg-white shadow rounded-lg w-full max-w-md">
+        <div className="mb-4 bg-white shadow rounded-lg w-full max-w-md">
           <div className="px-4 py-5 p-6">
             <div className="inline-block">
               <span className="pr-2 font-action">Pane Styles</span>
@@ -1583,7 +1587,7 @@ const PaneEditInPlace = ({
                 <select
                   id={`addd---${parentId}`}
                   name={`add---${parentId}`}
-                  className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
                   onChange={(e) => handleChangeEditInPlace(e)}
                   value={` `}
                 >
@@ -1600,9 +1604,9 @@ const PaneEditInPlace = ({
         </div>
       ) : null}
       {hasBgColourId ? (
-        <div className="my-2 bg-white shadow rounded-lg w-full max-w-md">
+        <div className="mb-4 bg-white shadow rounded-lg w-full max-w-md">
           <div className="px-4 py-5 p-6">
-            <div className="block mb-2">
+            <div className="block mb-4">
               <div className="grid grid-cols-2">
                 <span className="font-action">Background Colour</span>
                 <div>
@@ -1649,7 +1653,7 @@ const PaneEditInPlace = ({
       (hasBreaks && !hasBgColour) ||
       (!modalData.length && !hasBreaks) ? (
         <div className="px-4 py-5 p-6">
-          <div className="block mb-2">
+          <div className="block mb-4">
             <div className="grid grid-cols-2">
               <div className="mt-2 inline-flex items-center">
                 <label
@@ -1661,7 +1665,7 @@ const PaneEditInPlace = ({
                 <select
                   id={`add---special`}
                   name={`add---special`}
-                  className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
                   onChange={(e) => handleChangeEditInPlace(e)}
                   value={` `}
                 >
