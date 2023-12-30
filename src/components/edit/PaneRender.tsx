@@ -653,7 +653,7 @@ const PaneRender = ({ uuid, handlers, previewPayload, fn, flags }: any) => {
 
   if (emptyPane)
     return (
-      <section className="my-4 max-max-w-screen-lg">
+      <section className="p-6 max-max-w-screen-lg">
         <div className="mb-4">
           <span className="font-action pr-3 text-base font-bold text-black">
             Pane Details
@@ -704,7 +704,7 @@ const PaneRender = ({ uuid, handlers, previewPayload, fn, flags }: any) => {
                         *
                       </span>
                     </label>
-                    {previewPayload.formState?.slugCollision ? (
+                    {flags?.slugCollision ? (
                       <span className="text-myorange ml-2">
                         that slug was taken
                       </span>
@@ -729,7 +729,7 @@ const PaneRender = ({ uuid, handlers, previewPayload, fn, flags }: any) => {
           </form>
         </div>
 
-        {previewPayload.state.slug && previewPayload.state.title ? (
+        {previewPayload.state.slug && previewPayload.state.title && !flags.slugCollision ? (
           <>
             <div className="mb-4">
               <span className="font-action pr-3 text-base font-bold text-black">

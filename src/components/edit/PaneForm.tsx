@@ -117,6 +117,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
     interceptMode,
     interceptModeTag,
     width,
+    slugCollision: formState.slugCollision
   }
 
   return (
@@ -1176,7 +1177,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
               </div>
               <div className="mt-2 flex items-center" title={authorTitle}>
                 <span className="mr-2 text-sm text-mydarkgrey">
-                  Currently viewing:
+                  Currently designing:
                 </span>
                 <span className="font-bold text-xl text-myblue">
                   {viewportKey}
