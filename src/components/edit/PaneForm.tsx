@@ -924,7 +924,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                   <h2 className="text-2xl font-bold leading-7 text-black xs:truncate xs:text-3xl xs:tracking-tight">
                     {state.title}
                   </h2>
-                  <div className="mt-1 flex flex-col xs:mt-0 xs:flex-row xs:flex-wrap xs:space-x-6">
+                  <div className="h-12 mx-auto mt-1 flex flex-col xs:mt-0 xs:flex-row xs:flex-wrap xs:space-x-6">
                     <div
                       className="mt-2 flex items-center text-sm text-mydarkgrey"
                       title="You are editing a Pane"
