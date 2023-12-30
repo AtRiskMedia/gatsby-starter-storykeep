@@ -2,13 +2,14 @@
 import React, { useEffect, useState } from 'react'
 
 import { IMessage } from 'src/types'
+import { config } from '../../data/SiteConfig'
 
 const Message = ({ className, children }: IMessage) => {
   const [alert, setAlert] = useState(true)
   useEffect(() => {
     setTimeout(() => {
       setAlert(false)
-    }, 7000)
+    }, config.messageDelay)
   }, [])
   return alert ? <div className={className}>{children}</div> : null
 }

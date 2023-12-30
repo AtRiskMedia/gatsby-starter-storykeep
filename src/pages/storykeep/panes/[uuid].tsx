@@ -179,7 +179,7 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
         )
           hasBreaks = true
       })
-      const newOptionsPayload:any = {}
+      const newOptionsPayload: any = {}
       const impressionsPayload = initialStateImpressions?.title
         ? {
             [initialStateImpressions.id]: initialStateImpressions,

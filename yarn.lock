@@ -2768,10 +2768,10 @@
   resolved "https://registry.yarnpkg.com/@tractstack/drupal-react-oauth-provider/-/drupal-react-oauth-provider-0.1.0.tgz#7c5091dc97633cc7facb53c2966dee6d4d5db4af"
   integrity sha512-7rtvdWCfFdbxVikjP3X1OD6FiWxrQSRbYn1Dm1pf7FT1a5VuKspgPwcznv0slmdY7RSkBgKHo+Oy5JTqV4HqbA==
 
-"@tractstack/helpers@0.1.6":
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/@tractstack/helpers/-/helpers-0.1.6.tgz#56cb56fa7d027e88dbbcc31a7c07775c7006bb30"
-  integrity sha512-4AJQU3vVBH3DIx5bnSZ8QB5jbfFhQ2MYu+DAXfP7tkeA4G0TX8upyAOQ063DQWd9g8/co3nJk4dTJ+5Rujgciw==
+"@tractstack/helpers@0.1.7":
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/@tractstack/helpers/-/helpers-0.1.7.tgz#bb58cdb62463115dec083cf3b59860692b84ad3a"
+  integrity sha512-bQ/uQmoLd0u7mghZoL1I4WnHUBNQB0PbJ5ZNjkEqHH3rglT358SPGqgdKnnOAJXvMbnuXFVtiLrFWVgyBvod6Q==
   dependencies:
     buffer "^6.0.3"
 

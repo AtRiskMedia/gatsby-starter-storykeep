@@ -614,7 +614,7 @@ const PaneRender = ({ uuid, handlers, previewPayload, fn, flags }: any) => {
     if (focus > -1) {
       const thisId = `${stateLivePreviewMarkdown.markdownTags[focus]}-${focus}`
       const el = document?.getElementById(thisId)
-      el?.classList.remove(`border-myblue/20`)
+      el?.classList.remove(`border-yellow-300`)
       el?.classList.add(`border`)
       el?.classList.add(`border-transparent`)
     }
@@ -624,7 +624,7 @@ const PaneRender = ({ uuid, handlers, previewPayload, fn, flags }: any) => {
       typeof thisId === `string` ? document?.getElementById(thisId) : null
     el?.classList.remove(`border-transparent`)
     el?.classList.add(`border`)
-    el?.classList.add(`border-myblue/20`)
+    el?.classList.add(`border-yellow-300`)
     setFocus(nth)
   }, [nth, focus, stateLivePreviewMarkdown.markdownTags])
 
@@ -636,7 +636,7 @@ const PaneRender = ({ uuid, handlers, previewPayload, fn, flags }: any) => {
     ) {
       const thisId = `li-${childFocusNth}-${childFocus}`
       const el = document?.getElementById(thisId)
-      el?.classList.remove(`border-myblue/50`)
+      el?.classList.remove(`border-yellow-300/50`)
       el?.classList.add(`border`)
       el?.classList.add(`border-transparent`)
     }
@@ -645,7 +645,7 @@ const PaneRender = ({ uuid, handlers, previewPayload, fn, flags }: any) => {
       const el = document?.getElementById(thisId)
       el?.classList.remove(`border-transparent`)
       el?.classList.add(`border`)
-      el?.classList.add(`border-myblue/50`)
+      el?.classList.add(`border-yellow-300/50`)
       setChildFocus(childNth)
       setChildFocusNth(nth)
     }

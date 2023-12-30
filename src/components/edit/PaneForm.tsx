@@ -43,7 +43,6 @@ const insertModeTags = [
 ]
 
 const PaneForm = ({ uuid, payload, flags, fn }: any) => {
-  console.log(payload, flags)
   const {
     state,
     formState,
@@ -1015,7 +1014,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                           className="-ml-0.5 mr-1.5 h-5 w-5"
                           aria-hidden="true"
                         />
-                        Publish
+                        Save
                       </button>
                     </span>
                   ) : null}

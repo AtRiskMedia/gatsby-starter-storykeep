@@ -157,7 +157,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
             [stateImpressions.id]: stateImpressions,
           }
         : null
-      const newOptionsPayload:any = {}
+      const newOptionsPayload: any = {}
       if (impressionsPayload) newOptionsPayload.impressions = impressionsPayload
       if (Object.keys(stateHeldBeliefs).length)
         newOptionsPayload.heldBeliefs = stateHeldBeliefs
@@ -202,7 +202,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
           [stateImpressions.id]: stateImpressions,
         }
       : null
-    const newOptionsPayload:any = {}
+    const newOptionsPayload: any = {}
     if (impressionsPayload) newOptionsPayload.impressions = impressionsPayload
     if (Object.keys(stateHeldBeliefs).length)
       newOptionsPayload.heldBeliefs = stateHeldBeliefs
@@ -240,7 +240,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
           [stateImpressions.id]: stateImpressions,
         }
       : null
-    const newOptionsPayload:any = {}
+    const newOptionsPayload: any = {}
     if (impressionsPayload) newOptionsPayload.impressions = impressionsPayload
     if (Object.keys(stateHeldBeliefs).length)
       newOptionsPayload.heldBeliefs = stateHeldBeliefs
@@ -337,7 +337,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
           [stateImpressions.id]: stateImpressions,
         }
       : null
-    const newOptionsPayload:any = {}
+    const newOptionsPayload: any = {}
     if (impressionsPayload) newOptionsPayload.impressions = impressionsPayload
     if (Object.keys(stateHeldBeliefs).length)
       newOptionsPayload.heldBeliefs = stateHeldBeliefs
@@ -417,7 +417,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
           [stateImpressions.id]: stateImpressions,
         }
       : null
-    const newOptionsPayload:any = {}
+    const newOptionsPayload: any = {}
     if (impressionsPayload) newOptionsPayload.impressions = impressionsPayload
     if (Object.keys(stateHeldBeliefs).length)
       newOptionsPayload.heldBeliefs = stateHeldBeliefs
@@ -504,7 +504,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
           [stateImpressions.id]: stateImpressions,
         }
       : null
-    const newOptionsPayload:any = {}
+    const newOptionsPayload: any = {}
     if (impressionsPayload) newOptionsPayload.impressions = impressionsPayload
     if (Object.keys(stateHeldBeliefs).length)
       newOptionsPayload.heldBeliefs = stateHeldBeliefs
@@ -588,7 +588,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
           [stateImpressions.id]: stateImpressions,
         }
       : null
-    const newOptionsPayload:any = {}
+    const newOptionsPayload: any = {}
     if (impressionsPayload) newOptionsPayload.impressions = impressionsPayload
     if (Object.keys(stateHeldBeliefs).length)
       newOptionsPayload.heldBeliefs = stateHeldBeliefs
@@ -2628,7 +2628,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
           [stateImpressions.id]: stateImpressions,
         }
       : null
-    const newOptionsPayload:any = {}
+    const newOptionsPayload: any = {}
     if (impressionsPayload) newOptionsPayload.impressions = impressionsPayload
     if (Object.keys(stateHeldBeliefs).length)
       newOptionsPayload.heldBeliefs = stateHeldBeliefs
