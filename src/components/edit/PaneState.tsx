@@ -1,16 +1,15 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, MouseEvent } from 'react'
 import { fromMarkdown } from 'mdast-util-from-markdown'
-import { ParseOptions } from '@tractstack/helpers'
+// import { ParseOptions } from '@tractstack/helpers'
 import { v4 as uuidv4 } from 'uuid'
 
 import { useDrupalStore } from '../../stores/drupal'
 import { reduceTailwindClasses } from '../../helpers/reduceTailwindClasses'
 import { generateLivePreviewInitialState } from '../../helpers/generateLivePreviewInitialState'
-import {
-  panePayload,
-  markdownPayload,
-} from '../../helpers/generateDrupalPayload'
+import {} from // panePayload,
+// markdownPayload,
+'../../helpers/generateDrupalPayload'
 import {
   shapesMobileHeightRatio,
   artpackCollectionImages,
@@ -42,30 +41,29 @@ const PaneState = ({ uuid, payload, flags }: any) => {
   const [formState, setFormState] = useState(payload.formState)
   const [saveStage, setSaveStage] = useState(SaveStages.Booting)
   const [toggleCheck, setToggleCheck] = useState(false)
-  const [settingPane, setSettingPane] = useState(false)
-  const [hasProcessedMarkdownResponse, setHasProcessedMarkdownResponse] =
-    useState(false)
+  // const [settingPane, setSettingPane] = useState(false)
+  // const [hasProcessedMarkdownResponse, setHasProcessedMarkdownResponse] =
+  useState(false)
   const deepEqual = require(`deep-equal`)
-  const openDemoEnabled = useDrupalStore((state) => state.openDemoEnabled)
   const allPanes = useDrupalStore((state) => state.allPanes)
   const thisPane = typeof allPanes[uuid] !== `undefined` ? allPanes[uuid] : null
   const allFiles = useDrupalStore((state) => state.allFiles)
   const allMarkdown = useDrupalStore((state) => state.allMarkdown)
   const updateMarkdown = useDrupalStore((state) => state.updateMarkdown)
-  const drupalPreSaveQueue = useDrupalStore((state) => state.drupalPreSaveQueue)
-  const removeDrupalPreSaveQueue = useDrupalStore(
-    (state) => state.removeDrupalPreSaveQueue,
-  )
-  const setDrupalPreSaveQueue = useDrupalStore(
-    (state) => state.setDrupalPreSaveQueue,
-  )
-  const setDrupalSaveNode = useDrupalStore((state) => state.setDrupalSaveNode)
+  // const drupalPreSaveQueue = useDrupalStore((state) => state.drupalPreSaveQueue)
+  // const removeDrupalPreSaveQueue = useDrupalStore(
+  //  (state) => state.removeDrupalPreSaveQueue,
+  // )
+  // const setDrupalPreSaveQueue = useDrupalStore(
+  //  (state) => state.setDrupalPreSaveQueue,
+  // )
+  // const setDrupalSaveNode = useDrupalStore((state) => state.setDrupalSaveNode)
   const removeDrupalResponse = useDrupalStore(
     (state) => state.removeDrupalResponse,
   )
-  const setPane = useDrupalStore((state) => state.setPane)
-  const removePane = useDrupalStore((state) => state.removePane)
-  const removeMarkdown = useDrupalStore((state) => state.removeMarkdown)
+  // const setPane = useDrupalStore((state) => state.setPane)
+  // const removePane = useDrupalStore((state) => state.removePane)
+  // const removeMarkdown = useDrupalStore((state) => state.removeMarkdown)
   const drupalResponse = useDrupalStore((state) => state.drupalResponse)
   const allPanesSlugs = Object.keys(allPanes).map((e) => {
     return allPanes[e].slug
@@ -2648,6 +2646,49 @@ const PaneState = ({ uuid, payload, flags }: any) => {
     setToggleCheck(true)
   }
 
+  useEffect(() => {
+    if (toggleCheck) {
+      const hasChanges = !deepEqual(state, payload.initialState)
+      if (hasChanges && saveStage === SaveStages.NoChanges)
+        setSaveStage(SaveStages.UnsavedChanges)
+      else if (!hasChanges && saveStage === SaveStages.UnsavedChanges)
+        setSaveStage(SaveStages.NoChanges)
+    }
+  }, [
+    toggleCheck,
+    deepEqual,
+    payload.initialState,
+    payload.initialStateHeldBeliefs,
+    payload.initialStatePaneFragments,
+    payload.initialStateWithheldBeliefs,
+    saveStage,
+    state,
+    stateHeldBeliefs,
+    statePaneFragments,
+    stateWithheldBeliefs,
+  ])
+
+  useEffect(() => {
+    let showMessage = false
+    Object.keys(drupalResponse).forEach((e) => {
+      if (e === uuid) {
+        removeDrupalResponse(e)
+        showMessage = true
+      }
+    })
+    if (showMessage)
+      document?.getElementById(`message`)?.scrollIntoView({
+        behavior: `auto`,
+        block: `end`,
+      })
+  }, [drupalResponse, uuid, removeDrupalResponse])
+
+  const handleSubmit = (e: MouseEvent<HTMLButtonElement>) => {
+    console.log(`submit`)
+    e.preventDefault()
+    setSaveStage(SaveStages.Submitted)
+  }
+  /*
   const handleSubmit = (e: any) => {
     // FIX
     e.preventDefault()
@@ -2689,43 +2730,6 @@ const PaneState = ({ uuid, payload, flags }: any) => {
       })
     }
   }
-
-  useEffect(() => {
-    if (toggleCheck) {
-      const hasChanges = !deepEqual(state, payload.initialState)
-      if (hasChanges && saveStage === SaveStages.NoChanges)
-        setSaveStage(SaveStages.UnsavedChanges)
-      else if (!hasChanges && saveStage === SaveStages.UnsavedChanges)
-        setSaveStage(SaveStages.NoChanges)
-    }
-  }, [
-    toggleCheck,
-    deepEqual,
-    payload.initialState,
-    payload.initialStateHeldBeliefs,
-    payload.initialStatePaneFragments,
-    payload.initialStateWithheldBeliefs,
-    saveStage,
-    state,
-    stateHeldBeliefs,
-    statePaneFragments,
-    stateWithheldBeliefs,
-  ])
-
-  useEffect(() => {
-    let showMessage = false
-    Object.keys(drupalResponse).forEach((e) => {
-      if (e === uuid) {
-        removeDrupalResponse(e)
-        showMessage = true
-      }
-    })
-    if (showMessage)
-      document?.getElementById(`message`)?.scrollIntoView({
-        behavior: `auto`,
-        block: `end`,
-      })
-  }, [drupalResponse, uuid, removeDrupalResponse])
 
   useEffect(() => {
     if (formState?.saving && !settingPane) {
@@ -2968,6 +2972,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
     openDemoEnabled,
     settingPane,
   ])
+*/
 
   useEffect(() => {
     if (

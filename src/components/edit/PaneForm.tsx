@@ -58,7 +58,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
     handleChangeBelief,
     addBelief,
     handleChangeImpression,
-    //    handleSubmit,
+    handleSubmit,
     handleEditMarkdown,
     handleMutateMarkdown,
     handleChangeEditInPlace,
@@ -1014,6 +1014,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                         <CheckIcon
                           className="-ml-0.5 mr-1.5 h-5 w-5"
                           aria-hidden="true"
+                          onClick={(e) => handleSubmit(e)}
                         />
                         Save
                       </button>
