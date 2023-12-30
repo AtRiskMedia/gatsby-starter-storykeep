@@ -41,6 +41,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
   const [state, setState] = useState(payload.state)
   const [formState, setFormState] = useState(payload.formState)
   const [saveStage, setSaveStage] = useState(SaveStages.Booting)
+  const [toggleCheck, setToggleCheck] = useState(false)
   const [settingPane, setSettingPane] = useState(false)
   const [hasProcessedMarkdownResponse, setHasProcessedMarkdownResponse] =
     useState(false)
@@ -156,13 +157,17 @@ const PaneState = ({ uuid, payload, flags }: any) => {
             [stateImpressions.id]: stateImpressions,
           }
         : null
-      const newOptionsPayload = {
-        heldBeliefs: stateHeldBeliefs,
-        withheldBeliefs: stateWithheldBeliefs,
-        impressions: impressionsPayload,
-        paneFragmentsPayload: Object.values(newStatePaneFragments),
-        hiddenPane: state.hiddenPane,
-      }
+      const newOptionsPayload:any = {}
+      if (impressionsPayload) newOptionsPayload.impressions = impressionsPayload
+      if (Object.keys(stateHeldBeliefs).length)
+        newOptionsPayload.heldBeliefs = stateHeldBeliefs
+      if (Object.keys(stateWithheldBeliefs).length)
+        newOptionsPayload.withheldBeliefs = stateWithheldBeliefs
+      if (newStatePaneFragments)
+        newOptionsPayload.paneFragmentsPayload = Object.values(
+          newStatePaneFragments,
+        )
+      if (state.hiddenPane) newOptionsPayload.hiddenPane = state.hiddenPane
       setState((prev: any) => {
         return {
           ...prev,
@@ -170,7 +175,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
           ...(paneExtra || {}),
         }
       })
-      // setToggleCheck(true)
+      setToggleCheck(true)
     },
     [
       allFiles,
@@ -197,13 +202,14 @@ const PaneState = ({ uuid, payload, flags }: any) => {
           [stateImpressions.id]: stateImpressions,
         }
       : null
-    const newOptionsPayload = {
-      heldBeliefs: stateHeldBeliefs,
-      withheldBeliefs: stateWithheldBeliefs,
-      impressions: impressionsPayload,
-      paneFragmentsPayload: [statePaneFragments],
-      hiddenPane: state.hiddenPane,
-    }
+    const newOptionsPayload:any = {}
+    if (impressionsPayload) newOptionsPayload.impressions = impressionsPayload
+    if (Object.keys(stateHeldBeliefs).length)
+      newOptionsPayload.heldBeliefs = stateHeldBeliefs
+    if (Object.keys(stateWithheldBeliefs).length)
+      newOptionsPayload.withheldBeliefs = stateWithheldBeliefs
+    newOptionsPayload.paneFragmentsPayload = Object.values(statePaneFragments)
+    if (state.hiddenPane) newOptionsPayload.hiddenPane = state.hiddenPane
     setState((prev: any) => {
       return {
         ...prev,
@@ -234,13 +240,14 @@ const PaneState = ({ uuid, payload, flags }: any) => {
           [stateImpressions.id]: stateImpressions,
         }
       : null
-    const newOptionsPayload = {
-      heldBeliefs: stateHeldBeliefs,
-      withheldBeliefs: stateWithheldBeliefs,
-      impressions: impressionsPayload,
-      paneFragmentsPayload: Object.values(statePaneFragments),
-      hiddenPane: state.hiddenPane,
-    }
+    const newOptionsPayload:any = {}
+    if (impressionsPayload) newOptionsPayload.impressions = impressionsPayload
+    if (Object.keys(stateHeldBeliefs).length)
+      newOptionsPayload.heldBeliefs = stateHeldBeliefs
+    if (Object.keys(stateWithheldBeliefs).length)
+      newOptionsPayload.withheldBeliefs = stateWithheldBeliefs
+    newOptionsPayload.paneFragmentsPayload = Object.values(statePaneFragments)
+    if (state.hiddenPane) newOptionsPayload.hiddenPane = state.hiddenPane
     setState((prev: any) => {
       return {
         ...prev,
@@ -330,13 +337,14 @@ const PaneState = ({ uuid, payload, flags }: any) => {
           [stateImpressions.id]: stateImpressions,
         }
       : null
-    const newOptionsPayload = {
-      heldBeliefs: stateHeldBeliefs,
-      withheldBeliefs: stateWithheldBeliefs,
-      impressions: impressionsPayload,
-      paneFragmentsPayload: Object.values(statePaneFragments),
-      hiddenPane: state.hiddenPane,
-    }
+    const newOptionsPayload:any = {}
+    if (impressionsPayload) newOptionsPayload.impressions = impressionsPayload
+    if (Object.keys(stateHeldBeliefs).length)
+      newOptionsPayload.heldBeliefs = stateHeldBeliefs
+    if (Object.keys(stateWithheldBeliefs).length)
+      newOptionsPayload.withheldBeliefs = stateWithheldBeliefs
+    newOptionsPayload.paneFragmentsPayload = Object.values(statePaneFragments)
+    if (state.hiddenPane) newOptionsPayload.hiddenPane = state.hiddenPane
     setState((prev: any) => {
       return {
         ...prev,
@@ -409,20 +417,21 @@ const PaneState = ({ uuid, payload, flags }: any) => {
           [stateImpressions.id]: stateImpressions,
         }
       : null
-    const newOptionsPayload = {
-      heldBeliefs: stateHeldBeliefs,
-      withheldBeliefs: stateWithheldBeliefs,
-      impressions: impressionsPayload,
-      paneFragmentsPayload: Object.values(statePaneFragments),
-      hiddenPane: name === `hiddenPane` ? value : state?.hiddenPane,
-    }
+    const newOptionsPayload:any = {}
+    if (impressionsPayload) newOptionsPayload.impressions = impressionsPayload
+    if (Object.keys(stateHeldBeliefs).length)
+      newOptionsPayload.heldBeliefs = stateHeldBeliefs
+    if (Object.keys(stateWithheldBeliefs).length)
+      newOptionsPayload.withheldBeliefs = stateWithheldBeliefs
+    newOptionsPayload.paneFragmentsPayload = Object.values(statePaneFragments)
+    if (state.hiddenPane) newOptionsPayload.hiddenPane = state.hiddenPane
     setState((prev: any) => {
       return {
         ...prev,
         optionsPayloadString: JSON.stringify(newOptionsPayload),
       }
     })
-    // setToggleCheck(true)
+    setToggleCheck(true)
   }
 
   function insertPaneFragmentsRegenerateState(
@@ -495,13 +504,14 @@ const PaneState = ({ uuid, payload, flags }: any) => {
           [stateImpressions.id]: stateImpressions,
         }
       : null
-    const newOptionsPayload = {
-      heldBeliefs: stateHeldBeliefs,
-      withheldBeliefs: stateWithheldBeliefs,
-      impressions: impressionsPayload,
-      paneFragmentsPayload: Object.values(initialStatePaneFragments),
-      hiddenPane: state.hiddenPane,
-    }
+    const newOptionsPayload:any = {}
+    if (impressionsPayload) newOptionsPayload.impressions = impressionsPayload
+    if (Object.keys(stateHeldBeliefs).length)
+      newOptionsPayload.heldBeliefs = stateHeldBeliefs
+    if (Object.keys(stateWithheldBeliefs).length)
+      newOptionsPayload.withheldBeliefs = stateWithheldBeliefs
+    newOptionsPayload.paneFragmentsPayload = Object.values(statePaneFragments)
+    if (state.hiddenPane) newOptionsPayload.hiddenPane = state.hiddenPane
     setState((prev: any) => {
       return {
         ...prev,
@@ -512,7 +522,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
         ...(paneExtra || {}),
       }
     })
-    // setToggleCheck(true)
+    setToggleCheck(true)
   }
 
   function deletePaneFragmentRegenerateState(paneFragmentId: string) {
@@ -578,13 +588,14 @@ const PaneState = ({ uuid, payload, flags }: any) => {
           [stateImpressions.id]: stateImpressions,
         }
       : null
-    const newOptionsPayload = {
-      heldBeliefs: stateHeldBeliefs,
-      withheldBeliefs: stateWithheldBeliefs,
-      impressions: impressionsPayload,
-      paneFragmentsPayload: Object.values(initialStatePaneFragments),
-      hiddenPane: state.hiddenPane,
-    }
+    const newOptionsPayload:any = {}
+    if (impressionsPayload) newOptionsPayload.impressions = impressionsPayload
+    if (Object.keys(stateHeldBeliefs).length)
+      newOptionsPayload.heldBeliefs = stateHeldBeliefs
+    if (Object.keys(stateWithheldBeliefs).length)
+      newOptionsPayload.withheldBeliefs = stateWithheldBeliefs
+    newOptionsPayload.paneFragmentsPayload = Object.values(statePaneFragments)
+    if (state.hiddenPane) newOptionsPayload.hiddenPane = state.hiddenPane
     setState((prev: any) => {
       if (isBgColour)
         return {
@@ -598,7 +609,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
         optionsPayloadString: JSON.stringify(newOptionsPayload),
       }
     })
-    // setToggleCheck(true)
+    setToggleCheck(true)
   }
 
   const handleChangeEditInPlace = (e: any) => {
@@ -1773,7 +1784,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
                 optionsPayloadString: JSON.stringify(newOptionsPayload),
               }
             })
-            // setToggleCheck(true)
+            setToggleCheck(true)
           } else if (result[2] === `0`) {
             const newPaneFragmentId = uuidv4()
             const newStatePaneFragments = {
@@ -1808,7 +1819,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
                 optionsPayloadString: JSON.stringify(newOptionsPayload),
               }
             })
-            // setToggleCheck(true)
+            setToggleCheck(true)
           }
         }
         break
@@ -1869,7 +1880,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
             optionsPayloadString: JSON.stringify(newOptionsPayload),
           }
         })
-        // setToggleCheck(true)
+        setToggleCheck(true)
         break
       }
 
@@ -1932,7 +1943,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
               optionsPayloadString: JSON.stringify(newOptionsPayload),
             }
           })
-          // setToggleCheck(true)
+          setToggleCheck(true)
         } else if (selector === `callback`) {
           setStateLivePreviewMarkdown((prev: any) => {
             return {
@@ -1946,7 +1957,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
               },
             }
           })
-          // setToggleCheck(true)
+          setToggleCheck(true)
         }
         break
       }
@@ -2008,7 +2019,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
             optionsPayloadString: JSON.stringify(newOptionsPayload),
           }
         })
-        // setToggleCheck(true)
+        setToggleCheck(true)
         break
       }
 
@@ -2373,7 +2384,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
         optionsPayloadString: JSON.stringify(newOptionsPayload),
       }
     })
-    // setToggleCheck(true)
+    setToggleCheck(true)
   }
 
   const handleMutateMarkdown = (
@@ -2617,20 +2628,24 @@ const PaneState = ({ uuid, payload, flags }: any) => {
           [stateImpressions.id]: stateImpressions,
         }
       : null
-    const newOptionsPayload = {
-      heldBeliefs: stateHeldBeliefs,
-      withheldBeliefs: stateWithheldBeliefs,
-      impressions: impressionsPayload,
-      paneFragmentsPayload: Object.values(newStatePaneFragments),
-      hiddenPane: state.hiddenPane,
-    }
+    const newOptionsPayload:any = {}
+    if (impressionsPayload) newOptionsPayload.impressions = impressionsPayload
+    if (Object.keys(stateHeldBeliefs).length)
+      newOptionsPayload.heldBeliefs = stateHeldBeliefs
+    if (Object.keys(stateWithheldBeliefs).length)
+      newOptionsPayload.withheldBeliefs = stateWithheldBeliefs
+    if (newStatePaneFragments)
+      newOptionsPayload.paneFragmentsPayload = Object.values(
+        newStatePaneFragments,
+      )
+    if (state.hiddenPane) newOptionsPayload.hiddenPane = state.hiddenPane
     setState((prev: any) => {
       return {
         ...prev,
         optionsPayloadString: JSON.stringify(newOptionsPayload),
       }
     })
-    // setToggleCheck(true)
+    setToggleCheck(true)
   }
 
   const handleSubmit = (e: any) => {
@@ -2676,12 +2691,33 @@ const PaneState = ({ uuid, payload, flags }: any) => {
   }
 
   useEffect(() => {
+    if (toggleCheck) {
+      const hasChanges = !deepEqual(state, payload.initialState)
+      if (hasChanges && saveStage === SaveStages.NoChanges)
+        setSaveStage(SaveStages.UnsavedChanges)
+      else if (!hasChanges && saveStage === SaveStages.UnsavedChanges)
+        setSaveStage(SaveStages.NoChanges)
+    }
+  }, [
+    toggleCheck,
+    deepEqual,
+    payload.initialState,
+    payload.initialStateHeldBeliefs,
+    payload.initialStatePaneFragments,
+    payload.initialStateWithheldBeliefs,
+    saveStage,
+    state,
+    stateHeldBeliefs,
+    statePaneFragments,
+    stateWithheldBeliefs,
+  ])
+
+  useEffect(() => {
     let showMessage = false
     Object.keys(drupalResponse).forEach((e) => {
       if (e === uuid) {
         removeDrupalResponse(e)
         showMessage = true
-        // setToggleCheck(true)
       }
     })
     if (showMessage)
@@ -2733,7 +2769,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
         setFormState((prev: any) => {
           return { ...prev, submitted: true, saving: false, success }
         })
-        // setToggleCheck(true)
+        setToggleCheck(true)
       } else {
         // save to Drupal
 
@@ -2901,7 +2937,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
           setFormState((prev: any) => {
             return { ...prev, submitted: true, saving: false, success }
           })
-          // setToggleCheck(true)
+          setToggleCheck(true)
         }
       }
     }
@@ -2984,7 +3020,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
         stateLivePreview,
         stateLivePreviewMarkdown,
       }}
-      flags={{ ...flags,saveStage }}
+      flags={{ ...flags, saveStage }}
       fn={{
         toggleBelief,
         handleChangeBelief,

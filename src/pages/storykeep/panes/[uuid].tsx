@@ -179,9 +179,27 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
         )
           hasBreaks = true
       })
+      const newOptionsPayload:any = {}
+      const impressionsPayload = initialStateImpressions?.title
+        ? {
+            [initialStateImpressions.id]: initialStateImpressions,
+          }
+        : null
+      if (impressionsPayload) newOptionsPayload.impressions = impressionsPayload
+      if (Object.keys(initialStateHeldBeliefs).length)
+        newOptionsPayload.heldBeliefs = initialStateHeldBeliefs
+      if (Object.keys(initialStateWithheldBeliefs).length)
+        newOptionsPayload.withheldBeliefs = initialStateWithheldBeliefs
+      if (initialStatePaneFragments)
+        newOptionsPayload.paneFragmentsPayload = Object.values(
+          initialStatePaneFragments,
+        )
+      if (typeof thisPaneOptions?.hiddenPane === `boolean`)
+        newOptionsPayload.hiddenPane = thisPaneOptions.hiddenPane
       const initialState = {
         title: thisPane.title,
         slug: thisPane.slug,
+        optionsPayloadString: JSON.stringify(newOptionsPayload),
         heightOffsetDesktop: thisPane.heightOffsetDesktop,
         heightOffsetTablet: thisPane.heightOffsetTablet,
         heightOffsetMobile: thisPane.heightOffsetMobile,
@@ -189,7 +207,6 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
         heightRatioTablet: thisPane.heightRatioTablet,
         heightRatioMobile: thisPane.heightRatioMobile,
         isContextPane: thisPane.isContextPane,
-        optionsPayloadString: thisPane.optionsPayload,
         hasCodeHook:
           typeof thisPaneOptions?.codeHook === `object`
             ? thisPaneOptions.codeHook

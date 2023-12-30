@@ -66,14 +66,9 @@ const useRefCallback = <T extends any[]>(
   return result
 }
 
-const PaneRender = ({
-  uuid,
-  handlers,
-  previewPayload,
-  toggleCheck,
-  fn,
-}: any) => {
-  const { width, interceptMode, setInterceptMode, interceptModeTag } = fn
+const PaneRender = ({ uuid, handlers, previewPayload, fn, flags }: any) => {
+  const { setInterceptMode } = fn
+  const { width, interceptMode, interceptModeTag } = flags
   const handleEditMarkdown = handlers.handleEditMarkdown
   const handleMutateMarkdown = handlers.handleMutateMarkdown
   const handleChangeEditInPlace = handlers.handleChangeEditInPlace
@@ -611,10 +606,9 @@ const PaneRender = ({
     window.addEventListener(`resize`, handleResize)
     handleResize()
     const lastWidth = width
-    const lastCheck = toggleCheck
-    if (width !== lastWidth || lastCheck !== toggleCheck) handleResize()
+    if (width !== lastWidth) handleResize()
     return () => window.removeEventListener(`resize`, handleResize)
-  }, [elementRef, viewportKey, width, toggleCheck])
+  }, [elementRef, viewportKey, width])
 
   useEffect(() => {
     if (focus > -1) {

@@ -2,6 +2,7 @@
 import React, { useState, Fragment } from 'react'
 import { Switch, Menu, Transition } from '@headlessui/react'
 import { classNames } from '@tractstack/helpers'
+import { navigate } from 'gatsby'
 import {
   LockOpenIcon,
   LockClosedIcon,
@@ -111,8 +112,10 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
         ? `No edit privileges`
         : `Safe mode enabled`
   const passFn = {
-    interceptMode,
     setInterceptMode,
+  }
+  const passFlags = {
+    interceptMode,
     interceptModeTag,
     width,
   }
@@ -977,37 +980,51 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                     </button>
                   </span>
 
-                  <span className="ml-3 hidden xs:block">
-                    <button
-                      type="button"
-                      className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-100"
-                      onClick={() => alert(`todo`)}
-                    >
-                      <TrashIcon
-                        className="-ml-0.5 mr-1.5 h-5 w-5 text-mydarkgrey"
-                        aria-hidden="true"
-                      />
-                      Delete
-                    </button>
-                  </span>
+                  {flags.isAuthor || flags.isAdmin ? (
+                    <span className="ml-3 hidden xs:block">
+                      <button
+                        type="button"
+                        className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-100"
+                        onClick={() => alert(`todo`)}
+                      >
+                        <TrashIcon
+                          className="-ml-0.5 mr-1.5 h-5 w-5 text-mydarkgrey"
+                          aria-hidden="true"
+                        />
+                        Delete
+                      </button>
+                    </span>
+                  ) : null}
 
-                  <span className="xs:ml-3">
-                    <button
-                      type="button"
-                      className="inline-flex items-center rounded-md bg-myblue px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-myorange hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-myorange"
-                    >
-                      <CheckIcon
-                        className="-ml-0.5 mr-1.5 h-5 w-5"
-                        aria-hidden="true"
-                      />
-                      Publish
-                    </button>
-                  </span>
+                  {flags.saveStage >= SaveStages.UnsavedChanges ? (
+                    <span className="xs:ml-3">
+                      <button
+                        type="button"
+                        className={classNames(
+                          flags.saveStage === SaveStages.UnsavedChanges
+                            ? `bg-myblue`
+                            : flags.saveStage < SaveStages.Error
+                              ? `bg-yellow-300`
+                              : flags.saveStage === SaveStages.Error
+                                ? `bg-red-300`
+                                : `bg-mygreen`,
+                          `inline-flex items-center rounded-md bg-myblue px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-myorange hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-myorange`,
+                        )}
+                      >
+                        <CheckIcon
+                          className="-ml-0.5 mr-1.5 h-5 w-5"
+                          aria-hidden="true"
+                        />
+                        Publish
+                      </button>
+                    </span>
+                  ) : null}
 
                   <span className="ml-3">
                     {flags.saveStage === SaveStages.NoChanges ? (
                       <button
                         type="button"
+                        onClick={() => navigate(`/storykeep`)}
                         className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-100"
                       >
                         <XMarkIcon
@@ -1019,6 +1036,14 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                     ) : (
                       <button
                         type="button"
+                        onClick={() => {
+                          if (
+                            window.confirm(
+                              `There are Unsaved Changes. Proceed?`,
+                            )
+                          )
+                            navigate(`/storykeep`)
+                        }}
                         className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-100"
                       >
                         <XMarkIcon
@@ -1269,6 +1294,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
               setViewportKey,
             }}
             fn={passFn}
+            flags={passFlags}
           />
         </section>
       </>
