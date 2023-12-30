@@ -55,6 +55,7 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
     isBuilder: false,
     isOpenDemo: openDemoEnabled,
     editStage: EditStages.Booting,
+    saveStage: SaveStages.Booting,
   })
   const [isSSR, setIsSSR] = useState(true)
 

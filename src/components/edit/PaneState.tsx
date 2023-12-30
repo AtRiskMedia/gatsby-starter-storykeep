@@ -2984,7 +2984,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
         stateLivePreview,
         stateLivePreviewMarkdown,
       }}
-      flags={{ ...flags }}
+      flags={{ ...flags,saveStage }}
       fn={{
         toggleBelief,
         handleChangeBelief,

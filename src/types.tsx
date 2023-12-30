@@ -83,6 +83,7 @@ export interface IEditPaneFlags {
   isAdmin: boolean
   isBuilder: boolean
   isOpenDemo: boolean
+  saveStage: number
   editStage: number
 }
 
