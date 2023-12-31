@@ -77,6 +77,7 @@ export enum SaveStages {
 export interface ISlideOver {
   children: JSX.Element
   setToggle: Function
+  locked: boolean
 }
 
 export interface IEditPanePayload {

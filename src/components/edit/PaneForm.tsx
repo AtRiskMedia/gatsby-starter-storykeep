@@ -47,7 +47,6 @@ const insertModeTags = [
 const PaneForm = ({ uuid, payload, flags, fn }: any) => {
   const {
     state,
-    formState,
     statePaneFragments,
     stateImpressions,
     stateHeldBeliefs,
@@ -120,7 +119,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
     interceptMode,
     interceptModeTag,
     width,
-    slugCollision: formState.slugCollision,
+    slugCollision: flags.slugCollision,
   }
 
   useEffect(() => {
@@ -132,7 +131,10 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
   return (
     <>
       {toggleAdvOpt ? (
-        <SlideOver setToggle={setToggleAdvOpt}>
+        <SlideOver
+          setToggle={setToggleAdvOpt}
+          locked={state.title.length === 0 || flags.slugCollision}
+        >
           <section className="relative bg-slate-50">
             <div className="w-full px-6 pt-2 max-w-screen-2xl mt-2 ml-2">
               <form className="max-w-3xl" id="editPane">
@@ -187,7 +189,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                             </span>
                           </>
                         ) : null}
-                        {formState.slugCollision ? (
+                        {flags.slugCollision ? (
                           <span className="text-myorange ml-2 inline-block">
                             {` `} (that slug is already taken)
                           </span>

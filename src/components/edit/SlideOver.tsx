@@ -5,9 +5,14 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 
 import { ISlideOver } from '../../types'
 
-const SlideOver = ({ children, setToggle }: ISlideOver) => {
+const SlideOver = ({ children, setToggle, locked }: ISlideOver) => {
   const [open, setOpen] = useState(false)
   const [lag, setLag] = useState(true)
+
+  const doClose = () => {
+    if (!locked) setOpen(false)
+    else alert(`Please enter a title and unique slug.`)
+  }
 
   useEffect(() => {
     if (lag) {
@@ -19,7 +24,7 @@ const SlideOver = ({ children, setToggle }: ISlideOver) => {
 
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={setOpen}>
+      <Dialog as="div" className="relative z-50" onClose={() => doClose()}>
         <Transition.Child
           as={Fragment}
           enter="ease-in-out duration-500"
@@ -58,7 +63,7 @@ const SlideOver = ({ children, setToggle }: ISlideOver) => {
                       <button
                         type="button"
                         className="relative rounded-md text-slate-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
-                        onClick={() => setOpen(false)}
+                        onClick={() => doClose()}
                       >
                         <span className="absolute -inset-2.5" />
                         <span className="sr-only">Close panel</span>
@@ -78,7 +83,7 @@ const SlideOver = ({ children, setToggle }: ISlideOver) => {
                         <div className="mt-12">
                           <button
                             type="button"
-                            onClick={() => setOpen(false)}
+                            onClick={() => doClose()}
                             className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-100"
                           >
                             <XMarkIcon

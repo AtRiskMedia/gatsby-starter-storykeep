@@ -42,10 +42,10 @@ const PaneState = ({ uuid, payload, flags }: any) => {
   const [lastSavedState, setLastSavedState] = useState(payload)
   const [saved, setSaved] = useState(false)
   const [state, setState] = useState(payload.state)
+  const [slugCollision, setSlugCollision] = useState(false)
   const [newUuid, setNewUuid] = useState(``)
   const [updateMarkdownPayload, setUpdateMarkdownPayload]: any = useState([])
   const [updatePanePayload, setUpdatePanePayload]: any = useState([])
-  const [formState, setFormState] = useState(payload.formState)
   const [saveStage, setSaveStage] = useState(SaveStages.Booting)
   const [toggleCheck, setToggleCheck] = useState(false)
   const deepEqual = require(`deep-equal`)
@@ -407,19 +407,12 @@ const PaneState = ({ uuid, payload, flags }: any) => {
       setState((prev: any) => {
         return { ...prev, [name]: value }
       })
-      setFormState((prev: any) => {
-        return { ...prev, slugCollision: true }
-      })
+      setSlugCollision(true)
     } else {
       setState((prev: any) => {
         return { ...prev, [name]: value }
       })
-      setFormState((prev: any) => {
-        return {
-          ...prev,
-          slugCollision: false,
-        }
-      })
+      setSlugCollision(false)
     }
     const impressionsPayload = stateImpressions?.title
       ? {
@@ -2697,7 +2690,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
 
     switch (saveStage) {
       case SaveStages.NoChanges:
-        Object.keys(cleanerQueue).forEach((e: any) => {
+        Object.keys(cleanerQueue).forEach((e: string) => {
           if (cleanerQueue[e] === `pane` && e !== uuid) {
             removePane(e)
             removeCleanerQueue(e)
@@ -2821,7 +2814,6 @@ const PaneState = ({ uuid, payload, flags }: any) => {
         setSaved(true)
         setLastSavedState({
           initialState: state,
-          initialFormState: formState,
           initialStatePaneFragments: statePaneFragments,
           initialStateImpressions: stateImpressions,
           initialStateHeldBeliefs: stateHeldBeliefs,
@@ -2856,7 +2848,6 @@ const PaneState = ({ uuid, payload, flags }: any) => {
     stateHeldBeliefs,
     stateWithheldBeliefs,
     statePaneFragments,
-    formState,
     stateLivePreview,
     stateLivePreviewMarkdown,
     cleanerQueue,
@@ -3076,9 +3067,6 @@ const PaneState = ({ uuid, payload, flags }: any) => {
         setNewUuid(newPaneId)
       }
       removeDrupalResponse(uuid)
-      setFormState((prev: any) => {
-        return { ...prev, submitted: true, saving: false, success: true }
-      })
       setSaveStage(SaveStages.SavingPane)
     }
   }, [
@@ -3129,7 +3117,6 @@ const PaneState = ({ uuid, payload, flags }: any) => {
       setStateLivePreviewMarkdown(payload.initialStateLivePreviewMarkdown)
       setStatePaneFragments(payload.initialStatePaneFragments)
       setState(payload.initialState)
-      setFormState(payload.initialFormState)
     }
     if (
       flags.editStage === EditStages.Activated &&
@@ -3162,7 +3149,6 @@ const PaneState = ({ uuid, payload, flags }: any) => {
       uuid={uuid}
       payload={{
         state,
-        formState,
         statePaneFragments,
         stateImpressions,
         stateHeldBeliefs,
@@ -3170,7 +3156,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
         stateLivePreview,
         stateLivePreviewMarkdown,
       }}
-      flags={{ ...flags, saveStage, saved, isEmptyPane }}
+      flags={{ ...flags, saveStage, saved, isEmptyPane, slugCollision }}
       fn={{
         toggleBelief,
         handleChangeBelief,

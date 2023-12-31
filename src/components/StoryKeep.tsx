@@ -254,7 +254,6 @@ const StoryKeep = () => {
       case `resource`:
         break
     }
-    console.log(e)
   }
 
   useEffect(() => {
@@ -616,8 +615,12 @@ const StoryKeep = () => {
                         <button
                           className="truncate text-md font-main"
                           onClick={() => {
-                            setSelectedCollection(current)
-                            setSelected(record)
+                            if (current === `pane`)
+                              navigate(`/storykeep/panes/${record}`)
+                            else {
+                              setSelectedCollection(current)
+                              setSelected(record)
+                            }
                           }}
                         >
                           {payload[record].title}
