@@ -1,6 +1,14 @@
 import { ReactElement, JSX } from 'react'
 import { IContentMap, IStoryFragmentId } from '@tractstack/types'
 
+export enum ApiStages {
+  Booting,
+  Open,
+  Locked,
+  Error,
+  Success,
+}
+
 export enum Stages {
   Booting,
   Authenticate,
@@ -183,6 +191,8 @@ export interface ICleanerNode {
 export interface IDrupalState {
   stage: number
   setStage: Function
+  apiStage: number
+  setApiStage: Function
   embeddedEdit: {
     child: null | string
     childType: null | string

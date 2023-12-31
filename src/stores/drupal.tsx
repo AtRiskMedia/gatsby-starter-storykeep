@@ -7,6 +7,8 @@ import { IDrupalState } from '../types'
 export const useDrupalStore = create<IDrupalState>((set, get) => ({
   stage: 0,
   setStage: (stage: number) => set((state) => ({ ...state, stage })),
+  apiStage: 0,
+  setApiStage: (apiStage: number) => set((state) => ({ ...state, apiStage })),
   embeddedEdit: {
     child: null,
     childType: null,
