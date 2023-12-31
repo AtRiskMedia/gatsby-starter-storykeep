@@ -133,7 +133,11 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
       {toggleAdvOpt ? (
         <SlideOver
           setToggle={setToggleAdvOpt}
-          locked={state.title.length === 0 || flags.slugCollision}
+          locked={
+            state.title.length === 0 ||
+            state.slug.length === 0 ||
+            flags.slugCollision
+          }
         >
           <section className="relative bg-slate-50">
             <div className="w-full px-6 pt-2 max-w-screen-2xl mt-2 ml-2">
