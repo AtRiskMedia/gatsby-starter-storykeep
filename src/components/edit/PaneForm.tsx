@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-import React, { useState, Fragment } from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
 import { Switch, Menu, Transition } from '@headlessui/react'
 import { classNames } from '@tractstack/helpers'
 import { navigate } from 'gatsby'
@@ -25,7 +25,7 @@ import {
 } from '@heroicons/react/20/solid'
 
 import { useDrupalStore } from '../../stores/drupal'
-import Message from '../Message'
+import { config } from '../../../data/SiteConfig'
 import EditBelief from '../EditBelief'
 import PaneRender from './PaneRender'
 import SlideOver from './SlideOver'
@@ -44,7 +44,6 @@ const insertModeTags = [
 ]
 
 const PaneForm = ({ uuid, payload, flags, fn }: any) => {
-  console.log(flags.saveStage, SaveStages[flags.saveStage])
   const {
     state,
     formState,
@@ -65,6 +64,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
     handleMutateMarkdown,
     handleChangeEditInPlace,
     handleChange,
+    setSaved,
   } = fn
   const [toggleAdvOpt, setToggleAdvOpt] = useState(false)
   const [interceptMode, setInterceptMode] = useState(`edit`)
@@ -121,6 +121,12 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
     width,
     slugCollision: formState.slugCollision,
   }
+
+  useEffect(() => {
+    if (flags.saved) {
+      setTimeout(() => setSaved(false), config.messageDelay)
+    }
+  }, [flags.saved, setSaved])
 
   return (
     <>
@@ -958,8 +964,12 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                       {state.slug}
                     </div>
                     <div className="mt-2 flex items-center">
-                      {flags.saveStage > SaveStages.NoChanges &&
-                      flags.saveStage < SaveStages.Success ? (
+                      {flags.saved ? (
+                        <span className="inline-flex items-center rounded-md bg-myorange/10 px-2 py-1 text-sm text-black ring-1 ring-inset ring-mydarkgrey/10">
+                          Saved!
+                        </span>
+                      ) : flags.saveStage > SaveStages.NoChanges &&
+                        flags.saveStage < SaveStages.Success ? (
                         <span className="inline-flex items-center rounded-md bg-yellow-300/20 px-2 py-1 text-sm text-black ring-1 ring-inset ring-mydarkgrey/10">
                           Unsaved changes
                         </span>
@@ -1043,7 +1053,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                             ? `Save`
                             : flags.saveStage < SaveStages.Error
                               ? `Saving`
-                              : flags.saveStage === SaveStages.Success
+                              : flags.saveStage === SaveStages.Error
                                 ? `Error`
                                 : `Saved`}
                         </>
@@ -1329,15 +1339,6 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                   ) : null}
                 </span>
               </div>
-              <div id="message" className="flex items-center mt-2">
-                {flags.saveStage === SaveStages.Success ? (
-                  <Message>
-                    <span className="mr-2 py-2 text-lg text-myorange font-bold">
-                      Changes have been saved
-                    </span>
-                  </Message>
-                ) : null}
-              </div>
             </div>
           </div>
         </section>
@@ -1345,7 +1346,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
         <section className="relative py-4 bg-slate-100">
           <>
             {flags.saveStage >= SaveStages.PrepareSave ? (
-              <div className="z-50 absolute top-0 bg-mydarkgrey/95 inset-y-0 right-0 w-full h-screen"></div>
+              <div className="z-50 absolute top-0 bg-transparent inset-y-0 right-0 w-full h-screen"></div>
             ) : null}
             <PaneRender
               uuid={uuid}

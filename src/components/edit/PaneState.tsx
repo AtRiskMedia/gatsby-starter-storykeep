@@ -1,15 +1,16 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 import React, { useState, useEffect, useCallback, MouseEvent } from 'react'
 import { fromMarkdown } from 'mdast-util-from-markdown'
-// import { ParseOptions } from '@tractstack/helpers'
+import { ParseOptions } from '@tractstack/helpers'
 import { v4 as uuidv4 } from 'uuid'
 
 import { useDrupalStore } from '../../stores/drupal'
 import { reduceTailwindClasses } from '../../helpers/reduceTailwindClasses'
 import { generateLivePreviewInitialState } from '../../helpers/generateLivePreviewInitialState'
-import {} from // panePayload,
-// markdownPayload,
-'../../helpers/generateDrupalPayload'
+import {
+  panePayload,
+  markdownPayload,
+} from '../../helpers/generateDrupalPayload'
 import {
   shapesMobileHeightRatio,
   artpackCollectionImages,
@@ -37,33 +38,32 @@ const PaneState = ({ uuid, payload, flags }: any) => {
   const [statePaneFragments, setStatePaneFragments] = useState(
     payload.statePaneFragments,
   )
+  const [lastSavedState, setLastSavedState] = useState(payload)
+  const [saved, setSaved] = useState(false)
   const [state, setState] = useState(payload.state)
+  const [updateMarkdownPayload, setUpdateMarkdownPayload]: any = useState([])
+  const [updatePanePayload, setUpdatePanePayload]: any = useState([])
   const [formState, setFormState] = useState(payload.formState)
   const [saveStage, setSaveStage] = useState(SaveStages.Booting)
   const [toggleCheck, setToggleCheck] = useState(false)
-  // const [settingPane, setSettingPane] = useState(false)
-  // const [hasProcessedMarkdownResponse, setHasProcessedMarkdownResponse] =
-  useState(false)
   const deepEqual = require(`deep-equal`)
   const allPanes = useDrupalStore((state) => state.allPanes)
   const thisPane = typeof allPanes[uuid] !== `undefined` ? allPanes[uuid] : null
   const allFiles = useDrupalStore((state) => state.allFiles)
   const allMarkdown = useDrupalStore((state) => state.allMarkdown)
   const updateMarkdown = useDrupalStore((state) => state.updateMarkdown)
-  // const drupalPreSaveQueue = useDrupalStore((state) => state.drupalPreSaveQueue)
-  // const removeDrupalPreSaveQueue = useDrupalStore(
-  //  (state) => state.removeDrupalPreSaveQueue,
-  // )
-  // const setDrupalPreSaveQueue = useDrupalStore(
-  //  (state) => state.setDrupalPreSaveQueue,
-  // )
-  // const setDrupalSaveNode = useDrupalStore((state) => state.setDrupalSaveNode)
+  const drupalPreSaveQueue = useDrupalStore((state) => state.drupalPreSaveQueue)
+  const removeDrupalPreSaveQueue = useDrupalStore(
+    (state) => state.removeDrupalPreSaveQueue,
+  )
+  const setDrupalPreSaveQueue = useDrupalStore(
+    (state) => state.setDrupalPreSaveQueue,
+  )
+  const setDrupalSaveNode = useDrupalStore((state) => state.setDrupalSaveNode)
   const removeDrupalResponse = useDrupalStore(
     (state) => state.removeDrupalResponse,
   )
-  // const setPane = useDrupalStore((state) => state.setPane)
-  // const removePane = useDrupalStore((state) => state.removePane)
-  // const removeMarkdown = useDrupalStore((state) => state.removeMarkdown)
+  const setPane = useDrupalStore((state) => state.setPane)
   const drupalResponse = useDrupalStore((state) => state.drupalResponse)
   const allPanesSlugs = Object.keys(allPanes).map((e) => {
     return allPanes[e].slug
@@ -830,7 +830,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
             const paneExtra = {
               markdown: [starterPayload.newMarkdownId],
             }
-            updateMarkdown(starterPayload.newMarkdownPayload)
+            // updateMarkdown(starterPayload.newMarkdownPayload)
             insertPaneFragmentsRegenerateState(
               starterPayload.paneFragmentsPayload,
               starterPayload.newMarkdown,
@@ -846,7 +846,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
               heightRatioMobile: `120.83`,
               markdown: [starterPayload.newMarkdownId],
             }
-            updateMarkdown(starterPayload.newMarkdownPayload)
+            // updateMarkdown(starterPayload.newMarkdownPayload)
             insertPaneFragmentsRegenerateState(
               starterPayload.paneFragmentsPayload,
               starterPayload.newMarkdown,
@@ -862,7 +862,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
               heightRatioMobile: `32.67`,
               markdown: [starterPayload.newMarkdownId],
             }
-            updateMarkdown(starterPayload.newMarkdownPayload)
+            // updateMarkdown(starterPayload.newMarkdownPayload)
             insertPaneFragmentsRegenerateState(
               starterPayload.paneFragmentsPayload,
               starterPayload.newMarkdown,
@@ -2646,9 +2646,15 @@ const PaneState = ({ uuid, payload, flags }: any) => {
     setToggleCheck(true)
   }
 
+  const handleSubmit = (e: MouseEvent<HTMLButtonElement>) => {
+    console.log(`submit`)
+    e.preventDefault()
+    setSaveStage(SaveStages.PrepareSave)
+  }
+
   useEffect(() => {
     if (toggleCheck) {
-      const hasChanges = !deepEqual(state, payload.initialState)
+      const hasChanges = !deepEqual(state, lastSavedState.initialState)
       if (hasChanges && saveStage === SaveStages.NoChanges)
         setSaveStage(SaveStages.UnsavedChanges)
       else if (!hasChanges && saveStage === SaveStages.UnsavedChanges)
@@ -2666,88 +2672,77 @@ const PaneState = ({ uuid, payload, flags }: any) => {
     stateHeldBeliefs,
     statePaneFragments,
     stateWithheldBeliefs,
+    lastSavedState.initialState,
   ])
 
+  // handle stages
   useEffect(() => {
-    let showMessage = false
-    Object.keys(drupalResponse).forEach((e) => {
-      if (e === uuid) {
-        removeDrupalResponse(e)
-        showMessage = true
-      }
-    })
-    if (showMessage)
-      document?.getElementById(`message`)?.scrollIntoView({
-        behavior: `auto`,
-        block: `end`,
-      })
-  }, [drupalResponse, uuid, removeDrupalResponse])
+    const hasMarkdown =
+      typeof stateLivePreviewMarkdown?.markdownId !== `undefined` &&
+      typeof allMarkdown[stateLivePreviewMarkdown.markdownId] !== `undefined`
+    const thisMarkdown = hasMarkdown
+      ? allMarkdown[stateLivePreviewMarkdown.markdownId]
+      : null
+    // const hasMarkdownDrupalNid = hasMarkdown && thisMarkdown.drupalNid !== `-1`
+    // const hasPaneDrupalNid = thisPane.drupalNid !== `-1`
 
-  const handleSubmit = (e: MouseEvent<HTMLButtonElement>) => {
-    console.log(`submit`)
-    e.preventDefault()
-    setSaveStage(SaveStages.PrepareSave)
-  }
-  /*
-  const handleSubmit = (e: any) => {
-    // FIX
-    e.preventDefault()
-    if (
-      !deepEqual(state, payload.initialState) ||
-      !deepEqual(statePaneFragments, payload.initialStatePaneFragments) ||
-      !deepEqual(stateImpressions, payload.initialStateImpressions) ||
-      !deepEqual(stateHeldBeliefs, payload.initialStateHeldBeliefs) ||
-      !deepEqual(stateWithheldBeliefs, payload.initialStateWithheldBeliefs)
-    ) {
-      const thisMarkdownId = stateLivePreviewMarkdown?.markdownId
-      let wait = false
-      if (thisMarkdownId) {
-        const thisMarkdown = allMarkdown[thisMarkdownId]
-        const markdown = markdownPayload(statePaneFragments, allMarkdown)
-        if (typeof markdown[0] !== `undefined`) {
-          setDrupalPreSaveQueue(
-            markdown[0],
-            `markdown`,
-            thisMarkdownId,
-            thisMarkdown.drupalNid,
-          )
-          wait = true
-        }
+    switch (saveStage) {
+      case SaveStages.PrepareSave: {
+        setSaveStage(SaveStages.PrepareNodes)
+        break
       }
-      const pane = panePayload(
-        state,
-        uuid,
-        statePaneFragments,
-        stateImpressions,
-        stateHeldBeliefs,
-        stateWithheldBeliefs,
-      )
-      setDrupalPreSaveQueue(pane, `pane`, uuid, thisPane.drupalNid, wait)
-      // setLocked(false)
-      // setHasProcessedMarkdownResponse(false)
-      setFormState((prev: any) => {
-        return { ...prev, submitted: true, saving: true }
-      })
-    }
-  }
 
-  useEffect(() => {
-    if (formState?.saving && !settingPane) {
-      const markdownId = stateLivePreviewMarkdown?.markdownId
-      let success = false
-      if (process.env.NODE_ENV === `development` || openDemoEnabled) {
-        setSettingPane(true)
-        // bypass drupal save; update pane in state
-        if (markdownId) {
-          const newMarkdown = {
-            ...allMarkdown[markdownId],
-            id: markdownId,
-            markdownBody: stateLivePreviewMarkdown.markdownArray.join(`\n`),
-            title: `Copy for ${state.title}`,
-            slug: state.slug,
-          }
-          setTimeout(() => updateMarkdown(newMarkdown), 0)
+      case SaveStages.PrepareNodes:
+        // for now, not touching files
+        if (hasMarkdown) setSaveStage(SaveStages.SaveMarkdown)
+        else setSaveStage(SaveStages.SavePane)
+        break
+
+      case SaveStages.SaveFiles:
+        break
+
+      case SaveStages.SavedFiles:
+        break
+
+      case SaveStages.FilesUpdateAffectedNodes:
+        break
+
+      case SaveStages.SaveMarkdown: {
+        setSaveStage(SaveStages.SavingMarkdown)
+        const newMarkdown = {
+          ...allMarkdown[stateLivePreviewMarkdown.markdownId],
+          id: stateLivePreviewMarkdown.markdownId,
+          markdownBody: stateLivePreviewMarkdown.markdownArray.join(`\n`),
+          title: `Copy for ${state.title}`,
+          slug: state.slug,
         }
+        setUpdateMarkdownPayload([newMarkdown])
+        if (!flags.isOpenDemo) {
+          const markdown = markdownPayload(statePaneFragments, allMarkdown)
+          if (typeof markdown[0] !== `undefined`)
+            setDrupalPreSaveQueue(
+              markdown[0],
+              `markdown`,
+              stateLivePreviewMarkdown.markdownId,
+              thisMarkdown.drupalNid,
+            )
+        }
+        break
+      }
+
+      case SaveStages.SavedMarkdown:
+        if (!flags.isOpenDemo)
+          setSaveStage(SaveStages.MarkdownUpdateAffectedNodes)
+        else setSaveStage(SaveStages.SavePane)
+        break
+
+      case SaveStages.MarkdownUpdateAffectedNodes:
+        console.log(`todo MarkdownUpdateAffectedNodes`)
+        setSaveStage(SaveStages.SavePane)
+        break
+
+      case SaveStages.SavePane: {
+        setSaveStage(SaveStages.SavingPane)
         const newPane = {
           id: uuid,
           drupalNid: thisPane.drupalNid,
@@ -2767,212 +2762,318 @@ const PaneState = ({ uuid, payload, flags }: any) => {
           title: state.title,
         }
         if (state.markdown) newPane.relationships.markdown = state.markdown
-        setTimeout(() => setPane(uuid, newPane), 0)
-        setSettingPane(false)
-        success = true
-        setFormState((prev: any) => {
-          return { ...prev, submitted: true, saving: false, success }
-        })
-        setToggleCheck(true)
-      } else {
-        // save to Drupal
-
-        if (
-          typeof drupalPreSaveQueue?.markdown !== `undefined` &&
-          Object.keys(drupalPreSaveQueue?.markdown).length
-        ) {
-          setDrupalSaveNode(
-            drupalPreSaveQueue.markdown[markdownId].payload,
-            `markdown`,
-            markdownId,
-            drupalPreSaveQueue.markdown[markdownId].drupalNid,
-          )
-          removeDrupalPreSaveQueue(markdownId, `markdown`)
-        }
-
-        if (
-          !hasProcessedMarkdownResponse &&
-          markdownId &&
-          typeof drupalResponse[markdownId] !== `undefined`
-        ) {
-          if (allMarkdown[markdownId].drupalNid === -1) {
-            // this is a new markdown; replace initial uuid with one from Drupal
-            const newMarkdown = { ...allMarkdown[markdownId] }
-            newMarkdown.id = drupalResponse[markdownId].data.id
-            newMarkdown.drupalNid =
-              drupalResponse[markdownId].data.attributes.drupal_internal__nid
-            setTimeout(() => updateMarkdown(newMarkdown), 0)
-            const newPreSavePayload = {
-              ...drupalPreSaveQueue.pane[uuid].payload,
-            }
-            const currentOptionsPayload = ParseOptions(
-              newPreSavePayload.attributes.field_options,
-            )
-            let offset = 0
-            Object.keys(currentOptionsPayload).forEach((e: any) => {
-              if (currentOptionsPayload[e].markdownId) offset = e
-            })
-            const newPaneFragments = {
-              ...currentOptionsPayload.paneFragmentsPayload,
-              [offset]: {
-                ...currentOptionsPayload.paneFragmentsPayload[offset],
-                markdownId: newMarkdown.id,
-              },
-            }
-            const newOptionsPayload = {
-              ...currentOptionsPayload,
-              paneFragmentsPayload: Object.values(newPaneFragments),
-            }
-            newPreSavePayload.attributes.field_options =
-              JSON.stringify(newOptionsPayload)
-            setDrupalPreSaveQueue(
-              newPreSavePayload,
-              `pane`,
-              uuid,
-              thisPane.drupalNid,
-              true,
-              newMarkdown.id,
-              markdownId,
-            )
-          }
-          removeDrupalResponse(markdownId)
-          setHasProcessedMarkdownResponse(true)
-        }
-
-        if (
-          typeof drupalPreSaveQueue?.pane !== `undefined` &&
-          Object.keys(drupalPreSaveQueue?.pane).length &&
-          (!drupalPreSaveQueue.pane[uuid].wait ||
-            (hasProcessedMarkdownResponse &&
-              drupalPreSaveQueue.pane[uuid].wait))
-        ) {
-          const newMarkdownId = drupalPreSaveQueue.pane[uuid].markdownId
-          if (
-            newMarkdownId &&
-            newMarkdownId !== thisPane.relationships.markdown[0]
-          ) {
-            const fullOptionsPayload = ParseOptions(state.optionsPayloadString)
-            const currentOptionsPayload =
-              fullOptionsPayload.paneFragmentsPayload
-            let offset = 0
-            Object.keys(currentOptionsPayload).forEach((e: any) => {
-              if (currentOptionsPayload[e].markdownId) offset = e
-            })
-            const newPaneFragments = {
-              ...currentOptionsPayload,
-              [offset]: {
-                ...currentOptionsPayload[offset],
-                markdownId: newMarkdownId,
-              },
-            }
-            const newOptionsPayload = {
-              ...fullOptionsPayload,
-              paneFragmentsPayload: Object.values(newPaneFragments),
-            }
-            const newPane = {
-              id: uuid,
-              drupalNid: thisPane.drupalNid,
-              heightOffsetDesktop: state.heightOffsetDesktop,
-              heightOffketMobile: state.heightOffsetMobile,
-              heightOffsetTablet: state.heightOffsetTablet,
-              heightRatioDesktop: state.heightRatioDesktop,
-              heightRatioMobile: state.heightRatioMobile,
-              heightRatioTablet: state.heightRatioTablet,
-              isContextPane: state.isContextPane,
-              optionsPayload: JSON.stringify(newOptionsPayload),
-              relationships: {
-                // FIX --- should pull all from state
-                ...thisPane.relationships,
-                markdown: [newMarkdownId],
-              },
-              slug: state.slug,
-              title: state.title,
-            }
-            setPane(uuid, newPane)
-            setStateLivePreviewMarkdown((prev: any) => {
-              return {
-                ...prev,
-                markdownId: newMarkdownId,
-              }
-            })
-            regenerateState(
-              null,
-              stateLivePreviewMarkdown.paneFragmentId,
-              { markdownId: newMarkdownId },
-              null,
-              newMarkdownId,
-            )
-          }
-          const drupalNode = { ...drupalPreSaveQueue.pane[uuid].payload }
-          if (newMarkdownId)
-            drupalNode.relationships.field_markdown.data.id = newMarkdownId
-          setDrupalSaveNode(
-            drupalNode,
-            `pane`,
+        setUpdatePanePayload([newPane])
+        if (!flags.isOpenDemo) {
+          const pane = panePayload(
+            state,
             uuid,
-            drupalPreSaveQueue.pane[uuid].drupalNid,
+            statePaneFragments,
+            stateImpressions,
+            stateHeldBeliefs,
+            stateWithheldBeliefs,
           )
-          if (
-            typeof drupalPreSaveQueue.pane[uuid] !== `undefined` &&
-            drupalPreSaveQueue.pane[uuid].markdownId &&
-            drupalPreSaveQueue.pane[uuid].oldMarkdownId
-          ) {
-            const thisUuid = drupalPreSaveQueue.pane[uuid].oldMarkdownId
-            setTimeout(() => removeMarkdown(thisUuid), 500)
-          }
-          removeDrupalPreSaveQueue(uuid, `pane`)
+          setDrupalPreSaveQueue(pane, `pane`, uuid, thisPane.drupalNid)
         }
-
-        if (typeof drupalResponse[uuid] !== `undefined`) {
-          if (thisPane.drupalNid === -1) {
-            const newPaneId = drupalResponse[uuid].data.id
-            const newPane = {
-              ...thisPane,
-              drupalNid:
-                drupalResponse[uuid].data.attributes.drupal_internal__nid,
-            }
-            setPane(newPaneId, newPane)
-            // setTimeout(() => setThisUuid(newPaneId), 0)
-            // handleReplacePane(uuid, newPaneId)
-            setTimeout(() => removePane(uuid), 500)
-          }
-          success = true
-          removeDrupalResponse(uuid)
-          setFormState((prev: any) => {
-            return { ...prev, submitted: true, saving: false, success }
-          })
-          setToggleCheck(true)
-        }
+        break
       }
+
+      case SaveStages.SavedPane:
+        if (!flags.isOpenDemo) setSaveStage(SaveStages.PaneUpdateAffectedNodes)
+        else setSaveStage(SaveStages.Success)
+        break
+
+      case SaveStages.PaneUpdateAffectedNodes:
+        console.log(`todo PaneUpdateAffectedNodes`)
+        setSaveStage(SaveStages.Success)
+        break
+
+      case SaveStages.Error:
+        break
+
+      case SaveStages.Success:
+        setSaved(true)
+        setLastSavedState({
+          initialState: state,
+          initialFormState: formState,
+          initialStatePaneFragments: statePaneFragments,
+          initialStateImpressions: stateImpressions,
+          initialStateHeldBeliefs: stateHeldBeliefs,
+          initialStateWithheldBeliefs: stateWithheldBeliefs,
+          initialStateLivePreview: stateLivePreview,
+          initialStateLivePreviewMarkdown: stateLivePreviewMarkdown,
+        })
+        setSaveStage(SaveStages.NoChanges)
+        setToggleCheck(true)
+        break
     }
   }, [
+    flags.isOpenDemo,
+    saveStage,
     uuid,
-    thisPane,
+    thisPane.drupalNid,
+    thisPane.relationships,
     allMarkdown,
-    stateLivePreviewMarkdown,
-    formState?.saving,
-    hasProcessedMarkdownResponse,
-    drupalResponse,
-    drupalPreSaveQueue,
     setDrupalPreSaveQueue,
-    setDrupalSaveNode,
-    setPane,
-    updateMarkdown,
-    removePane,
-    removeMarkdown,
-    removeDrupalPreSaveQueue,
-    removeDrupalResponse,
-    regenerateState,
-    stateLivePreviewMarkdown?.paneFragmentId,
     state,
-    stateHeldBeliefs,
+    stateLivePreviewMarkdown?.markdownArray,
+    stateLivePreviewMarkdown?.drupalNid,
+    stateLivePreviewMarkdown?.markdownId,
     stateImpressions,
-    statePaneFragments,
+    stateHeldBeliefs,
     stateWithheldBeliefs,
-    openDemoEnabled,
-    settingPane,
+    statePaneFragments,
+    formState,
+    stateLivePreview,
+    stateLivePreviewMarkdown,
   ])
-*/
+
+  // update markdown on save
+  useEffect(() => {
+    if (
+      saveStage === SaveStages.SavingMarkdown &&
+      updateMarkdownPayload.length
+    ) {
+      updateMarkdownPayload.forEach((e: any) => {
+        updateMarkdown(e)
+      })
+      setUpdateMarkdownPayload([])
+      setSaveStage(SaveStages.SavedMarkdown)
+    }
+  }, [saveStage, updateMarkdownPayload, updateMarkdown])
+
+  // save markdown for drupal
+  useEffect(() => {
+    // first pass save to drupal
+    if (
+      !flags.isOpenDemo &&
+      saveStage === SaveStages.SavingMarkdown &&
+      typeof drupalPreSaveQueue?.markdown !== `undefined` &&
+      Object.keys(drupalPreSaveQueue?.markdown).length
+    ) {
+      setDrupalSaveNode(
+        drupalPreSaveQueue.markdown[stateLivePreviewMarkdown.markdownId]
+          .payload,
+        `markdown`,
+        stateLivePreviewMarkdown.markdownId,
+        drupalPreSaveQueue.markdown[stateLivePreviewMarkdown.markdownId]
+          .drupalNid,
+      )
+      removeDrupalPreSaveQueue(stateLivePreviewMarkdown.markdownId, `markdown`)
+    }
+    // second pass, intercept / process response, get uuid from Drupal
+    if (
+      !flags.isOpenDemo &&
+      saveStage === SaveStages.SavingMarkdown &&
+      typeof drupalResponse[stateLivePreviewMarkdown.markdownId] !== `undefined`
+    ) {
+      if (allMarkdown[stateLivePreviewMarkdown.markdownId].drupalNid === -1) {
+        // this is a new markdown; replace initial uuid with one from Drupal
+        const newMarkdown = {
+          ...allMarkdown[stateLivePreviewMarkdown.markdownId],
+        }
+        newMarkdown.id =
+          drupalResponse[stateLivePreviewMarkdown.markdownId].data.id
+        newMarkdown.drupalNid =
+          drupalResponse[
+            stateLivePreviewMarkdown.markdownId
+          ].data.attributes.drupal_internal__nid
+        // updateMarkdown(newMarkdown)
+        const newPreSavePayload = {
+          ...drupalPreSaveQueue.pane[uuid].payload,
+        }
+        const currentOptionsPayload = ParseOptions(
+          newPreSavePayload.attributes.field_options,
+        )
+        let offset = 0
+        Object.keys(currentOptionsPayload).forEach((e: any) => {
+          if (currentOptionsPayload[e].stateLivePreviewMarkdown.markdownId)
+            offset = e
+        })
+        const newPaneFragments = {
+          ...currentOptionsPayload.paneFragmentsPayload,
+          [offset]: {
+            ...currentOptionsPayload.paneFragmentsPayload[offset],
+            markdownId: newMarkdown.id,
+          },
+        }
+        const newOptionsPayload = {
+          ...currentOptionsPayload,
+          paneFragmentsPayload: Object.values(newPaneFragments),
+        }
+        newPreSavePayload.attributes.field_options =
+          JSON.stringify(newOptionsPayload)
+        setDrupalPreSaveQueue(
+          newPreSavePayload,
+          `pane`,
+          uuid,
+          thisPane.drupalNid,
+          true,
+          newMarkdown.id,
+          stateLivePreviewMarkdown.markdownId,
+        )
+      }
+      removeDrupalResponse(stateLivePreviewMarkdown.markdownId)
+      setSaveStage(SaveStages.SavedMarkdown)
+    }
+  }, [
+    flags.isOpenDemo,
+    saveStage,
+    drupalPreSaveQueue?.markdown,
+    removeDrupalPreSaveQueue,
+    setDrupalSaveNode,
+    stateLivePreviewMarkdown?.markdownId,
+    allMarkdown,
+    drupalPreSaveQueue?.pane,
+    setDrupalPreSaveQueue,
+    drupalResponse,
+    removeDrupalResponse,
+    thisPane.drupalNid,
+    uuid,
+  ])
+
+  // update pane on save
+  useEffect(() => {
+    if (saveStage === SaveStages.SavingPane && updatePanePayload.length) {
+      updatePanePayload.forEach((e: any) => {
+        setPane(e.id, e)
+      })
+      setUpdatePanePayload([])
+      setSaveStage(SaveStages.SavedPane)
+    }
+  }, [saveStage, updatePanePayload, setPane])
+
+  // save pane for drupal
+  useEffect(() => {
+    // first pass save to drupal
+    if (
+      !flags.isOpenDemo &&
+      saveStage === SaveStages.SavingPane &&
+      typeof drupalPreSaveQueue?.pane !== `undefined` &&
+      Object.keys(drupalPreSaveQueue?.pane).length
+    ) {
+      const newMarkdownId = drupalPreSaveQueue.pane[uuid].markdownId
+      if (
+        newMarkdownId &&
+        newMarkdownId !== thisPane.relationships.markdown[0]
+      ) {
+        const fullOptionsPayload = ParseOptions(state.optionsPayloadString)
+        const currentOptionsPayload = fullOptionsPayload.paneFragmentsPayload
+        let offset = 0
+        Object.keys(currentOptionsPayload).forEach((e: any) => {
+          if (currentOptionsPayload[e].markdownId) offset = e
+        })
+        const newPaneFragments = {
+          ...currentOptionsPayload,
+          [offset]: {
+            ...currentOptionsPayload[offset],
+            markdownId: newMarkdownId,
+          },
+        }
+        const newOptionsPayload = {
+          ...fullOptionsPayload,
+          paneFragmentsPayload: Object.values(newPaneFragments),
+        }
+        const newPane = {
+          id: uuid,
+          drupalNid: thisPane.drupalNid,
+          heightOffsetDesktop: state.heightOffsetDesktop,
+          heightOffketMobile: state.heightOffsetMobile,
+          heightOffsetTablet: state.heightOffsetTablet,
+          heightRatioDesktop: state.heightRatioDesktop,
+          heightRatioMobile: state.heightRatioMobile,
+          heightRatioTablet: state.heightRatioTablet,
+          isContextPane: state.isContextPane,
+          optionsPayload: JSON.stringify(newOptionsPayload),
+          relationships: {
+            // FIX --- should pull all from state
+            ...thisPane.relationships,
+            markdown: [newMarkdownId],
+          },
+          slug: state.slug,
+          title: state.title,
+        }
+        setUpdatePanePayload([newPane])
+        setStateLivePreviewMarkdown((prev: any) => {
+          return {
+            ...prev,
+            markdownId: newMarkdownId,
+          }
+        })
+        regenerateState(
+          null,
+          stateLivePreviewMarkdown.paneFragmentId,
+          { markdownId: newMarkdownId },
+          null,
+          newMarkdownId,
+        )
+      }
+      const drupalNode = { ...drupalPreSaveQueue.pane[uuid].payload }
+      if (newMarkdownId)
+        drupalNode.relationships.field_markdown.data.id = newMarkdownId
+      setDrupalSaveNode(
+        drupalNode,
+        `pane`,
+        uuid,
+        drupalPreSaveQueue.pane[uuid].drupalNid,
+      )
+      if (
+        typeof drupalPreSaveQueue.pane[uuid] !== `undefined` &&
+        drupalPreSaveQueue.pane[uuid].markdownId &&
+        drupalPreSaveQueue.pane[uuid].oldMarkdownId
+      ) {
+        const thisUuid = drupalPreSaveQueue.pane[uuid].oldMarkdownId
+        console.log(`must remove markdown`, thisUuid)
+        // removeMarkdown(thisUuid)
+      }
+      removeDrupalPreSaveQueue(uuid, `pane`)
+    }
+    // second pass, intercept / process response, get uuid from Drupal
+    if (
+      !flags.isOpenDemo &&
+      saveStage === SaveStages.SavingMarkdown &&
+      typeof drupalResponse[uuid] !== `undefined`
+    ) {
+      if (thisPane.drupalNid === -1) {
+        const newPaneId = drupalResponse[uuid].data.id
+        const newPane = {
+          ...thisPane,
+          drupalNid: drupalResponse[uuid].data.attributes.drupal_internal__nid,
+        }
+        setUpdatePanePayload([newPane])
+        console.log(`must remove pane ${uuid}, new uuid ${newPaneId}`)
+        // setThisUuid(newPaneId)
+        // handleReplacePane(uuid, newPaneId)
+        // removePane(uuid)
+      }
+      removeDrupalResponse(uuid)
+      setFormState((prev: any) => {
+        return { ...prev, submitted: true, saving: false, success: true }
+      })
+      setToggleCheck(true)
+    }
+  }, [
+    flags.isOpenDemo,
+    saveStage,
+    drupalPreSaveQueue?.pane,
+    regenerateState,
+    removeDrupalPreSaveQueue,
+    setDrupalSaveNode,
+    drupalResponse,
+    removeDrupalResponse,
+    thisPane,
+    state?.heightOffsetDesktop,
+    state?.heightOffsetMobile,
+    state?.heightOffsetTablet,
+    state?.heightRatioDesktop,
+    state?.heightRatioMobile,
+    state?.heightRatioTablet,
+    state?.isContextPane,
+    state?.optionsPayloadString,
+    state?.slug,
+    state?.title,
+    stateLivePreviewMarkdown?.paneFragmentId,
+    uuid,
+  ])
 
   useEffect(() => {
     if (
@@ -3026,7 +3127,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
         stateLivePreview,
         stateLivePreviewMarkdown,
       }}
-      flags={{ ...flags, saveStage }}
+      flags={{ ...flags, saveStage, saved }}
       fn={{
         toggleBelief,
         handleChangeBelief,
@@ -3037,6 +3138,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
         handleMutateMarkdown,
         handleChangeEditInPlace,
         handleChange,
+        setSaved,
       }}
     />
   )
