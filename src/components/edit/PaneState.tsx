@@ -2680,6 +2680,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
 
   // handle stages
   useEffect(() => {
+    console.log(SaveStages[saveStage])
     const hasMarkdown =
       typeof stateLivePreviewMarkdown?.markdownId !== `undefined` &&
       typeof allMarkdown[stateLivePreviewMarkdown.markdownId] !== `undefined`
@@ -2709,7 +2710,6 @@ const PaneState = ({ uuid, payload, flags }: any) => {
         break
 
       case SaveStages.SaveMarkdown: {
-        setSaveStage(SaveStages.SavingMarkdown)
         const newMarkdown = {
           ...allMarkdown[stateLivePreviewMarkdown.markdownId],
           id: stateLivePreviewMarkdown.markdownId,
@@ -2727,7 +2727,8 @@ const PaneState = ({ uuid, payload, flags }: any) => {
               stateLivePreviewMarkdown.markdownId,
               thisMarkdown.drupalNid,
             )
-        }
+          setSaveStage(SaveStages.PreSavingMarkdown)
+        } else setSaveStage(SaveStages.SavingMarkdown)
         break
       }
 
@@ -2743,7 +2744,6 @@ const PaneState = ({ uuid, payload, flags }: any) => {
         break
 
       case SaveStages.SavePane: {
-        setSaveStage(SaveStages.SavingPane)
         const newPane = {
           id: uuid,
           drupalNid: thisPane.drupalNid,
@@ -2774,7 +2774,8 @@ const PaneState = ({ uuid, payload, flags }: any) => {
             stateWithheldBeliefs,
           )
           setDrupalPreSaveQueue(pane, `pane`, uuid, thisPane.drupalNid)
-        }
+          setSaveStage(SaveStages.PreSavingPane)
+        } else setSaveStage(SaveStages.SavingPane)
         break
       }
 
@@ -2828,26 +2829,12 @@ const PaneState = ({ uuid, payload, flags }: any) => {
     stateLivePreviewMarkdown,
   ])
 
-  // update markdown on save
-  useEffect(() => {
-    if (
-      saveStage === SaveStages.SavingMarkdown &&
-      updateMarkdownPayload.length
-    ) {
-      updateMarkdownPayload.forEach((e: any) => {
-        updateMarkdown(e)
-      })
-      setUpdateMarkdownPayload([])
-      setSaveStage(SaveStages.SavedMarkdown)
-    }
-  }, [saveStage, updateMarkdownPayload, updateMarkdown])
-
   // save markdown for drupal
   useEffect(() => {
     // first pass save to drupal
     if (
       !flags.isOpenDemo &&
-      saveStage === SaveStages.SavingMarkdown &&
+      saveStage === SaveStages.PreSavingMarkdown &&
       typeof drupalPreSaveQueue?.markdown !== `undefined` &&
       Object.keys(drupalPreSaveQueue?.markdown).length
     ) {
@@ -2860,11 +2847,13 @@ const PaneState = ({ uuid, payload, flags }: any) => {
           .drupalNid,
       )
       removeDrupalPreSaveQueue(stateLivePreviewMarkdown.markdownId, `markdown`)
+      setSaveStage(SaveStages.PreSavedMarkdown)
     }
     // second pass, intercept / process response, get uuid from Drupal if new node
     if (
       !flags.isOpenDemo &&
-      saveStage === SaveStages.SavingMarkdown &&
+      saveStage === SaveStages.PreSavedMarkdown &&
+      stateLivePreviewMarkdown?.markdownId &&
       typeof drupalResponse[stateLivePreviewMarkdown.markdownId] !== `undefined`
     ) {
       if (allMarkdown[stateLivePreviewMarkdown.markdownId].drupalNid === -1) {
@@ -2914,7 +2903,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
         )
       }
       removeDrupalResponse(stateLivePreviewMarkdown.markdownId)
-      setSaveStage(SaveStages.SavedMarkdown)
+      setSaveStage(SaveStages.SavingMarkdown)
     }
   }, [
     flags.isOpenDemo,
@@ -2932,23 +2921,26 @@ const PaneState = ({ uuid, payload, flags }: any) => {
     uuid,
   ])
 
-  // update pane on save
+  // update markdown on save
   useEffect(() => {
-    if (saveStage === SaveStages.SavingPane && updatePanePayload.length) {
-      updatePanePayload.forEach((e: any) => {
-        setPane(e.id, e)
+    if (
+      saveStage === SaveStages.SavingMarkdown &&
+      updateMarkdownPayload.length
+    ) {
+      updateMarkdownPayload.forEach((e: any) => {
+        updateMarkdown(e)
       })
-      setUpdatePanePayload([])
-      setSaveStage(SaveStages.SavedPane)
+      setUpdateMarkdownPayload([])
+      setSaveStage(SaveStages.SavedMarkdown)
     }
-  }, [saveStage, updatePanePayload, setPane])
+  }, [saveStage, updateMarkdownPayload, updateMarkdown])
 
   // save pane for drupal
   useEffect(() => {
     // first pass save to drupal
     if (
       !flags.isOpenDemo &&
-      saveStage === SaveStages.SavingPane &&
+      saveStage === SaveStages.PreSavingPane &&
       typeof drupalPreSaveQueue?.pane !== `undefined` &&
       Object.keys(drupalPreSaveQueue?.pane).length
     ) {
@@ -3027,11 +3019,12 @@ const PaneState = ({ uuid, payload, flags }: any) => {
         // removeMarkdown(thisUuid)
       }
       removeDrupalPreSaveQueue(uuid, `pane`)
+      setSaveStage(SaveStages.PreSavedPane)
     }
     // second pass, intercept / process response, get uuid from Drupal for new node
     if (
       !flags.isOpenDemo &&
-      saveStage === SaveStages.SavingMarkdown &&
+      saveStage === SaveStages.PreSavedPane &&
       typeof drupalResponse[uuid] !== `undefined`
     ) {
       if (thisPane.drupalNid === -1) {
@@ -3050,7 +3043,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
       setFormState((prev: any) => {
         return { ...prev, submitted: true, saving: false, success: true }
       })
-      setToggleCheck(true)
+      setSaveStage(SaveStages.SavingPane)
     }
   }, [
     flags.isOpenDemo,
@@ -3075,6 +3068,17 @@ const PaneState = ({ uuid, payload, flags }: any) => {
     stateLivePreviewMarkdown?.paneFragmentId,
     uuid,
   ])
+
+  // update pane on save
+  useEffect(() => {
+    if (saveStage === SaveStages.SavingPane && updatePanePayload.length) {
+      updatePanePayload.forEach((e: any) => {
+        setPane(e.id, e)
+      })
+      setUpdatePanePayload([])
+      setSaveStage(SaveStages.SavedPane)
+    }
+  }, [saveStage, updatePanePayload, setPane])
 
   useEffect(() => {
     if (
