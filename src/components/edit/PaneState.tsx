@@ -2647,7 +2647,6 @@ const PaneState = ({ uuid, payload, flags }: any) => {
   }
 
   const handleSubmit = (e: MouseEvent<HTMLButtonElement>) => {
-    console.log(`submit`)
     e.preventDefault()
     setSaveStage(SaveStages.PrepareSave)
   }
@@ -2683,8 +2682,6 @@ const PaneState = ({ uuid, payload, flags }: any) => {
     const thisMarkdown = hasMarkdown
       ? allMarkdown[stateLivePreviewMarkdown.markdownId]
       : null
-    // const hasMarkdownDrupalNid = hasMarkdown && thisMarkdown.drupalNid !== `-1`
-    // const hasPaneDrupalNid = thisPane.drupalNid !== `-1`
 
     switch (saveStage) {
       case SaveStages.PrepareSave: {
@@ -2860,7 +2857,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
       )
       removeDrupalPreSaveQueue(stateLivePreviewMarkdown.markdownId, `markdown`)
     }
-    // second pass, intercept / process response, get uuid from Drupal
+    // second pass, intercept / process response, get uuid from Drupal if new node
     if (
       !flags.isOpenDemo &&
       saveStage === SaveStages.SavingMarkdown &&
@@ -3027,7 +3024,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
       }
       removeDrupalPreSaveQueue(uuid, `pane`)
     }
-    // second pass, intercept / process response, get uuid from Drupal
+    // second pass, intercept / process response, get uuid from Drupal for new node
     if (
       !flags.isOpenDemo &&
       saveStage === SaveStages.SavingMarkdown &&
