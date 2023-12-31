@@ -54,6 +54,7 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
     isAdmin: false,
     isBuilder: false,
     isOpenDemo: openDemoEnabled,
+    isEmptyPane: false,
     editStage: EditStages.Booting,
     saveStage: SaveStages.Booting,
   })

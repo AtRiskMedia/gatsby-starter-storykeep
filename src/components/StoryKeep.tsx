@@ -12,6 +12,7 @@ import {
   BookOpenIcon,
 } from '@heroicons/react/24/outline'
 import { FireIcon } from '@heroicons/react/20/solid'
+import { v4 as uuidv4 } from 'uuid'
 
 import { useDrupalStore } from '../stores/drupal'
 import EditSlideOver from './EditSlideOver'
@@ -113,6 +114,7 @@ const StoryKeep = () => {
   // const [displayMode, setDisplayMode] = useState(true)
   const displayMode = true
   const allTractStacks = useDrupalStore((state) => state.allTractStacks)
+  const updatePanes = useDrupalStore((state) => state.updatePanes)
   const selected = useDrupalStore((state) => state.selected)
   const setSelected = useDrupalStore((state) => state.setSelected)
   const setSelectedCollection = useDrupalStore(
@@ -228,7 +230,30 @@ const StoryKeep = () => {
     return e
   })
 
-  const handleClick = (e: any) => {
+  const handleAdd = (e: any) => {
+    switch (e) {
+      case `pane`: {
+        const newUuid = uuidv4()
+        const newPane = {
+          id: newUuid,
+          drupalNid: -1,
+          title: `Untitled`,
+          slug: ``,
+        }
+        updatePanes(newPane)
+        navigate(`/storykeep/panes/${newUuid}`)
+        break
+      }
+
+      case `storyfragment`:
+        break
+
+      case `tractstack`:
+        break
+
+      case `resource`:
+        break
+    }
     console.log(e)
   }
 
@@ -390,7 +415,7 @@ const StoryKeep = () => {
                           <Menu.Item>
                             {({ active }) => (
                               <button
-                                onClick={() => handleClick(e.id)}
+                                onClick={() => handleAdd(e.id)}
                                 className={classNames(
                                   active
                                     ? `bg-myorange/10 text-black`

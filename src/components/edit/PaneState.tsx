@@ -68,6 +68,10 @@ const PaneState = ({ uuid, payload, flags }: any) => {
   const allPanesSlugs = Object.keys(allPanes).map((e) => {
     return allPanes[e].slug
   })
+  const isEmptyPane =
+    statePaneFragments &&
+    Object.keys(statePaneFragments).length === 0 &&
+    !thisPane?.codeHookTarget
 
   const regenerateState = useCallback(
     (
@@ -830,7 +834,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
             const paneExtra = {
               markdown: [starterPayload.newMarkdownId],
             }
-            // updateMarkdown(starterPayload.newMarkdownPayload)
+            updateMarkdown(starterPayload.newMarkdownPayload)
             insertPaneFragmentsRegenerateState(
               starterPayload.paneFragmentsPayload,
               starterPayload.newMarkdown,
@@ -846,7 +850,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
               heightRatioMobile: `120.83`,
               markdown: [starterPayload.newMarkdownId],
             }
-            // updateMarkdown(starterPayload.newMarkdownPayload)
+            updateMarkdown(starterPayload.newMarkdownPayload)
             insertPaneFragmentsRegenerateState(
               starterPayload.paneFragmentsPayload,
               starterPayload.newMarkdown,
@@ -862,7 +866,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
               heightRatioMobile: `32.67`,
               markdown: [starterPayload.newMarkdownId],
             }
-            // updateMarkdown(starterPayload.newMarkdownPayload)
+            updateMarkdown(starterPayload.newMarkdownPayload)
             insertPaneFragmentsRegenerateState(
               starterPayload.paneFragmentsPayload,
               starterPayload.newMarkdown,
@@ -2874,7 +2878,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
           drupalResponse[
             stateLivePreviewMarkdown.markdownId
           ].data.attributes.drupal_internal__nid
-        // updateMarkdown(newMarkdown)
+        setUpdateMarkdownPayload([newMarkdown])
         const newPreSavePayload = {
           ...drupalPreSaveQueue.pane[uuid].payload,
         }
@@ -3124,7 +3128,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
         stateLivePreview,
         stateLivePreviewMarkdown,
       }}
-      flags={{ ...flags, saveStage, saved }}
+      flags={{ ...flags, saveStage, saved, isEmptyPane }}
       fn={{
         toggleBelief,
         handleChangeBelief,

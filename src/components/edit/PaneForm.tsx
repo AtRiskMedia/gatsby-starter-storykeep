@@ -26,6 +26,7 @@ import {
 
 import { useDrupalStore } from '../../stores/drupal'
 import { config } from '../../../data/SiteConfig'
+import PaneStarter from './PaneStarter'
 import EditBelief from '../EditBelief'
 import PaneRender from './PaneRender'
 import SlideOver from './SlideOver'
@@ -1348,29 +1349,37 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
             {flags.saveStage >= SaveStages.PrepareSave ? (
               <div className="z-50 absolute top-0 bg-transparent inset-y-0 right-0 w-full h-screen"></div>
             ) : null}
-            <PaneRender
-              uuid={uuid}
-              handlers={{
-                handleEditMarkdown,
-                handleMutateMarkdown,
-                handleChangeEditInPlace,
-                handleChange,
-              }}
-              previewPayload={{
-                state,
-                statePaneFragments,
-                stateImpressions,
-                stateLivePreview,
-                stateLivePreviewMarkdown,
-                stateHeldBeliefs,
-                stateWithheldBeliefs,
-                allMarkdown,
-                viewportKey,
-                setViewportKey,
-              }}
-              fn={passFn}
-              flags={passFlags}
-            />
+            {flags.isEmptyPane ? (
+              <PaneStarter
+                state={state}
+                fn={{ handleChange, handleChangeEditInPlace }}
+                flags={{ slugCollision: flags.slugCollision }}
+              />
+            ) : (
+              <PaneRender
+                uuid={uuid}
+                handlers={{
+                  handleEditMarkdown,
+                  handleMutateMarkdown,
+                  handleChangeEditInPlace,
+                  handleChange,
+                }}
+                previewPayload={{
+                  state,
+                  statePaneFragments,
+                  stateImpressions,
+                  stateLivePreview,
+                  stateLivePreviewMarkdown,
+                  stateHeldBeliefs,
+                  stateWithheldBeliefs,
+                  allMarkdown,
+                  viewportKey,
+                  setViewportKey,
+                }}
+                fn={passFn}
+                flags={passFlags}
+              />
+            )}
           </>
         </section>
       </>
