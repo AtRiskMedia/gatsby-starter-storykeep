@@ -2850,6 +2850,9 @@ const PaneState = ({ uuid, payload, flags }: any) => {
       setSaveStage(SaveStages.PreSavedMarkdown)
     }
     // second pass, intercept / process response, get uuid from Drupal if new node
+
+    console.log(drupalResponse)
+
     if (
       !flags.isOpenDemo &&
       saveStage === SaveStages.PreSavedMarkdown &&

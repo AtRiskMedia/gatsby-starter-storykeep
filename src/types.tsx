@@ -5,6 +5,7 @@ export enum ApiStages {
   Booting,
   Open,
   Locked,
+  Loading,
   Error,
   Success,
 }

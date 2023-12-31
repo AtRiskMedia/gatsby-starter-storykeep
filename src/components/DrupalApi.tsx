@@ -23,21 +23,36 @@ const DrupalAPI = ({ children }: IReactChild) => {
   useEffect(() => {
     if (
       [ApiStages.Booting, ApiStages.Success].includes(apiStage) &&
-      isAuthenticated
+      isAuthenticated &&
+      !loading &&
+      processQueue
     )
       setApiStage(ApiStages.Open)
     if (apiStage === ApiStages.Open && processQueue) {
       if (process.env.NODE_ENV === `development`)
         console.log(`skipping API call to drupal`)
       else {
-        setApiStage(ApiStages.Locked)
         const thisKey = Object.keys(drupalQueue)[0]
         setDrupalLocked(thisKey)
         const thisPayload = drupalQueue[thisKey]
         lazyAPI(thisPayload)
+        setApiStage(ApiStages.Locked)
       }
     }
-    if (data && apiStage === ApiStages.Locked && !loading) {
+  }, [
+    isAuthenticated,
+    drupalQueue,
+    setDrupalLocked,
+    lazyAPI,
+    processQueue,
+    apiStage,
+    setApiStage,
+    loading,
+  ])
+
+  useEffect(() => {
+    if (apiStage === ApiStages.Locked && loading) setApiStage(ApiStages.Loading)
+    if (apiStage === ApiStages.Loading && !loading && data) {
       setDrupalResponse(drupalLocked, data)
       removeDrupalQueue(drupalLocked)
       setApiStage(ApiStages.Success)
@@ -47,16 +62,12 @@ const DrupalAPI = ({ children }: IReactChild) => {
       console.log(`error in api call to drupal`, error)
     }
   }, [
-    isAuthenticated,
-    drupalQueue,
     drupalLocked,
     removeDrupalQueue,
     setDrupalResponse,
-    setDrupalLocked,
     loading,
     data,
     error,
-    lazyAPI,
     processQueue,
     apiStage,
     setApiStage,
