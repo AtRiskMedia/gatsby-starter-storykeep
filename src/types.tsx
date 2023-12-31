@@ -206,7 +206,7 @@ export interface IDrupalState {
     parentType: null | string
   }
   setEmbeddedEdit: Function
-  cleanerQueue: ICleanerNode[]
+  cleanerQueue: ICleanerNode
   setCleanerQueue: Function
   removeCleanerQueue: Function
   setStoryFragment: Function

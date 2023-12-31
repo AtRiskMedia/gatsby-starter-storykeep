@@ -18,7 +18,7 @@ import {
 } from '../../helpers/allowedShapeNames'
 import { starterTemplate } from '../../helpers/starterTemplates'
 import PaneForm from './PaneForm'
-import { ICleanerNode, EditStages, SaveStages } from '../../types'
+import { EditStages, SaveStages } from '../../types'
 
 const PaneState = ({ uuid, payload, flags }: any) => {
   const [stateHeldBeliefs, setStateHeldBeliefs] = useState(
@@ -2697,7 +2697,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
 
     switch (saveStage) {
       case SaveStages.NoChanges:
-        Object.keys(cleanerQueue).forEach((e: ICleanerNode) => {
+        Object.keys(cleanerQueue).forEach((e: any) => {
           if (cleanerQueue[e] === `pane` && e !== uuid) {
             removePane(e)
             removeCleanerQueue(e)
