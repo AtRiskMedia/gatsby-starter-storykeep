@@ -14,7 +14,6 @@ import {
   SaveStages,
   IEditPanePayload,
   IEditPaneFlags,
-  ICleanerNode,
 } from '../../../types'
 
 export default function EditPane({ params }: { params: { uuid: string } }) {
@@ -22,8 +21,6 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
   const drupalConfig = {
     url: process.env.DRUPAL_URL || ``,
   }
-  const cleanerQueue = useDrupalStore((state) => state.cleanerQueue)
-  const removeCleanerQueue = useDrupalStore((state) => state.removeCleanerQueue)
   const embeddedEdit = useDrupalStore((state) => state.embeddedEdit)
   const [editStage, setEditStage] = useState(EditStages.Booting)
   const openDemoEnabled = useDrupalStore((state) => state.openDemoEnabled)
@@ -312,15 +309,6 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
         case EditStages.CheckEmbedded:
           if (embeddedEdit.child === uuid)
             setFlags((prev) => ({ ...prev, isEmbeddedEdit: true }))
-          setEditStage(EditStages.Cleanup)
-          break
-
-        case EditStages.Cleanup:
-          cleanerQueue.forEach((e: ICleanerNode) => {
-            console.log(e)
-            // must delete from allPanes, etc.
-            removeCleanerQueue(Object.keys(e)[0])
-          })
           setEditStage(EditStages.SetInitialState)
           break
 
@@ -333,9 +321,7 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
     editStage,
     setEditStage,
     openDemoEnabled,
-    cleanerQueue,
     embeddedEdit.child,
-    removeCleanerQueue,
     uuid,
   ])
 

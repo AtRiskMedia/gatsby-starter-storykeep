@@ -34,7 +34,6 @@ export enum EditStages {
   AuthorChecking,
   AuthorChecked,
   CheckEmbedded,
-  Cleanup,
   SetInitialState,
   SettingInitialState,
   InitialStateSet,
@@ -43,6 +42,7 @@ export enum EditStages {
 
 export enum SaveStages {
   Booting,
+  Cleanup,
   NoChanges,
   UnsavedChanges,
   PrepareSave,

@@ -26,11 +26,11 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
       embeddedEdit: { child, childType, parent, parentType },
     })),
   cleanerQueue: [],
-  setCleanerQueue: (uuid: string, payload: any) =>
+  setCleanerQueue: (uuid: string, type: any) =>
     set((state) => ({
       cleanerQueue: {
         ...state.cleanerQueue,
-        [uuid]: payload,
+        [uuid]: type,
       },
     })),
   removeCleanerQueue: (key: string) =>
