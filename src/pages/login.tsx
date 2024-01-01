@@ -19,6 +19,7 @@ const LoginPage = () => {
     url: process.env.DRUPAL_URL || ``,
   }
   const login = useAuthStore((state) => state.login)
+  const validToken = useAuthStore((state) => state.validToken)
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
   const stage = useDrupalStore((state) => state.stage)
   const setStage = useDrupalStore((state) => state.setStage)
@@ -39,6 +40,7 @@ const LoginPage = () => {
 
   // UuidConfirm
   useEffect(() => {
+    if (openDemoEnabled && stage === Stages.Booting) setStage(Stages.Initialize)
     if (!openDemoEnabled && stage === Stages.UuidConfirm) {
       setStage(Stages.UuidConfirming)
       const payload = {
@@ -128,14 +130,27 @@ const LoginPage = () => {
         break
 
       case Stages.Initialized:
-        setStage(Stages.Activated)
+        if (
+          process.env.NODE_ENV === `development` ||
+          openDemoEnabled ||
+          (process.env.NODE_ENV === `production` && validToken)
+        )
+          setStage(Stages.Activated)
         break
 
       case Stages.Activated:
         navigate(`/`)
         break
     }
-  }, [login, thisURL, updateCollections, stage, setStage, openDemoEnabled])
+  }, [
+    login,
+    thisURL,
+    updateCollections,
+    stage,
+    setStage,
+    openDemoEnabled,
+    validToken,
+  ])
 
   if (isSSR) return null
 

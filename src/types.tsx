@@ -301,10 +301,7 @@ export interface IAuthStorePayload {
 
 export interface IAuthStoreState {
   accessToken: string | null
-  authData: IAuthStorePayload
   validToken: boolean
-  fingerprint: string | null
-  setFingerprint: Function
   isLoggedIn: Function
   login: Function
   logout: Function
