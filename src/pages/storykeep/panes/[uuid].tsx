@@ -13,7 +13,7 @@ import {
   EditStages,
   SaveStages,
   IEditPanePayload,
-  IEditPaneFlags,
+  IEditFlags,
 } from '../../../types'
 
 export default function EditPane({ params }: { params: { uuid: string } }) {
@@ -37,7 +37,6 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
   const thisPane = typeof allPanes[uuid] !== `undefined` ? allPanes[uuid] : null
   const [payload, setPayload] = useState<IEditPanePayload>({
     initialState: {},
-    initialFormState: {},
     initialStatePaneFragments: {},
     initialStateImpressions: {},
     initialStateHeldBeliefs: {},
@@ -45,13 +44,13 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
     initialStateLivePreview: {},
     initialStateLivePreviewMarkdown: {},
   })
-  const [flags, setFlags] = useState<IEditPaneFlags>({
+  const [flags, setFlags] = useState<IEditFlags>({
     isAuthor: false,
     isEmbeddedEdit: false,
     isAdmin: false,
     isBuilder: false,
     isOpenDemo: openDemoEnabled,
-    isEmptyPane: false,
+    isEmpty: false,
     editStage: EditStages.Booting,
     saveStage: SaveStages.Booting,
   })
@@ -295,6 +294,7 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
 
   // handle Stage
   useEffect(() => {
+    console.log(EditStages[editStage])
     if (thisPane)
       switch (editStage) {
         case EditStages.Booting:

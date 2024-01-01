@@ -52,7 +52,7 @@ const EditFormStoryFragment = ({
   const allStoryFragmentSlugs = Object.keys(allStoryFragments).map((e) => {
     return allStoryFragments[e].slug
   })
-  const setSelected = useDrupalStore((state) => state.setSelected)
+  // const setSelected = useDrupalStore((state) => state.setSelected)
   const setSelectedCollection = useDrupalStore(
     (state) => state.setSelectedCollection,
   )
@@ -354,7 +354,7 @@ const EditFormStoryFragment = ({
                       true
                   ) {
                     setLocked(false)
-                    setSelected(``)
+                    // setSelected(``)
                     handleToggle(``)
                   }
                 }}
@@ -561,7 +561,7 @@ const EditFormStoryFragment = ({
                                 type="button"
                                 className="rounded-md bg-white px-2.5 py-1.5 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-50"
                                 onClick={() => {
-                                  setSelected(e)
+                                  // setSelected(e)
                                   setSelectedCollection(`pane`)
                                 }}
                               >
@@ -590,7 +590,7 @@ const EditFormStoryFragment = ({
                                   type="button"
                                   className="rounded-md bg-white px-2.5 py-1.5 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-50"
                                   onClick={() => {
-                                    setSelected(e)
+                                    // setSelected(e)
                                     setSelectedCollection(`pane`)
                                   }}
                                 >
@@ -618,7 +618,7 @@ const EditFormStoryFragment = ({
                               type="button"
                               className="rounded-md bg-white px-2.5 py-1.5 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-50"
                               onClick={() => {
-                                setSelected(state.menu)
+                                // setSelected(state.menu)
                                 setSelectedCollection(`menu`)
                               }}
                             >

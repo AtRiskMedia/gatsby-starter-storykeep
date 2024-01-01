@@ -29,7 +29,7 @@ const EditTractStack = ({ uuid }: IEdit) => {
   const allTractStacksSlugs = Object.keys(allTractStacks).map((e) => {
     return allTractStacks[e].slug
   })
-  const setSelected = useDrupalStore((state) => state.setSelected)
+  // const setSelected = useDrupalStore((state) => state.setSelected)
   const setSelectedCollection = useDrupalStore(
     (state) => state.setSelectedCollection,
   )
@@ -323,7 +323,7 @@ const EditTractStack = ({ uuid }: IEdit) => {
                             type="button"
                             className="rounded-md bg-white px-2.5 py-1.5 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-50"
                             onClick={() => {
-                              setSelected(e)
+                              // setSelected(e)
                               setSelectedCollection(`storyfragment`)
                             }}
                           >
@@ -350,7 +350,7 @@ const EditTractStack = ({ uuid }: IEdit) => {
                             type="button"
                             className="rounded-md bg-white px-2.5 py-1.5 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-50"
                             onClick={() => {
-                              setSelected(e)
+                              // setSelected(e)
                               setSelectedCollection(`pane`)
                             }}
                           >
@@ -382,7 +382,7 @@ const EditTractStack = ({ uuid }: IEdit) => {
                       true
                   ) {
                     setLocked(false)
-                    setSelected(``)
+                    // setSelected(``)
                   }
                 }}
               >

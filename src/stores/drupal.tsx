@@ -60,8 +60,7 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
   drupalResponse: {},
   drupalLocked: ``,
   drupalSoftLock: false,
-  selected: ``,
-  selectedCollection: ``,
+  selectedCollection: `storyfragment`,
   openDemoEnabled: false,
   oauthDrupalUuid: ``,
   oauthDrupalRoles: ``,
@@ -215,7 +214,6 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
       delete newData[key]
       return { ...state, drupalResponse: newData }
     }),
-  setSelected: (selected: string) => set((state) => ({ ...state, selected })),
   setSelectedCollection: (selectedCollection: string) =>
     set((state) => ({ ...state, selectedCollection })),
   setOpenDemoEnabled: (openDemoEnabled: boolean) =>

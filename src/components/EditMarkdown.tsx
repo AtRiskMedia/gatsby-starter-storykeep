@@ -25,7 +25,7 @@ const EditMarkdown = ({ uuid }: IEdit) => {
   const allFiles = useDrupalStore((state) => state.allFiles)
   const thisMarkdown = useDrupalStore((state) => state.allMarkdown[uuid])
   const updateMarkdown = useDrupalStore((state) => state.updateMarkdown)
-  const setSelected = useDrupalStore((state) => state.setSelected)
+  // const setSelected = useDrupalStore((state) => state.setSelected)
   const initialState = useMemo(() => {
     return {
       title: thisMarkdown.title,
@@ -379,7 +379,7 @@ const EditMarkdown = ({ uuid }: IEdit) => {
                       true
                   ) {
                     setLocked(false)
-                    setSelected(``)
+                    // setSelected(``)
                   }
                 }}
               >

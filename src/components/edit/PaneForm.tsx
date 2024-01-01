@@ -1355,7 +1355,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
             {flags.saveStage >= SaveStages.PrepareSave ? (
               <div className="z-50 absolute top-0 bg-transparent inset-y-0 right-0 w-full h-screen"></div>
             ) : null}
-            {flags.isEmptyPane ? (
+            {flags.isEmpty ? (
               <PaneStarter
                 state={state}
                 fn={{ handleChange, handleChangeEditInPlace }}

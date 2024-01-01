@@ -82,7 +82,6 @@ export interface ISlideOver {
 
 export interface IEditPanePayload {
   initialState: any
-  initialFormState: any
   initialStatePaneFragments: any
   initialStateImpressions: any
   initialStateHeldBeliefs: any
@@ -91,13 +90,13 @@ export interface IEditPanePayload {
   initialStateLivePreviewMarkdown: any
 }
 
-export interface IEditPaneFlags {
+export interface IEditFlags {
   isAuthor: boolean
   isEmbeddedEdit: boolean
   isAdmin: boolean
   isBuilder: boolean
   isOpenDemo: boolean
-  isEmptyPane: boolean
+  isEmpty: boolean
   saveStage: number
   editStage: number
 }
@@ -221,7 +220,6 @@ export interface IDrupalState {
   drupalResponse: any // FIX
   drupalLocked: string
   drupalSoftLock: boolean
-  selected: string
   selectedCollection: string
   openDemoEnabled: boolean
   oauthDrupalUuid: string
@@ -245,7 +243,6 @@ export interface IDrupalState {
   setDrupalSoftLock: Function
   setDrupalQueue: Function
   setDrupalResponse: Function
-  setSelected: Function
   setSelectedCollection: Function
   setOpenDemoEnabled: Function
   setOauthDrupalUuid: Function

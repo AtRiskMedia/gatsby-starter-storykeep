@@ -29,7 +29,7 @@ const EditResource = ({ uuid }: IEdit) => {
   const allResourceSlugs = Object.keys(allResources).map((e) => {
     return allResources[e].slug
   })
-  const setSelected = useDrupalStore((state) => state.setSelected)
+  // const setSelected = useDrupalStore((state) => state.setSelected)
   const initialState = useMemo(() => {
     return {
       title: thisResource.title,
@@ -397,7 +397,7 @@ const EditResource = ({ uuid }: IEdit) => {
                       true
                   ) {
                     setLocked(false)
-                    setSelected(``)
+                    // setSelected(``)
                   }
                 }}
               >

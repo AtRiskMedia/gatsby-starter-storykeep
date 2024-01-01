@@ -15,12 +15,12 @@ import { FireIcon } from '@heroicons/react/20/solid'
 import { v4 as uuidv4 } from 'uuid'
 
 import { useDrupalStore } from '../stores/drupal'
-import EditSlideOver from './EditSlideOver'
-import EditTractStack from './EditTractStack'
-import EditStoryFragment from './EditStoryFragment'
-import EditResource from './EditResource'
-import EditMarkdown from './EditMarkdown'
-import EditPane from './EditPane'
+// import EditSlideOver from './EditSlideOver'
+// import EditTractStack from './EditTractStack'
+// import EditStoryFragment from './EditStoryFragment'
+// import EditResource from './EditResource'
+// import EditMarkdown from './EditMarkdown'
+// import EditPane from './EditPane'
 import { getPanesDaysSince, getStoryFragmentDaysSince } from '../api/services'
 import { IActivityDetails } from 'src/types'
 
@@ -108,15 +108,15 @@ const daysSinceDataPayload = (data: any) => {
 
 const StoryKeep = () => {
   const selectedCollection = useDrupalStore((state) => state.selectedCollection)
-  const [current, setCurrent] = useState(selectedCollection || `storyfragment`)
-  const [children, setChildren]: any = useState(null)
-  const [childrenTitle, setChildrenTitle] = useState(``)
+  // const [current, setCurrent] = useState(selectedCollection || `storyfragment`)
+  // const [children, setChildren]: any = useState(null)
+  // const [childrenTitle, setChildrenTitle] = useState(``)
   // const [displayMode, setDisplayMode] = useState(true)
   const displayMode = true
   const allTractStacks = useDrupalStore((state) => state.allTractStacks)
   const updatePanes = useDrupalStore((state) => state.updatePanes)
-  const selected = useDrupalStore((state) => state.selected)
-  const setSelected = useDrupalStore((state) => state.setSelected)
+  // const selected = useDrupalStore((state) => state.selected)
+  // const setSelected = useDrupalStore((state) => state.setSelected)
   const setSelectedCollection = useDrupalStore(
     (state) => state.setSelectedCollection,
   )
@@ -146,12 +146,12 @@ const StoryKeep = () => {
     {
       id: `resource`,
       name: `Resource`,
-      enabled: current === `resource`,
+      enabled: selectedCollection === `resource`,
     },
     {
       id: `tractstack`,
       name: `Track Stack`,
-      enabled: current === `tractstack`,
+      enabled: selectedCollection === `tractstack`,
     },
     {
       id: `pane`,
@@ -170,58 +170,58 @@ const StoryKeep = () => {
       id: `storyfragment`,
       name: `Story Fragments`,
       count: Object.keys(allStoryFragments).length,
-      current: current === `storyfragment`,
+      current: selectedCollection === `storyfragment`,
     },
     {
       id: `pane`,
       name: `Panes`,
       count: Object.keys(allPanes).length,
-      current: current === `pane`,
+      current: selectedCollection === `pane`,
     },
     {
       id: `resource`,
       name: `Resources`,
       count: Object.keys(allResources).length,
-      current: current === `resource`,
+      current: selectedCollection === `resource`,
     },
     {
       id: `tractstack`,
       name: `Tract Stacks`,
       count: Object.keys(allTractStacks).length,
-      current: current === `tractstack`,
+      current: selectedCollection === `tractstack`,
     },
     // {
     //  id: `markdown`,
     //  name: `Markdown`,
     //  count: Object.keys(allMarkdown).length,
-    //  current: current === `markdown`,
+    //  current: selectedCollection === `markdown`,
     // },
     // {
     //  id: `file`,
     //  name: `Files`,
     //  count: Object.keys(allFiles).length,
-    //  current: current === `file`,
+    //  current: selectedCollection === `file`,
     // },
     // {
     //  id: `menu`,
     //  name: `Menus`,
     //  count: Object.keys(allMenus).length,
-    //  current: current === `menu`,
+    //  current: selectedCollection === `menu`,
     // },
   ]
   const noTags = tags.filter((t) => t.count).length === 0
   const payload =
-    current === `tractstack`
+    selectedCollection === `tractstack`
       ? allTractStacks
-      : current === `storyfragment`
+      : selectedCollection === `storyfragment`
         ? allStoryFragments
-        : current === `pane`
+        : selectedCollection === `pane`
           ? allPanes
-          : current === `resource`
+          : selectedCollection === `resource`
             ? allResources
-            : current === `markdown`
+            : selectedCollection === `markdown`
               ? allMarkdown
-              : current === `menu`
+              : selectedCollection === `menu`
                 ? allMenus
                 : {}
 
@@ -256,6 +256,7 @@ const StoryKeep = () => {
     }
   }
 
+  /*
   useEffect(() => {
     if (selectedCollection && selected) {
       switch (selectedCollection) {
@@ -295,10 +296,11 @@ const StoryKeep = () => {
       setChildrenTitle(``)
     }
   }, [selected, setSelected, selectedCollection, setSelectedCollection])
+*/
 
   useEffect(() => {
     if (
-      current === `storyfragment` &&
+      selectedCollection === `storyfragment` &&
       storyFragmentDaysSinceData &&
       Object.keys(storyFragmentDaysSinceData).length === 0 &&
       !loadingStoryFragmentDaysSince &&
@@ -330,13 +332,13 @@ const StoryKeep = () => {
     storyFragmentDaysSinceData,
     loadedStoryFragmentDaysSince,
     loadingStoryFragmentDaysSince,
-    current,
+    selectedCollection,
     maxRetryStoryFragments,
   ])
 
   useEffect(() => {
     if (
-      current === `pane` &&
+      selectedCollection === `pane` &&
       panesDaysSinceData &&
       Object.keys(panesDaysSinceData).length === 0 &&
       !loadingPanesDaysSince &&
@@ -368,17 +370,12 @@ const StoryKeep = () => {
     panesDaysSinceData,
     loadedPanesDaysSince,
     loadingPanesDaysSince,
-    current,
+    selectedCollection,
     maxRetryPanes,
   ])
 
   return (
     <section className="w-full xl:max-w-screen-2xl">
-      {childrenTitle ? (
-        <EditSlideOver setSelected={setSelected} title={childrenTitle}>
-          {children}
-        </EditSlideOver>
-      ) : null}
       <div className="w-full xl:max-w-screen-2xl">
         <div className="bg-white px-4 py-4 shadow xs:rounded-md xs:px-6">
           <div className="border-b border-gray-200 pb-1.5 flex items-center justify-between">
@@ -436,7 +433,7 @@ const StoryKeep = () => {
           </div>
           <div className="mt-4">
             <p className="text-mydarkgrey text-xl">
-              {current === `storyfragment` ? (
+              {selectedCollection === `storyfragment` ? (
                 <>
                   Each <span className="font-bold">story fragment</span> maps to
                   {` `}
@@ -444,7 +441,7 @@ const StoryKeep = () => {
                   contains one or more content panes. (This gets your easy
                   no-code analytics working straight out-of-the-box.)
                 </>
-              ) : current === `pane` ? (
+              ) : selectedCollection === `pane` ? (
                 <>
                   Each <span className="font-bold">pane</span> is{` `}
                   <span className="font-bold">one section</span> of a web page.
@@ -452,12 +449,12 @@ const StoryKeep = () => {
                   your site activities such as reading or clicking in this pane
                   get collected.)
                 </>
-              ) : current === `resource` ? (
+              ) : selectedCollection === `resource` ? (
                 <>
                   A <span className="font-bold">resource</span> is used in
                   special cases such as embedding a YouTube video.
                 </>
-              ) : current === `tractstack` ? (
+              ) : selectedCollection === `tractstack` ? (
                 <>
                   Each <span className="font-bold">tract stack</span> contains a
                   collection of story fragments. Your website will have one or
@@ -480,7 +477,6 @@ const StoryKeep = () => {
                 type="button"
                 onClick={() => {
                   setSelectedCollection(tag.id)
-                  setCurrent(tag.id)
                 }}
                 className={classNames(
                   tag.current ? `bg-myorange/10` : `bg-black/10`,
@@ -502,7 +498,7 @@ const StoryKeep = () => {
         </span>
       </div>
 
-      {displayMode && current === `tractstack` ? (
+      {displayMode && selectedCollection === `tractstack` ? (
         <div className="text-xl font-action mb-12 xl:max-w-screen-2xl mt-16 px-4 xl:px-8">
           <div className="-mx-4">
             <ul
@@ -515,8 +511,7 @@ const StoryKeep = () => {
                     type="button"
                     className="bg-slate-50 group relative block w-full max-w-md rounded-lg shadow-md hover:shadow-none hover:border-dashed border-2 border-dotted border-mylightgrey/20 p-6 text-center hover:border-myblue/20 hover:bg-myorange/10 focus:outline-none focus:ring-2 focus:ring-myorange focus:ring-offset-2"
                     onClick={() => {
-                      setSelectedCollection(current)
-                      setSelected(record)
+                      console.log(`goto edit tractstack`)
                     }}
                   >
                     <ChatBubbleLeftRightIcon
@@ -547,8 +542,8 @@ const StoryKeep = () => {
                   >
                     Name
                   </th>
-                  {(current === `pane` && loadedPanesDaysSince) ||
-                  (current === `storyfragment` &&
+                  {(selectedCollection === `pane` && loadedPanesDaysSince) ||
+                  (selectedCollection === `storyfragment` &&
                     loadedStoryFragmentDaysSince) ? (
                     <th
                       scope="col"
@@ -575,19 +570,20 @@ const StoryKeep = () => {
                   ) => (
                     <tr key={payload[record].title}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-black">
-                        {(current === `storyfragment` &&
+                        {(selectedCollection === `storyfragment` &&
                           loadedStoryFragmentDaysSince) ||
-                        (current === `pane` && loadedPanesDaysSince) ? (
+                        (selectedCollection === `pane` &&
+                          loadedPanesDaysSince) ? (
                           <span
                             className="mr-1"
                             title={`Recent activity score | ${
-                              current === `storyfragment` &&
+                              selectedCollection === `storyfragment` &&
                               typeof storyFragmentDaysSinceData[record] !==
                                 `undefined` &&
                               typeof storyFragmentDaysSinceData[record]
                                 .engagement !== `undefined`
                                 ? `${storyFragmentDaysSinceData[record].engagement}%`
-                                : current === `pane` &&
+                                : selectedCollection === `pane` &&
                                     typeof panesDaysSinceData[record] !==
                                       `undefined` &&
                                     typeof panesDaysSinceData[record]
@@ -615,26 +611,30 @@ const StoryKeep = () => {
                         <button
                           className="truncate text-md font-main"
                           onClick={() => {
-                            if (current === `pane`)
+                            if (selectedCollection === `pane`)
                               navigate(`/storykeep/panes/${record}`)
-                            else {
-                              setSelectedCollection(current)
-                              setSelected(record)
-                            }
+                            if (selectedCollection === `storyfragment`)
+                              navigate(`/storykeep/storyfragments/${record}`)
+                            else console.log(`goto`, selectedCollection)
+                            // else {
+                            // setSelectedCollection(current)
+                            // setSelected(record)
+                            // }
                           }}
                         >
                           {payload[record].title}
                         </button>
                       </td>
 
-                      {(current === `pane` && loadedPanesDaysSince) ||
-                      (current === `storyfragment` &&
+                      {(selectedCollection === `pane` &&
+                        loadedPanesDaysSince) ||
+                      (selectedCollection === `storyfragment` &&
                         loadedStoryFragmentDaysSince) ? (
                         <td className="hidden whitespace-nowrap pt-4 pb-2 text-sm text-mydarkgrey xs:table-cell">
                           <div
                             className={classNames(
                               `grid`,
-                              current === `storyfragment` &&
+                              selectedCollection === `storyfragment` &&
                                 typeof storyFragmentDaysSinceData[record] !==
                                   `undefined` &&
                                 (storyFragmentDaysSinceData[record].entered ||
@@ -644,7 +644,7 @@ const StoryKeep = () => {
                             )}
                           >
                             <div className="flex flex-row flex-nowrap">
-                              {(current === `storyfragment` &&
+                              {(selectedCollection === `storyfragment` &&
                                 typeof storyFragmentDaysSinceData[record] !==
                                   `undefined` &&
                                 ((typeof storyFragmentDaysSinceData[record]
@@ -655,7 +655,7 @@ const StoryKeep = () => {
                                     .glossed === `number` &&
                                     storyFragmentDaysSinceData[record].glossed >
                                       0))) ||
-                              (current === `pane` &&
+                              (selectedCollection === `pane` &&
                                 typeof panesDaysSinceData[record] !==
                                   `undefined`) ? (
                                 <>
@@ -675,29 +675,29 @@ const StoryKeep = () => {
                                     className="text-xs leading-6 text-black ml-1 mr-2"
                                     title="Glossed | Read"
                                   >
-                                    {current === `storyfragment` &&
+                                    {selectedCollection === `storyfragment` &&
                                     storyFragmentDaysSinceData[record].glossed >
                                       0
                                       ? storyFragmentDaysSinceData[record]
                                           .glossed
-                                      : current === `pane` &&
+                                      : selectedCollection === `pane` &&
                                           panesDaysSinceData[record].glossed > 0
                                         ? panesDaysSinceData[record].glossed
                                         : null}
-                                    {(current === `storyfragment` &&
+                                    {(selectedCollection === `storyfragment` &&
                                       storyFragmentDaysSinceData[record].read >
                                         0 &&
                                       storyFragmentDaysSinceData[record]
                                         .glossed > 0) ||
-                                    (current === `pane` &&
+                                    (selectedCollection === `pane` &&
                                       panesDaysSinceData[record].read > 0 &&
                                       panesDaysSinceData[record].glossed > 0)
                                       ? `, `
                                       : null}
-                                    {current === `storyfragment` &&
+                                    {selectedCollection === `storyfragment` &&
                                     storyFragmentDaysSinceData[record].read > 0
                                       ? storyFragmentDaysSinceData[record].read
-                                      : current === `pane` &&
+                                      : selectedCollection === `pane` &&
                                           panesDaysSinceData[record].read > 0
                                         ? panesDaysSinceData[record].read
                                         : null}
@@ -705,12 +705,12 @@ const StoryKeep = () => {
                                 </>
                               ) : null}
 
-                              {(current === `storyfragment` &&
+                              {(selectedCollection === `storyfragment` &&
                                 typeof storyFragmentDaysSinceData[record] !==
                                   `undefined` &&
                                 storyFragmentDaysSinceData[record].clicked >
                                   0) ||
-                              (current === `pane` &&
+                              (selectedCollection === `pane` &&
                                 typeof panesDaysSinceData[record] !==
                                   `undefined` &&
                                 panesDaysSinceData[record].clicked > 0) ? (
@@ -723,7 +723,7 @@ const StoryKeep = () => {
                                     />
                                   </div>
 
-                                  {current === `storyfragment` ? (
+                                  {selectedCollection === `storyfragment` ? (
                                     <div
                                       className="text-xs leading-6 text-black ml-1 mr-2"
                                       title="Clicked"
@@ -749,13 +749,13 @@ const StoryKeep = () => {
                               ) : null}
                             </div>
 
-                            {current === `storyfragment` &&
+                            {selectedCollection === `storyfragment` &&
                             typeof storyFragmentDaysSinceData[record] !==
                               `undefined` &&
                             (storyFragmentDaysSinceData[record].entered ||
                               storyFragmentDaysSinceData[record].discovered) ? (
                               <div className="flex flex-row flex-nowrap">
-                                {current === `storyfragment` &&
+                                {selectedCollection === `storyfragment` &&
                                 typeof storyFragmentDaysSinceData[record] !==
                                   `undefined` &&
                                 storyFragmentDaysSinceData[record].entered >
@@ -782,7 +782,7 @@ const StoryKeep = () => {
                                   </>
                                 ) : null}
 
-                                {current === `storyfragment` &&
+                                {selectedCollection === `storyfragment` &&
                                 typeof storyFragmentDaysSinceData[record] !==
                                   `undefined` &&
                                 storyFragmentDaysSinceData[record].discovered >
@@ -798,7 +798,7 @@ const StoryKeep = () => {
                                       />
                                     </div>
 
-                                    {current === `storyfragment` ? (
+                                    {selectedCollection === `storyfragment` ? (
                                       <div
                                         className="text-xs leading-6 text-black ml-1 mr-2"
                                         title="Discovered"
@@ -838,12 +838,15 @@ const StoryKeep = () => {
                       <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm">
                         <button
                           onClick={() => {
-                            if (current === `pane`)
+                            if (selectedCollection === `pane`)
                               navigate(`/storykeep/panes/${record}`)
-                            else {
-                              setSelectedCollection(current)
-                              setSelected(record)
-                            }
+                            if (selectedCollection === `storyfragment`)
+                              navigate(`/storykeep/storyfragments/${record}`)
+                            else console.log(`goto`, selectedCollection)
+                            // else {
+                            // setSelectedCollection(current)
+                            // setSelected(record)
+                            // }
                           }}
                           className="text-myblue underline underline-offset-2 text-sm hover:text-myorange"
                         >
@@ -858,8 +861,9 @@ const StoryKeep = () => {
                 )}
               </tbody>
             </table>
-            {(current === `pane` && loadedPanesDaysSince) ||
-            (current === `storyfragment` && loadedStoryFragmentDaysSince) ? (
+            {(selectedCollection === `pane` && loadedPanesDaysSince) ||
+            (selectedCollection === `storyfragment` &&
+              loadedStoryFragmentDaysSince) ? (
               <div className="my-6">
                 <FireIcon
                   className={classNames(`w-4 h-4 text-myorange inline`)}

@@ -75,10 +75,10 @@ const PaneState = ({ uuid, payload, flags }: any) => {
   const allPanesSlugs = Object.keys(allPanes).map((e) => {
     return allPanes[e].slug
   })
-  const isEmptyPane =
+  const isEmpty =
     statePaneFragments &&
     Object.keys(statePaneFragments).length === 0 &&
-    !thisPane?.codeHookTarget
+    !state?.hasCodeHook
 
   const regenerateState = useCallback(
     (
@@ -3156,7 +3156,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
         stateLivePreview,
         stateLivePreviewMarkdown,
       }}
-      flags={{ ...flags, saveStage, saved, isEmptyPane, slugCollision }}
+      flags={{ ...flags, saveStage, saved, isEmpty, slugCollision }}
       fn={{
         toggleBelief,
         handleChangeBelief,

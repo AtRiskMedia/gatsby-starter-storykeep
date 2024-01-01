@@ -140,7 +140,6 @@ const Dashboard = () => {
   const allMenus = useDrupalStore((state) => state.allMenus)
   const allMarkdown = useDrupalStore((state) => state.allMarkdown)
   const allProducts = useProductData()
-  const setSelected = useDrupalStore((state) => state.setSelected)
   const setSelectedCollection = useDrupalStore(
     (state) => state.setSelectedCollection,
   )
@@ -203,9 +202,8 @@ const Dashboard = () => {
         if (allPanes[f].title === e.id) thisId = f
       })
       if (e) {
-        setSelected(thisId)
         setSelectedCollection(`pane`)
-        navigate(`/storykeep`)
+        navigate(`/storykeep/panes/${thisId}`)
       } else console.log(`miss on`, e)
     } else if (e.group === `storyfragment`) {
       let thisId
@@ -213,9 +211,8 @@ const Dashboard = () => {
         if (allStoryFragments[f].title === e.id) thisId = f
       })
       if (e) {
-        setSelected(thisId)
         setSelectedCollection(`storyfragment`)
-        navigate(`/storykeep`)
+        navigate(`/storykeep/storyfragments/${thisId}`)
       } else console.log(`miss on`, e)
     } else console.log(`missed on`, e)
   }
