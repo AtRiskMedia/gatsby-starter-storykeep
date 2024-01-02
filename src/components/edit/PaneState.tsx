@@ -2667,7 +2667,6 @@ const PaneState = ({ uuid, payload, flags }: any) => {
 
   // handle stages
   useEffect(() => {
-    console.log(`saveStage`, SaveStages[saveStage])
     const hasMarkdown =
       typeof stateLivePreviewMarkdown?.markdownId !== `undefined` &&
       typeof allMarkdown[stateLivePreviewMarkdown.markdownId] !== `undefined`

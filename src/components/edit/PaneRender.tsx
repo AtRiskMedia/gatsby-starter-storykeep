@@ -66,12 +66,14 @@ const useRefCallback = <T extends any[]>(
   return result
 }
 
-const PaneRender = ({ uuid, handlers, previewPayload, fn, flags }: any) => {
-  const { setInterceptMode } = fn
-  const { width, interceptMode, interceptModeTag } = flags
-  const handleEditMarkdown = handlers.handleEditMarkdown
-  const handleMutateMarkdown = handlers.handleMutateMarkdown
-  const handleChangeEditInPlace = handlers.handleChangeEditInPlace
+const PaneRender = ({ uuid, previewPayload, fn, flags }: any) => {
+  const {
+    setInterceptMode,
+    handleEditMarkdown,
+    handleMutateMarkdown,
+    handleChangeEditInPlace,
+  } = fn
+  const { width, interceptMode, interceptModeTag, viewportKey } = flags
   const [pageStylesPagination, setPageStylesPagination] = useState(-1)
   const thisPane = previewPayload.state
   const paneFragmentsPayload = previewPayload.statePaneFragments
@@ -86,7 +88,6 @@ const PaneRender = ({ uuid, handlers, previewPayload, fn, flags }: any) => {
   const imagesLookup = previewPayload.stateLivePreviewMarkdown.imagesLookup
   const codeItemsLookup =
     previewPayload.stateLivePreviewMarkdown.codeItemsLookup
-  const viewportKey = previewPayload.viewportKey
   const [nth, setNth] = useState(-1)
   const [focus, setFocus] = useState(-1)
   const [childFocus, setChildFocus] = useState(-1)

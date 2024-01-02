@@ -287,7 +287,6 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
 
   // handle Stage
   useEffect(() => {
-    console.log(EditStages[editStage])
     if (thisPane)
       switch (editStage) {
         case EditStages.Booting:

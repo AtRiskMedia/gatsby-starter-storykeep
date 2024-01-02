@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-import React, { useState, useEffect, Fragment } from 'react'
-import { Switch, Menu, Transition } from '@headlessui/react'
+import React, { useState, useEffect } from 'react'
+import { Switch } from '@headlessui/react'
 import { classNames } from '@tractstack/helpers'
 import { navigate } from 'gatsby'
 import {
@@ -17,7 +17,6 @@ import {
 } from '@heroicons/react/24/outline'
 import {
   CheckIcon,
-  ChevronDownIcon,
   LinkIcon,
   TrashIcon,
   PencilIcon,
@@ -89,7 +88,6 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
         ? innerViewportTablet
         : innerViewportDesktop
   const [width, setWidth] = useState(innerViewport)
-  const allMarkdown = useDrupalStore((state) => state.allMarkdown)
   const setViewportKey = useDrupalStore((state) => state.setViewportKey)
   const AuthorIcon =
     flags.isAuthor || flags.isAdmin || flags.isBuilder
@@ -114,12 +112,16 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
         : `Safe mode enabled`
   const passFn = {
     setInterceptMode,
+    handleMutateMarkdown,
+    handleEditMarkdown,
+    handleChangeEditInPlace,
   }
   const passFlags = {
     interceptMode,
     interceptModeTag,
     width,
     slugCollision: flags.slugCollision,
+    viewportKey,
   }
 
   useEffect(() => {
@@ -985,7 +987,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                   </div>
                 </div>
                 <div className="mt-5 flex lg:ml-4 lg:mt-0">
-                  <span className="hidden xs:block">
+                  <span>
                     <button
                       type="button"
                       disabled={flags.saveStage >= SaveStages.PrepareSave}
@@ -1006,7 +1008,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                   </span>
 
                   {flags.isAuthor || flags.isAdmin ? (
-                    <span className="ml-3 hidden xs:block">
+                    <span>
                       <button
                         type="button"
                         className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-100"
@@ -1114,56 +1116,6 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                       </button>
                     )}
                   </span>
-
-                  {/* Dropdown */}
-                  <Menu as="div" className="relative ml-3 xs:hidden">
-                    <Menu.Button className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:ring--mydarkgrey">
-                      More
-                      <ChevronDownIcon
-                        className="-mr-1 ml-1.5 h-5 w-5 text-mydarkgrey"
-                        aria-hidden="true"
-                      />
-                    </Menu.Button>
-
-                    <Transition
-                      as={Fragment}
-                      enter="transition ease-out duration-200"
-                      enterFrom="transform opacity-0 scale-95"
-                      enterTo="transform opacity-100 scale-100"
-                      leave="transition ease-in duration-75"
-                      leaveFrom="transform opacity-100 scale-100"
-                      leaveTo="transform opacity-0 scale-95"
-                    >
-                      <Menu.Items className="absolute right-0 z-10 -mr-1 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        <Menu.Item>
-                          {({ active }) => (
-                            <a
-                              href="#"
-                              className={classNames(
-                                active ? `bg-slate-100` : ``,
-                                `block px-4 py-2 text-sm text-mydarkgrey`,
-                              )}
-                            >
-                              Settings
-                            </a>
-                          )}
-                        </Menu.Item>
-                        <Menu.Item>
-                          {({ active }) => (
-                            <a
-                              href="#"
-                              className={classNames(
-                                active ? `bg-slate-100` : ``,
-                                `block px-4 py-2 text-sm text-mydarkgrey`,
-                              )}
-                            >
-                              Delete
-                            </a>
-                          )}
-                        </Menu.Item>
-                      </Menu.Items>
-                    </Transition>
-                  </Menu>
                 </div>
               </div>
             </div>
@@ -1364,12 +1316,6 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
             ) : (
               <PaneRender
                 uuid={uuid}
-                handlers={{
-                  handleEditMarkdown,
-                  handleMutateMarkdown,
-                  handleChangeEditInPlace,
-                  handleChange,
-                }}
                 previewPayload={{
                   state,
                   statePaneFragments,
@@ -1378,9 +1324,6 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                   stateLivePreviewMarkdown,
                   stateHeldBeliefs,
                   stateWithheldBeliefs,
-                  allMarkdown,
-                  viewportKey,
-                  setViewportKey,
                 }}
                 fn={passFn}
                 flags={passFlags}
