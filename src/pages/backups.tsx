@@ -24,7 +24,7 @@ const BackupsPage = () => {
     if (process.env.NODE_ENV === `production` && !validToken)
       setStage(Stages.Booting)
     if (stage !== Stages.Activated) navigate(`/login`)
-  }, [isSSR, stage,validToken, setStage])
+  }, [isSSR, stage, validToken, setStage])
 
   if (isSSR) return null
 

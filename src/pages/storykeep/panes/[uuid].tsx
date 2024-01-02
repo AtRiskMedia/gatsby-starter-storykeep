@@ -51,17 +51,10 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
     isBuilder: false,
     isOpenDemo: openDemoEnabled,
     isEmpty: false,
-    editStage: EditStages.Booting,
+    editStage,
     saveStage: SaveStages.Booting,
   })
   const [isSSR, setIsSSR] = useState(true)
-
-  // SSR check
-  useEffect(() => {
-    if (isSSR && typeof window !== `undefined`) {
-      setIsSSR(false)
-    }
-  }, [isSSR])
 
   // AuthorCheck
   useEffect(() => {
@@ -325,6 +318,13 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
     uuid,
   ])
 
+  // SSR check
+  useEffect(() => {
+    if (isSSR && typeof window !== `undefined`) {
+      setIsSSR(false)
+    }
+  }, [isSSR])
+
   if (isSSR) return null
   if (!thisPane) navigate(`/storykeep`)
 
@@ -334,11 +334,7 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
         {editStage < EditStages.Activated ? (
           <></>
         ) : (
-          <PaneState
-            uuid={uuid}
-            payload={payload}
-            flags={{ ...flags, editStage }}
-          />
+          <PaneState uuid={uuid} payload={payload} flags={flags} />
         )}
       </DrupalApi>
     </DrupalProvider>

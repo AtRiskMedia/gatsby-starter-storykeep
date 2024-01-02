@@ -2663,24 +2663,11 @@ const PaneState = ({ uuid, payload, flags }: any) => {
       else if (!hasChanges && saveStage === SaveStages.UnsavedChanges)
         setSaveStage(SaveStages.NoChanges)
     }
-  }, [
-    toggleCheck,
-    deepEqual,
-    payload.initialState,
-    payload.initialStateHeldBeliefs,
-    payload.initialStatePaneFragments,
-    payload.initialStateWithheldBeliefs,
-    saveStage,
-    state,
-    stateHeldBeliefs,
-    statePaneFragments,
-    stateWithheldBeliefs,
-    lastSavedState.initialState,
-  ])
+  }, [toggleCheck, deepEqual, saveStage, state, lastSavedState.initialState])
 
   // handle stages
   useEffect(() => {
-    console.log(SaveStages[saveStage])
+    console.log(`saveStage`, SaveStages[saveStage])
     const hasMarkdown =
       typeof stateLivePreviewMarkdown?.markdownId !== `undefined` &&
       typeof allMarkdown[stateLivePreviewMarkdown.markdownId] !== `undefined`
@@ -3107,7 +3094,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
 
   useEffect(() => {
     if (
-      flags?.editStage === EditStages.Activated &&
+      flags?.editStage === EditStages.Booting &&
       (!state || Object.keys(state).length === 0)
     ) {
       setStateHeldBeliefs(payload.initialStateHeldBeliefs)
@@ -3119,7 +3106,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
       setState(payload.initialState)
     }
     if (
-      flags.editStage === EditStages.Activated &&
+      flags.editStage === EditStages.Booting &&
       state &&
       Object.keys(state).length &&
       saveStage === SaveStages.Booting

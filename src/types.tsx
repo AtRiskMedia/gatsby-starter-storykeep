@@ -80,6 +80,10 @@ export interface ISlideOver {
   locked: boolean
 }
 
+export interface IEditStoryFragmentPayload {
+  initialState: any
+}
+
 export interface IEditPanePayload {
   initialState: any
   initialStatePaneFragments: any
