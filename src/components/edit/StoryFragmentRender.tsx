@@ -16,7 +16,7 @@ import { IAdd } from '../../types'
 import { useDrupalStore } from '../../stores/drupal'
 import RenderStoryFragmentPane from './RenderStoryFragmentPane'
 import { injectBuilderClasses } from '../../helpers/injectBuilderClasses'
-import EditDetailsPane from './EditDetailsPane'
+import DetailsPane from './DetailsPane'
 import { getPaneDetailsPie } from '../../api/services'
 
 const goGetPaneDetailsPie = async (storyFragmentId: string) => {
@@ -456,7 +456,7 @@ const StoryFragmentRender = ({ uuid, previewPayload, flags, fn }: any) => {
               <div className="flex flex-row">
                 <div className="m-2 py-2 bg-mywhite rounded-md w-72 shadow-md">
                   {loaded ? (
-                    <EditDetailsPane
+                    <DetailsPane
                       uuid={p}
                       data={data.filter((e: any) => e.paneId === p)}
                     />

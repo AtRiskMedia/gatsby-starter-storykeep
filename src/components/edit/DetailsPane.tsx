@@ -4,7 +4,7 @@ import { DetailsPie } from '@tractstack/nivo'
 
 import { useDrupalStore } from '../../stores/drupal'
 
-const EditDetailsPane = ({ uuid, data }: any) => {
+const DetailsPane = ({ uuid, data }: any) => {
   const thisPane = useDrupalStore((state) => state.allPanes[uuid])
   const payload = useMemo(() => {
     return [
@@ -62,4 +62,4 @@ const EditDetailsPane = ({ uuid, data }: any) => {
   )
 }
 
-export default EditDetailsPane
+export default DetailsPane
