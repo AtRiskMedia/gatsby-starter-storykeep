@@ -41,9 +41,17 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
   // )
   const allStoryFragments = useDrupalStore((state) => state.allStoryFragments)
   const thisStoryFragment = allStoryFragments[uuid]
-  // const thisTractStack = useDrupalStore(
-  //  (state) => state.allTractStacks[thisStoryFragment.tractstack],
-  // )
+  const thisTractStack = useDrupalStore(
+    (state) => state.allTractStacks[thisStoryFragment.tractstack],
+  )
+  const storyFragmentId = {
+    id: uuid,
+    title: thisStoryFragment.title,
+    slug: thisStoryFragment.slug,
+    tractStackId: thisStoryFragment.tractstack,
+    tractStackTitle: thisTractStack.title,
+    tractStackSlug: thisTractStack.slug,
+  }
   const allStoryFragmentSlugs = Object.keys(allStoryFragments).map((e) => {
     return allStoryFragments[e].slug
   })
@@ -194,7 +202,14 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
       payload={{
         state,
       }}
-      flags={{ ...flags, saveStage, saved, isEmpty, slugCollision }}
+      flags={{
+        ...flags,
+        saveStage,
+        saved,
+        isEmpty,
+        slugCollision,
+        storyFragmentId,
+      }}
       fn={{
         handleChange,
         handleInsertPane,

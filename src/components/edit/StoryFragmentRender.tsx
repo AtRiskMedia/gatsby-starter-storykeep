@@ -447,6 +447,7 @@ const StoryFragmentRender = ({ uuid, previewPayload, flags, fn }: any) => {
                       renderedPayload.contentChildren[`${viewportKey}-${p}`],
                   }}
                   paneId={p}
+                  storyFragmentId={flags.storyFragmentId}
                   viewportKey={viewportKey}
                   viewportClasses={viewportClasses}
                 />

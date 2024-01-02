@@ -1,11 +1,38 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 import React from 'react'
 import { classNames } from '@tractstack/helpers'
+import { ICodeHookProps } from '@tractstack/types'
+
+import codeHooks from '../../custom/codehooks'
+
+const CodeHook = ({
+  thisId,
+  payload,
+  viewportKey,
+  storyFragmentId,
+}: ICodeHookProps) => {
+  const ThisCodeHook =
+    typeof codeHooks[payload.target] !== `undefined`
+      ? codeHooks[payload.target]
+      : null
+  const children = (
+    <ThisCodeHook viewportKey={viewportKey} storyFragmentId={storyFragmentId} />
+  )
+  return (
+    <div
+      id={`${thisId}-hook`}
+      className="paneFragment paneFragmentCode overflow-hidden"
+    >
+      {children}
+    </div>
+  )
+}
 
 const RenderStoryFragmentPane = ({
   viewportKey,
   payload,
   paneId,
+  storyFragmentId,
   viewportClasses,
 }: any) => {
   const p = paneId
@@ -19,11 +46,25 @@ const RenderStoryFragmentPane = ({
   )
   const thisPaneChildren =
     hasCodeHook?.target &&
-    (hasCodeHook.target === `h5p` || hasCodeHook.target === `iframe`)
-      ? codeHookDiv
-      : hasCodeHook?.target && hasCodeHook.target === `shopify`
-        ? codeHookDiv
-        : payload.children
+    (hasCodeHook.target === `h5p` || hasCodeHook.target === `iframe`) ? (
+      codeHookDiv
+    ) : hasCodeHook?.target && hasCodeHook.target === `shopify` ? (
+      codeHookDiv
+    ) : hasCodeHook?.target ? (
+      <CodeHook
+        thisId={thisId}
+        payload={hasCodeHook}
+        viewportKey={viewportKey}
+        storyFragmentId={{
+          ...storyFragmentId,
+          paneId: p,
+          paneTitle: thisPane.title,
+          paneSlug: thisPane.slug,
+        }}
+      />
+    ) : (
+      payload.children
+    )
   const hasMaxHScreen =
     typeof thisPane?.hasMaxHScreen === `boolean`
       ? thisPane.hasMaxHScreen

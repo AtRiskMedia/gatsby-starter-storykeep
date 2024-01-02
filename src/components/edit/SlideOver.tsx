@@ -74,7 +74,7 @@ const SlideOver = ({ children, setToggle, locked }: ISlideOver) => {
                   <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
                     <div className="px-4 xs:px-6">
                       <Dialog.Title className="text-xl leading-6 text-myblue">
-                        Advanced Settings
+                        Settings
                       </Dialog.Title>
                     </div>
                     <div className="relative mt-6 flex-1 px-4 xs:px-6">

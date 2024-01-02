@@ -42,12 +42,12 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
     400,
   )
   const innerViewportTablet = Math.min(
-    typeof window !== `undefined` ? window.innerWidth * 0.6 : 500,
-    500,
-  )
-  const innerViewportDesktop = Math.max(
     typeof window !== `undefined` ? window.innerWidth * 0.6 : 700,
     700,
+  )
+  const innerViewportDesktop = Math.max(
+    typeof window !== `undefined` ? window.innerWidth * 0.6 : 800,
+    800,
   )
   const innerViewport =
     viewportKey === `mobile`
@@ -87,6 +87,7 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
     width,
     slugCollision: flags.slugCollision,
     viewportKey,
+    storyFragmentId: flags.storyFragmentId,
   }
 
   useEffect(() => {
