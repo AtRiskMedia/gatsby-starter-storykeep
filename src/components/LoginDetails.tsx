@@ -8,7 +8,7 @@ import Logo from '../../assets/logo.svg'
 import { config } from '../../data/SiteConfig'
 import { Stages } from '../types'
 
-const Initialize = () => {
+const LoginDetails = () => {
   const [isSSR, setIsSSR] = useState(true)
   const openDemo = config.openDemo
   const stage = useDrupalStore((state) => state.stage)
@@ -104,4 +104,4 @@ const Initialize = () => {
   )
 }
 
-export default Initialize
+export default LoginDetails

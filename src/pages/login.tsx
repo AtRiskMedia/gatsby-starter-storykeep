@@ -10,7 +10,7 @@ import { useDrupalCollections } from '../hooks/use-drupal-collections'
 import { useDrupalSource } from '../hooks/use-drupal-source'
 import Login from '../components/Login'
 import DrupalApi from '../components/DrupalApi'
-import Initialize from '../components/Initialize'
+import LoginDetails from '../components/LoginDetails'
 import { Stages } from '../types'
 
 const LoginPage = () => {
@@ -157,7 +157,7 @@ const LoginPage = () => {
   return (
     <DrupalProvider config={drupalConfig}>
       <DrupalApi>
-        {stage < Stages.Authenticated ? <Login /> : <Initialize />}
+        {stage < Stages.Authenticated ? <Login /> : <LoginDetails />}
       </DrupalApi>
     </DrupalProvider>
   )
