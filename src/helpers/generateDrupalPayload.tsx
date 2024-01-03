@@ -1,3 +1,53 @@
+export function storyFragmentPayload(
+  state: any, // FIX
+  uuid: string,
+) {
+  const relationships = (
+    panes: string[],
+    contextPanes: string[],
+    tractStackId: string,
+  ) => {
+    const val: any = {
+      field_tract_stack: {
+        data: {
+          type: `node--tractstack`,
+          id: tractStackId,
+        },
+      },
+    }
+    if (panes.length)
+      val.field_panes = {
+        data: panes.map((p: string) => {
+          return {
+            type: `node--pane`,
+            id: p,
+          }
+        }),
+      }
+    if (contextPanes.length)
+      val.field_context_panes = {
+        data: contextPanes.map((p: string) => {
+          return {
+            type: `node--pane`,
+            id: p,
+          }
+        }),
+      }
+    return { relationships: val }
+  }
+  return {
+    type: `node--story_fragment`,
+    id: uuid,
+    attributes: {
+      title: state.title,
+      field_slug: state.slug,
+      field_social_image_path: state.socialImagePath,
+      field_tailwind_background_colour: state?.tailwindBgColour || ``,
+    },
+    ...relationships(state.panes, state.contextPanes, state.tractstack),
+  }
+}
+
 export function panePayload(
   state: any, // FIX
   uuid: string,
@@ -63,7 +113,7 @@ export function panePayload(
         },
       }
     : {}
-  const drupalNode = {
+  return {
     id: uuid,
     type: `node--pane`,
     attributes: {
@@ -82,7 +132,6 @@ export function panePayload(
     // relationships: g.relationships, *** THIS NEEDS WORK: field_image, field_image_svg
     // FOR NOW, only markdown is touched
   }
-  return drupalNode
 }
 
 export function markdownPayload(

@@ -104,7 +104,6 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
   ) => {
     const apiBase = process.env.DRUPAL_APIBASE
     const setDrupalQueue = get().setDrupalQueue
-    const openDemoEnabled = get().openDemoEnabled
     if (drupalNid > -1) {
       const fullPayload = {
         endpoint: `${apiBase}/node/${type}/${uuid}`,
@@ -113,9 +112,7 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
           data: payload,
         },
       }
-      if (process.env.NODE_ENV !== `development` && !openDemoEnabled)
-        setDrupalQueue(uuid, fullPayload)
-      else console.log(`offline: ${type}`, uuid, payload)
+      setDrupalQueue(uuid, fullPayload)
     } else {
       delete payload.id
       const fullPayload = {
@@ -125,9 +122,7 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
           data: payload,
         },
       }
-      if (process.env.NODE_ENV !== `development` && !openDemoEnabled)
-        setDrupalQueue(uuid, fullPayload)
-      else console.log(`offline: ${type}`, uuid, payload)
+      setDrupalQueue(uuid, fullPayload)
     }
 
     switch (type) {
@@ -169,7 +164,43 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
         break
       }
 
-      case `storyfragment`:
+      case `storyfragment`: {
+        const thisStoryFragment = get().allStoryFragments[uuid]
+        const updateStoryFragments = get().updateStoryFragments
+        const newStoryFragment = {
+          ...thisStoryFragment,
+          id: uuid,
+          contextPanes:
+            payload?.relationships?.field_context_panes?.data
+              ?.map((f: any) => {
+                return f.id
+              })
+              .filter((e: string) => e !== `missing`) || [],
+          tractstack: payload?.relationships?.field_tract_stack?.data?.id,
+          panes: payload?.relationships?.field_panes?.data
+            ?.map((f: any) => {
+              return f.id
+            })
+            .filter((e: string) => e !== `missing`),
+          menu: payload?.relationships?.field_menu?.data?.id,
+        }
+        if (payload.attributes.title !== thisStoryFragment.title)
+          newStoryFragment.title = payload.attributes.title
+        if (payload.attributes.field_slug !== thisStoryFragment.slug)
+          newStoryFragment.slug = payload.attributes.field_slug
+        if (
+          payload.attributes.field_tailwind_background_colour !==
+          thisStoryFragment.tailwindBgColour
+        )
+          newStoryFragment.tailwindBgColour =
+            payload.attributes.field_tailwind_background_colour
+        if (payload.socialImagePath !== thisStoryFragment.socialImagePath)
+          newStoryFragment.attributes.field_social_image_path =
+            payload.attributes.field_social_image_path
+        updateStoryFragments(newStoryFragment)
+        break
+      }
+
       case `tractstack`:
       case `resource`:
       case `file`:
@@ -417,6 +448,12 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
     const newPayload = { ...allMarkdown }
     delete newPayload[uuid]
     set((state) => ({ ...state, allMarkdown: newPayload }))
+  },
+  removeStoryFragment: (uuid: string) => {
+    const allStoryFragments = get().allStoryFragments
+    const newPayload = { ...allStoryFragments }
+    delete newPayload[uuid]
+    set((state) => ({ ...state, allStoryFragments: newPayload }))
   },
   updateMarkdown: (payload: any) => {
     // FIX

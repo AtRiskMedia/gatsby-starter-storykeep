@@ -92,6 +92,7 @@ module.exports = {
         7: '107',
         8: '108',
         9: '109',
+        99: '999',
       },
       colors: {
         mywhite: '#fcfcfc',

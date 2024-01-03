@@ -15,12 +15,6 @@ import { FireIcon } from '@heroicons/react/20/solid'
 import { v4 as uuidv4 } from 'uuid'
 
 import { useDrupalStore } from '../stores/drupal'
-// import EditSlideOver from './EditSlideOver'
-// import EditTractStack from './EditTractStack'
-// import EditStoryFragment from './EditStoryFragment'
-// import EditResource from './EditResource'
-// import EditMarkdown from './EditMarkdown'
-// import EditPane from './EditPane'
 import { getPanesDaysSince, getStoryFragmentDaysSince } from '../api/services'
 import { IActivityDetails } from 'src/types'
 
@@ -108,15 +102,9 @@ const daysSinceDataPayload = (data: any) => {
 
 const StoryKeep = () => {
   const selectedCollection = useDrupalStore((state) => state.selectedCollection)
-  // const [current, setCurrent] = useState(selectedCollection || `storyfragment`)
-  // const [children, setChildren]: any = useState(null)
-  // const [childrenTitle, setChildrenTitle] = useState(``)
-  // const [displayMode, setDisplayMode] = useState(true)
   const displayMode = true
   const allTractStacks = useDrupalStore((state) => state.allTractStacks)
   const updatePanes = useDrupalStore((state) => state.updatePanes)
-  // const selected = useDrupalStore((state) => state.selected)
-  // const setSelected = useDrupalStore((state) => state.setSelected)
   const setSelectedCollection = useDrupalStore(
     (state) => state.setSelectedCollection,
   )

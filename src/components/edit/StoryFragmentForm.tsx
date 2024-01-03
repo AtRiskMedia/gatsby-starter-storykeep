@@ -56,7 +56,7 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
         ? innerViewportTablet
         : innerViewportDesktop
   const [width, setWidth] = useState(innerViewport)
-  // const allMarkdown = useDrupalStore((state) => state.allMarkdown)
+  const allPanes = useDrupalStore((state) => state.allPanes)
   const setViewportKey = useDrupalStore((state) => state.setViewportKey)
   const AuthorIcon =
     flags.isAuthor || flags.isAdmin || flags.isBuilder
@@ -179,6 +179,139 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
                             />
                           </div>
                         </div>
+                      </div>
+                      <div className="xs:col-span-2">
+                        <label
+                          htmlFor="tailwindBgColour"
+                          className="block text-sm leading-6 text-black"
+                        >
+                          Tailwind Background Colour
+                        </label>
+                        <div className="mt-2">
+                          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
+                            <input
+                              type="text"
+                              name="tailwindBgColour"
+                              id="tailwindBgColour"
+                              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
+                              value={state.tailwindBgColour}
+                              onChange={handleChange}
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="xs:col-span-3">
+                        <label
+                          htmlFor="socialImagePath"
+                          className="block text-sm leading-6 text-black"
+                        >
+                          Social Image Path{` `}
+                          <span
+                            className="text-myorange ml-1"
+                            title="Optional. Must be manually added to /static in frontend."
+                          >
+                            *
+                          </span>
+                        </label>
+                        <div className="mt-2">
+                          <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
+                            <input
+                              type="text"
+                              name="socialImagePath"
+                              id="socialImagePath"
+                              className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
+                              value={state.socialImagePath}
+                              onChange={handleChange}
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="xs:col-span-full">
+                        <p className="block text-sm leading-6 text-black">
+                          Panes
+                        </p>
+                        {!flags.isEmpty ? (
+                          state.panes?.map((e: any) => (
+                            <div
+                              key={e}
+                              className="mt-2 flex items-center gap-x-3"
+                            >
+                              {typeof allPanes[e] !== `undefined`
+                                ? allPanes[e].title
+                                : e}
+                              <button
+                                type="button"
+                                className="rounded-md bg-white px-2.5 py-1.5 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-50"
+                                onClick={() => {
+                                  console.log(`todo embedded edit pane`, e)
+                                }}
+                              >
+                                edit
+                              </button>
+                            </div>
+                          ))
+                        ) : (
+                          <p>none</p>
+                        )}
+                      </div>
+
+                      <div className="xs:col-span-full">
+                        <p className="block text-sm leading-6 text-black">
+                          Context Panes
+                        </p>
+                        {flags.hasContextPanes ? (
+                          state.contextPanes?.map((e: any) => {
+                            return (
+                              <div
+                                key={e}
+                                className="mt-2 flex items-center gap-x-3"
+                              >
+                                {allPanes[e].title}
+                                <button
+                                  type="button"
+                                  className="rounded-md bg-white px-2.5 py-1.5 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-50"
+                                  onClick={() => {
+                                    console.log(`todo embedded edit pane`, e)
+                                  }}
+                                >
+                                  edit
+                                </button>
+                              </div>
+                            )
+                          })
+                        ) : (
+                          <p>none</p>
+                        )}
+                      </div>
+
+                      <div className="xs:col-span-full">
+                        <p className="block text-sm leading-6 text-black">
+                          Menu
+                        </p>
+                        {state.menu ? (
+                          <div
+                            key={state.menu.id}
+                            className="mt-2 flex items-center gap-x-3"
+                          >
+                            {state.menu.title}
+                            <button
+                              type="button"
+                              className="rounded-md bg-white px-2.5 py-1.5 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-50"
+                              onClick={() => {
+                                console.log(
+                                  `todo embedded edit menu`,
+                                  state.menu.id,
+                                )
+                              }}
+                            >
+                              edit
+                            </button>
+                          </div>
+                        ) : (
+                          <p>none</p>
+                        )}
                       </div>
                     </div>
                   </div>

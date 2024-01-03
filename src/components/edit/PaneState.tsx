@@ -3091,6 +3091,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
     }
   }, [saveStage, updatePanePayload, setPane])
 
+  // set initial state
   useEffect(() => {
     if (
       flags?.editStage === EditStages.Booting &&

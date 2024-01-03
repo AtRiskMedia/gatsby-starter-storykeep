@@ -63,10 +63,14 @@ export enum SaveStages {
   SavingPane,
   SavedPane,
   PaneUpdateAffectedNodes,
+  PreSavingStoryFragment,
+  PreSavedStoryFragment,
   SaveStoryFragment,
   SavingStoryFragment,
   SavedStoryFragment,
   StoryFragmentUpdateAffectedNodes,
+  PreSavingTractStack,
+  PreSavedTractStack,
   SaveTractStack,
   SavingTractStack,
   SavedTractStack,
@@ -238,6 +242,7 @@ export interface IDrupalState {
   allCollections: any // FIX
   removePane: Function
   removeMarkdown: Function
+  removeStoryFragment: Function
   removeDrupalQueue: Function
   removeDrupalPreSaveQueue: Function
   removeDrupalResponse: Function

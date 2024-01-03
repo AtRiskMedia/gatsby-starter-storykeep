@@ -238,191 +238,192 @@ const StoryFragmentRender = ({ uuid, previewPayload, flags, fn }: any) => {
     }
   }, [uuid, data, setData, loaded, loading, setLoaded, setLoading])
 
-  if (addModalOpen)
-    return (
-      <Transition.Root show={addModalOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-30" onClose={setAddModalOpen}>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div className="fixed inset-0 bg-mydarkgrey/80 transition-opacity" />
-          </Transition.Child>
+  return (
+    <>
+      {addModalOpen ? (
+        <Transition.Root show={addModalOpen} as={Fragment}>
+          <Dialog as="div" className="relative z-30" onClose={setAddModalOpen}>
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <div className="fixed inset-0 bg-mydarkgrey/80 transition-opacity" />
+            </Transition.Child>
 
-          <div className="fixed inset-0 max-w-screen overflow-y-auto">
-            <div className="flex h-full justify-center items-center">
-              <div className="flex bg-mylightgrey h-96 w-full items-end justify-start p-4 text-center xs:items-center xs:p-0">
-                <Transition.Child
-                  as={Fragment}
-                  enter="ease-out duration-300"
-                  enterFrom="opacity-0 translate-y-4 xs:translate-y-0 xs:scale-95"
-                  enterTo="opacity-100 translate-y-0 xs:scale-100"
-                  leave="ease-in duration-200"
-                  leaveFrom="opacity-100 translate-y-0 xs:scale-100"
-                  leaveTo="opacity-0 translate-y-4 xs:translate-y-0 xs:scale-95"
-                >
-                  <Dialog.Panel className="max-w-3xl relative transform px-4 pb-4 pt-5 text-left transition-all xs:my-8 xs:w-full xs:p-6">
-                    <div className="flex flex-row">
-                      <div className="h-fit rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all xs:my-8 xs:w-full xs:p-6">
-                        <div className="xs:flex xs:items-start">
-                          <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-myorange/20 xs:mx-0 xs:h-10 xs:w-10">
-                            <RectangleGroupIcon
-                              className="h-6 w-6 text-myorange"
-                              aria-hidden="true"
-                            />
-                          </div>
-                          <div className="mt-3 text-center xs:ml-4 xs:mt-0 xs:text-left">
-                            <Dialog.Title
-                              as="h3"
-                              className="text-lg font-main leading-6 text-black"
-                            >
-                              Design a new pane?
-                            </Dialog.Title>
-                          </div>
-                        </div>
-                        <div className="mt-5 xs:mt-4 xs:flex xs:flex-row-reverse">
-                          <button
-                            type="button"
-                            className="inline-flex w-full justify-center rounded-md bg-mydarkgrey px-3 py-2 text-sm font-bold text-mywhite shadow-sm hover:bg-myorange xs:ml-3 xs:w-auto"
-                            onClick={() => handleAdd(`new`)}
-                          >
-                            New Pane
-                          </button>
-                          <button
-                            type="button"
-                            className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 xs:mt-0 xs:w-auto"
-                            onClick={() => setAddModalOpen(false)}
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
-                      <span className="mt-16 px-4 text-2xl font-action text-white">
-                        OR
-                      </span>
-                      <div className="rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all xs:my-8 xs:w-full xs:p-6">
-                        <div className="xs:flex xs:items-start">
-                          <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-myorange/20 xs:mx-0 xs:h-10 xs:w-10">
-                            <RectangleGroupIcon
-                              className="h-6 w-6 text-myorange"
-                              aria-hidden="true"
-                            />
-                          </div>
-                          <div className="mt-3 text-center xs:ml-4 xs:mt-0 xs:text-left">
-                            <Dialog.Title
-                              as="h3"
-                              className="text-lg font-main leading-6 text-black"
-                            >
-                              Insert an existing pane?
-                            </Dialog.Title>
-                          </div>
-                        </div>
-                        <Combobox
-                          as="div"
-                          value={selectedPane}
-                          onChange={setSelectedPane}
-                        >
-                          <Combobox.Label className="mt-3 block text-sm leading-6 text-black">
-                            Select pane or enter title to search
-                          </Combobox.Label>
-                          <div className="relative mt-2">
-                            <Combobox.Input
-                              className="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-10 text-black shadow-sm ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-mygreen xs:text-sm xs:leading-6"
-                              onChange={(event) => setQuery(event.target.value)}
-                              displayValue={(pane: any) => pane?.title}
-                            />
-                            <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
-                              <ChevronUpDownIcon
-                                className="h-5 w-5 text-slate-400"
+            <div className="fixed inset-0 max-w-screen overflow-y-auto">
+              <div className="flex h-full justify-center items-center">
+                <div className="flex bg-mylightgrey h-96 w-full items-end justify-start p-4 text-center xs:items-center xs:p-0">
+                  <Transition.Child
+                    as={Fragment}
+                    enter="ease-out duration-300"
+                    enterFrom="opacity-0 translate-y-4 xs:translate-y-0 xs:scale-95"
+                    enterTo="opacity-100 translate-y-0 xs:scale-100"
+                    leave="ease-in duration-200"
+                    leaveFrom="opacity-100 translate-y-0 xs:scale-100"
+                    leaveTo="opacity-0 translate-y-4 xs:translate-y-0 xs:scale-95"
+                  >
+                    <Dialog.Panel className="max-w-3xl relative transform px-4 pb-4 pt-5 text-left transition-all xs:my-8 xs:w-full xs:p-6">
+                      <div className="flex flex-row">
+                        <div className="h-fit rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all xs:my-8 xs:w-full xs:p-6">
+                          <div className="xs:flex xs:items-start">
+                            <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-myorange/20 xs:mx-0 xs:h-10 xs:w-10">
+                              <RectangleGroupIcon
+                                className="h-6 w-6 text-myorange"
                                 aria-hidden="true"
                               />
-                            </Combobox.Button>
-
-                            {filteredPanes.length > 0 && (
-                              <Combobox.Options className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none xs:text-sm">
-                                {filteredPanes.map((pane: any) => (
-                                  <Combobox.Option
-                                    key={pane.id}
-                                    value={pane}
-                                    className={({ active }) =>
-                                      classNames(
-                                        `relative cursor-default select-none py-2 pl-3 pr-9`,
-                                        active
-                                          ? `bg-mygreen text-black`
-                                          : `text-black`,
-                                      )
-                                    }
-                                  >
-                                    {({ active, selected }) => (
-                                      <>
-                                        <span
-                                          className={classNames(
-                                            `block truncate`,
-                                            selected ? `font-bold` : ``,
-                                          )}
-                                        >
-                                          {pane.title}
-                                        </span>
-
-                                        {selected && (
-                                          <span
-                                            className={classNames(
-                                              `absolute inset-y-0 right-0 flex items-center pr-4`,
-                                              active
-                                                ? `text-white`
-                                                : `text-mygreen`,
-                                            )}
-                                          >
-                                            <CheckIcon
-                                              className="h-5 w-5"
-                                              aria-hidden="true"
-                                            />
-                                          </span>
-                                        )}
-                                      </>
-                                    )}
-                                  </Combobox.Option>
-                                ))}
-                              </Combobox.Options>
-                            )}
+                            </div>
+                            <div className="mt-3 text-center xs:ml-4 xs:mt-0 xs:text-left">
+                              <Dialog.Title
+                                as="h3"
+                                className="text-lg font-main leading-6 text-black"
+                              >
+                                Design a new pane?
+                              </Dialog.Title>
+                            </div>
                           </div>
-                        </Combobox>
-
-                        <div className="mt-5 xs:mt-4 xs:flex xs:flex-row-reverse">
-                          {selectedPane ? (
+                          <div className="mt-5 xs:mt-4 xs:flex xs:flex-row-reverse">
                             <button
                               type="button"
                               className="inline-flex w-full justify-center rounded-md bg-mydarkgrey px-3 py-2 text-sm font-bold text-mywhite shadow-sm hover:bg-myorange xs:ml-3 xs:w-auto"
-                              onClick={() => handleAdd(`existing`)}
+                              onClick={() => handleAdd(`new`)}
                             >
-                              Insert
+                              New Pane
                             </button>
-                          ) : null}
-                          <button
-                            type="button"
-                            className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 xs:mt-0 xs:w-auto"
-                            onClick={() => setAddModalOpen(false)}
+                            <button
+                              type="button"
+                              className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 xs:mt-0 xs:w-auto"
+                              onClick={() => setAddModalOpen(false)}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                        <span className="mt-16 px-4 text-2xl font-action text-black -rotate-2">
+                          OR
+                        </span>
+                        <div className="rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all xs:my-8 xs:w-full xs:p-6">
+                          <div className="xs:flex xs:items-start">
+                            <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-myorange/20 xs:mx-0 xs:h-10 xs:w-10">
+                              <RectangleGroupIcon
+                                className="h-6 w-6 text-myorange"
+                                aria-hidden="true"
+                              />
+                            </div>
+                            <div className="mt-3 text-center xs:ml-4 xs:mt-0 xs:text-left">
+                              <Dialog.Title
+                                as="h3"
+                                className="text-lg font-main leading-6 text-black"
+                              >
+                                Insert an existing pane?
+                              </Dialog.Title>
+                            </div>
+                          </div>
+                          <Combobox
+                            as="div"
+                            value={selectedPane}
+                            onChange={setSelectedPane}
                           >
-                            Cancel
-                          </button>
+                            <Combobox.Label className="mt-3 block text-sm leading-6 text-black">
+                              Select pane or enter title to search
+                            </Combobox.Label>
+                            <div className="relative mt-2">
+                              <Combobox.Input
+                                className="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-10 text-black shadow-sm ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-mygreen xs:text-sm xs:leading-6"
+                                onChange={(event) =>
+                                  setQuery(event.target.value)
+                                }
+                                displayValue={(pane: any) => pane?.title}
+                              />
+                              <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
+                                <ChevronUpDownIcon
+                                  className="h-5 w-5 text-slate-400"
+                                  aria-hidden="true"
+                                />
+                              </Combobox.Button>
+
+                              {filteredPanes.length > 0 && (
+                                <Combobox.Options className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none xs:text-sm">
+                                  {filteredPanes.map((pane: any) => (
+                                    <Combobox.Option
+                                      key={pane.id}
+                                      value={pane}
+                                      className={({ active }) =>
+                                        classNames(
+                                          `relative cursor-default select-none py-2 pl-3 pr-9`,
+                                          active
+                                            ? `bg-mygreen text-black`
+                                            : `text-black`,
+                                        )
+                                      }
+                                    >
+                                      {({ active, selected }) => (
+                                        <>
+                                          <span
+                                            className={classNames(
+                                              `block truncate`,
+                                              selected ? `font-bold` : ``,
+                                            )}
+                                          >
+                                            {pane.title}
+                                          </span>
+
+                                          {selected && (
+                                            <span
+                                              className={classNames(
+                                                `absolute inset-y-0 right-0 flex items-center pr-4`,
+                                                active
+                                                  ? `text-white`
+                                                  : `text-mygreen`,
+                                              )}
+                                            >
+                                              <CheckIcon
+                                                className="h-5 w-5"
+                                                aria-hidden="true"
+                                              />
+                                            </span>
+                                          )}
+                                        </>
+                                      )}
+                                    </Combobox.Option>
+                                  ))}
+                                </Combobox.Options>
+                              )}
+                            </div>
+                          </Combobox>
+
+                          <div className="mt-5 xs:mt-4 xs:flex xs:flex-row-reverse">
+                            {selectedPane ? (
+                              <button
+                                type="button"
+                                className="inline-flex w-full justify-center rounded-md bg-mydarkgrey px-3 py-2 text-sm font-bold text-mywhite shadow-sm hover:bg-myorange xs:ml-3 xs:w-auto"
+                                onClick={() => handleAdd(`existing`)}
+                              >
+                                Insert
+                              </button>
+                            ) : null}
+                            <button
+                              type="button"
+                              className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 xs:mt-0 xs:w-auto"
+                              onClick={() => setAddModalOpen(false)}
+                            >
+                              Cancel
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Dialog.Panel>
-                </Transition.Child>
+                    </Dialog.Panel>
+                  </Transition.Child>
+                </div>
               </div>
             </div>
-          </div>
-        </Dialog>
-      </Transition.Root>
-    )
-  return (
-    <>
+          </Dialog>
+        </Transition.Root>
+      ) : null}
       {thisStoryFragment.panes?.map((p: string, idx: number) => (
         <div
           key={`${p}-${idx}`}
@@ -484,7 +485,14 @@ const StoryFragmentRender = ({ uuid, previewPayload, flags, fn }: any) => {
                   ) : null}
                   <button
                     title="Remove Pane"
-                    onClick={() => handleReorderPane(idx, undefined)}
+                    onClick={() => {
+                      if (
+                        window.confirm(
+                          `Remove pane from this storyfragment? Please confirm.`,
+                        )
+                      )
+                        handleReorderPane(idx, undefined)
+                    }}
                     className="my-0.5 py-1 rounded-md bg-mywhite px-2 shadow-sm hover:bg-myorange hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-myorange"
                   >
                     <XMarkIcon className="w-4 h-4" />
