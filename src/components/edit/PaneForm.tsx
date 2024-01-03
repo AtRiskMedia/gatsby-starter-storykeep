@@ -26,7 +26,7 @@ import {
 import { useDrupalStore } from '../../stores/drupal'
 import { config } from '../../../data/SiteConfig'
 import PaneStarter from './PaneStarter'
-import EditBelief from '../EditBelief'
+import EditBelief from './EditBelief'
 import PaneRender from './PaneRender'
 import SlideOver from './SlideOver'
 import { SaveStages } from '../../types'

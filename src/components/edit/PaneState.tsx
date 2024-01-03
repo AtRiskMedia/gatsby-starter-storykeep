@@ -225,6 +225,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
         optionsPayloadString: JSON.stringify(newOptionsPayload),
       }
     })
+    setToggleCheck(true)
   }
 
   const toggleBelief = (mode: string) => {
@@ -233,6 +234,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
       (mode === `withheld` && !Object.keys(stateWithheldBeliefs).length)
     )
       addBelief(mode)
+    setToggleCheck(true)
   }
 
   const addBelief = (mode: string) => {
@@ -263,6 +265,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
         optionsPayloadString: JSON.stringify(newOptionsPayload),
       }
     })
+    setToggleCheck(true)
   }
 
   const handleChangeBelief = (e: any) => {
@@ -360,6 +363,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
         optionsPayloadString: JSON.stringify(newOptionsPayload),
       }
     })
+    setToggleCheck(true)
   }
 
   /*
