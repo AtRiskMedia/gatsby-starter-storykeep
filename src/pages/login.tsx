@@ -114,7 +114,6 @@ const LoginPage = () => {
 
   if (isSSR) return null
 
-  console.log(Stages[stage])
   return (
     <DrupalProvider config={drupalConfig}>
       <DrupalApi>

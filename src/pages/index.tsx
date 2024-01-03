@@ -28,7 +28,7 @@ const DashboardPage = () => {
   }, [isSSR, stage, validToken, setStage])
 
   if (isSSR) return null
-  console.log(Stages[stage])
+
   return (
     <ConciergeApi>
       <Layout current="dashboard">
