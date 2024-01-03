@@ -18,9 +18,13 @@ const BackupsPage = () => {
 
   useEffect(() => {
     if (isSSR && typeof window !== `undefined`) setIsSSR(false)
-    if (process.env.NODE_ENV === `production` && !validToken)
-      setStage(Stages.Booting)
-    if (stage !== Stages.Activated) navigate(`/login`)
+    if (
+      process.env.NODE_ENV === `production` &&
+      !validToken &&
+      stage === Stages.Activated
+    )
+      setStage(Stages.Initialize)
+    if (stage < Stages.Initialize) navigate(`/login`)
   }, [isSSR, stage, validToken, setStage])
 
   if (isSSR) return null

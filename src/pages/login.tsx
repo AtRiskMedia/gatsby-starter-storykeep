@@ -113,6 +113,7 @@ const LoginPage = () => {
   }, [stage, setStage, openDemoEnabled])
 
   if (isSSR) return null
+
   console.log(Stages[stage])
   return (
     <DrupalProvider config={drupalConfig}>

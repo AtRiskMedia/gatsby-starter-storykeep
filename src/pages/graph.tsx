@@ -18,7 +18,11 @@ const GraphPage = () => {
 
   useEffect(() => {
     if (isSSR && typeof window !== `undefined`) setIsSSR(false)
-    if (process.env.NODE_ENV === `production` && !validToken)
+    if (
+      process.env.NODE_ENV === `production` &&
+      !validToken &&
+      stage === Stages.Activated
+    )
       setStage(Stages.Initialize)
     if (stage < Stages.Initialize) navigate(`/login`)
   }, [isSSR, stage, validToken, setStage])
