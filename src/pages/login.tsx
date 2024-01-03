@@ -4,8 +4,6 @@ import { DrupalProvider } from '@tractstack/drupal-react-oauth-provider'
 import { navigate } from 'gatsby'
 
 import { useDrupalStore } from '../stores/drupal'
-import { useAuthStore } from '../stores/authStore'
-import { getTokens } from '../api/axiosClient'
 import { useDrupalCollections } from '../hooks/use-drupal-collections'
 import { useDrupalSource } from '../hooks/use-drupal-source'
 import Login from '../components/Login'
@@ -18,9 +16,6 @@ const LoginPage = () => {
   const drupalConfig = {
     url: process.env.DRUPAL_URL || ``,
   }
-  const login = useAuthStore((state) => state.login)
-  const validToken = useAuthStore((state) => state.validToken)
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
   const stage = useDrupalStore((state) => state.stage)
   const setStage = useDrupalStore((state) => state.setStage)
   const openDemoEnabled = useDrupalStore((state) => state.openDemoEnabled)
@@ -33,10 +28,6 @@ const LoginPage = () => {
     (state) => state.removeDrupalResponse,
   )
   const drupalResponse = useDrupalStore((state) => state.drupalResponse)
-  const updateCollections = useDrupalStore((state) => state.updateCollections)
-  const apiBase = process.env.DRUPAL_APIBASE
-  const baseURL = process.env.DRUPAL_URL
-  const thisURL = `${baseURL}/${apiBase}`
 
   // UuidConfirm
   useEffect(() => {
@@ -94,12 +85,6 @@ const LoginPage = () => {
     if (e && stage === Stages.SourceLoad) setStage(Stages.SourceLoaded)
   })
 
-  // initialize (connect to concierge)
-  useEffect(() => {
-    if (isLoggedIn && stage === Stages.Initializing)
-      setStage(Stages.Initialized)
-  }, [isLoggedIn, setStage, stage])
-
   // handle stages
   useEffect(() => {
     switch (stage) {
@@ -121,39 +106,14 @@ const LoginPage = () => {
         setStage(Stages.Initialize)
         break
 
-      case Stages.Initialize:
-        if (process.env.NODE_ENV === `development`) setStage(Stages.Activated)
-        else {
-          setStage(Stages.Initializing)
-          getTokens(`builder`).then((res) => login(res))
-        }
-        break
-
-      case Stages.Initialized:
-        if (
-          process.env.NODE_ENV === `development` ||
-          openDemoEnabled ||
-          (process.env.NODE_ENV === `production` && validToken)
-        )
-          setStage(Stages.Activated)
-        break
-
       case Stages.Activated:
         navigate(`/`)
         break
     }
-  }, [
-    login,
-    thisURL,
-    updateCollections,
-    stage,
-    setStage,
-    openDemoEnabled,
-    validToken,
-  ])
+  }, [stage, setStage, openDemoEnabled])
 
   if (isSSR) return null
-
+  console.log(Stages[stage])
   return (
     <DrupalProvider config={drupalConfig}>
       <DrupalApi>
