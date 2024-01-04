@@ -118,11 +118,11 @@ export default function EditResource({ params }: { params: { uuid: string } }) {
     setEditStage,
     thisResource?.slug,
     thisResource?.title,
-    thisResource.actionLisp,
-    thisResource.categorySlug,
-    thisResource.drupalNid,
-    thisResource.oneliner,
-    thisResource.optionsPayload,
+    thisResource?.actionLisp,
+    thisResource?.categorySlug,
+    thisResource?.drupalNid,
+    thisResource?.oneliner,
+    thisResource?.optionsPayload,
     uuid,
   ])
 
