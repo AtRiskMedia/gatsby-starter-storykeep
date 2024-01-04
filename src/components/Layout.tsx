@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 import React, { Fragment, useState } from 'react'
-import { Link } from 'gatsby'
+import { Link, navigate } from 'gatsby'
 import { Dialog, Transition } from '@headlessui/react'
 import {
   Bars3Icon,
@@ -16,10 +16,12 @@ import {
 import { classNames } from '@tractstack/helpers'
 
 import { ILayout } from '../types'
+import { useDrupalStore } from '../stores/drupal'
 import Logo from '../../assets/logo.svg'
 
 const Layout = ({ children, current }: ILayout) => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const navLocked = useDrupalStore((state) => state.navLocked)
   const navigation = [
     {
       id: `dashboard`,
@@ -154,21 +156,50 @@ const Layout = ({ children, current }: ILayout) => {
                           <ul role="list" className="-mx-2 space-y-1">
                             {navigation.map((item) => (
                               <li key={item.name}>
-                                <Link
-                                  to={item.href}
-                                  className={classNames(
-                                    item.current
-                                      ? `mydarkgrey text-white`
-                                      : `text-mylightgrey hover:text-white hover:mydarkgrey`,
-                                    `group flex gap-x-3 rounded-md p-2 text-sm font-bold`,
+                                <>
+                                  {!navLocked ? (
+                                    <Link
+                                      to={item.href}
+                                      className={classNames(
+                                        item.current
+                                          ? `mydarkgrey text-white`
+                                          : `text-mylightgrey hover:text-white hover:mydarkgrey`,
+                                        `group flex gap-x-3 rounded-md p-2 text-sm font-bold`,
+                                      )}
+                                    >
+                                      <item.icon
+                                        className="h-6 w-6 shrink-0"
+                                        aria-hidden="true"
+                                      />
+                                      {item.name}
+                                    </Link>
+                                  ) : (
+                                    <button
+                                      onClick={() => {
+                                        if (navLocked) {
+                                          if (
+                                            window.confirm(
+                                              `There are unsaved changes. Proceed?`,
+                                            )
+                                          )
+                                            navigate(item.href)
+                                        } else navigate(item.href)
+                                      }}
+                                      className={classNames(
+                                        item.current
+                                          ? `mydarkgrey text-white`
+                                          : `text-mylightgrey hover:text-white hover:mydarkgrey`,
+                                        `group flex gap-x-3 rounded-md p-2 text-sm font-bold`,
+                                      )}
+                                    >
+                                      <item.icon
+                                        className="h-6 w-6 shrink-0"
+                                        aria-hidden="true"
+                                      />
+                                      {item.name}
+                                    </button>
                                   )}
-                                >
-                                  <item.icon
-                                    className="h-6 w-6 shrink-0"
-                                    aria-hidden="true"
-                                  />
-                                  {item.name}
-                                </Link>
+                                </>
                               </li>
                             ))}
                           </ul>
@@ -180,25 +211,58 @@ const Layout = ({ children, current }: ILayout) => {
                           <ul role="list" className="-mx-2 mt-2 space-y-1">
                             {actions.map((action) => (
                               <li key={action.name}>
-                                <Link
-                                  to={action.href}
-                                  className={classNames(
-                                    action.current
-                                      ? `mydarkgrey text-white`
-                                      : `text-mylightgrey hover:text-white hover:mydarkgrey`,
-                                    `group flex gap-x-3 rounded-md p-2 text-sm font-bold`,
+                                <>
+                                  {!navLocked ? (
+                                    <Link
+                                      to={action.href}
+                                      className={classNames(
+                                        action.current
+                                          ? `mydarkgrey text-white`
+                                          : `text-mylightgrey hover:text-white hover:mydarkgrey`,
+                                        `group flex gap-x-3 rounded-md p-2 text-sm font-bold`,
+                                      )}
+                                    >
+                                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-mylightgrey mydarkgrey text-[0.625rem] font-medium text-mylightgrey group-hover:text-white">
+                                        <action.icon
+                                          className="h-4 w-4 shrink-0"
+                                          aria-hidden="true"
+                                        />
+                                      </span>
+                                      <span className="truncate">
+                                        {action.name}
+                                      </span>
+                                    </Link>
+                                  ) : (
+                                    <button
+                                      onClick={() => {
+                                        if (navLocked) {
+                                          if (
+                                            window.confirm(
+                                              `There are unsaved changes. Proceed?`,
+                                            )
+                                          )
+                                            navigate(action.href)
+                                        } else navigate(action.href)
+                                      }}
+                                      className={classNames(
+                                        action.current
+                                          ? `mydarkgrey text-white`
+                                          : `text-mylightgrey hover:text-white hover:mydarkgrey`,
+                                        `group flex gap-x-3 rounded-md p-2 text-sm font-bold`,
+                                      )}
+                                    >
+                                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-mylightgrey mydarkgrey text-[0.625rem] font-medium text-mylightgrey group-hover:text-white">
+                                        <action.icon
+                                          className="h-4 w-4 shrink-0"
+                                          aria-hidden="true"
+                                        />
+                                      </span>
+                                      <span className="truncate">
+                                        {action.name}
+                                      </span>
+                                    </button>
                                   )}
-                                >
-                                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-mylightgrey mydarkgrey text-[0.625rem] font-medium text-mylightgrey group-hover:text-white">
-                                    <action.icon
-                                      className="h-4 w-4 shrink-0"
-                                      aria-hidden="true"
-                                    />
-                                  </span>
-                                  <span className="truncate">
-                                    {action.name}
-                                  </span>
-                                </Link>
+                                </>
                               </li>
                             ))}
                           </ul>
@@ -223,21 +287,50 @@ const Layout = ({ children, current }: ILayout) => {
                   <ul role="list" className="-mx-2 space-y-1">
                     {navigation.map((item) => (
                       <li key={item.name}>
-                        <Link
-                          to={item.href}
-                          className={classNames(
-                            item.current
-                              ? `text-white`
-                              : `text-mylightgrey hover:text-white hover:mydarkgrey`,
-                            `group flex gap-x-3 rounded-md p-2 text-lg font-bold`,
+                        <>
+                          {!navLocked ? (
+                            <Link
+                              to={item.href}
+                              className={classNames(
+                                item.current
+                                  ? `text-white`
+                                  : `text-mylightgrey hover:text-white hover:mydarkgrey`,
+                                `group flex gap-x-3 rounded-md p-2 text-lg font-bold`,
+                              )}
+                            >
+                              <item.icon
+                                className="h-6 w-6 shrink-0"
+                                aria-hidden="true"
+                              />
+                              {item.name}
+                            </Link>
+                          ) : (
+                            <button
+                              onClick={() => {
+                                if (navLocked) {
+                                  if (
+                                    window.confirm(
+                                      `There are unsaved changes. Proceed?`,
+                                    )
+                                  )
+                                    navigate(item.href)
+                                } else navigate(item.href)
+                              }}
+                              className={classNames(
+                                item.current
+                                  ? `text-white`
+                                  : `text-mylightgrey hover:text-white hover:mydarkgrey`,
+                                `group flex gap-x-3 rounded-md p-2 text-lg font-bold`,
+                              )}
+                            >
+                              <item.icon
+                                className="h-6 w-6 shrink-0"
+                                aria-hidden="true"
+                              />
+                              {item.name}
+                            </button>
                           )}
-                        >
-                          <item.icon
-                            className="h-6 w-6 shrink-0"
-                            aria-hidden="true"
-                          />
-                          {item.name}
-                        </Link>
+                        </>
                       </li>
                     ))}
                   </ul>
@@ -249,23 +342,54 @@ const Layout = ({ children, current }: ILayout) => {
                   <ul role="list" className="-mx-2 mt-2 space-y-1">
                     {actions.map((action) => (
                       <li key={action.name}>
-                        <Link
-                          to={action.href}
-                          className={classNames(
-                            action.current
-                              ? `mydarkgrey text-white`
-                              : `text-mylightgrey hover:text-white hover:mydarkgrey`,
-                            `group flex gap-x-3 rounded-md p-2 text-md font-bold`,
+                        <>
+                          {!navLocked ? (
+                            <Link
+                              to={action.href}
+                              className={classNames(
+                                action.current
+                                  ? `mydarkgrey text-white`
+                                  : `text-mylightgrey hover:text-white hover:mydarkgrey`,
+                                `group flex gap-x-3 rounded-md p-2 text-md font-bold`,
+                              )}
+                            >
+                              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-mylightgrey mydarkgrey text-[0.625rem] text-mylightgrey group-hover:text-white">
+                                <action.icon
+                                  className="w-4 h-4 shrink-0"
+                                  aria-hidden="true"
+                                />
+                              </span>
+                              <span className="truncate">{action.name}</span>
+                            </Link>
+                          ) : (
+                            <button
+                              onClick={() => {
+                                if (navLocked) {
+                                  if (
+                                    window.confirm(
+                                      `There are unsaved changes. Proceed?`,
+                                    )
+                                  )
+                                    navigate(action.href)
+                                } else navigate(action.href)
+                              }}
+                              className={classNames(
+                                action.current
+                                  ? `mydarkgrey text-white`
+                                  : `text-mylightgrey hover:text-white hover:mydarkgrey`,
+                                `group flex gap-x-3 rounded-md p-2 text-md font-bold`,
+                              )}
+                            >
+                              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-mylightgrey mydarkgrey text-[0.625rem] text-mylightgrey group-hover:text-white">
+                                <action.icon
+                                  className="w-4 h-4 shrink-0"
+                                  aria-hidden="true"
+                                />
+                              </span>
+                              <span className="truncate">{action.name}</span>
+                            </button>
                           )}
-                        >
-                          <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-mylightgrey mydarkgrey text-[0.625rem] text-mylightgrey group-hover:text-white">
-                            <action.icon
-                              className="w-4 h-4 shrink-0"
-                              aria-hidden="true"
-                            />
-                          </span>
-                          <span className="truncate">{action.name}</span>
-                        </Link>
+                        </>
                       </li>
                     ))}
                   </ul>
@@ -292,14 +416,36 @@ const Layout = ({ children, current }: ILayout) => {
             {navigation.map((e: any) => (
               <span key={e.id} className={e.id !== current ? `mx-1` : ``}>
                 {e.id !== current ? (
-                  <Link
-                    to={e.href}
-                    title={e.name}
-                    className="text-mywhite hover:text-mygreen"
-                  >
-                    <span className="sr-only">{e.name}</span>
-                    <e.icon className="h-6 w-6" aria-hidden="true" />
-                  </Link>
+                  <>
+                    {!navLocked ? (
+                      <Link
+                        to={e.href}
+                        title={e.name}
+                        className="text-mywhite hover:text-mygreen"
+                      >
+                        <span className="sr-only">{e.name}</span>
+                        <e.icon className="h-6 w-6" aria-hidden="true" />
+                      </Link>
+                    ) : (
+                      <button
+                        title={e.name}
+                        onClick={() => {
+                          if (navLocked) {
+                            if (
+                              window.confirm(
+                                `There are unsaved changes. Proceed?`,
+                              )
+                            )
+                              navigate(e.href)
+                          } else navigate(e.href)
+                        }}
+                        className="text-mywhite hover:text-mygreen"
+                      >
+                        <span className="sr-only">{e.name}</span>
+                        <e.icon className="h-6 w-6" aria-hidden="true" />
+                      </button>
+                    )}
+                  </>
                 ) : null}
               </span>
             ))}

@@ -2,7 +2,6 @@
 import React, { useState } from 'react'
 
 import { useDrupalStore } from '../stores/drupal'
-import Message from './Message'
 import { DemoProhibited } from './DemoProhibited'
 import '../styles/default.css'
 
@@ -97,9 +96,9 @@ const Publish = () => {
                   className="mt-6 flex items-center justify-end gap-x-6"
                 >
                   {saved ? (
-                    <Message className="text-xl text-myorange pb-12">
+                    <div className="text-xl text-myorange pb-12">
                       <p>Site rebuild has been queued.</p>
-                    </Message>
+                    </div>
                   ) : null}
                 </div>
               </div>

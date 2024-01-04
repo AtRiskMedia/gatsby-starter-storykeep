@@ -65,6 +65,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
   const removeDrupalResponse = useDrupalStore(
     (state) => state.removeDrupalResponse,
   )
+  const setNavLocked = useDrupalStore((state) => state.setNavLocked)
   const setPane = useDrupalStore((state) => state.setPane)
   const removePane = useDrupalStore((state) => state.removePane)
   const removeMarkdown = useDrupalStore((state) => state.removeMarkdown)
@@ -2662,12 +2663,23 @@ const PaneState = ({ uuid, payload, flags }: any) => {
   useEffect(() => {
     if (toggleCheck) {
       const hasChanges = !deepEqual(state, lastSavedState.initialState)
-      if (hasChanges && saveStage === SaveStages.NoChanges)
+      if (hasChanges && saveStage === SaveStages.NoChanges) {
         setSaveStage(SaveStages.UnsavedChanges)
-      else if (!hasChanges && saveStage === SaveStages.UnsavedChanges)
+        console.log(`lock`)
+        setNavLocked(true)
+      } else if (!hasChanges && saveStage === SaveStages.UnsavedChanges) {
         setSaveStage(SaveStages.NoChanges)
+        setNavLocked(false)
+      }
     }
-  }, [toggleCheck, deepEqual, saveStage, state, lastSavedState.initialState])
+  }, [
+    toggleCheck,
+    deepEqual,
+    saveStage,
+    state,
+    setNavLocked,
+    lastSavedState.initialState,
+  ])
 
   // handle stages
   useEffect(() => {
@@ -3132,8 +3144,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
     state,
   ])
 
-  if (saveStage < SaveStages.NoChanges)
-    return <div className="h-6 bg-myblue w-full" />
+  if (saveStage < SaveStages.NoChanges) return null
 
   return (
     <PaneForm

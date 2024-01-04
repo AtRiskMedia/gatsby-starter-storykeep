@@ -6,19 +6,15 @@ import { navigate } from 'gatsby'
 import { useDrupalStore } from '../../../stores/drupal'
 import DrupalApi from '../../../components/DrupalApi'
 import Layout from '../../../components/Layout'
-import StoryFragmentState from '../../../components/edit/StoryFragmentState'
+import ResourceState from '../../../components/edit/ResourceState'
 import {
+  IEditResourceFlags,
   SaveStages,
   EditStages,
-  IEditStoryFragmentPayload,
-  IEditFlags,
+  IEditPayload,
 } from '../../../types'
 
-export default function EditStoryFragment({
-  params,
-}: {
-  params: { uuid: string }
-}) {
+export default function EditResource({ params }: { params: { uuid: string } }) {
   const uuid = params.uuid
   const drupalConfig = {
     url: process.env.DRUPAL_URL || ``,
@@ -34,26 +30,15 @@ export default function EditStoryFragment({
   const removeDrupalResponse = useDrupalStore(
     (state) => state.removeDrupalResponse,
   )
-  const allStoryFragments = useDrupalStore((state) => state.allStoryFragments)
-  const thisStoryFragment = allStoryFragments[uuid]
-  const allFiles = useDrupalStore((state) => state.allFiles)
-  const allMarkdown = useDrupalStore((state) => state.allMarkdown)
-  const allMenus = useDrupalStore(
-    (state) => state.allMenus[thisStoryFragment?.menu],
-  )
-  const thisMenu = thisStoryFragment?.menu
-    ? allMenus[thisStoryFragment.menu]
-    : null
-  const [payload, setPayload] = useState<IEditStoryFragmentPayload>({
+  const thisResource = useDrupalStore((state) => state.allResources[uuid])
+  const [payload, setPayload] = useState<IEditPayload>({
     initialState: {},
   })
-  const [flags, setFlags] = useState<IEditFlags>({
+  const [flags, setFlags] = useState<IEditResourceFlags>({
     isAuthor: false,
-    isEmbeddedEdit: !!embeddedEdit,
     isAdmin: false,
     isBuilder: false,
     isOpenDemo: openDemoEnabled,
-    isEmpty: false,
     editStage,
     saveStage: SaveStages.Booting,
   })
@@ -62,34 +47,28 @@ export default function EditStoryFragment({
   // AuthorCheck
   useEffect(() => {
     if (
-      thisStoryFragment &&
+      thisResource &&
       editStage === EditStages.AuthorCheck &&
       !openDemoEnabled
     ) {
       setEditStage(EditStages.AuthorChecking)
       const payload = {
-        endpoint: `uuid-by-node/${thisStoryFragment.drupalNid}`,
+        endpoint: `uuid-by-node/${thisResource.drupalNid}`,
         method: `GET`,
       }
-      setDrupalQueue(thisStoryFragment.drupalNid, payload)
+      setDrupalQueue(thisResource.drupalNid, payload)
     }
-  }, [
-    editStage,
-    setEditStage,
-    openDemoEnabled,
-    setDrupalQueue,
-    thisStoryFragment,
-  ])
+  }, [editStage, setEditStage, openDemoEnabled, setDrupalQueue, thisResource])
   // AuthorCheck (cont.)
   useEffect(() => {
     if (
-      thisStoryFragment &&
+      thisResource &&
       editStage === EditStages.AuthorChecking &&
       drupalResponse &&
       Object.keys(drupalResponse).length &&
-      drupalResponse[thisStoryFragment.drupalNid]
+      drupalResponse[thisResource.drupalNid]
     ) {
-      const data = drupalResponse[thisStoryFragment.drupalNid]
+      const data = drupalResponse[thisResource.drupalNid]
       if (data) {
         data.forEach((e: any) => {
           if (e?.uuid === oauthDrupalUuid)
@@ -101,7 +80,7 @@ export default function EditStoryFragment({
           if (e === `Builder`)
             setFlags((prev) => ({ ...prev, isBuilder: true }))
         })
-        removeDrupalResponse(thisStoryFragment.drupalNid)
+        removeDrupalResponse(thisResource.drupalNid)
         setEditStage(EditStages.AuthorChecked)
       }
     }
@@ -112,7 +91,7 @@ export default function EditStoryFragment({
     removeDrupalResponse,
     editStage,
     setEditStage,
-    thisStoryFragment,
+    thisResource,
   ])
 
   // set initial state
@@ -120,14 +99,13 @@ export default function EditStoryFragment({
     if (editStage === EditStages.SetInitialState) {
       setEditStage(EditStages.SettingInitialState)
       const initialState = {
-        title: thisStoryFragment?.title,
-        slug: thisStoryFragment?.slug,
-        socialImagePath: thisStoryFragment?.socialImagePath || ``,
-        tailwindBgColour: thisStoryFragment?.tailwindBgColour || ``,
-        panes: thisStoryFragment?.panes || {},
-        contextPanes: thisStoryFragment?.contextPanes || {},
-        menu: thisMenu,
-        tractstack: thisStoryFragment?.tractstack,
+        title: thisResource?.title,
+        slug: thisResource?.slug,
+        categorySlug: thisResource.categorySlug,
+        actionLisp: thisResource.actionLisp,
+        drupalNid: thisResource.drupalNid,
+        oneliner: thisResource.oneliner,
+        optionsPayload: thisResource.optionsPayload,
       }
       const payload = {
         initialState,
@@ -138,23 +116,20 @@ export default function EditStoryFragment({
   }, [
     editStage,
     setEditStage,
-    allFiles,
-    allMarkdown,
-    thisStoryFragment?.slug,
-    thisStoryFragment?.title,
+    thisResource?.slug,
+    thisResource?.title,
+    thisResource.actionLisp,
+    thisResource.categorySlug,
+    thisResource.drupalNid,
+    thisResource.oneliner,
+    thisResource.optionsPayload,
     uuid,
-    thisMenu,
-    thisStoryFragment?.contextPanes,
-    thisStoryFragment?.panes,
-    thisStoryFragment?.socialImagePath,
-    thisStoryFragment?.tailwindBgColour,
-    thisStoryFragment?.tractstack,
   ])
 
   // handle Stage
   useEffect(() => {
     console.log(`-editStage`, EditStages[editStage])
-    if (thisStoryFragment)
+    if (thisResource)
       switch (editStage) {
         case EditStages.Booting:
           if (!openDemoEnabled) setEditStage(EditStages.AuthorCheck)
@@ -177,12 +152,12 @@ export default function EditStoryFragment({
           break
       }
   }, [
-    thisStoryFragment,
+    thisResource,
     editStage,
     setEditStage,
     openDemoEnabled,
-    embeddedEdit.child,
     setNavLocked,
+    embeddedEdit.child,
     uuid,
   ])
 
@@ -194,7 +169,7 @@ export default function EditStoryFragment({
   }, [isSSR])
 
   if (isSSR) return null
-  if (!thisStoryFragment) navigate(`/storykeep`)
+  if (!thisResource) navigate(`/storykeep`)
 
   return (
     <DrupalProvider config={drupalConfig}>
@@ -203,7 +178,7 @@ export default function EditStoryFragment({
           {editStage < EditStages.Activated ? (
             <></>
           ) : (
-            <StoryFragmentState uuid={uuid} payload={payload} flags={flags} />
+            <ResourceState uuid={uuid} payload={payload} flags={flags} />
           )}
         </Layout>
       </DrupalApi>

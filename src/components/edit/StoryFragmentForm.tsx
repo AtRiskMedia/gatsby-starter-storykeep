@@ -336,7 +336,6 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
           </div>
         </div>
 
-        <div className="h-6 bg-myblue w-full" />
         <section className="relative bg-slate-50">
           <div className="p-6">
             <div className="w-full xl:max-w-screen-2xl flex justify-between">

@@ -88,6 +88,10 @@ export interface IEditStoryFragmentPayload {
   initialState: any
 }
 
+export interface IEditPayload {
+  initialState: any
+}
+
 export interface IEditPanePayload {
   initialState: any
   initialStatePaneFragments: any
@@ -109,9 +113,46 @@ export interface IEditFlags {
   editStage: number
 }
 
+export interface IEditResourceFlags {
+  isAuthor: boolean
+  isAdmin: boolean
+  isBuilder: boolean
+  isOpenDemo: boolean
+  saveStage: number
+  editStage: number
+}
+
+export interface IActivityDetails {
+  [key: string]: {
+    engagement: number
+    daysSince: number
+    colorOffset: string
+    read: number
+    glossed: number
+    clicked: number
+    entered: number
+    discovered: number
+  }
+}
+
+export interface IEditTractStackFlags {
+  isAuthor: boolean
+  isAdmin: boolean
+  isBuilder: boolean
+  isOpenDemo: boolean
+  isEmpty: boolean
+  hasStoryFragments: boolean
+  hasContextPanes: boolean
+  saveStage: number
+  editStage: number
+  storyFragmentDaysSinceData: undefined | IActivityDetails
+  panesDaysSinceData: undefined | IActivityDetails
+}
+
 export interface ISiteBuilderConfig {
   openDemo: boolean
   messageDelay: number
+  home: string
 }
 
 export interface IUseDrupalJSONAPI {
@@ -195,7 +236,6 @@ export interface IPaneFragmentPayload {
 export interface ILayout {
   children: ReactElement
   current: string
-  openDemo?: boolean
 }
 
 export interface ICleanerNode {
@@ -221,6 +261,8 @@ export interface IDrupalState {
   setPane: Function
   viewportKey: string
   setViewportKey: Function
+  navLocked: boolean
+  setNavLocked: Function
   locked: string
   setLocked: Function
   drupalQueue: any // FIX
@@ -452,17 +494,4 @@ export interface IBuilderPaneProps {
   hasMaxHScreen: boolean
   handleToggle: Function
   editPaneEnabled: string
-}
-
-export interface IActivityDetails {
-  [key: string]: {
-    engagement: number
-    daysSince: number
-    colorOffset: string
-    read: number
-    glossed: number
-    clicked: number
-    entered: number
-    discovered: number
-  }
 }

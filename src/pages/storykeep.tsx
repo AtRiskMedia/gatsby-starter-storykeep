@@ -11,15 +11,31 @@ import StoryKeep from '../components/StoryKeep'
 import DrupalApi from '../components/DrupalApi'
 import { Stages } from '../types'
 import '../styles/default.css'
+import { config } from '../../data/SiteConfig'
 
 const StoryKeepPage = () => {
   const [isSSR, setIsSSR] = useState(true)
+  const [isLoaded, setIsLoaded] = useState(false)
   const drupalConfig = {
     url: process.env.DRUPAL_URL || ``,
   }
   const stage = useDrupalStore((state) => state.stage)
   const setStage = useDrupalStore((state) => state.setStage)
   const validToken = useAuthStore((state) => state.validToken)
+  const allStoryFragments = useDrupalStore((state) => state.allStoryFragments)
+  const homeStoryFragment =
+    allStoryFragments &&
+    Object.keys(allStoryFragments)
+      .map((e: any) => {
+        if (allStoryFragments[e].slug === config.home) return e
+        return null
+      })
+      .filter((e) => e)
+  const homeStoryFragmentId =
+    homeStoryFragment && homeStoryFragment.length ? homeStoryFragment[0] : null
+  const thisTractStackId = homeStoryFragmentId
+    ? allStoryFragments[homeStoryFragmentId].tractstack
+    : null
 
   useEffect(() => {
     if (isSSR && typeof window !== `undefined`) setIsSSR(false)
@@ -30,7 +46,9 @@ const StoryKeepPage = () => {
     )
       setStage(Stages.Initialize)
     if (stage < Stages.Initialize) navigate(`/login`)
-  }, [isSSR, stage, validToken, setStage])
+    if (thisTractStackId) navigate(`/storykeep/tractstacks/${thisTractStackId}`)
+    else setIsLoaded(true)
+  }, [thisTractStackId, isSSR, stage, validToken, setStage])
 
   if (isSSR) return null
 
@@ -39,7 +57,7 @@ const StoryKeepPage = () => {
       <DrupalApi>
         <ConciergeApi>
           <Layout current="storykeep">
-            <StoryKeep />
+            {isLoaded ? <StoryKeep /> : <></>}
           </Layout>
         </ConciergeApi>
       </DrupalApi>

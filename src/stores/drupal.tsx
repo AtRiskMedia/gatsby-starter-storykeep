@@ -53,6 +53,9 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
   viewportKey: `mobile`,
   setViewportKey: (viewportKey: string) =>
     set((state) => ({ ...state, viewportKey })),
+  navLocked: false,
+  setNavLocked: (navLocked: boolean) =>
+    set((state) => ({ ...state, navLocked })),
   locked: ``,
   setLocked: (locked: string) => set((state) => ({ ...state, locked })),
   drupalQueue: {},

@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { useDrupalStore } from '../../../stores/drupal'
 import { generateLivePreviewInitialState } from '../../../helpers/generateLivePreviewInitialState'
 import DrupalApi from '../../../components/DrupalApi'
+import Layout from '../../../components/Layout'
 import PaneState from '../../../components/edit/PaneState'
 import {
   EditStages,
@@ -21,6 +22,7 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
   const drupalConfig = {
     url: process.env.DRUPAL_URL || ``,
   }
+  const setNavLocked = useDrupalStore((state) => state.setNavLocked)
   const embeddedEdit = useDrupalStore((state) => state.embeddedEdit)
   const [editStage, setEditStage] = useState(EditStages.Booting)
   const openDemoEnabled = useDrupalStore((state) => state.openDemoEnabled)
@@ -305,6 +307,7 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
           break
 
         case EditStages.InitialStateSet:
+          setNavLocked(false)
           setEditStage(EditStages.Activated)
           break
       }
@@ -314,6 +317,7 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
     setEditStage,
     openDemoEnabled,
     embeddedEdit.child,
+    setNavLocked,
     uuid,
   ])
 
@@ -330,11 +334,13 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
   return (
     <DrupalProvider config={drupalConfig}>
       <DrupalApi>
-        {editStage < EditStages.Activated ? (
-          <></>
-        ) : (
-          <PaneState uuid={uuid} payload={payload} flags={flags} />
-        )}
+        <Layout current="storykeep">
+          {editStage < EditStages.Activated ? (
+            <></>
+          ) : (
+            <PaneState uuid={uuid} payload={payload} flags={flags} />
+          )}
+        </Layout>
       </DrupalApi>
     </DrupalProvider>
   )

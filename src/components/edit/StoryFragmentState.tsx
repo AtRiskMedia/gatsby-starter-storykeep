@@ -20,6 +20,7 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
   const deepEqual = require(`deep-equal`)
   const [updateStoryFragmentPayload, setUpdateStoryFragmentPayload]: any =
     useState([])
+  const setNavLocked = useDrupalStore((state) => state.setNavLocked)
   const updatePanes = useDrupalStore((state) => state.updatePanes)
   const removeStoryFragment = useDrupalStore(
     (state) => state.removeStoryFragment,
@@ -142,10 +143,13 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
   useEffect(() => {
     if (toggleCheck) {
       const hasChanges = !deepEqual(state, lastSavedState.initialState)
-      if (hasChanges && saveStage === SaveStages.NoChanges)
+      if (hasChanges && saveStage === SaveStages.NoChanges) {
         setSaveStage(SaveStages.UnsavedChanges)
-      else if (!hasChanges && saveStage === SaveStages.UnsavedChanges)
+        setNavLocked(true)
+      } else if (!hasChanges && saveStage === SaveStages.UnsavedChanges) {
         setSaveStage(SaveStages.NoChanges)
+        setNavLocked(false)
+      }
     }
   }, [
     toggleCheck,
@@ -153,6 +157,7 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
     payload.initialState,
     saveStage,
     state,
+    setNavLocked,
     lastSavedState.initialState,
   ])
 
@@ -333,8 +338,7 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
     }
   }, [flags.editStage, saveStage, setSaveStage, payload.initialState, state])
 
-  if (saveStage < SaveStages.NoChanges)
-    return <div className="h-6 bg-myblue w-full" />
+  if (saveStage < SaveStages.NoChanges) return null
 
   return (
     <StoryFragmentForm
