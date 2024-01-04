@@ -69,6 +69,11 @@ export enum SaveStages {
   SavingStoryFragment,
   SavedStoryFragment,
   StoryFragmentUpdateAffectedNodes,
+  PreSavingResource,
+  PreSavedResource,
+  SaveResource,
+  SavingResource,
+  SavedResource,
   PreSavingTractStack,
   PreSavedTractStack,
   SaveTractStack,
@@ -259,6 +264,7 @@ export interface IDrupalState {
   removeCleanerQueue: Function
   setStoryFragment: Function
   setTractStack: Function
+  setResource: Function
   setPane: Function
   viewportKey: string
   setViewportKey: Function

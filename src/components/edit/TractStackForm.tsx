@@ -604,7 +604,7 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                 <>
                   Each <span className="font-bold">story fragment</span> maps to
                   {` `}
-                  <span className="font-bold">one</span> web page or URL. It
+                  <span className="font-bold">one web page</span> or URL. It
                   contains one or more content panes.{` `}
                 </>
               ) : selectedCollection === `pane` ? (

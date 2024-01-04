@@ -128,7 +128,6 @@ export default function EditResource({ params }: { params: { uuid: string } }) {
 
   // handle Stage
   useEffect(() => {
-    console.log(`-editStage`, EditStages[editStage])
     if (thisResource)
       switch (editStage) {
         case EditStages.Booting:

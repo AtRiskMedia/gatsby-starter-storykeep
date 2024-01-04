@@ -60,13 +60,13 @@ const ResourceForm = ({ uuid, payload, flags, fn }: any) => {
                 <div className="h-12 mx-auto mt-1 flex flex-col xs:mt-0 xs:flex-row xs:flex-wrap xs:space-x-6">
                   <div
                     className="mt-2 flex items-center text-sm text-mydarkgrey"
-                    title="You are editing a Tract Stack"
+                    title="You are editing a Resource Node"
                   >
                     <RectangleGroupIcon
                       className="mr-1.5 h-5 w-5 flex-shrink-0 text-mylightgrey"
                       aria-hidden="true"
                     />
-                    Tract Stack
+                    Resource Node
                   </div>
                   <div
                     className="mt-2 flex items-center text-sm text-mydarkgrey"
@@ -123,7 +123,7 @@ const ResourceForm = ({ uuid, payload, flags, fn }: any) => {
                   <span className="xs:ml-3">
                     <button
                       type="button"
-                      onClick={() => alert(`todo`)}
+                      onClick={handleSubmit}
                       disabled={flags.saveStage >= SaveStages.PrepareSave}
                       className={classNames(
                         flags.saveStage === SaveStages.UnsavedChanges
@@ -167,7 +167,25 @@ const ResourceForm = ({ uuid, payload, flags, fn }: any) => {
                 ) : null}
 
                 <span className="ml-3">
-                  {flags.saveStage === SaveStages.NoChanges ? null : (
+                  {flags.saveStage === SaveStages.NoChanges ? (
+                    <button
+                      type="button"
+                      disabled={flags.saveStage >= SaveStages.PrepareSave}
+                      onClick={() => navigate(`/storykeep`)}
+                      className={classNames(
+                        flags.saveStage >= SaveStages.PrepareSave
+                          ? ``
+                          : `hover:bg-slate-100`,
+                        `inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200`,
+                      )}
+                    >
+                      <XMarkIcon
+                        className="-ml-0.5 mr-1.5 h-5 w-5"
+                        aria-hidden="true"
+                      />
+                      Close
+                    </button>
+                  ) : (
                     <button
                       type="button"
                       disabled={flags.saveStage >= SaveStages.PrepareSave}
@@ -199,11 +217,22 @@ const ResourceForm = ({ uuid, payload, flags, fn }: any) => {
       </section>
 
       <section className="relative bg-slate-50">
+        <div className="mx-6 mb-8 bg-white/50 px-4 py-4 shadow xs:rounded-md xs:px-6">
+          <p className="text-xl text-myblue">
+            Please be careful when making any direct edits. (No data protections
+            are currently enforced on resources.)
+          </p>
+          <p className="text-xl text-myblue mt-2 font-bold">
+            A guided wizard is coming soon.
+          </p>
+        </div>
+      </section>
+      <section className="relative bg-slate-50">
         <div className="p-6">
           <form className="max-w-3xl" id="editResource" onSubmit={handleSubmit}>
             <div className="space-y-12">
               <div className="border-b border-black/10 pb-12">
-                <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 xs:grid-cols-6">
+                <div className="grid grid-cols-1 gap-x-6 gap-y-8 xs:grid-cols-6">
                   <div className="xs:col-span-full">
                     <label
                       htmlFor="title"

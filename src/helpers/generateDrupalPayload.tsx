@@ -1,3 +1,18 @@
+export function resourcePayload(
+  state: any, // FIX
+  uuid: string,
+) {
+  console.log(state, uuid)
+  return {
+    type: `node--resource`,
+    id: uuid,
+    attributes: {
+      title: state.title,
+      field_slug: state.slug,
+    },
+  }
+}
+
 export function tractStackPayload(
   state: any, // FIX
   uuid: string,

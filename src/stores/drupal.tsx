@@ -53,6 +53,10 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
         [uuid]: payload,
       },
     })),
+  setResource: (uuid: string, payload: any) =>
+    set((state) => ({
+      allResources: { ...state.allResources, [uuid]: payload },
+    })),
   setPane: (uuid: string, payload: any) =>
     set((state) => ({
       allPanes: { ...state.allPanes, [uuid]: payload },
@@ -215,7 +219,7 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
       case `resource`:
       case `file`:
       case `menu`:
-        console.log(`todo`)
+        console.log(`todo SaveDrupalNode`, type)
         break
     }
   },

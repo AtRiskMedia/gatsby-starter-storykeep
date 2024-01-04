@@ -153,7 +153,6 @@ export default function EditStoryFragment({
 
   // handle Stage
   useEffect(() => {
-    console.log(`-editStage`, EditStages[editStage])
     if (thisStoryFragment)
       switch (editStage) {
         case EditStages.Booting:

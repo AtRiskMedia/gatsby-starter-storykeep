@@ -242,7 +242,6 @@ export default function EditTractStack({
 
   // handle Stage
   useEffect(() => {
-    console.log(`-editStage`, EditStages[editStage])
     if (thisTractStack)
       switch (editStage) {
         case EditStages.Booting:
