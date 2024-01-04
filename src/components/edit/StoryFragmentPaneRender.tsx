@@ -28,7 +28,7 @@ const CodeHook = ({
   )
 }
 
-const RenderStoryFragmentPane = ({
+const StoryFragmentPaneRender = ({
   viewportKey,
   payload,
   paneId,
@@ -111,4 +111,4 @@ const RenderStoryFragmentPane = ({
   )
 }
 
-export default RenderStoryFragmentPane
+export default StoryFragmentPaneRender

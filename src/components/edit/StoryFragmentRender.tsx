@@ -14,7 +14,7 @@ import { classNames, Compositor } from '@tractstack/helpers'
 
 import { IAdd } from '../../types'
 import { useDrupalStore } from '../../stores/drupal'
-import RenderStoryFragmentPane from './RenderStoryFragmentPane'
+import StoryFragmentPaneRender from './StoryFragmentPaneRender'
 import { injectBuilderClasses } from '../../helpers/injectBuilderClasses'
 import DetailsPane from './DetailsPane'
 import { getPaneDetailsPie } from '../../api/services'
@@ -218,6 +218,24 @@ const StoryFragmentRender = ({ uuid, previewPayload, flags, fn }: any) => {
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(false)
   const [loaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    function handleResize() {
+      const thisWidth = elementRef?.current?.offsetWidth || 0
+      const viewportWidth =
+        viewportKey === `desktop` ? 1928 : viewportKey === `tablet` ? 1088 : 608
+      const thisScale = (thisWidth - 8) / viewportWidth
+      document.documentElement.style.setProperty(
+        `--scale`,
+        thisScale.toString(),
+      )
+    }
+    window.addEventListener(`resize`, handleResize)
+    handleResize()
+    const lastWidth = width
+    if (width !== lastWidth) handleResize()
+    return () => window.removeEventListener(`resize`, handleResize)
+  }, [elementRef, viewportKey, width])
 
   useEffect(() => {
     if (data && Object.keys(data).length === 0 && !loading && !loaded) {
@@ -441,7 +459,7 @@ const StoryFragmentRender = ({ uuid, previewPayload, flags, fn }: any) => {
               <StyledWrapperSection
                 css={renderedPayload?.storyFragment?.css || ``}
               >
-                <RenderStoryFragmentPane
+                <StoryFragmentPaneRender
                   payload={{
                     panePayload: renderedPayload.contentMap[p],
                     children:

@@ -2665,7 +2665,6 @@ const PaneState = ({ uuid, payload, flags }: any) => {
       const hasChanges = !deepEqual(state, lastSavedState.initialState)
       if (hasChanges && saveStage === SaveStages.NoChanges) {
         setSaveStage(SaveStages.UnsavedChanges)
-        console.log(`lock`)
         setNavLocked(true)
       } else if (!hasChanges && saveStage === SaveStages.UnsavedChanges) {
         setSaveStage(SaveStages.NoChanges)
