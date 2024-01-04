@@ -258,6 +258,7 @@ export interface IDrupalState {
   setCleanerQueue: Function
   removeCleanerQueue: Function
   setStoryFragment: Function
+  setTractStack: Function
   setPane: Function
   viewportKey: string
   setViewportKey: Function

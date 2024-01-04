@@ -46,6 +46,13 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
         [uuid]: payload,
       },
     })),
+  setTractStack: (uuid: string, payload: any) =>
+    set((state) => ({
+      allTractStacks: {
+        ...state.allTractStacks,
+        [uuid]: payload,
+      },
+    })),
   setPane: (uuid: string, payload: any) =>
     set((state) => ({
       allPanes: { ...state.allPanes, [uuid]: payload },

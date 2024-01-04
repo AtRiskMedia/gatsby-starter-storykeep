@@ -1,3 +1,41 @@
+export function tractStackPayload(
+  state: any, // FIX
+  uuid: string,
+) {
+  const relationships = (contextPanes: string[], storyfragments: string[]) => {
+    const val: any = {}
+    if (storyfragments.length)
+      val.field_story_fragments = {
+        data: storyfragments.map((p: string) => {
+          return {
+            type: `node--story_fragment`,
+            id: p,
+          }
+        }),
+      }
+    if (contextPanes.length)
+      val.field_context_panes = {
+        data: contextPanes.map((p: string) => {
+          return {
+            type: `node--pane`,
+            id: p,
+          }
+        }),
+      }
+    return { relationships: val }
+  }
+  return {
+    type: `node--tractstack`,
+    id: uuid,
+    attributes: {
+      title: state.title,
+      field_slug: state.slug,
+      field_social_image_path: state.socialImagePath,
+    },
+    ...relationships(state.contextPanes, state.storyfragments),
+  }
+}
+
 export function storyFragmentPayload(
   state: any, // FIX
   uuid: string,

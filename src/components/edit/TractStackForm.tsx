@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-import React, { useState, Fragment } from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { classNames } from '@tractstack/helpers'
 import { navigate } from 'gatsby'
@@ -26,12 +26,12 @@ import {
 
 import { useDrupalStore } from '../../stores/drupal'
 import SlideOver from './SlideOver'
-// import { config } from '../../../data/SiteConfig'
+import { config } from '../../../data/SiteConfig'
 import { SaveStages } from '../../types'
 
 const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
   const { state } = payload
-  const { /* setSaved, */ handleChange, handleSubmit, handleAdd } = fn
+  const { setSaved, handleChange, handleSubmit, handleAdd } = fn
   const [toggleAdvOpt, setToggleAdvOpt] = useState(false)
   const selectedCollection = useDrupalStore((state) => state.selectedCollection)
   const setSelectedCollection = useDrupalStore(
@@ -159,6 +159,12 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
     // console.log(nodes[e])
     return e
   })
+
+  useEffect(() => {
+    if (flags.saved) {
+      setTimeout(() => setSaved(false), config.messageDelay)
+    }
+  }, [flags.saved, setSaved])
 
   return (
     <>
@@ -431,7 +437,7 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                   <span className="xs:ml-3">
                     <button
                       type="button"
-                      onClick={() => alert(`todo`)}
+                      onClick={handleSubmit}
                       disabled={flags.saveStage >= SaveStages.PrepareSave}
                       className={classNames(
                         flags.saveStage === SaveStages.UnsavedChanges
