@@ -75,6 +75,7 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
   drupalLocked: ``,
   drupalSoftLock: false,
   selectedCollection: `storyfragment`,
+  tractStackSelect: false,
   openDemoEnabled: false,
   oauthDrupalUuid: ``,
   oauthDrupalRoles: ``,
@@ -259,6 +260,8 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
       delete newData[key]
       return { ...state, drupalResponse: newData }
     }),
+  setTractStackSelect: (tractStackSelect: boolean) =>
+    set((state) => ({ ...state, tractStackSelect })),
   setSelectedCollection: (selectedCollection: string) =>
     set((state) => ({ ...state, selectedCollection })),
   setOpenDemoEnabled: (openDemoEnabled: boolean) =>

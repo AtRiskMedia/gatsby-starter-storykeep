@@ -109,6 +109,7 @@ const TractStackState = ({ uuid, payload, flags }: any) => {
   const [updateTractStackPayload, setUpdateTractStackPayload]: any = useState(
     [],
   )
+  const setTractStackSelect = useDrupalStore((state) => state.setTractStackSelect)
   const selectedCollection = useDrupalStore((state) => state.selectedCollection)
   const setNavLocked = useDrupalStore((state) => state.setNavLocked)
   const allTractStacks = useDrupalStore((state) => state.allTractStacks)
@@ -472,6 +473,7 @@ const TractStackState = ({ uuid, payload, flags }: any) => {
       Object.keys(state).length &&
       saveStage === SaveStages.Booting
     ) {
+      setTractStackSelect(false)
       setSaveStage(SaveStages.NoChanges)
     }
   }, [flags.editStage, saveStage, setSaveStage, payload.initialState, state])

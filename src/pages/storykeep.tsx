@@ -19,6 +19,7 @@ const StoryKeepPage = () => {
   const drupalConfig = {
     url: process.env.DRUPAL_URL || ``,
   }
+  const tractStackSelect = useDrupalStore((state) => state.tractStackSelect)
   const stage = useDrupalStore((state) => state.stage)
   const setStage = useDrupalStore((state) => state.setStage)
   const validToken = useAuthStore((state) => state.validToken)
@@ -51,9 +52,10 @@ const StoryKeepPage = () => {
 
   // valid data check
   useEffect(() => {
-    if (thisTractStackId) navigate(`/storykeep/tractstacks/${thisTractStackId}`)
+    if (thisTractStackId && !tractStackSelect)
+      navigate(`/storykeep/tractstacks/${thisTractStackId}`)
     else setIsLoaded(true)
-  }, [thisTractStackId])
+  }, [thisTractStackId, tractStackSelect])
 
   if (isSSR) return null
 

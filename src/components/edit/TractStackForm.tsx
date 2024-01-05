@@ -34,6 +34,7 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
   const { setSaved, handleChange, handleSubmit, handleAdd } = fn
   const [toggleAdvOpt, setToggleAdvOpt] = useState(false)
   const selectedCollection = useDrupalStore((state) => state.selectedCollection)
+  const setTractStackSelect = useDrupalStore((state) => state.setTractStackSelect)
   const setSelectedCollection = useDrupalStore(
     (state) => state.setSelectedCollection,
   )
@@ -49,9 +50,8 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
     })
     .filter((e) => e)
     .reduce((acc, cur, idx): any => {
-      if (idx === 1) return { [cur.id]: cur }
       return { ...acc, [cur.id]: cur }
-    })
+    }, {})
   const nodes =
     selectedCollection === `storyfragment`
       ? thisAllStoryFragments
@@ -479,8 +479,8 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                   </span>
                 ) : null}
 
-                <span className="ml-3">
-                  {flags.saveStage === SaveStages.NoChanges ? null : (
+                {flags.saveStage === SaveStages.NoChanges ? null : (
+                  <span className="ml-3">
                     <button
                       type="button"
                       disabled={flags.saveStage >= SaveStages.PrepareSave}
@@ -503,8 +503,8 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                       />
                       Cancel
                     </button>
-                  )}
-                </span>
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -543,8 +543,16 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
               ) : null}
               <button
                 className="relative inline-flex items-center rounded-l-md bg-mywhite px-3 py-2 text-sm text-black font-main underline hover:font-myorange"
+                disabled={flags.saveStage >= SaveStages.PrepareSave}
                 onClick={() => {
-                  console.log(`todo; select tract stack menu`)
+                  if (
+                    flags.saveStage === SaveStages.NoChanges ||
+                    (flags.saveStage === SaveStages.UnsavedChanges &&
+                      window.confirm(`There are Unsaved Changes. Proceed?`))
+                  ) {
+                    setTractStackSelect(true)
+                    navigate(`/storykeep`)
+                  }
                 }}
               >
                 change Tract Stack

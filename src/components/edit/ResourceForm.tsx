@@ -160,8 +160,8 @@ const ResourceForm = ({ payload, flags, fn }: any) => {
                   </span>
                 ) : null}
 
-                <span className="ml-3">
-                  {flags.saveStage === SaveStages.NoChanges ? (
+                {flags.saveStage === SaveStages.NoChanges ? (
+                  <span className="ml-3">
                     <button
                       type="button"
                       disabled={flags.saveStage >= SaveStages.PrepareSave}
@@ -179,7 +179,9 @@ const ResourceForm = ({ payload, flags, fn }: any) => {
                       />
                       Close
                     </button>
-                  ) : (
+                  </span>
+                ) : (
+                  <span className="ml-3">
                     <button
                       type="button"
                       disabled={flags.saveStage >= SaveStages.PrepareSave}
@@ -202,8 +204,8 @@ const ResourceForm = ({ payload, flags, fn }: any) => {
                       />
                       Cancel
                     </button>
-                  )}
-                </span>
+                  </span>
+                )}
               </div>
             </div>
           </div>

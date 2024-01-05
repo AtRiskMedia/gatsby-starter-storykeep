@@ -278,6 +278,7 @@ export interface IDrupalState {
   drupalLocked: string
   drupalSoftLock: boolean
   selectedCollection: string
+  tractStackSelect: boolean
   openDemoEnabled: boolean
   oauthDrupalUuid: string
   oauthDrupalRoles: string
@@ -301,6 +302,7 @@ export interface IDrupalState {
   setDrupalSoftLock: Function
   setDrupalQueue: Function
   setDrupalResponse: Function
+  setTractStackSelect: Function
   setSelectedCollection: Function
   setOpenDemoEnabled: Function
   setOauthDrupalUuid: Function
