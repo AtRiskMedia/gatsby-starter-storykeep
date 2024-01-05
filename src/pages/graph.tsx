@@ -16,6 +16,7 @@ const GraphPage = () => {
   const setStage = useDrupalStore((state) => state.setStage)
   const validToken = useAuthStore((state) => state.validToken)
 
+  // SSR + Concierge API check
   useEffect(() => {
     if (isSSR && typeof window !== `undefined`) setIsSSR(false)
     if (
@@ -30,11 +31,11 @@ const GraphPage = () => {
   if (isSSR) return null
 
   return (
-    <ConciergeApi>
-      <Layout current="graph">
+    <Layout current="graph">
+      <ConciergeApi>
         <Graph />
-      </Layout>
-    </ConciergeApi>
+      </ConciergeApi>
+    </Layout>
   )
 }
 

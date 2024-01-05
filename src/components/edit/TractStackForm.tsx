@@ -48,7 +48,6 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
       return null
     })
     .filter((e) => e)
-
     .reduce((acc, cur, idx): any => {
       if (idx === 1) return { [cur.id]: cur }
       return { ...acc, [cur.id]: cur }
@@ -524,12 +523,14 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                     type="button"
                     onClick={() => setSelectedCollection(tag.id)}
                     className={classNames(
-                      tag.current ? `bg-myorange/10` : `bg-black/10`,
+                      tag.current
+                        ? `bg-myorange/10 text-black`
+                        : `bg-black/10 text-mydarkgrey`,
                       idx === 0 ? `rounded-l-md` : ``,
                       idx + 1 === tags.filter((tag) => tag.count).length
                         ? `rounded-r-md`
                         : ``,
-                      `relative inline-flex items-center px-3 py-2 text-sm font-bold text-black ring-1 ring-inset ring-myorange/20 hover:text-black hover:bg-myorange/20`,
+                      `relative inline-flex items-center px-3 py-2 text-sm font-bold ring-1 ring-inset ring-myorange/20 hover:text-black hover:bg-myorange/20`,
                     )}
                   >
                     {`${tag.name} (${tag.count})`}
@@ -647,9 +648,10 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                     {rowOneHeading}
                   </th>
                   {(selectedCollection === `pane` &&
-                    !!flags.panesDaysSinceData) ||
+                    typeof flags?.panesDaysSinceData !== `undefined`) ||
                   (selectedCollection === `storyfragment` &&
-                    !!flags.storyFragmentDaysSinceData) ? (
+                    typeof flags?.storyFragmentDaysSinceData !==
+                      `undefined`) ? (
                     <th
                       scope="col"
                       className="hidden whitespace-nowrap px-3 py-4 text-left text-sm text-mydarkgrey xs:table-cell"
@@ -676,23 +678,24 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                     <tr key={nodes[record].title}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-black">
                         {(selectedCollection === `storyfragment` &&
-                          !!flags.storyFragmentDaysSinceData) ||
+                          typeof flags?.storyFragmentDaysSinceData !==
+                            `undefined`) ||
                         (selectedCollection === `pane` &&
-                          !!flags.panesDaysSinceData) ? (
+                          typeof flags?.panesDaysSinceData !== `undefined`) ? (
                           <span
                             className="mr-1"
                             title={`Recent activity score | ${
                               selectedCollection === `storyfragment` &&
-                              typeof flags.storyFragmentDaysSinceData[
+                              typeof flags?.storyFragmentDaysSinceData[
                                 record
                               ] !== `undefined` &&
-                              typeof flags.storyFragmentDaysSinceData[record]
+                              typeof flags?.storyFragmentDaysSinceData[record]
                                 .engagement !== `undefined`
                                 ? `${flags.storyFragmentDaysSinceData[record].engagement}%`
                                 : selectedCollection === `pane` &&
-                                    typeof flags.panesDaysSinceData[record] !==
+                                    typeof flags?.panesDaysSinceData[record] !==
                                       `undefined` &&
-                                    typeof flags.panesDaysSinceData[record]
+                                    typeof flags?.panesDaysSinceData[record]
                                       .engagement !== `undefined`
                                   ? `${flags.panesDaysSinceData[record].engagement}%`
                                   : `no activity`
@@ -700,11 +703,11 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                           >
                             <FireIcon
                               className={classNames(
-                                typeof flags.storyFragmentDaysSinceData[
+                                typeof flags?.storyFragmentDaysSinceData[
                                   record
                                 ] !== `undefined`
                                   ? `opacity-${flags.storyFragmentDaysSinceData[record].colorOffset}`
-                                  : typeof flags.panesDaysSinceData[record] !==
+                                  : typeof flags?.panesDaysSinceData[record] !==
                                       `undefined`
                                     ? `opacity-${flags.panesDaysSinceData[record].colorOffset}`
                                     : `opacity-5`,
@@ -734,15 +737,16 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                       </td>
 
                       {(selectedCollection === `pane` &&
-                        !!flags.panesDaysSinceData) ||
+                        typeof flags?.panesDaysSinceData !== `undefined`) ||
                       (selectedCollection === `storyfragment` &&
-                        !!flags.storyFragmentDaysSinceData) ? (
+                        typeof flags?.storyFragmentDaysSinceData !==
+                          `undefined`) ? (
                         <td className="hidden whitespace-nowrap pt-4 pb-2 text-sm text-mydarkgrey xs:table-cell">
                           <div
                             className={classNames(
                               `grid`,
                               selectedCollection === `storyfragment` &&
-                                typeof flags.storyFragmentDaysSinceData[
+                                typeof flags?.storyFragmentDaysSinceData[
                                   record
                                 ] !== `undefined` &&
                                 (flags.storyFragmentDaysSinceData[record]
@@ -755,21 +759,21 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                           >
                             <div className="flex flex-row flex-nowrap">
                               {(selectedCollection === `storyfragment` &&
-                                typeof flags.storyFragmentDaysSinceData[
+                                typeof flags?.storyFragmentDaysSinceData[
                                   record
                                 ] !== `undefined` &&
-                                ((typeof flags.storyFragmentDaysSinceData[
+                                ((typeof flags?.storyFragmentDaysSinceData[
                                   record
                                 ].read === `number` &&
                                   flags.storyFragmentDaysSinceData[record]
                                     .read > 0) ||
-                                  (typeof flags.storyFragmentDaysSinceData[
+                                  (typeof flags?.storyFragmentDaysSinceData[
                                     record
                                   ].glossed === `number` &&
                                     flags.storyFragmentDaysSinceData[record]
                                       .glossed > 0))) ||
                               (selectedCollection === `pane` &&
-                                typeof flags.panesDaysSinceData[record] !==
+                                typeof flags?.panesDaysSinceData[record] !==
                                   `undefined`) ? (
                                 <>
                                   <div title="Glossed | Read">
@@ -826,13 +830,13 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                               ) : null}
 
                               {(selectedCollection === `storyfragment` &&
-                                typeof flags.storyFragmentDaysSinceData[
+                                typeof flags?.storyFragmentDaysSinceData[
                                   record
                                 ] !== `undefined` &&
                                 flags.storyFragmentDaysSinceData[record]
                                   .clicked > 0) ||
                               (selectedCollection === `pane` &&
-                                typeof flags.panesDaysSinceData[record] !==
+                                typeof flags?.panesDaysSinceData[record] !==
                                   `undefined` &&
                                 flags.panesDaysSinceData[record].clicked >
                                   0) ? (
@@ -876,14 +880,14 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                             </div>
 
                             {selectedCollection === `storyfragment` &&
-                            typeof flags.storyFragmentDaysSinceData[record] !==
+                            typeof flags?.storyFragmentDaysSinceData[record] !==
                               `undefined` &&
                             (flags.storyFragmentDaysSinceData[record].entered ||
                               flags.storyFragmentDaysSinceData[record]
                                 .discovered) ? (
                               <div className="flex flex-row flex-nowrap">
                                 {selectedCollection === `storyfragment` &&
-                                typeof flags.storyFragmentDaysSinceData[
+                                typeof flags?.storyFragmentDaysSinceData[
                                   record
                                 ] !== `undefined` &&
                                 flags.storyFragmentDaysSinceData[record]
@@ -912,7 +916,7 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                                 ) : null}
 
                                 {selectedCollection === `storyfragment` &&
-                                typeof flags.storyFragmentDaysSinceData[
+                                typeof flags?.storyFragmentDaysSinceData[
                                   record
                                 ] !== `undefined` &&
                                 flags.storyFragmentDaysSinceData[record]
@@ -990,9 +994,10 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                 )}
               </tbody>
             </table>
-            {(selectedCollection === `pane` && !!flags.panesDaysSinceData) ||
+            {(selectedCollection === `pane` &&
+              typeof flags?.panesDaysSinceData !== `undefined`) ||
             (selectedCollection === `storyfragment` &&
-              !!flags.storyFragmentDaysSinceData) ? (
+              typeof flags?.storyFragmentDaysSinceData !== `undefined`) ? (
               <div className="my-6">
                 <FireIcon
                   className={classNames(`w-4 h-4 text-myorange inline`)}

@@ -185,25 +185,21 @@ export default function EditStoryFragment({
     uuid,
   ])
 
-  // SSR check
+  // SSR + valid data check
   useEffect(() => {
     if (isSSR && typeof window !== `undefined`) {
-      setIsSSR(false)
+      if (thisStoryFragment) setIsSSR(false)
+      else navigate(`/storykeep`)
     }
-  }, [isSSR])
+  }, [thisStoryFragment, isSSR])
 
   if (isSSR) return null
-  if (!thisStoryFragment) navigate(`/storykeep`)
 
   return (
     <DrupalProvider config={drupalConfig}>
       <DrupalApi>
         <Layout current="storykeep">
-          {editStage < EditStages.Activated ? (
-            <></>
-          ) : (
-            <StoryFragmentState uuid={uuid} payload={payload} flags={flags} />
-          )}
+          <StoryFragmentState uuid={uuid} payload={payload} flags={flags} />
         </Layout>
       </DrupalApi>
     </DrupalProvider>

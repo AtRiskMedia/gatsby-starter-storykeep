@@ -8,10 +8,10 @@ import DrupalApi from '../../../components/DrupalApi'
 import Layout from '../../../components/Layout'
 import ResourceState from '../../../components/edit/ResourceState'
 import {
-  IEditResourceFlags,
   SaveStages,
   EditStages,
   IEditPayload,
+  IEditResourceFlags,
 } from '../../../types'
 
 export default function EditResource({ params }: { params: { uuid: string } }) {
@@ -160,25 +160,21 @@ export default function EditResource({ params }: { params: { uuid: string } }) {
     uuid,
   ])
 
-  // SSR check
+  // SSR + valid data check
   useEffect(() => {
     if (isSSR && typeof window !== `undefined`) {
-      setIsSSR(false)
+      if (thisResource) setIsSSR(false)
+      else navigate(`/storykeep`)
     }
-  }, [isSSR])
+  }, [thisResource, isSSR])
 
   if (isSSR) return null
-  if (!thisResource) navigate(`/storykeep`)
 
   return (
     <DrupalProvider config={drupalConfig}>
       <DrupalApi>
         <Layout current="storykeep">
-          {editStage < EditStages.Activated ? (
-            <></>
-          ) : (
-            <ResourceState uuid={uuid} payload={payload} flags={flags} />
-          )}
+          <ResourceState uuid={uuid} payload={payload} flags={flags} />
         </Layout>
       </DrupalApi>
     </DrupalProvider>

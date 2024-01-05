@@ -64,6 +64,8 @@ const LoginPage = () => {
     setOauthDrupalRoles,
     setOauthDrupalUuid,
   ])
+
+  // SSR + localStorage check
   useEffect(() => {
     const authInLocalStorage =
       typeof window !== `undefined` &&

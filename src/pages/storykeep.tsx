@@ -37,6 +37,7 @@ const StoryKeepPage = () => {
     ? allStoryFragments[homeStoryFragmentId].tractstack
     : null
 
+  // SSR + Concierge API check
   useEffect(() => {
     if (isSSR && typeof window !== `undefined`) setIsSSR(false)
     if (
@@ -46,9 +47,13 @@ const StoryKeepPage = () => {
     )
       setStage(Stages.Initialize)
     if (stage < Stages.Initialize) navigate(`/login`)
+  }, [isSSR, stage, validToken, setStage])
+
+  // valid data check
+  useEffect(() => {
     if (thisTractStackId) navigate(`/storykeep/tractstacks/${thisTractStackId}`)
     else setIsLoaded(true)
-  }, [thisTractStackId, isSSR, stage, validToken, setStage])
+  }, [thisTractStackId])
 
   if (isSSR) return null
 

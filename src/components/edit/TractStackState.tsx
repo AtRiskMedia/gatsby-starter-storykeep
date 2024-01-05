@@ -6,7 +6,95 @@ import { v4 as uuidv4 } from 'uuid'
 import { useDrupalStore } from '../../stores/drupal'
 import TractStackForm from './TractStackForm'
 import { tractStackPayload } from '../../helpers/generateDrupalPayload'
-import { EditStages, SaveStages } from '../../types'
+import { IActivityDetails, EditStages, SaveStages } from '../../types'
+import {
+  getPanesDaysSince,
+  getStoryFragmentDaysSince,
+} from '../../api/services'
+
+const goGetStoryFragmentDaysSince = async () => {
+  try {
+    const response = await getStoryFragmentDaysSince()
+    const data = response?.data
+    if (data) {
+      return { data, error: null }
+    }
+    return { data: null, error: null }
+  } catch (error: any) {
+    return {
+      error: error?.response?.data?.message || error?.message,
+      graph: null,
+    }
+  }
+}
+
+const goGetPanesDaysSince = async () => {
+  try {
+    const response = await getPanesDaysSince()
+    const data = response?.data
+    if (data) {
+      return { data, error: null }
+    }
+    return { data: null, error: null }
+  } catch (error: any) {
+    return {
+      error: error?.response?.data?.message || error?.message,
+      graph: null,
+    }
+  }
+}
+
+const daysSinceDataPayload = (data: any) => {
+  const maxSince =
+    data.length === 0
+      ? 0
+      : data.reduce((a: any, b: any) =>
+          a.hours_since_activity > b.hours_since_activity ? a : b,
+        ).hours_since_activity
+  const payload: IActivityDetails = {}
+  data
+    .map((e: any) => {
+      if (!e || !e.title) return null
+      let colorOffset =
+        maxSince === 0
+          ? 0
+          : 10 *
+            Math.round((10 * (maxSince - e.hours_since_activity)) / maxSince)
+      if (colorOffset < 20) colorOffset = 20
+      if (colorOffset > 95) colorOffset = 95
+      return {
+        id: e.storyFragmentId || e.paneId,
+        engagement: Math.max(
+          1,
+          Math.min(
+            95,
+            Math.round((100 * (maxSince - e.hours_since_activity)) / maxSince),
+          ),
+        ),
+        daysSince: Math.round((e.hours_since_activity / 24) * 10) / 10,
+        colorOffset: colorOffset.toString(),
+        read: parseInt(e.red),
+        glossed: parseInt(e.glossed),
+        clicked: parseInt(e.clicked),
+        entered: parseInt(e.entered),
+        discovered: parseInt(e.discovered),
+      }
+    })
+    .filter((n: any) => n)
+    .forEach((e: any) => {
+      payload[e.id] = {
+        engagement: e.engagement,
+        daysSince: e.daysSince,
+        colorOffset: e.colorOffset,
+        read: e.read,
+        glossed: e.glossed,
+        clicked: e.clicked,
+        entered: e.entered,
+        discovered: e.discovered,
+      }
+    })
+  return payload
+}
 
 const TractStackState = ({ uuid, payload, flags }: any) => {
   const apiBase = process.env.DRUPAL_APIBASE
@@ -21,6 +109,7 @@ const TractStackState = ({ uuid, payload, flags }: any) => {
   const [updateTractStackPayload, setUpdateTractStackPayload]: any = useState(
     [],
   )
+  const selectedCollection = useDrupalStore((state) => state.selectedCollection)
   const setNavLocked = useDrupalStore((state) => state.setNavLocked)
   const allTractStacks = useDrupalStore((state) => state.allTractStacks)
   const updatePanes = useDrupalStore((state) => state.updatePanes)
@@ -51,6 +140,22 @@ const TractStackState = ({ uuid, payload, flags }: any) => {
       return null
     })
     .filter((e) => e)
+  const [storyFragmentDaysSinceData, setStoryFragmentDaysSinceData] =
+    useState<IActivityDetails>({})
+  const [loadingStoryFragmentDaysSince, setLoadingStoryFragmentDaysSince] =
+    useState(false)
+  const [loadedStoryFragmentDaysSince, setLoadedStoryFragmentDaysSince] =
+    useState(false)
+  const [panesDaysSinceData, setPanesDaysSinceData] =
+    useState<IActivityDetails>({})
+  const [loadingPanesDaysSince, setLoadingPanesDaysSince] = useState(false)
+  const [loadedPanesDaysSince, setLoadedPanesDaysSince] = useState(false)
+  const [maxRetryPanes, setMaxRetryPanes] = useState<undefined | boolean>(
+    undefined,
+  )
+  const [maxRetryStoryFragments, setMaxRetryStoryFragments] = useState<
+    undefined | boolean
+  >(undefined)
 
   const handleAdd = (e: any) => {
     switch (e) {
@@ -127,9 +232,86 @@ const TractStackState = ({ uuid, payload, flags }: any) => {
     lastSavedState.initialState,
   ])
 
+  // load chart data for storyfragments
+  useEffect(() => {
+    if (
+      selectedCollection === `storyfragment` &&
+      storyFragmentDaysSinceData &&
+      Object.keys(storyFragmentDaysSinceData).length === 0 &&
+      !loadingStoryFragmentDaysSince &&
+      !loadedStoryFragmentDaysSince &&
+      !maxRetryStoryFragments
+    ) {
+      setLoadingStoryFragmentDaysSince(true)
+      goGetStoryFragmentDaysSince()
+        .then((res: any) => {
+          if (res?.data && res.data?.data) {
+            const payload = daysSinceDataPayload(JSON.parse(res.data.data))
+            setStoryFragmentDaysSinceData(payload)
+            setLoadedStoryFragmentDaysSince(true)
+          } else {
+            if (typeof maxRetryStoryFragments === `undefined`) {
+              setMaxRetryStoryFragments(false)
+              setLoadingStoryFragmentDaysSince(false)
+            } else if (typeof maxRetryStoryFragments === `undefined`) {
+              setMaxRetryStoryFragments(true)
+              setLoadingStoryFragmentDaysSince(false)
+            }
+          }
+        })
+        .catch((e) => {
+          console.log(`An error occurred.`, e)
+        })
+    }
+  }, [
+    storyFragmentDaysSinceData,
+    loadedStoryFragmentDaysSince,
+    loadingStoryFragmentDaysSince,
+    selectedCollection,
+    maxRetryStoryFragments,
+  ])
+
+  // load chart data for panes
+  useEffect(() => {
+    if (
+      selectedCollection === `pane` &&
+      panesDaysSinceData &&
+      Object.keys(panesDaysSinceData).length === 0 &&
+      !loadingPanesDaysSince &&
+      !loadedPanesDaysSince &&
+      !maxRetryPanes
+    ) {
+      setLoadingPanesDaysSince(true)
+      goGetPanesDaysSince()
+        .then((res: any) => {
+          if (res?.data && res.data?.data) {
+            const payload = daysSinceDataPayload(JSON.parse(res.data.data))
+            setPanesDaysSinceData(payload)
+            setLoadedPanesDaysSince(true)
+          } else {
+            if (typeof maxRetryPanes === `undefined`) {
+              setMaxRetryPanes(false)
+              setLoadingPanesDaysSince(false)
+            } else if (typeof maxRetryPanes === `undefined`) {
+              setMaxRetryPanes(true)
+              setLoadingPanesDaysSince(false)
+            }
+          }
+        })
+        .catch((e) => {
+          console.log(`An error occurred.`, e)
+        })
+    }
+  }, [
+    panesDaysSinceData,
+    loadedPanesDaysSince,
+    loadingPanesDaysSince,
+    selectedCollection,
+    maxRetryPanes,
+  ])
+
   // handle stages
   useEffect(() => {
-    console.log(`--saveStage`, SaveStages[saveStage])
     switch (saveStage) {
       case SaveStages.NoChanges:
         Object.keys(cleanerQueue).forEach((e: string) => {
@@ -307,6 +489,8 @@ const TractStackState = ({ uuid, payload, flags }: any) => {
         saveStage,
         saved,
         slugCollision,
+        panesDaysSinceData,
+        storyFragmentDaysSinceData,
       }}
       fn={{
         setSaved,

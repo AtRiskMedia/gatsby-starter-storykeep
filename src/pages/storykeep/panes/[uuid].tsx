@@ -321,25 +321,21 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
     uuid,
   ])
 
-  // SSR check
+  // SSR + valid data check
   useEffect(() => {
     if (isSSR && typeof window !== `undefined`) {
-      setIsSSR(false)
+      if (thisPane) setIsSSR(false)
+      else navigate(`/storykeep`)
     }
-  }, [isSSR])
+  }, [thisPane, isSSR])
 
   if (isSSR) return null
-  if (!thisPane) navigate(`/storykeep`)
 
   return (
     <DrupalProvider config={drupalConfig}>
       <DrupalApi>
         <Layout current="storykeep">
-          {editStage < EditStages.Activated ? (
-            <></>
-          ) : (
-            <PaneState uuid={uuid} payload={payload} flags={flags} />
-          )}
+          <PaneState uuid={uuid} payload={payload} flags={flags} />
         </Layout>
       </DrupalApi>
     </DrupalProvider>

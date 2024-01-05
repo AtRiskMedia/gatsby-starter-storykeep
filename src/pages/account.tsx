@@ -16,6 +16,7 @@ const AccountPage = () => {
   const setStage = useDrupalStore((state) => state.setStage)
   const validToken = useAuthStore((state) => state.validToken)
 
+  // SSR + Concierge API check
   useEffect(() => {
     if (isSSR && typeof window !== `undefined`) setIsSSR(false)
     if (
