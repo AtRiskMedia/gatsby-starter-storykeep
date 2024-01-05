@@ -56,10 +56,6 @@ const StoryFragmentRender = ({ uuid, previewPayload, flags, fn }: any) => {
   const allPanes = useDrupalStore((state) => state.allPanes)
   const allFiles = useDrupalStore((state) => state.allFiles)
   const allMarkdown = useDrupalStore((state) => state.allMarkdown)
-  // thisStoryFragment.panes.forEach((e: any) => {
-  //  console.log(e, allPanes[e])
-  //  if (allPanes[e].relationships.markdown[0]) console.log(allPanes[e].relationships.markdown[0], allMarkdown[allPanes[e].relationships.markdown[0]])
-  // })
   const overrideWidthCss = `width:${width}px;`
   const viewportClasses = classNames(
     thisStoryFragment.tailwindBgColour || ``,

@@ -107,7 +107,6 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
         ],
       }
     })
-    console.log(`handleInsertPane`, uuid)
     setToggleCheck(true)
   }
 
@@ -163,7 +162,6 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
 
   // handle stages
   useEffect(() => {
-    console.log(`--saveStage`, SaveStages[saveStage])
     switch (saveStage) {
       case SaveStages.NoChanges:
         Object.keys(cleanerQueue).forEach((e: string) => {

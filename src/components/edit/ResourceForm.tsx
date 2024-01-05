@@ -16,15 +16,9 @@ import { CheckIcon, LinkIcon, TrashIcon } from '@heroicons/react/20/solid'
 // import { config } from '../../../data/SiteConfig'
 import { SaveStages } from '../../types'
 
-const ResourceForm = ({ uuid, payload, flags, fn }: any) => {
-  console.log(`form`, flags, fn, uuid)
+const ResourceForm = ({ payload, flags, fn }: any) => {
   const { state } = payload
-  const { /* setSaved, */ handleChange, handleSubmit } = fn
-  // const selectedCollection = useDrupalStore((state) => state.selectedCollection)
-  // const setSelectedCollection = useDrupalStore(
-  //  (state) => state.setSelectedCollection,
-  // )
-  // const thisResource = useDrupalStore((state) => state.allResources[uuid])
+  const { handleChange, handleSubmit } = fn
   const AuthorIcon =
     flags.isAuthor || flags.isAdmin || flags.isBuilder
       ? LockOpenIcon

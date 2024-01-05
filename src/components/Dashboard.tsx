@@ -248,10 +248,6 @@ const Dashboard = () => {
             ) {
               setMaxRetyDashboardPayloads(true)
               setLoadingDashboardPayloads(false)
-              if (typeof window !== `undefined`) {
-                console.log(`forced reload; trigger regeneration of token`)
-                location.reload()
-              }
             }
           }
         })
