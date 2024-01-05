@@ -581,7 +581,7 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
               >
-                <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-mywhite shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <Menu.Items className="z-1 absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-mywhite shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <div className="py-1">
                     {addButtons.map((e) => (
                       <span key={e.id}>
@@ -735,6 +735,8 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                               navigate(`/storykeep/panes/${record}`)
                             if (selectedCollection === `storyfragment`)
                               navigate(`/storykeep/storyfragments/${record}`)
+                            if (selectedCollection === `resource`)
+                              navigate(`/storykeep/resources/${record}`)
                             else console.log(`goto`, selectedCollection)
                             // else {
                             // setSelectedCollection(current)

@@ -176,6 +176,7 @@ export default function EditTractStack({
 
   // Concierge API check
   useEffect(() => {
+    console.log(`tractstack`,Stages[stage])
     if (
       process.env.NODE_ENV === `production` &&
       !validToken &&
