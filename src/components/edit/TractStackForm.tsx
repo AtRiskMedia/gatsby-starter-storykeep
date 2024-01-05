@@ -34,7 +34,9 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
   const { setSaved, handleChange, handleSubmit, handleAdd } = fn
   const [toggleAdvOpt, setToggleAdvOpt] = useState(false)
   const selectedCollection = useDrupalStore((state) => state.selectedCollection)
-  const setTractStackSelect = useDrupalStore((state) => state.setTractStackSelect)
+  const setTractStackSelect = useDrupalStore(
+    (state) => state.setTractStackSelect,
+  )
   const setSelectedCollection = useDrupalStore(
     (state) => state.setSelectedCollection,
   )
@@ -49,7 +51,7 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
       return null
     })
     .filter((e) => e)
-    .reduce((acc, cur, idx): any => {
+    .reduce((acc, cur): any => {
       return { ...acc, [cur.id]: cur }
     }, {})
   const nodes =

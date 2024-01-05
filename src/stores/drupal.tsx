@@ -76,6 +76,7 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
   drupalSoftLock: false,
   selectedCollection: `storyfragment`,
   tractStackSelect: false,
+  tractStackSelected: ``,
   openDemoEnabled: false,
   oauthDrupalUuid: ``,
   oauthDrupalRoles: ``,
@@ -262,6 +263,8 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
     }),
   setTractStackSelect: (tractStackSelect: boolean) =>
     set((state) => ({ ...state, tractStackSelect })),
+  setTractStackSelected: (tractStackSelected: string) =>
+    set((state) => ({ ...state, tractStackSelected })),
   setSelectedCollection: (selectedCollection: string) =>
     set((state) => ({ ...state, selectedCollection })),
   setOpenDemoEnabled: (openDemoEnabled: boolean) =>
