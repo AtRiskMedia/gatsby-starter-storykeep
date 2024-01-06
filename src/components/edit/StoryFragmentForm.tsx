@@ -24,6 +24,7 @@ import { useDrupalStore } from '../../stores/drupal'
 import { config } from '../../../data/SiteConfig'
 import SlideOver from './SlideOver'
 import StoryFragmentRender from './StoryFragmentRender'
+import StoryFragmentStarter from './StoryFragmentStarter'
 import { SaveStages } from '../../types'
 
 const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
@@ -88,6 +89,12 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
     slugCollision: flags.slugCollision,
     viewportKey,
     storyFragmentId: flags.storyFragmentId,
+  }
+
+  const handleAdd = (mode: string, paneId?: string) => {
+    console.log(`handleAdd`, mode, paneId)
+    if (mode === `new`) handleInsertPane(0)
+    else if (mode === `existing` && paneId) handleInsertPane(0, paneId)
   }
 
   useEffect(() => {
@@ -650,7 +657,7 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
               <div className="z-50 absolute top-0 bg-transparent inset-y-0 right-0 w-full h-screen"></div>
             ) : null}
             {flags.isEmpty ? (
-              <>
+              <div className="w-full px-6 pt-2 max-w-screen-2xl mt-2 ml-2">
                 <span className="font-action pr-3 text-base font-bold text-black">
                   Story Fragment Details
                 </span>
@@ -731,12 +738,11 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
                     Please enter a title and slug to get started!
                   </div>
                 ) : (
-                  <p>
-                    extract from StoryFragmentRender --- add new pane or select
-                    {` `}
-                  </p>
+                  <div className="max-w-3xl pb-4 pt-5 text-left my-8 w-full p-6 bg-slate-50">
+                    <StoryFragmentStarter fn={{ handleAdd }} />
+                  </div>
                 )}
-              </>
+              </div>
             ) : (
               <StoryFragmentRender
                 uuid={uuid}

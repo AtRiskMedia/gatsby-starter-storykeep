@@ -701,7 +701,7 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                   (
                     record: string, // FIX
                   ) => (
-                    <tr key={nodes[record].title}>
+                    <tr key={record}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-black">
                         {(selectedCollection === `storyfragment` &&
                           typeof flags?.storyFragmentDaysSinceData !==

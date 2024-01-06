@@ -24,6 +24,9 @@ const StoryKeepPage = () => {
   const setStage = useDrupalStore((state) => state.setStage)
   const validToken = useAuthStore((state) => state.validToken)
   const tractStackSelected = useDrupalStore((state) => state.tractStackSelected)
+  const setTractStackSelected = useDrupalStore(
+    (state) => state.setTractStackSelected,
+  )
   const allStoryFragments = useDrupalStore((state) => state.allStoryFragments)
   const homeStoryFragment =
     allStoryFragments &&
@@ -55,10 +58,16 @@ const StoryKeepPage = () => {
   useEffect(() => {
     if (tractStackSelected !== `` && !tractStackSelect)
       navigate(`/storykeep/tractstacks/${tractStackSelected}`)
-    else if (homeTractStackId && !tractStackSelect)
+    else if (homeTractStackId && !tractStackSelect) {
+      setTractStackSelected(homeTractStackId)
       navigate(`/storykeep/tractstacks/${homeTractStackId}`)
-    else setIsLoaded(true)
-  }, [homeTractStackId, tractStackSelect, tractStackSelected])
+    } else setIsLoaded(true)
+  }, [
+    homeTractStackId,
+    tractStackSelect,
+    tractStackSelected,
+    setTractStackSelected,
+  ])
 
   if (isSSR) return null
 
