@@ -989,7 +989,11 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                   <span className="ml-3">
                     <button
                       type="button"
-                      disabled={flags.saveStage >= SaveStages.PrepareSave}
+                      disabled={
+                        flags.saveStage >= SaveStages.PrepareSave ||
+                        flags.slugCollision ||
+                        state.slug === ``
+                      }
                       onClick={() => setToggleAdvOpt(!toggleAdvOpt)}
                       className={classNames(
                         flags.saveStage >= SaveStages.PrepareSave
@@ -1027,7 +1031,11 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                       <button
                         type="button"
                         onClick={handleSubmit}
-                        disabled={flags.saveStage >= SaveStages.PrepareSave}
+                        disabled={
+                          flags.saveStage >= SaveStages.PrepareSave ||
+                          flags.slugCollision ||
+                          state.slug === ``
+                        }
                         className={classNames(
                           flags.saveStage === SaveStages.UnsavedChanges
                             ? `bg-myblue hover:bg-myorange/20 text-white hover:text-myblue`
@@ -1073,7 +1081,11 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                     <span className="ml-3">
                       <button
                         type="button"
-                        disabled={flags.saveStage >= SaveStages.PrepareSave}
+                        disabled={
+                          flags.saveStage >= SaveStages.PrepareSave ||
+                          flags.slugCollision ||
+                          state.slug === ``
+                        }
                         onClick={() => navigate(`/storykeep`)}
                         className={classNames(
                           flags.saveStage >= SaveStages.PrepareSave
@@ -1093,7 +1105,11 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                     <span className="ml-3">
                       <button
                         type="button"
-                        disabled={flags.saveStage >= SaveStages.PrepareSave}
+                        disabled={
+                          flags.saveStage >= SaveStages.PrepareSave ||
+                          flags.slugCollision ||
+                          state.slug === ``
+                        }
                         onClick={() => {
                           if (
                             window.confirm(
@@ -1132,7 +1148,11 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                   <button
                     type="button"
                     title="Mobile or small screens"
-                    disabled={flags.saveStage >= SaveStages.PrepareSave}
+                    disabled={
+                      flags.saveStage >= SaveStages.PrepareSave ||
+                      flags.slugCollision ||
+                      state.slug === ``
+                    }
                     className={classNames(
                       flags.saveStage >= SaveStages.PrepareSave
                         ? ``
@@ -1156,7 +1176,11 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                   <button
                     type="button"
                     title="Tablet or medium screens"
-                    disabled={flags.saveStage >= SaveStages.PrepareSave}
+                    disabled={
+                      flags.saveStage >= SaveStages.PrepareSave ||
+                      flags.slugCollision ||
+                      state.slug === ``
+                    }
                     className={classNames(
                       flags.saveStage >= SaveStages.PrepareSave
                         ? ``
@@ -1177,7 +1201,11 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                   <button
                     type="button"
                     title="Desktop or large screens"
-                    disabled={flags.saveStage >= SaveStages.PrepareSave}
+                    disabled={
+                      flags.saveStage >= SaveStages.PrepareSave ||
+                      flags.slugCollision ||
+                      state.slug === ``
+                    }
                     className={classNames(
                       flags.saveStage >= SaveStages.PrepareSave
                         ? ``
@@ -1213,7 +1241,11 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                 <span className="isolate inline-flex -space-x-px rounded-md shadow-sm">
                   <button
                     type="button"
-                    disabled={flags.saveStage >= SaveStages.PrepareSave}
+                    disabled={
+                      flags.saveStage >= SaveStages.PrepareSave ||
+                      flags.slugCollision ||
+                      state.slug === ``
+                    }
                     className={classNames(
                       flags.saveStage >= SaveStages.PrepareSave
                         ? ``
@@ -1233,7 +1265,11 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                     <>
                       <button
                         type="button"
-                        disabled={flags.saveStage >= SaveStages.PrepareSave}
+                        disabled={
+                          flags.saveStage >= SaveStages.PrepareSave ||
+                          flags.slugCollision ||
+                          state.slug === ``
+                        }
                         className={classNames(
                           flags.saveStage >= SaveStages.PrepareSave
                             ? ``
@@ -1252,7 +1288,11 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                       {interceptMode !== `insert` ? (
                         <button
                           type="button"
-                          disabled={flags.saveStage >= SaveStages.PrepareSave}
+                          disabled={
+                            flags.saveStage >= SaveStages.PrepareSave ||
+                            flags.slugCollision ||
+                            state.slug === ``
+                          }
                           className={classNames(
                             flags.saveStage >= SaveStages.PrepareSave
                               ? ``
@@ -1280,7 +1320,11 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                           <select
                             id="interceptModeEdit"
                             name="interceptModeEdit"
-                            disabled={flags.saveStage >= SaveStages.PrepareSave}
+                            disabled={
+                              flags.saveStage >= SaveStages.PrepareSave ||
+                              flags.slugCollision ||
+                              state.slug === ``
+                            }
                             className="block w-full bg-white rounded-r-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-myorange xs:text-sm xs:leading-6"
                             value={interceptModeTag}
                             onChange={(e) =>

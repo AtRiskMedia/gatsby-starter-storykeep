@@ -176,13 +176,18 @@ const TractStackState = ({ uuid, payload, flags }: any) => {
       }
 
       case `storyfragment`: {
-        alert(`won't work yet; must ask for tractstackId and link on creation`)
         const newUuid = uuidv4()
         const newStoryFragment = {
           id: newUuid,
           drupalNid: -1,
           title: `Untitled`,
           slug: ``,
+          tailwindBgColour: ``,
+          socialImagePath: ``,
+          contextPanes: [],
+          tractstack: uuid,
+          panes: [],
+          menu: null,
         }
         updateStoryFragments(newStoryFragment)
         navigate(`/storykeep/storyfragments/${newUuid}`)

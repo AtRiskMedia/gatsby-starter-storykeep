@@ -118,7 +118,11 @@ const ResourceForm = ({ payload, flags, fn }: any) => {
                     <button
                       type="button"
                       onClick={handleSubmit}
-                      disabled={flags.saveStage >= SaveStages.PrepareSave}
+                      disabled={
+                        flags.saveStage >= SaveStages.PrepareSave ||
+                        flags.slugCollision ||
+                        state.slug === ``
+                      }
                       className={classNames(
                         flags.saveStage === SaveStages.UnsavedChanges
                           ? `bg-myblue hover:bg-myorange/20 text-white hover:text-myblue`
@@ -164,7 +168,11 @@ const ResourceForm = ({ payload, flags, fn }: any) => {
                   <span className="ml-3">
                     <button
                       type="button"
-                      disabled={flags.saveStage >= SaveStages.PrepareSave}
+                      disabled={
+                        flags.saveStage >= SaveStages.PrepareSave ||
+                        flags.slugCollision ||
+                        state.slug === ``
+                      }
                       onClick={() => navigate(`/storykeep`)}
                       className={classNames(
                         flags.saveStage >= SaveStages.PrepareSave
@@ -184,7 +192,11 @@ const ResourceForm = ({ payload, flags, fn }: any) => {
                   <span className="ml-3">
                     <button
                       type="button"
-                      disabled={flags.saveStage >= SaveStages.PrepareSave}
+                      disabled={
+                        flags.saveStage >= SaveStages.PrepareSave ||
+                        flags.slugCollision ||
+                        state.slug === ``
+                      }
                       onClick={() => {
                         if (
                           window.confirm(`There are Unsaved Changes. Proceed?`)

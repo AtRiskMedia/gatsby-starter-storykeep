@@ -401,7 +401,11 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                 <span>
                   <button
                     type="button"
-                    disabled={flags.saveStage >= SaveStages.PrepareSave}
+                    disabled={
+                      flags.saveStage >= SaveStages.PrepareSave ||
+                      flags.slugCollision ||
+                      state.slug === ``
+                    }
                     onClick={() => setToggleAdvOpt(!toggleAdvOpt)}
                     className={classNames(
                       flags.saveStage >= SaveStages.PrepareSave
@@ -439,7 +443,11 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                     <button
                       type="button"
                       onClick={handleSubmit}
-                      disabled={flags.saveStage >= SaveStages.PrepareSave}
+                      disabled={
+                        flags.saveStage >= SaveStages.PrepareSave ||
+                        flags.slugCollision ||
+                        state.slug === ``
+                      }
                       className={classNames(
                         flags.saveStage === SaveStages.UnsavedChanges
                           ? `bg-myblue hover:bg-myorange/20 text-white hover:text-myblue`
@@ -485,7 +493,11 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                   <span className="ml-3">
                     <button
                       type="button"
-                      disabled={flags.saveStage >= SaveStages.PrepareSave}
+                      disabled={
+                        flags.saveStage >= SaveStages.PrepareSave ||
+                        flags.slugCollision ||
+                        state.slug === ``
+                      }
                       onClick={() => {
                         if (
                           window.confirm(`There are Unsaved Changes. Proceed?`)
@@ -545,7 +557,11 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
               ) : null}
               <button
                 className="relative inline-flex items-center rounded-l-md bg-mywhite px-3 py-2 text-sm text-black font-main underline hover:font-myorange"
-                disabled={flags.saveStage >= SaveStages.PrepareSave}
+                disabled={
+                  flags.saveStage >= SaveStages.PrepareSave ||
+                  flags.slugCollision ||
+                  state.slug === ``
+                }
                 onClick={() => {
                   if (
                     flags.saveStage === SaveStages.NoChanges ||

@@ -393,7 +393,11 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
                   <span className="hidden xs:block">
                     <button
                       type="button"
-                      disabled={flags.saveStage >= SaveStages.PrepareSave}
+                      disabled={
+                        flags.saveStage >= SaveStages.PrepareSave ||
+                        flags.slugCollision ||
+                        state.slug === ``
+                      }
                       onClick={() => setToggleAdvOpt(!toggleAdvOpt)}
                       className={classNames(
                         flags.saveStage >= SaveStages.PrepareSave
@@ -431,7 +435,11 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
                       <button
                         type="button"
                         onClick={handleSubmit}
-                        disabled={flags.saveStage >= SaveStages.PrepareSave}
+                        disabled={
+                          flags.saveStage >= SaveStages.PrepareSave ||
+                          flags.slugCollision ||
+                          state.slug === ``
+                        }
                         className={classNames(
                           flags.saveStage === SaveStages.UnsavedChanges
                             ? `bg-myblue hover:bg-myorange/20 text-white hover:text-myblue`
@@ -477,7 +485,11 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
                     <span className="ml-3">
                       <button
                         type="button"
-                        disabled={flags.saveStage >= SaveStages.PrepareSave}
+                        disabled={
+                          flags.saveStage >= SaveStages.PrepareSave ||
+                          flags.slugCollision ||
+                          state.slug === ``
+                        }
                         onClick={() => navigate(`/storykeep`)}
                         className={classNames(
                           flags.saveStage >= SaveStages.PrepareSave
@@ -497,7 +509,11 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
                     <span className="ml-3">
                       <button
                         type="button"
-                        disabled={flags.saveStage >= SaveStages.PrepareSave}
+                        disabled={
+                          flags.saveStage >= SaveStages.PrepareSave ||
+                          flags.slugCollision ||
+                          state.slug === ``
+                        }
                         onClick={() => {
                           if (
                             window.confirm(
@@ -536,7 +552,11 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
                   <button
                     type="button"
                     title="Mobile or small screens"
-                    disabled={flags.saveStage >= SaveStages.PrepareSave}
+                    disabled={
+                      flags.saveStage >= SaveStages.PrepareSave ||
+                      flags.slugCollision ||
+                      state.slug === ``
+                    }
                     className={classNames(
                       flags.saveStage >= SaveStages.PrepareSave
                         ? ``
@@ -560,7 +580,11 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
                   <button
                     type="button"
                     title="Tablet or medium screens"
-                    disabled={flags.saveStage >= SaveStages.PrepareSave}
+                    disabled={
+                      flags.saveStage >= SaveStages.PrepareSave ||
+                      flags.slugCollision ||
+                      state.slug === ``
+                    }
                     className={classNames(
                       flags.saveStage >= SaveStages.PrepareSave
                         ? ``
@@ -581,7 +605,11 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
                   <button
                     type="button"
                     title="Desktop or large screens"
-                    disabled={flags.saveStage >= SaveStages.PrepareSave}
+                    disabled={
+                      flags.saveStage >= SaveStages.PrepareSave ||
+                      flags.slugCollision ||
+                      state.slug === ``
+                    }
                     className={classNames(
                       flags.saveStage >= SaveStages.PrepareSave
                         ? ``
@@ -622,7 +650,93 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
               <div className="z-50 absolute top-0 bg-transparent inset-y-0 right-0 w-full h-screen"></div>
             ) : null}
             {flags.isEmpty ? (
-              <p>what to put here?</p>
+              <>
+                <span className="font-action pr-3 text-base font-bold text-black">
+                  Story Fragment Details
+                </span>
+                <form className="max-w-3xl" id="editPaneDetails">
+                  <div className="space-y-12">
+                    <div className="border-b border-black/10 pb-12">
+                      <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 xs:grid-cols-6">
+                        <div className="xs:col-span-3">
+                          <label
+                            htmlFor="title"
+                            className="block text-sm leading-6 text-black"
+                          >
+                            Title
+                            {state.title.length === 0 ? (
+                              <>
+                                {` `}
+                                <span
+                                  className="text-myorange ml-1"
+                                  title="required"
+                                >
+                                  *required
+                                </span>
+                              </>
+                            ) : null}
+                          </label>
+                          <div className="mt-2">
+                            <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
+                              <input
+                                type="text"
+                                name="title"
+                                id="title"
+                                className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
+                                value={state.title}
+                                onChange={handleChange}
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="xs:col-span-2">
+                          <label
+                            htmlFor="slug"
+                            className="block text-sm leading-6 text-black"
+                          >
+                            Slug{` `}
+                            <span
+                              className="text-myorange ml-1"
+                              title="use lowercase letters, dash allowed"
+                            >
+                              *
+                            </span>
+                          </label>
+                          {flags.slugCollision ? (
+                            <span className="text-myorange ml-2">
+                              that slug was taken
+                            </span>
+                          ) : null}
+                          <div className="mt-2">
+                            <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
+                              <input
+                                type="text"
+                                name="slug"
+                                id="slug"
+                                pattern="[a-zA-Z\-]+"
+                                className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
+                                value={state.slug}
+                                onChange={handleChange}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+                {state.slug === `` ? (
+                  <div className="text-base mt-4">
+                    Please enter a title and slug to get started!
+                  </div>
+                ) : (
+                  <p>
+                    extract from StoryFragmentRender --- add new pane or select
+                    {` `}
+                  </p>
+                )}
+              </>
             ) : (
               <StoryFragmentRender
                 uuid={uuid}
