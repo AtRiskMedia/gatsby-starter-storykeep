@@ -77,8 +77,10 @@ export const starterTemplate = (key: string, title: string, slug: string) => {
         markdownBody: newMarkdownBody,
         slug,
         categorySlug: ``,
-        images: [],
-        svgs: [],
+        relationships: {
+          images: [],
+          imagesSvg: [],
+        },
       }
       const newMarkdown = {
         [newMarkdownId]: {
@@ -170,8 +172,10 @@ export const starterTemplate = (key: string, title: string, slug: string) => {
         markdownBody: newMarkdownBody,
         slug,
         categorySlug: ``,
-        images: [],
-        svgs: [],
+        relationships: {
+          images: [],
+          imagesSvg: [],
+        },
       }
       const newMarkdown = {
         [newMarkdownId]: {
@@ -254,8 +258,10 @@ export const starterTemplate = (key: string, title: string, slug: string) => {
         markdownBody: newMarkdownBody,
         slug,
         categorySlug: ``,
-        images: [],
-        svgs: [],
+        relationships: {
+          images: [],
+          imagesSvg: [],
+        },
       }
       const newMarkdown = {
         [newMarkdownId]: {
@@ -358,8 +364,10 @@ export const starterTemplate = (key: string, title: string, slug: string) => {
         markdownBody: newMarkdownBody,
         slug,
         categorySlug: ``,
-        images: [],
-        svgs: [],
+        relationships: {
+          images: [],
+          imagesSvg: [],
+        },
       }
       const newMarkdown = {
         [newMarkdownId]: {
@@ -501,8 +509,10 @@ export const starterTemplate = (key: string, title: string, slug: string) => {
         markdownBody: newMarkdownBody,
         slug,
         categorySlug: ``,
-        images: [],
-        svgs: [],
+        relationships: {
+          images: [],
+          imagesSvg: [],
+        },
       }
       const newMarkdown = {
         [newMarkdownId]: {

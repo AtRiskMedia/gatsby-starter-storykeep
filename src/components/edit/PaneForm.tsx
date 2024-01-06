@@ -973,8 +973,8 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                     </div>
                     <div className="mt-2 flex items-center">
                       {flags.saved ? (
-                        <span className="inline-flex items-center rounded-md bg-myorange/10 px-2 py-1 text-sm text-black ring-1 ring-inset ring-mydarkgrey/10">
-                          Saved!
+                        <span className="inline-flex items-center rounded-md bg-red-500 px-2 py-1 text-sm text-white ring-1 ring-inset ring-mydarkgrey/10">
+                          SAVED
                         </span>
                       ) : flags.saveStage > SaveStages.NoChanges &&
                         flags.saveStage < SaveStages.Success ? (
@@ -986,7 +986,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                   </div>
                 </div>
                 <div className="mt-5 flex lg:ml-4 lg:mt-0">
-                    <span className="ml-3">
+                  <span className="ml-3">
                     <button
                       type="button"
                       disabled={flags.saveStage >= SaveStages.PrepareSave}

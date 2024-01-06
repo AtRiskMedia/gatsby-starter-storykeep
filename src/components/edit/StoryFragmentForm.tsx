@@ -377,8 +377,8 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
                     </div>
                     <div className="mt-2 flex items-center">
                       {flags.saved ? (
-                        <span className="inline-flex items-center rounded-md bg-myorange/10 px-2 py-1 text-sm text-black ring-1 ring-inset ring-mydarkgrey/10">
-                          Saved!
+                        <span className="inline-flex items-center rounded-md bg-red-500 px-2 py-1 text-sm text-white ring-1 ring-inset ring-mydarkgrey/10">
+                          SAVED
                         </span>
                       ) : flags.saveStage > SaveStages.NoChanges &&
                         flags.saveStage < SaveStages.Success ? (

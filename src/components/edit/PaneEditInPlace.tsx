@@ -412,7 +412,8 @@ const InputTailwindClass = ({
                 )}
                 value={
                   typeof payload[selector] !== `undefined` &&
-                  typeof payload[selector][0] !== `undefined`
+                  typeof payload[selector][0] !== `undefined` &&
+                  payload[selector][0]
                     ? payload[selector][0]
                     : `=`
                 }
@@ -439,7 +440,8 @@ const InputTailwindClass = ({
                 )}
                 value={
                   typeof payload[selector] !== `undefined` &&
-                  typeof payload[selector][1] !== `undefined`
+                  typeof payload[selector][1] !== `undefined` &&
+                  payload[selector][1]
                     ? payload[selector][1]
                     : `=`
                 }
@@ -466,7 +468,8 @@ const InputTailwindClass = ({
                 )}
                 value={
                   typeof payload[selector] !== `undefined` &&
-                  typeof payload[selector][2] !== `undefined`
+                  typeof payload[selector][2] !== `undefined` &&
+                  payload[selector][2]
                     ? payload[selector][2]
                     : `=`
                 }

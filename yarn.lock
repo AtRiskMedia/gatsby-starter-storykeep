@@ -2768,17 +2768,17 @@
   resolved "https://registry.yarnpkg.com/@tractstack/drupal-react-oauth-provider/-/drupal-react-oauth-provider-0.1.0.tgz#7c5091dc97633cc7facb53c2966dee6d4d5db4af"
   integrity sha512-7rtvdWCfFdbxVikjP3X1OD6FiWxrQSRbYn1Dm1pf7FT1a5VuKspgPwcznv0slmdY7RSkBgKHo+Oy5JTqV4HqbA==
 
-"@tractstack/helpers@0.1.8":
-  version "0.1.8"
-  resolved "https://registry.yarnpkg.com/@tractstack/helpers/-/helpers-0.1.8.tgz#f1d798a9fe54a5770e68a53d5e8530ac81d5a0ba"
-  integrity sha512-4GD4zftF1gQkPCcNm/VkeVBtpXqbQdF66GEVdoLOoavnCFnLWEGQMnZWoSahmOfTKSeg2Zq9B4stQzvO8A6Ecg==
+"@tractstack/helpers@0.1.9":
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/@tractstack/helpers/-/helpers-0.1.9.tgz#be24ab08205f447472fcac78c5940d5b45c33e70"
+  integrity sha512-qwWD8o3ATesMoM2G3ZtVwgIPgMwl8QMxIe+49GEP31KWDtFLXqMJSm4/okGOdqeSuKiUOMzvL01K9HuFBli3ug==
   dependencies:
     buffer "^6.0.3"
 
-"@tractstack/nivo@0.1.8":
-  version "0.1.8"
-  resolved "https://registry.yarnpkg.com/@tractstack/nivo/-/nivo-0.1.8.tgz#b1fca4f861180a07b410e5c0aab8eb4d3cb14bb0"
-  integrity sha512-A0O1uFelbdmS5S72pkCbKcytzub6iLLMEYxmENLbsqlpmftPDCBfwPEH9AooH68wQ6GGte7tPQsl1jCw1qjfXg==
+"@tractstack/nivo@0.1.9":
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/@tractstack/nivo/-/nivo-0.1.9.tgz#4443f77426140a508578530bc388a9290c803138"
+  integrity sha512-xTCTdnstXMekmzmWciPtLRPCt7MnKksqwO5NJM3Adxgq3Cglswp5jOMLRH8xMc+tEJ25pmZAK3wov2+mkzo7yQ==
   dependencies:
     "@nivo/core" "^0.84.0"
     "@nivo/generators" "^0.84.0"

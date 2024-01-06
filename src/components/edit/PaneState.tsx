@@ -709,19 +709,17 @@ const PaneState = ({ uuid, payload, flags }: any) => {
     const childGlobalNth =
       tag === null
         ? null
-        : [`img`, `ul`, `ol`, `p`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6`].includes(
-              tag,
-            )
+        : [`ul`, `ol`, `p`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6`].includes(tag)
           ? tagsCount.filter((e: string) => e === tag).length
-          : tag === `li`
-            ? stateLivePreviewMarkdown.listItemsLookup[nth][childNth]
-            : null
+          : tag === `img`
+            ? stateLivePreviewMarkdown.imagesLookup[nth][childNth]
+            : tag === `li`
+              ? stateLivePreviewMarkdown.listItemsLookup[nth][childNth]
+              : null
     const thisNth =
       tag === null
         ? null
-        : [`img`, `ul`, `ol`, `p`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6`].includes(
-              tag,
-            )
+        : [`ul`, `ol`, `p`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6`].includes(tag)
           ? nth
           : childGlobalNth
     const mode =
@@ -1076,8 +1074,11 @@ const PaneState = ({ uuid, payload, flags }: any) => {
       }
 
       case `updateSelector`: {
+        const thisLookup = [`li`, `img`].includes(tag)
+          ? childGlobalNth
+          : thisNth
         const hasOverride =
-          stateLivePreview.childClasses[tag][thisNth][selector][3]
+          stateLivePreview.childClasses[tag][thisLookup][selector][3]
         const hasOverridePayload =
           typeof statePaneFragments[paneFragmentId].optionsPayload
             .classNamesPayload[tag].override !== `undefined`
@@ -1151,6 +1152,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
           }
           regenerateState(newOptionsPayload)
         } else {
+          // add selector to payload
           const newValue = value === `=` ? null : value
           const tuple = !hasOverride
             ? [
@@ -1274,9 +1276,12 @@ const PaneState = ({ uuid, payload, flags }: any) => {
       }
 
       case `updateSelectorOverride`: {
+        const thisLookup = [`li`, `img`].includes(tag)
+          ? childGlobalNth
+          : thisNth
         // toggle override
         const hasOverride =
-          stateLivePreview.childClasses[tag][thisNth][selector][3]
+          stateLivePreview.childClasses[tag][thisLookup][selector][3]
         if (!hasOverride) {
           const newStateLivePreview = {
             ...stateLivePreview,
@@ -1284,8 +1289,8 @@ const PaneState = ({ uuid, payload, flags }: any) => {
               ...stateLivePreview.childClasses,
               [tag]: {
                 ...stateLivePreview.childClasses[tag],
-                [thisNth]: {
-                  ...stateLivePreview.childClasses[tag][thisNth],
+                [thisLookup]: {
+                  ...stateLivePreview.childClasses[tag][thisLookup],
                   [selector]: [`=`, `=`, `=`, true],
                 },
               },
@@ -1296,7 +1301,6 @@ const PaneState = ({ uuid, payload, flags }: any) => {
           // currently enabled; must remove override from classNamesPayload
           // must remove classNamesPayload[tag].override[selector][thisNth]
           // may need to remove classNamesPayload[tag].override[selector] entirely if this is last element
-
           const hasOverride =
             typeof stateLivePreview.childClasses[tag] !== `undefined` &&
             typeof stateLivePreview.childClasses[tag][thisNth] !==

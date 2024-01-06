@@ -173,8 +173,10 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
           markdownBody: payload.attributes.field_markdown_body,
           slug: payload.attributes.field_slug,
           categorySlug: payload.attributes.categorySlug,
-          images: thisMarkdown?.relationships?.images || [],
-          svgs: thisMarkdown?.relationships?.imagesSvg || [],
+          relationships: {
+            images: thisMarkdown?.relationships?.images || [],
+            imagesSvg: thisMarkdown?.relationships?.imagesSvg || [],
+          },
         }
         updateMarkdown(newMarkdown)
         break
@@ -439,7 +441,6 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
               return f.id
             })
             .filter((e: string) => e !== `missing`) ||
-          payload?.images ||
           payload?.relationships?.images ||
           [],
         imagesSvg:
@@ -448,8 +449,7 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
               return f.id
             })
             .filter((e: string) => e !== `missing`) ||
-          payload?.svgs ||
-          payload?.relationships?.imagesSvgs ||
+          payload?.relationships?.imagesSvg ||
           [],
       },
     }
@@ -477,6 +477,26 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
   },
   updateMarkdown: (payload: any) => {
     // FIX
+    const thisMarkdownImages =
+      typeof payload?.relationships?.images !== `undefined`
+        ? payload.relationships.images
+        : typeof payload?.relationships?.field_image?.data !== `undefined`
+          ? payload?.relationships.field_image.data
+              ?.map((f: any) => {
+                return f.id
+              })
+              .filter((e: string) => e !== `missing`)
+          : []
+    const thisMarkdownImagesSvg =
+      typeof payload?.relationships?.imagesSvg !== `undefined`
+        ? payload.relationships.imagesSvg
+        : typeof payload?.relationships?.field_image_svg?.data !== `undefined`
+          ? payload.relationships.field_image_svg.data
+              ?.map((f: any) => {
+                return f.id
+              })
+              .filter((e: string) => e !== `missing`)
+          : []
     const thisMarkdown = {
       drupalNid:
         payload?.attributes?.drupal_internal__nid || payload?.drupalNid,
@@ -497,22 +517,8 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
       categorySlug:
         payload?.attributes?.field_category_slug || payload?.categorySlug,
       relationships: {
-        images:
-          payload?.relationships?.field_image?.data
-            ?.map((f: any) => {
-              return f.id
-            })
-            .filter((e: string) => e !== `missing`) ||
-          payload.images ||
-          [],
-        imagesSvg:
-          payload?.relationships?.field_image_svg?.data
-            ?.map((f: any) => {
-              return f.id
-            })
-            .filter((e: string) => e !== `missing`) ||
-          payload.svgs ||
-          [],
+        images: thisMarkdownImages,
+        imagesSvg: thisMarkdownImagesSvg,
       },
     }
     set((state) => ({
