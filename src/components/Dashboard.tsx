@@ -1,7 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 import React, { useState, useEffect } from 'react'
 import { Link, navigate } from 'gatsby'
-import { classNames } from '@tractstack/helpers'
 import {
   PaneActivitySwarm,
   StoryFragmentActivitySwarm,
@@ -140,16 +139,13 @@ const Dashboard = () => {
   const allMenus = useDrupalStore((state) => state.allMenus)
   const allMarkdown = useDrupalStore((state) => state.allMarkdown)
   const allProducts = useProductData()
+  const setTractStackSelect = useDrupalStore(
+    (state) => state.setTractStackSelect,
+  )
   const setSelectedCollection = useDrupalStore(
     (state) => state.setSelectedCollection,
   )
-  const enabledStats = [
-    `tractstack`,
-    `storyfragment`,
-    `pane`,
-    `resource`,
-    `file`,
-  ]
+  const enabledStats = [`storyfragment`, `pane`, `resource`]
   const recentMetrics = [
     {
       id: `uniqueSessions`,
@@ -348,19 +344,15 @@ const Dashboard = () => {
           <dl className="grid grid-cols-2 gap-0.5 overflow-hidden rounded-2xl text-center md:grid-cols-3 lg:grid-cols-4">
             {stats.map((stat) => (
               <Link
-                onClick={(e) => {
-                  if (enabledStats.includes(stat.id))
+                onClick={() => {
+                  if (enabledStats.includes(stat.id)) {
+                    setTractStackSelect(false)
                     setSelectedCollection(stat.id)
-                  else e.preventDefault()
+                  } else setTractStackSelect(true)
                 }}
                 to={`/storykeep`}
                 key={stat.id}
-                className={classNames(
-                  !enabledStats.includes(stat.id)
-                    ? `pointer-events-none`
-                    : `pointer-events-auto`,
-                  `font-action flex flex-col bg-lightgrey/5 p-4`,
-                )}
+                className="font-action flex flex-col bg-lightgrey/5 p-4"
               >
                 <dt className="text-sm font-bold leading-6 text-myblue">
                   {stat.name}
