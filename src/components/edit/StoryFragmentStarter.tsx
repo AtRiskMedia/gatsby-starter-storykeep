@@ -7,7 +7,8 @@ import { classNames } from '@tractstack/helpers'
 
 import { useDrupalStore } from '../../stores/drupal'
 
-const StoryFragmentStarter = ({ fn }: any) => {
+const StoryFragmentStarter = ({ fn, flags }: any) => {
+  const { allowCancel } = flags
   const { handleAdd, setAddModalOpen } = fn
   const [query, setQuery] = useState(``)
   const [selectedPane, setSelectedPane] = useState<any>(null)
@@ -46,15 +47,17 @@ const StoryFragmentStarter = ({ fn }: any) => {
           >
             New Pane
           </button>
-          <button
-            type="button"
-            className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 xs:mt-0 xs:w-auto"
-            onClick={() => {
-              if (setAddModalOpen) setAddModalOpen(false)
-            }}
-          >
-            Cancel
-          </button>
+          {allowCancel ? (
+            <button
+              type="button"
+              className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 xs:mt-0 xs:w-auto"
+              onClick={() => {
+                if (setAddModalOpen) setAddModalOpen(false)
+              }}
+            >
+              Cancel
+            </button>
+          ) : null}
         </div>
       </div>
       {panes.length > 0 ? (
@@ -150,15 +153,17 @@ const StoryFragmentStarter = ({ fn }: any) => {
                   Insert
                 </button>
               ) : null}
-              <button
-                type="button"
-                className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 xs:mt-0 xs:w-auto"
-                onClick={() => {
-                  if (setAddModalOpen) setAddModalOpen(false)
-                }}
-              >
-                Cancel
-              </button>
+              {allowCancel ? (
+                <button
+                  type="button"
+                  className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 xs:mt-0 xs:w-auto"
+                  onClick={() => {
+                    if (setAddModalOpen) setAddModalOpen(false)
+                  }}
+                >
+                  Cancel
+                </button>
+              ) : null}
             </div>
           </div>
         </>

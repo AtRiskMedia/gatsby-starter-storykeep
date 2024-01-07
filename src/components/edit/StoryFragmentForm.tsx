@@ -739,7 +739,10 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
                   </div>
                 ) : (
                   <div className="max-w-3xl pb-4 pt-5 text-left my-8 w-full p-6 bg-slate-50">
-                    <StoryFragmentStarter fn={{ handleAdd }} />
+                    <StoryFragmentStarter
+                      fn={{ handleAdd }}
+                      flags={{ allowCancel: false }}
+                    />
                   </div>
                 )}
               </div>

@@ -269,7 +269,10 @@ const StoryFragmentRender = ({ uuid, previewPayload, flags, fn }: any) => {
                     leaveTo="opacity-0 translate-y-4 xs:translate-y-0 xs:scale-95"
                   >
                     <Dialog.Panel className="max-w-3xl relative transform px-4 pb-4 pt-5 text-left transition-all xs:my-8 xs:w-full xs:p-6">
-                      <StoryFragmentStarter fn={{ handleAdd, addModalOpen }} />
+                      <StoryFragmentStarter
+                        fn={{ handleAdd, addModalOpen }}
+                        flags={{ allowCancel: true }}
+                      />
                     </Dialog.Panel>
                   </Transition.Child>
                 </div>

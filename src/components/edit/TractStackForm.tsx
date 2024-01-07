@@ -103,12 +103,12 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
     {
       id: `pane`,
       name: `Content Pane`,
-      enabled: true,
+      enabled: selectedCollection === `pane`,
     },
     {
       id: `storyfragment`,
       name: `Story Fragment`,
-      enabled: true,
+      enabled: selectedCollection === `storyfragment`,
     },
   ]
   const rowOneHeading =
