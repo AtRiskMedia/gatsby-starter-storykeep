@@ -651,7 +651,7 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
           </div>
         </section>
 
-        <section className="relative py-4 bg-slate-100">
+        <section className="w-fit relative py-4 bg-slate-100">
           <>
             {flags.saveStage >= SaveStages.PrepareSave ? (
               <div className="z-50 absolute top-0 bg-transparent inset-y-0 right-0 w-full h-screen"></div>

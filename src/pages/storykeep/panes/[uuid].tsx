@@ -334,7 +334,7 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
   return (
     <DrupalProvider config={drupalConfig}>
       <DrupalApi>
-        <Layout current="storykeep">
+        <Layout current="storykeepInner">
           <PaneState uuid={uuid} payload={payload} flags={flags} />
         </Layout>
       </DrupalApi>

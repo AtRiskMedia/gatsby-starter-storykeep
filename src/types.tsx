@@ -257,6 +257,8 @@ export interface IDrupalState {
     childType: null | string
     parent: null | string
     parentType: null | string
+    grandChild: undefined | string
+    grandChildType: undefined | string
   }
   setEmbeddedEdit: Function
   cleanerQueue: ICleanerNode

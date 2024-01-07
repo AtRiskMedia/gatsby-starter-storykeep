@@ -173,7 +173,7 @@ export default function EditResource({ params }: { params: { uuid: string } }) {
   return (
     <DrupalProvider config={drupalConfig}>
       <DrupalApi>
-        <Layout current="storykeep">
+        <Layout current="storykeepInner">
           <ResourceState uuid={uuid} payload={payload} flags={flags} />
         </Layout>
       </DrupalApi>

@@ -14,16 +14,27 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
     childType: null,
     parent: null,
     parentType: null,
+    grandChild: undefined,
+    grandChildType: undefined,
   },
   setEmbeddedEdit: (
     child: string,
     childType: string,
     parent: string,
     parentType: string,
+    grandChild?: string,
+    grandChildType?: string,
   ) =>
     set((state) => ({
       ...state,
-      embeddedEdit: { child, childType, parent, parentType },
+      embeddedEdit: {
+        child,
+        childType,
+        parent,
+        parentType,
+        grandChild,
+        grandChildType,
+      },
     })),
   cleanerQueue: {},
   setCleanerQueue: (uuid: string, type: any) =>

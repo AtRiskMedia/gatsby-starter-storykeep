@@ -198,7 +198,7 @@ export default function EditStoryFragment({
   return (
     <DrupalProvider config={drupalConfig}>
       <DrupalApi>
-        <Layout current="storykeep">
+        <Layout current="storykeepInner">
           <StoryFragmentState uuid={uuid} payload={payload} flags={flags} />
         </Layout>
       </DrupalApi>

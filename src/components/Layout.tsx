@@ -35,7 +35,7 @@ const Layout = ({ children, current }: ILayout) => {
       name: `Story Keep`,
       href: `/storykeep`,
       icon: RectangleGroupIcon,
-      current: current === `storykeep`,
+      current: [`storykeep`, `storykeepInner`].includes(current),
     },
     {
       id: `graph`,
@@ -94,7 +94,10 @@ const Layout = ({ children, current }: ILayout) => {
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
             as="div"
-            className="relative xl:hidden"
+            className={classNames(
+              current === `storykeepInner` ? `` : `xl:hidden`,
+              `relative`,
+            )}
             onClose={setSidebarOpen}
           >
             <Transition.Child
@@ -276,7 +279,13 @@ const Layout = ({ children, current }: ILayout) => {
           </Dialog>
         </Transition.Root>
 
-        <div className="hidden xl:fixed xl:inset-y-0 xl:flex xl:w-72 xl:flex-col">
+        <div
+          className={classNames(
+            current === `storykeepInner`
+              ? `hidden`
+              : `hidden xl:fixed xl:inset-y-0 xl:flex xl:w-72 xl:flex-col`,
+          )}
+        >
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-black px-6">
             <div className="flex h-16 shrink-0 items-center">
               <Logo className="h-8 w-auto" alt="Tract Stack by At Risk Media" />
@@ -402,10 +411,18 @@ const Layout = ({ children, current }: ILayout) => {
           </div>
         </div>
 
-        <div className="z-10 sticky top-0 flex items-center gap-x-6 bg-black px-4 py-4 shadow-sm xl:hidden">
+        <div
+          className={classNames(
+            current === `storykeepInner` ? `` : `xl:hidden`,
+            `z-10 sticky top-0 flex items-center gap-x-6 bg-black px-4 py-4 shadow-sm`,
+          )}
+        >
           <button
             type="button"
-            className="-m-2.5 p-2.5 text-mylightgrey xl:hidden"
+            className={classNames(
+              current === `storykeepInner` ? `` : `xl:hidden`,
+              `-m-2.5 p-2.5 text-mylightgrey`,
+            )}
             onClick={() => setSidebarOpen(!sidebarOpen)}
           >
             <span className="sr-only">Open sidebar</span>
@@ -452,7 +469,11 @@ const Layout = ({ children, current }: ILayout) => {
           </div>
         </div>
 
-        <main className="py-10 xl:pl-72">
+        <main
+          className={classNames(
+            current === `storykeepInner` ? `py-10` : `py-10 xl:pl-72`,
+          )}
+        >
           <div className="px-4 xl:px-8">{children}</div>
         </main>
       </div>
