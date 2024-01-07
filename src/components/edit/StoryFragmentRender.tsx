@@ -284,12 +284,15 @@ const StoryFragmentRender = ({ uuid, previewPayload, flags, fn }: any) => {
       {thisStoryFragment.panes?.map((p: string, idx: number) => (
         <div
           key={`${p}-${idx}`}
-          className={idx % 2 === 0 ? `bg-black/10` : `bg-black/5`}
+          className={classNames(
+            `pr-6`,
+            idx % 2 === 0 ? `bg-black/10` : `bg-black/5`,
+          )}
         >
           <StyledWrapperDiv css={overrideWidthCss}>
             {idx === 0 ? <Add idx={idx} /> : null}
           </StyledWrapperDiv>
-          <div className="w-full grow flex flex-row">
+          <div className="w-full grow flex flex-row pr-6">
             <StyledWrapperDiv
               ref={elementRef as React.RefObject<HTMLDivElement>}
               className="shrink-0"
@@ -304,6 +307,7 @@ const StoryFragmentRender = ({ uuid, previewPayload, flags, fn }: any) => {
                     children:
                       renderedPayload.contentChildren[`${viewportKey}-${p}`],
                   }}
+                  flags={{ saveStage: flags.saveStage }}
                   paneId={p}
                   storyFragmentId={flags.storyFragmentId}
                   viewportKey={viewportKey}
@@ -318,6 +322,11 @@ const StoryFragmentRender = ({ uuid, previewPayload, flags, fn }: any) => {
                     <DetailsPane
                       uuid={p}
                       data={data.filter((e: any) => e.paneId === p)}
+                      flags={{
+                        saveStage: flags.saveStage,
+                        storyFragmentId: uuid,
+                        panes: flags.panes,
+                      }}
                     />
                   ) : null}
                 </div>

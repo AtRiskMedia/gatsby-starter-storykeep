@@ -11,6 +11,7 @@ import { EditStages, SaveStages } from '../../types'
 const StoryFragmentState = ({ uuid, payload, flags }: any) => {
   const apiBase = process.env.DRUPAL_APIBASE
   const [lastSavedState, setLastSavedState] = useState(payload)
+  const [insertNewPane, setInsertNewPane] = useState(``)
   const [saved, setSaved] = useState(false)
   const [state, setState] = useState(payload.state)
   const [slugCollision, setSlugCollision] = useState(false)
@@ -46,6 +47,8 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
   const cleanerQueue = useDrupalStore((state) => state.cleanerQueue)
   const removeCleanerQueue = useDrupalStore((state) => state.removeCleanerQueue)
   const drupalResponse = useDrupalStore((state) => state.drupalResponse)
+  const embeddedEdit = useDrupalStore((state) => state.embeddedEdit)
+  const setEmbeddedEdit = useDrupalStore((state) => state.setEmbeddedEdit)
   const storyFragmentId = {
     id: uuid,
     title: thisStoryFragment.title,
@@ -86,25 +89,27 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
 
   const handleInsertPane = (offset: number, paneId?: string) => {
     // FIX
-    let uuid = ``
+    const newPaneId = !paneId ? uuidv4() : paneId
+    const newPanes = [
+      ...state.panes.slice(0, offset),
+      newPaneId,
+      ...state.panes.slice(offset),
+    ]
     if (!paneId) {
-      uuid = uuidv4()
       const newPane = {
-        id: uuid,
+        id: newPaneId,
         drupalNid: -1,
         title: `Untitled`,
         slug: ``,
       }
       updatePanes(newPane)
-    } else uuid = paneId
+      setEmbeddedEdit(newPaneId, `panes`, uuid, `storyfragments`, newPanes)
+      setInsertNewPane(newPaneId)
+    }
     setState((prev: any) => {
       return {
         ...prev,
-        panes: [
-          ...state.panes.slice(0, offset),
-          uuid,
-          ...state.panes.slice(offset),
-        ],
+        panes: newPanes,
       }
     })
     setToggleCheck(true)
@@ -318,23 +323,39 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
     }
   }, [saveStage, updateStoryFragmentPayload, setStoryFragment])
 
+  // handle insert new pane
+  useEffect(() => {
+    if (insertNewPane) {
+      const newPaneId = insertNewPane
+      setInsertNewPane(``)
+      setEmbeddedEdit(newPaneId, `panes`, uuid, `storyfragments`, state.panes)
+      navigate(`/storykeep/panes/${newPaneId}`)
+    }
+  }, [insertNewPane, setEmbeddedEdit, uuid, state?.panes])
+
   // set initial state
   useEffect(() => {
     if (
+      Object.keys(payload.initialState).length > 0 &&
       flags?.editStage === EditStages.Booting &&
       (!state || Object.keys(state).length === 0)
     ) {
-      setState(payload.initialState)
+      if (embeddedEdit.parentPanes)
+        setState({ ...payload.initialState, panes: embeddedEdit.parentPanes })
+      else setState(payload.initialState)
     }
+  }, [flags.editStage, payload.initialState, state, embeddedEdit?.parentPanes])
+  useEffect(() => {
     if (
       flags.editStage === EditStages.Booting &&
       state &&
       Object.keys(state).length &&
       saveStage === SaveStages.Booting
     ) {
+      setEmbeddedEdit(null, null, null, undefined, undefined, undefined)
       setSaveStage(SaveStages.NoChanges)
     }
-  }, [flags.editStage, saveStage, setSaveStage, payload.initialState, state])
+  }, [flags.editStage, saveStage, setSaveStage, state, setEmbeddedEdit])
 
   if (saveStage < SaveStages.NoChanges) return null
 

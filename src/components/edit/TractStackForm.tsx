@@ -293,8 +293,18 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                                   type="button"
                                   className="rounded-md bg-white px-2.5 py-1.5 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-50"
                                   onClick={() => {
-                                    console.log(`goto edit storyfragment`, e)
-                                    setSelectedCollection(`storyfragment`)
+                                    if (
+                                      flags.saveStage ===
+                                        SaveStages.NoChanges ||
+                                      (flags.saveStage ===
+                                        SaveStages.UnsavedChanges &&
+                                        window.confirm(
+                                          `There are Unsaved Changes. Proceed?`,
+                                        ))
+                                    ) {
+                                      setSelectedCollection(`storyfragment`)
+                                      navigate(`/storykeep/storyfragments/${e}`)
+                                    }
                                   }}
                                 >
                                   edit
@@ -323,8 +333,18 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                                   type="button"
                                   className="rounded-md bg-white px-2.5 py-1.5 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-50"
                                   onClick={() => {
-                                    console.log(`goto edit pane`, e)
-                                    setSelectedCollection(`pane`)
+                                    if (
+                                      flags.saveStage ===
+                                        SaveStages.NoChanges ||
+                                      (flags.saveStage ===
+                                        SaveStages.UnsavedChanges &&
+                                        window.confirm(
+                                          `There are Unsaved Changes. Proceed?`,
+                                        ))
+                                    ) {
+                                      setSelectedCollection(`pane`)
+                                      navigate(`/storykeep/panes/${e}`)
+                                    }
                                   }}
                                 >
                                   edit
@@ -753,7 +773,10 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                               navigate(`/storykeep/storyfragments/${record}`)
                             if (selectedCollection === `resource`)
                               navigate(`/storykeep/resources/${record}`)
-                            else console.log(`goto`, selectedCollection)
+                            else
+                              console.log(`miss on collection`, [
+                                selectedCollection,
+                              ])
                             // else {
                             // setSelectedCollection(current)
                             // setSelected(record)
@@ -1003,9 +1026,9 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                           onClick={() => {
                             if (selectedCollection === `pane`)
                               navigate(`/storykeep/panes/${record}`)
-                            if (selectedCollection === `storyfragment`)
+                            else if (selectedCollection === `storyfragment`)
                               navigate(`/storykeep/storyfragments/${record}`)
-                            if (selectedCollection === `resource`)
+                            else if (selectedCollection === `resource`)
                               navigate(`/storykeep/resources/${record}`)
                             else console.log(`goto`, selectedCollection)
                           }}

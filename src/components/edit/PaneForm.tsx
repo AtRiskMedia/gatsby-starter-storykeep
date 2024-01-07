@@ -89,6 +89,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
         : innerViewportDesktop
   const [width, setWidth] = useState(innerViewport)
   const setViewportKey = useDrupalStore((state) => state.setViewportKey)
+  const embeddedEdit = useDrupalStore((state) => state.embeddedEdit)
   const AuthorIcon =
     flags.isAuthor || flags.isAdmin || flags.isBuilder
       ? LockOpenIcon
@@ -1086,7 +1087,13 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                           flags.slugCollision ||
                           state.slug === ``
                         }
-                        onClick={() => navigate(`/storykeep`)}
+                        onClick={() => {
+                          if (embeddedEdit.parent) {
+                            navigate(
+                              `/storykeep/${embeddedEdit.parentType}/${embeddedEdit.parent}`,
+                            )
+                          } else navigate(`/storykeep`)
+                        }}
                         className={classNames(
                           flags.saveStage >= SaveStages.PrepareSave
                             ? ``
@@ -1115,8 +1122,17 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                             window.confirm(
                               `There are Unsaved Changes. Proceed?`,
                             )
-                          )
-                            navigate(`/storykeep`)
+                          ) {
+                            if (embeddedEdit.parent) {
+                              navigate(
+                                `/storykeep/${embeddedEdit.parentType}/${embeddedEdit.parent}`,
+                              )
+                            } else navigate(`/storykeep`)
+                          } else if (embeddedEdit.parent) {
+                            navigate(
+                              `/storykeep/${embeddedEdit.parentType}/${embeddedEdit.parent}`,
+                            )
+                          } else navigate(`/storykeep`)
                         }}
                         className={classNames(
                           flags.saveStage >= SaveStages.PrepareSave

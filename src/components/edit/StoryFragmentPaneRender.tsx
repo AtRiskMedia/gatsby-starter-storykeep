@@ -1,9 +1,12 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 import React from 'react'
+import { navigate } from 'gatsby'
 import { classNames } from '@tractstack/helpers'
 import { ICodeHookProps } from '@tractstack/types'
 
+import { useDrupalStore } from '../../stores/drupal'
 import codeHooks from '../../custom/codehooks'
+import { SaveStages } from '../../types'
 
 const CodeHook = ({
   thisId,
@@ -34,7 +37,9 @@ const StoryFragmentPaneRender = ({
   paneId,
   storyFragmentId,
   viewportClasses,
+  flags,
 }: any) => {
+  const setEmbeddedEdit = useDrupalStore((state) => state.setEmbeddedEdit)
   const p = paneId
   const thisPane = payload.panePayload
   const thisId = `${viewportKey}-${p}`
@@ -102,7 +107,21 @@ const StoryFragmentPaneRender = ({
             className="absolute top-0
             left-0 w-full h-full hover:border-2 hover:border-mygreen hover:border-dashed hover:bg-mygreen hover:bg-opacity-20 z-9"
             title="Edit this Pane"
-            onClick={() => console.log(`edit this pane; todo`)}
+            onClick={() => {
+              if (
+                flags.saveStage === SaveStages.NoChanges ||
+                (flags.saveStage === SaveStages.UnsavedChanges &&
+                  window.confirm(`There are Unsaved Changes. Proceed?`))
+              ) {
+                setEmbeddedEdit(
+                  p,
+                  `panes`,
+                  storyFragmentId.id,
+                  `storyfragments`,
+                )
+                navigate(`/storykeep/panes/${p}`)
+              }
+            }}
           ></button>
           {thisPaneChildren}
         </>

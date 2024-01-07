@@ -31,7 +31,6 @@ export default function EditTractStack({
   const validToken = useAuthStore((state) => state.validToken)
   const [editStage, setEditStage] = useState(EditStages.Booting)
   const setNavLocked = useDrupalStore((state) => state.setNavLocked)
-  const embeddedEdit = useDrupalStore((state) => state.embeddedEdit)
   const openDemoEnabled = useDrupalStore((state) => state.openDemoEnabled)
   const oauthDrupalUuid = useDrupalStore((state) => state.oauthDrupalUuid)
   const oauthDrupalRoles = useDrupalStore((state) => state.oauthDrupalRoles)
@@ -150,12 +149,6 @@ export default function EditTractStack({
           break
 
         case EditStages.AuthorChecked:
-          setEditStage(EditStages.CheckEmbedded)
-          break
-
-        case EditStages.CheckEmbedded:
-          if (embeddedEdit.child === uuid)
-            setFlags((prev) => ({ ...prev, isEmbeddedEdit: true }))
           setEditStage(EditStages.SetInitialState)
           break
 
@@ -170,7 +163,6 @@ export default function EditTractStack({
     setEditStage,
     openDemoEnabled,
     setNavLocked,
-    embeddedEdit.child,
     uuid,
   ])
 

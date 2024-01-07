@@ -20,7 +20,7 @@ const ResourceState = ({ uuid, payload, flags }: any) => {
   const [updateResourcePayload, setUpdateResourcePayload]: any = useState([])
   const setNavLocked = useDrupalStore((state) => state.setNavLocked)
   const allResources = useDrupalStore((state) => state.allResources)
-  const setResource = useDrupalStore((state) => state.allResources)
+  const setResource = useDrupalStore((state) => state.setResource)
   const thisResource = allResources[uuid]
   const drupalPreSaveQueue = useDrupalStore((state) => state.drupalPreSaveQueue)
   const removeDrupalPreSaveQueue = useDrupalStore(

@@ -25,7 +25,6 @@ export default function EditStoryFragment({
   }
   const [editStage, setEditStage] = useState(EditStages.Booting)
   const setNavLocked = useDrupalStore((state) => state.setNavLocked)
-  const embeddedEdit = useDrupalStore((state) => state.embeddedEdit)
   const openDemoEnabled = useDrupalStore((state) => state.openDemoEnabled)
   const oauthDrupalUuid = useDrupalStore((state) => state.oauthDrupalUuid)
   const oauthDrupalRoles = useDrupalStore((state) => state.oauthDrupalRoles)
@@ -49,7 +48,6 @@ export default function EditStoryFragment({
   })
   const [flags, setFlags] = useState<IEditFlags>({
     isAuthor: false,
-    isEmbeddedEdit: !!embeddedEdit,
     isAdmin: false,
     isBuilder: false,
     isOpenDemo: openDemoEnabled,
@@ -161,12 +159,6 @@ export default function EditStoryFragment({
           break
 
         case EditStages.AuthorChecked:
-          setEditStage(EditStages.CheckEmbedded)
-          break
-
-        case EditStages.CheckEmbedded:
-          if (embeddedEdit.child === uuid)
-            setFlags((prev) => ({ ...prev, isEmbeddedEdit: true }))
           setEditStage(EditStages.SetInitialState)
           break
 
@@ -180,7 +172,6 @@ export default function EditStoryFragment({
     editStage,
     setEditStage,
     openDemoEnabled,
-    embeddedEdit.child,
     setNavLocked,
     uuid,
   ])

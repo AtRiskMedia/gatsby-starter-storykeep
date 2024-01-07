@@ -23,7 +23,6 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
     url: process.env.DRUPAL_URL || ``,
   }
   const setNavLocked = useDrupalStore((state) => state.setNavLocked)
-  const embeddedEdit = useDrupalStore((state) => state.embeddedEdit)
   const [editStage, setEditStage] = useState(EditStages.Booting)
   const openDemoEnabled = useDrupalStore((state) => state.openDemoEnabled)
   const oauthDrupalUuid = useDrupalStore((state) => state.oauthDrupalUuid)
@@ -48,7 +47,6 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
   })
   const [flags, setFlags] = useState<IEditFlags>({
     isAuthor: false,
-    isEmbeddedEdit: false,
     isAdmin: false,
     isBuilder: false,
     isOpenDemo: openDemoEnabled,
@@ -297,12 +295,6 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
           break
 
         case EditStages.AuthorChecked:
-          setEditStage(EditStages.CheckEmbedded)
-          break
-
-        case EditStages.CheckEmbedded:
-          if (embeddedEdit.child === uuid)
-            setFlags((prev) => ({ ...prev, isEmbeddedEdit: true }))
           setEditStage(EditStages.SetInitialState)
           break
 
@@ -311,15 +303,7 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
           setEditStage(EditStages.Activated)
           break
       }
-  }, [
-    thisPane,
-    editStage,
-    setEditStage,
-    openDemoEnabled,
-    embeddedEdit.child,
-    setNavLocked,
-    uuid,
-  ])
+  }, [thisPane, editStage, setEditStage, openDemoEnabled, setNavLocked, uuid])
 
   // SSR + valid data check
   useEffect(() => {

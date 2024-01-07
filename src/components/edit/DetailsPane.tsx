@@ -1,10 +1,13 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 import React, { useMemo } from 'react'
+import { navigate } from 'gatsby'
 import { DetailsPie } from '@tractstack/nivo'
 
 import { useDrupalStore } from '../../stores/drupal'
+import { SaveStages } from '../../types'
 
-const DetailsPane = ({ uuid, data }: any) => {
+const DetailsPane = ({ uuid, data, flags }: any) => {
+  const setEmbeddedEdit = useDrupalStore((state) => state.setEmbeddedEdit)
   const thisPane = useDrupalStore((state) => state.allPanes[uuid])
   const payload = useMemo(() => {
     return [
@@ -46,7 +49,21 @@ const DetailsPane = ({ uuid, data }: any) => {
       <button
         title="Edit this Pane"
         className="px-3 text-xs text-left"
-        onClick={() => console.log(`todo; nav to`, uuid)}
+        onClick={() => {
+          if (
+            flags.saveStage === SaveStages.NoChanges ||
+            (flags.saveStage === SaveStages.UnsavedChanges &&
+              window.confirm(`There are Unsaved Changes. Proceed?`))
+          ) {
+            setEmbeddedEdit(
+              uuid,
+              `panes`,
+              flags.storyFragmentId,
+              `storyfragments`,
+            )
+            navigate(`/storykeep/panes/${uuid}`)
+          }
+        }}
       >
         {thisPane.title}
       </button>

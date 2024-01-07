@@ -14,6 +14,7 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
     childType: null,
     parent: null,
     parentType: null,
+    parentPanes: undefined,
     grandChild: undefined,
     grandChildType: undefined,
   },
@@ -22,6 +23,7 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
     childType: string,
     parent: string,
     parentType: string,
+    parentPanes: string,
     grandChild?: string,
     grandChildType?: string,
   ) =>
@@ -32,6 +34,7 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
         childType,
         parent,
         parentType,
+        parentPanes,
         grandChild,
         grandChildType,
       },

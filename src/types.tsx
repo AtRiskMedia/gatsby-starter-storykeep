@@ -33,7 +33,6 @@ export enum EditStages {
   AuthorCheck,
   AuthorChecking,
   AuthorChecked,
-  CheckEmbedded,
   SetInitialState,
   SettingInitialState,
   InitialStateSet,
@@ -109,7 +108,6 @@ export interface IEditPanePayload {
 
 export interface IEditFlags {
   isAuthor: boolean
-  isEmbeddedEdit: boolean
   isAdmin: boolean
   isBuilder: boolean
   isOpenDemo: boolean
@@ -257,6 +255,7 @@ export interface IDrupalState {
     childType: null | string
     parent: null | string
     parentType: null | string
+    parentPanes: undefined | string
     grandChild: undefined | string
     grandChildType: undefined | string
   }

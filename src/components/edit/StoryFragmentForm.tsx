@@ -38,6 +38,7 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
   } = fn
   const [toggleAdvOpt, setToggleAdvOpt] = useState(false)
   const viewportKey = useDrupalStore((state) => state.viewportKey)
+  const setEmbeddedEdit = useDrupalStore((state) => state.setEmbeddedEdit)
   const innerViewportMobile = Math.min(
     typeof window !== `undefined` ? window.innerWidth * 0.5 : 400,
     400,
@@ -89,10 +90,11 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
     slugCollision: flags.slugCollision,
     viewportKey,
     storyFragmentId: flags.storyFragmentId,
+    saveStage: flags.saveStage,
+    panes: state.panes,
   }
 
   const handleAdd = (mode: string, paneId?: string) => {
-    console.log(`handleAdd`, mode, paneId)
     if (mode === `new`) handleInsertPane(0)
     else if (mode === `existing` && paneId) handleInsertPane(0, paneId)
   }
@@ -252,7 +254,22 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
                                 type="button"
                                 className="rounded-md bg-white px-2.5 py-1.5 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-50"
                                 onClick={() => {
-                                  console.log(`todo embedded edit pane`, e)
+                                  if (
+                                    flags.saveStage === SaveStages.NoChanges ||
+                                    (flags.saveStage ===
+                                      SaveStages.UnsavedChanges &&
+                                      window.confirm(
+                                        `There are Unsaved Changes. Proceed?`,
+                                      ))
+                                  ) {
+                                    setEmbeddedEdit(
+                                      e,
+                                      `panes`,
+                                      uuid,
+                                      `storyfragments`,
+                                    )
+                                    navigate(`/storykeep/panes/${e}`)
+                                  }
                                 }}
                               >
                                 edit
@@ -280,7 +297,23 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
                                   type="button"
                                   className="rounded-md bg-white px-2.5 py-1.5 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-50"
                                   onClick={() => {
-                                    console.log(`todo embedded edit pane`, e)
+                                    if (
+                                      flags.saveStage ===
+                                        SaveStages.NoChanges ||
+                                      (flags.saveStage ===
+                                        SaveStages.UnsavedChanges &&
+                                        window.confirm(
+                                          `There are Unsaved Changes. Proceed?`,
+                                        ))
+                                    ) {
+                                      setEmbeddedEdit(
+                                        e,
+                                        `panes`,
+                                        uuid,
+                                        `storyfragments`,
+                                      )
+                                      navigate(`/storykeep/panes/${e}`)
+                                    }
                                   }}
                                 >
                                   edit
