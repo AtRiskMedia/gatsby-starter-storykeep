@@ -2763,7 +2763,8 @@ const PaneState = ({ uuid, payload, flags }: any) => {
           slug: state.slug,
           title: state.title,
         }
-        if (stateLivePreviewMarkdown?.markdownId) newPane.relationships.markdown = [stateLivePreviewMarkdown.markdownId]
+        if (stateLivePreviewMarkdown?.markdownId)
+          newPane.relationships.markdown = [stateLivePreviewMarkdown.markdownId]
         setUpdatePanePayload([{ id: uuid, payload: newPane }])
         if (!flags.isOpenDemo) {
           const pane = panePayload(
@@ -3083,8 +3084,8 @@ const PaneState = ({ uuid, payload, flags }: any) => {
           drupalNid: drupalResponse[uuid].data.attributes.drupal_internal__nid,
           relationships: {
             ...thisPane.relationships,
-            markdown: [stateLivePreviewMarkdown.markdownId]
-          }
+            markdown: [stateLivePreviewMarkdown.markdownId],
+          },
         }
         setUpdatePanePayload([{ id: newPaneId, payload: newPane }])
         setCleanerQueue(uuid, `pane`)
@@ -3115,6 +3116,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
     state?.slug,
     state?.title,
     stateLivePreviewMarkdown?.paneFragmentId,
+    stateLivePreviewMarkdown?.markdownId,
     uuid,
   ])
 

@@ -90,6 +90,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
   const [width, setWidth] = useState(innerViewport)
   const setViewportKey = useDrupalStore((state) => state.setViewportKey)
   const embeddedEdit = useDrupalStore((state) => state.embeddedEdit)
+  const setEmbeddedEdit = useDrupalStore((state) => state.setEmbeddedEdit)
   const AuthorIcon =
     flags.isAuthor || flags.isAdmin || flags.isBuilder
       ? LockOpenIcon
@@ -1115,16 +1116,17 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                               `There are Unsaved Changes. Proceed?`,
                             )
                           ) {
-                            if (embeddedEdit.parent) {
-                              navigate(
-                                `/storykeep/${embeddedEdit.parentType}/${embeddedEdit.parent}`,
+                            if (embeddedEdit.parent)
+                              setEmbeddedEdit(
+                                null,
+                                null,
+                                null,
+                                undefined,
+                                undefined,
+                                undefined,
                               )
-                            } else navigate(`/storykeep`)
-                          } else if (embeddedEdit.parent) {
-                            navigate(
-                              `/storykeep/${embeddedEdit.parentType}/${embeddedEdit.parent}`,
-                            )
-                          } else navigate(`/storykeep`)
+                            navigate(`/storykeep`)
+                          }
                         }}
                         className={classNames(
                           flags.saveStage >= SaveStages.PrepareSave

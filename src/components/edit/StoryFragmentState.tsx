@@ -219,7 +219,9 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
         break
 
       case SaveStages.StoryFragmentUpdateAffectedNodes:
-        console.log(`todo StoryFragmentUpdateAffectedNodes`)
+        console.log(
+          `todo StoryFragmentUpdateAffectedNodes -- must update it's tract stack`,
+        )
         setSaveStage(SaveStages.Success)
         break
 
@@ -235,7 +237,7 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
         if (newUuid) {
           const goto = newUuid
           setNewUuid(``)
-          navigate(`/storykeep/storyfragment/${goto}`)
+          navigate(`/storykeep/storyfragments/${goto}`)
         } else {
           setToggleCheck(true)
         }
@@ -282,8 +284,15 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
       if (thisStoryFragment.drupalNid === -1) {
         const newStoryFragmentId = drupalResponse[uuid].data.id
         const newStoryFragment = {
-          ...thisStoryFragment,
           drupalNid: drupalResponse[uuid].data.attributes.drupal_internal__nid,
+          title: state.title,
+          socialImagePath: state?.socialImagePath || ``,
+          slug: state.slug,
+          contextPanes: state.contextPanes,
+          tailwindBgColour: state?.tailwindBgColour || ``,
+          tractstack: state.tractstack,
+          panes: state.panes,
+          menu: state.menu,
         }
         setUpdateStoryFragmentPayload([
           { id: newStoryFragmentId, payload: newStoryFragment },
@@ -305,6 +314,14 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
     setCleanerQueue,
     setDrupalSaveNode,
     thisStoryFragment,
+    state?.contextPanes,
+    state?.menu,
+    state?.panes,
+    state?.slug,
+    state?.socialImagePath,
+    state?.tailwindBgColour,
+    state?.title,
+    state?.tractstack,
   ])
 
   // update storyFragment on save
@@ -323,7 +340,7 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
 
   // handle insert new pane
   useEffect(() => {
-    if (insertNewPane) {
+    if (insertNewPane !== ``) {
       const newPaneId = insertNewPane
       setInsertNewPane(``)
       setEmbeddedEdit(newPaneId, `panes`, uuid, `storyfragments`, state)
