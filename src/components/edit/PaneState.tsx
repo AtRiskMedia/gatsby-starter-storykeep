@@ -518,19 +518,9 @@ const PaneState = ({ uuid, payload, flags }: any) => {
     setStateLivePreviewMarkdown(initialStateLivePreviewMarkdown)
     setStateLivePreview(initialStateLivePreview)
     setStatePaneFragments(initialStatePaneFragments)
-    const impressionsPayload = stateImpressions?.title
-      ? {
-          [stateImpressions.id]: stateImpressions,
-        }
-      : null
-    const newOptionsPayload: any = {}
-    if (impressionsPayload) newOptionsPayload.impressions = impressionsPayload
-    if (Object.keys(stateHeldBeliefs).length)
-      newOptionsPayload.heldBeliefs = stateHeldBeliefs
-    if (Object.keys(stateWithheldBeliefs).length)
-      newOptionsPayload.withheldBeliefs = stateWithheldBeliefs
-    newOptionsPayload.paneFragmentsPayload = Object.values(statePaneFragments)
-    if (state.hiddenPane) newOptionsPayload.hiddenPane = state.hiddenPane
+    const newOptionsPayload: any = {
+      paneFragmentsPayload: Object.values(initialStatePaneFragments),
+    }
     setState((prev: any) => {
       return {
         ...prev,
