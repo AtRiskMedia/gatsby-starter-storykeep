@@ -526,9 +526,7 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
                     <span className="ml-3">
                       <button
                         type="button"
-                        disabled={
-                          flags.saveStage >= SaveStages.PrepareSave
-                        }
+                        disabled={flags.saveStage >= SaveStages.PrepareSave}
                         onClick={() => navigate(`/storykeep`)}
                         className={classNames(
                           flags.saveStage >= SaveStages.PrepareSave
@@ -548,9 +546,7 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
                     <span className="ml-3">
                       <button
                         type="button"
-                        disabled={
-                          flags.saveStage >= SaveStages.PrepareSave
-                          }
+                        disabled={flags.saveStage >= SaveStages.PrepareSave}
                         onClick={() => {
                           if (
                             window.confirm(

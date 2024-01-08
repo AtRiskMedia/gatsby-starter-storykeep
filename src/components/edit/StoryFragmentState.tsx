@@ -329,7 +329,7 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
       setEmbeddedEdit(newPaneId, `panes`, uuid, `storyfragments`, state)
       navigate(`/storykeep/panes/${newPaneId}`)
     }
-  }, [insertNewPane, setEmbeddedEdit, uuid, state?.panes])
+  }, [insertNewPane, setEmbeddedEdit, uuid, state])
 
   // set initial state
   useEffect(() => {
@@ -339,10 +339,9 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
       (!state || Object.keys(state).length === 0)
     ) {
       if (embeddedEdit.parentState) {
-        setState( embeddedEdit.parentState )
+        setState(embeddedEdit.parentState)
         setToggleCheck(true)
-      }
-      else setState(payload.initialState)
+      } else setState(payload.initialState)
     }
   }, [flags.editStage, payload.initialState, state, embeddedEdit?.parentState])
   useEffect(() => {

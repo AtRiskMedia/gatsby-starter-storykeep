@@ -513,9 +513,7 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                   <span className="ml-3">
                     <button
                       type="button"
-                      disabled={
-                        flags.saveStage >= SaveStages.PrepareSave
-                      }
+                      disabled={flags.saveStage >= SaveStages.PrepareSave}
                       onClick={() => {
                         if (
                           window.confirm(`There are Unsaved Changes. Proceed?`)
@@ -767,9 +765,9 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                           onClick={() => {
                             if (selectedCollection === `pane`)
                               navigate(`/storykeep/panes/${record}`)
-                            if (selectedCollection === `storyfragment`)
+                            else if (selectedCollection === `storyfragment`)
                               navigate(`/storykeep/storyfragments/${record}`)
-                            if (selectedCollection === `resource`)
+                            else if (selectedCollection === `resource`)
                               navigate(`/storykeep/resources/${record}`)
                             else
                               console.log(`miss on collection`, [

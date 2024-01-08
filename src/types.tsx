@@ -55,7 +55,6 @@ export enum SaveStages {
   PreSavedMarkdown,
   SavingMarkdown,
   SavedMarkdown,
-  MarkdownUpdateAffectedNodes,
   SavePane,
   PreSavingPane,
   PreSavedPane,
@@ -245,20 +244,22 @@ export interface ICleanerNode {
   [key: string]: string
 }
 
+export interface IEmbeddedEdit {
+  child: null | string
+  childType: null | string
+  parent: null | string
+  parentType: null | string
+  parentState: undefined | any // FIX
+  grandChild: undefined | string
+  grandChildType: undefined | string
+}
+
 export interface IDrupalState {
   stage: number
   setStage: Function
   apiStage: number
   setApiStage: Function
-  embeddedEdit: {
-    child: null | string
-    childType: null | string
-    parent: null | string
-    parentType: null | string
-    parentState: undefined | any // FIX
-    grandChild: undefined | string
-    grandChildType: undefined | string
-  }
+  embeddedEdit: IEmbeddedEdit
   setEmbeddedEdit: Function
   cleanerQueue: ICleanerNode
   setCleanerQueue: Function

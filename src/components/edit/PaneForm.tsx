@@ -1082,9 +1082,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                     <span className="ml-3">
                       <button
                         type="button"
-                        disabled={
-                          flags.saveStage >= SaveStages.PrepareSave
-                        }
+                        disabled={flags.saveStage >= SaveStages.PrepareSave}
                         onClick={() => {
                           if (embeddedEdit.parent) {
                             navigate(
@@ -1110,9 +1108,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                     <span className="ml-3">
                       <button
                         type="button"
-                        disabled={
-                          flags.saveStage >= SaveStages.PrepareSave
-                        }
+                        disabled={flags.saveStage >= SaveStages.PrepareSave}
                         onClick={() => {
                           if (
                             window.confirm(

@@ -18,7 +18,7 @@ import {
 } from '../../helpers/allowedShapeNames'
 import { starterTemplate } from '../../helpers/starterTemplates'
 import PaneForm from './PaneForm'
-import { EditStages, SaveStages } from '../../types'
+import { IEmbeddedEdit, EditStages, SaveStages } from '../../types'
 
 const PaneState = ({ uuid, payload, flags }: any) => {
   const [stateHeldBeliefs, setStateHeldBeliefs] = useState(
@@ -44,11 +44,22 @@ const PaneState = ({ uuid, payload, flags }: any) => {
   const [state, setState] = useState(payload.state)
   const [slugCollision, setSlugCollision] = useState(false)
   const [newUuid, setNewUuid] = useState(``)
+  const [newEmbeddedPayload, setNewEmbeddedPayload] = useState<IEmbeddedEdit>({
+    child: null,
+    childType: null,
+    parent: null,
+    parentType: null,
+    parentState: undefined,
+    grandChild: undefined,
+    grandChildType: undefined,
+  })
   const [updateMarkdownPayload, setUpdateMarkdownPayload]: any = useState([])
   const [updatePanePayload, setUpdatePanePayload]: any = useState([])
   const [saveStage, setSaveStage] = useState(SaveStages.Booting)
   const [toggleCheck, setToggleCheck] = useState(false)
   const deepEqual = require(`deep-equal`)
+  const embeddedEdit = useDrupalStore((state) => state.embeddedEdit)
+  const setEmbeddedEdit = useDrupalStore((state) => state.setEmbeddedEdit)
   const allPanes = useDrupalStore((state) => state.allPanes)
   const thisPane = typeof allPanes[uuid] !== `undefined` ? allPanes[uuid] : null
   const allFiles = useDrupalStore((state) => state.allFiles)
@@ -2752,7 +2763,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
           slug: state.slug,
           title: state.title,
         }
-        if (state.markdown) newPane.relationships.markdown = state.markdown
+        if (stateLivePreviewMarkdown?.markdownId) newPane.relationships.markdown = [stateLivePreviewMarkdown.markdownId]
         setUpdatePanePayload([{ id: uuid, payload: newPane }])
         if (!flags.isOpenDemo) {
           const pane = panePayload(
@@ -2786,13 +2797,6 @@ const PaneState = ({ uuid, payload, flags }: any) => {
       }
 
       case SaveStages.SavedMarkdown:
-        if (!flags.isOpenDemo)
-          setSaveStage(SaveStages.MarkdownUpdateAffectedNodes)
-        else setSaveStage(SaveStages.SavePane)
-        break
-
-      case SaveStages.MarkdownUpdateAffectedNodes:
-        console.log(`todo MarkdownUpdateAffectedNodes`)
         setSaveStage(SaveStages.SavePane)
         break
 
@@ -2808,7 +2812,16 @@ const PaneState = ({ uuid, payload, flags }: any) => {
         break
 
       case SaveStages.PaneUpdateAffectedNodes:
-        console.log(`todo PaneUpdateAffectedNodes`)
+        if (embeddedEdit?.parentState) {
+          const newPanes = embeddedEdit.parentState.panes.map((e: string) => {
+            if (e === uuid) return newUuid
+            return e
+          })
+          setNewEmbeddedPayload({
+            ...embeddedEdit,
+            parentState: { ...embeddedEdit.parentState, panes: newPanes },
+          })
+        }
         setSaveStage(SaveStages.Success)
         break
 
@@ -2859,6 +2872,8 @@ const PaneState = ({ uuid, payload, flags }: any) => {
     removeCleanerQueue,
     removePane,
     removeMarkdown,
+    embeddedEdit,
+    setNewEmbeddedPayload,
   ])
 
   // save markdown for drupal
@@ -3066,6 +3081,10 @@ const PaneState = ({ uuid, payload, flags }: any) => {
         const newPane = {
           ...thisPane,
           drupalNid: drupalResponse[uuid].data.attributes.drupal_internal__nid,
+          relationships: {
+            ...thisPane.relationships,
+            markdown: [stateLivePreviewMarkdown.markdownId]
+          }
         }
         setUpdatePanePayload([{ id: newPaneId, payload: newPane }])
         setCleanerQueue(uuid, `pane`)
@@ -3109,6 +3128,21 @@ const PaneState = ({ uuid, payload, flags }: any) => {
       setSaveStage(SaveStages.SavedPane)
     }
   }, [saveStage, updatePanePayload, setPane])
+
+  // handle new embeddedEdit payload
+  useEffect(() => {
+    if (newEmbeddedPayload.parentState) {
+      setEmbeddedEdit(
+        newEmbeddedPayload.child,
+        newEmbeddedPayload.childType,
+        newEmbeddedPayload.parent,
+        newEmbeddedPayload.parentType,
+        newEmbeddedPayload.parentState,
+        newEmbeddedPayload.grandChild,
+        newEmbeddedPayload.grandChildType,
+      )
+    }
+  }, [setEmbeddedEdit, newEmbeddedPayload, setNewEmbeddedPayload])
 
   // set initial state
   useEffect(() => {
