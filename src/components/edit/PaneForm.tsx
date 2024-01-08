@@ -1079,18 +1079,13 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                     </span>
                   ) : null}
 
-                  {flags.saveStage === SaveStages.NoChanges ? (
+                  {flags.saveStage === SaveStages.NoChanges &&
+                  !embeddedEdit?.parentState ? (
                     <span className="ml-3">
                       <button
                         type="button"
                         disabled={flags.saveStage >= SaveStages.PrepareSave}
-                        onClick={() => {
-                          if (embeddedEdit.parent) {
-                            navigate(
-                              `/storykeep/${embeddedEdit.parentType}/${embeddedEdit.parent}`,
-                            )
-                          } else navigate(`/storykeep`)
-                        }}
+                        onClick={() => navigate(`/storykeep`)}
                         className={classNames(
                           flags.saveStage >= SaveStages.PrepareSave
                             ? ``
@@ -1103,6 +1098,32 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                           aria-hidden="true"
                         />
                         Close
+                      </button>
+                    </span>
+                  ) : flags.saveStage === SaveStages.NoChanges &&
+                    !flags.isEmpty &&
+                    embeddedEdit?.parentState ? (
+                    <span className="ml-3">
+                      <button
+                        type="button"
+                        disabled={flags.saveStage >= SaveStages.PrepareSave}
+                        onClick={() =>
+                          navigate(
+                            `/storykeep/${embeddedEdit.parentType}/${embeddedEdit.parent}`,
+                          )
+                        }
+                        className={classNames(
+                          flags.saveStage >= SaveStages.PrepareSave
+                            ? ``
+                            : `hover:bg-slate-100`,
+                          `inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200`,
+                        )}
+                      >
+                        <XMarkIcon
+                          className="-ml-0.5 mr-1.5 h-5 w-5"
+                          aria-hidden="true"
+                        />
+                        Return to Story Fragment
                       </button>
                     </span>
                   ) : (
@@ -1366,7 +1387,10 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
               <PaneStarter
                 state={state}
                 fn={{ handleChange, handleChangeEditInPlace }}
-                flags={{ slugCollision: flags.slugCollision }}
+                flags={{
+                  slugCollision: flags.slugCollision,
+                  isEmbeddedEdit: !!embeddedEdit?.parentState,
+                }}
               />
             ) : (
               <PaneRender

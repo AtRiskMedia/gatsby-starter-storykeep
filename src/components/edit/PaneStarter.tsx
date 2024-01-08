@@ -7,9 +7,22 @@ const PaneStarter = ({ state, fn, flags }: any) => {
   return (
     <section className="p-6 max-max-w-screen-lg">
       <div className="mb-4">
-        <span className="font-action pr-3 text-base font-bold text-black">
-          Pane Details
-        </span>
+        {!flags?.isEmbeddedEdit ? (
+          <span className="font-action pr-3 text-base font-bold text-black">
+            Pane Details
+          </span>
+        ) : (
+          <>
+            <span className="font-action pr-3 text-base font-bold text-black">
+              Pane Details
+            </span>
+            <div className="pr-3 py-3 text-lg text-darkgrey font-main max-w-3xl">
+              (We&apos;re asking you to name every section of webpage. This
+              ensures you get meaningful engagement analytics out of the box.)
+            </div>
+          </>
+        )}
+
         <form className="max-w-3xl" id="editPaneDetails">
           <div className="space-y-12">
             <div className="border-b border-black/10 pb-12">

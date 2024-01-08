@@ -418,6 +418,7 @@ const PaneState = ({ uuid, payload, flags }: any) => {
     if (
       name === `slug` &&
       value !== thisPane.slug &&
+      value &&
       allPanesSlugs.includes(value)
     ) {
       setState((prev: any) => {
