@@ -2,7 +2,6 @@ export function resourcePayload(
   state: any, // FIX
   uuid: string,
 ) {
-  console.log(state, uuid)
   return {
     type: `node--resource`,
     id: uuid,
@@ -17,11 +16,11 @@ export function tractStackPayload(
   state: any, // FIX
   uuid: string,
 ) {
-  const relationships = (contextPanes: string[], storyfragments: string[]) => {
+  const relationships = (contextPanes: string[], storyFragments: string[]) => {
     const val: any = {}
-    if (storyfragments.length)
+    if (storyFragments.length)
       val.field_story_fragments = {
-        data: storyfragments.map((p: string) => {
+        data: storyFragments.map((p: string) => {
           return {
             type: `node--story_fragment`,
             id: p,
@@ -45,9 +44,9 @@ export function tractStackPayload(
     attributes: {
       title: state.title,
       field_slug: state.slug,
-      field_social_image_path: state.socialImagePath,
+      field_social_image_path: state?.socialImagePath || ``,
     },
-    ...relationships(state.contextPanes, state.storyfragments),
+    ...relationships(state.contextPanes, state.storyFragments),
   }
 }
 

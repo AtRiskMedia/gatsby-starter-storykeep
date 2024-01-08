@@ -233,7 +233,32 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
         break
       }
 
-      case `tractstack`:
+      case `tractstack`: {
+        const thisTractStack = get().allTractStacks[uuid]
+        const updateTractStacks = get().updateTractStacks
+        const newTractStack = {
+          ...thisTractStack,
+          id: uuid,
+          title: payload.attributes.title,
+          socialImagePath: payload?.attributes?.field_social_image_path || ``,
+          slug: payload.attributes.field_slug,
+          contextPanes:
+            payload?.relationships?.field_context_panes?.data
+              ?.map((f: any) => {
+                return f.id
+              })
+              .filter((e: string) => e !== `missing`) || [],
+          storyFragments:
+            payload?.relationships?.field_story_fragments?.data
+              ?.map((f: any) => {
+                return f.id
+              })
+              .filter((e: string) => e !== `missing`) || [],
+        }
+        updateTractStacks(newTractStack)
+        break
+      }
+
       case `resource`:
       case `file`:
       case `menu`:

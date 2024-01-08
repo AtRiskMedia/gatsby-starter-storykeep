@@ -119,7 +119,7 @@ export default function EditTractStack({
         title: thisTractStack?.title,
         slug: thisTractStack?.slug,
         socialImagePath: thisTractStack?.socialImagePath || ``,
-        storyfragments: thisTractStack?.storyfragments || {},
+        storyFragments: thisTractStack?.storyFragments || {},
         contextPanes: thisTractStack?.contextPanes || {},
       }
       const payload = {
@@ -134,7 +134,7 @@ export default function EditTractStack({
     thisTractStack?.slug,
     thisTractStack?.title,
     thisTractStack?.contextPanes,
-    thisTractStack?.storyfragments,
+    thisTractStack?.storyFragments,
     thisTractStack?.socialImagePath,
     uuid,
   ])

@@ -400,7 +400,7 @@ const TractStackState = ({ uuid, payload, flags }: any) => {
     thisTractStack,
   ])
 
-  // save storyfragment for drupal
+  // save tractstack for drupal
   useEffect(() => {
     // first pass save to drupal
     if (

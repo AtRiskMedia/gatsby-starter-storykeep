@@ -43,7 +43,6 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
   const allPanes = useDrupalStore((state) => state.allPanes)
   const allResources = useDrupalStore((state) => state.allResources)
   const allStoryFragments = useDrupalStore((state) => state.allStoryFragments)
-  const thisTractStack = useDrupalStore((state) => state.allTractStacks[uuid])
   const thisAllStoryFragments = Object.keys(allStoryFragments)
     .map((e: any) => {
       if (allStoryFragments[e].tractstack === uuid)
@@ -282,7 +281,7 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                           Story Fragments
                         </p>
                         {flags.hasStoryFragments ? (
-                          thisTractStack.storyFragments?.map((e: any) => {
+                          state.storyFragments?.map((e: any) => {
                             return (
                               <div
                                 key={e}
@@ -322,7 +321,7 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                           Context Panes
                         </p>
                         {flags.hasContextPanes ? (
-                          thisTractStack.contextPanes?.map((e: any) => {
+                          state.contextPanes?.map((e: any) => {
                             return (
                               <div
                                 key={e}

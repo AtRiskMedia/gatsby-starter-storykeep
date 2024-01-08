@@ -5,7 +5,10 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { useDrupalStore } from '../../stores/drupal'
 import StoryFragmentForm from './StoryFragmentForm'
-import { storyFragmentPayload } from '../../helpers/generateDrupalPayload'
+import {
+  storyFragmentPayload,
+  tractStackPayload,
+} from '../../helpers/generateDrupalPayload'
 import { EditStages, SaveStages } from '../../types'
 
 const StoryFragmentState = ({ uuid, payload, flags }: any) => {
@@ -21,12 +24,16 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
   const deepEqual = require(`deep-equal`)
   const [updateStoryFragmentPayload, setUpdateStoryFragmentPayload]: any =
     useState([])
+  const [updateTractStackPayload, setUpdateTractStackPayload]: any = useState(
+    [],
+  )
   const setNavLocked = useDrupalStore((state) => state.setNavLocked)
   const updatePanes = useDrupalStore((state) => state.updatePanes)
   const removeStoryFragment = useDrupalStore(
     (state) => state.removeStoryFragment,
   )
   const setStoryFragment = useDrupalStore((state) => state.setStoryFragment)
+  const setTractStack = useDrupalStore((state) => state.setTractStack)
   const allStoryFragments = useDrupalStore((state) => state.allStoryFragments)
   const thisStoryFragment = allStoryFragments[uuid]
   const thisTractStack = useDrupalStore(
@@ -213,15 +220,45 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
       }
 
       case SaveStages.SavedStoryFragment:
-        if (!flags.isOpenDemo)
-          setSaveStage(SaveStages.StoryFragmentUpdateAffectedNodes)
-        else setSaveStage(SaveStages.Success)
+        setSaveStage(SaveStages.StoryFragmentUpdateAffectedNodes)
         break
 
-      case SaveStages.StoryFragmentUpdateAffectedNodes:
-        console.log(
-          `todo StoryFragmentUpdateAffectedNodes -- must update it's tract stack`,
-        )
+      case SaveStages.StoryFragmentUpdateAffectedNodes: {
+        const thisUuid = newUuid === `` ? uuid : newUuid
+        const newStoryFragments =
+          thisTractStack.storyFragments.length === 0
+            ? [thisUuid]
+            : [...thisTractStack?.storyFragments, thisUuid]
+        const newTractStack = {
+          ...thisTractStack,
+          storyFragments: newStoryFragments,
+        }
+        setUpdateTractStackPayload([
+          { id: thisStoryFragment.tractstack, payload: newTractStack },
+        ])
+        if (!flags.isOpenDemo) {
+          const tractStack = tractStackPayload(
+            newTractStack,
+            thisStoryFragment.tractstack,
+          )
+          setDrupalPreSaveQueue(
+            tractStack,
+            `tractstack`,
+            thisStoryFragment.tractstack,
+            thisTractStack.drupalNid,
+          )
+        }
+        setSaveStage(SaveStages.SaveTractStack)
+        break
+      }
+
+      case SaveStages.SaveTractStack: {
+        if (!flags.isOpenDemo) setSaveStage(SaveStages.PreSavingTractStack)
+        else setSaveStage(SaveStages.SavingTractStack)
+        break
+      }
+
+      case SaveStages.SavedTractStack:
         setSaveStage(SaveStages.Success)
         break
 
@@ -255,6 +292,7 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
     flags.isOpenDemo,
     state,
     thisStoryFragment,
+    thisTractStack,
   ])
 
   // save storyfragment for drupal
@@ -337,6 +375,75 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
       setSaveStage(SaveStages.SavedStoryFragment)
     }
   }, [saveStage, updateStoryFragmentPayload, setStoryFragment])
+
+  // save tractstack for drupal
+  useEffect(() => {
+    // first pass save to drupal
+    if (
+      !flags.isOpenDemo &&
+      saveStage === SaveStages.PreSavingTractStack &&
+      typeof drupalPreSaveQueue?.tractstack !== `undefined` &&
+      Object.keys(drupalPreSaveQueue?.tractstack).length
+    ) {
+      setDrupalSaveNode(
+        drupalPreSaveQueue.tractstack[thisStoryFragment.tractstack].payload,
+        `tractstack`,
+        thisStoryFragment.tractstack,
+        thisTractStack.drupalNid,
+      )
+      removeDrupalPreSaveQueue(thisStoryFragment.tractstack, `tractstack`)
+      setSaveStage(SaveStages.PreSavedTractStack)
+    }
+    // second pass, intercept / process response, get uuid from Drupal for new node
+    if (
+      !flags.isOpenDemo &&
+      saveStage === SaveStages.PreSavedTractStack &&
+      typeof drupalResponse[thisStoryFragment.tractstack] !== `undefined`
+    ) {
+      if (thisTractStack.drupalNid === -1) {
+        const newTractStackId =
+          drupalResponse[thisStoryFragment.tractstack].data.id
+        const newTractStack = {
+          ...thisTractStack,
+          drupalNid:
+            drupalResponse[thisStoryFragment.tractstack].data.attributes
+              .drupal_internal__nid,
+        }
+        setUpdateTractStackPayload([
+          { id: newTractStackId, payload: newTractStack },
+        ])
+        setCleanerQueue(thisStoryFragment.tractstack, `tractstack`)
+        setNewUuid(newTractStackId)
+      }
+      removeDrupalResponse(thisStoryFragment.tractstack)
+      setSaveStage(SaveStages.SavingTractStack)
+    }
+  }, [
+    flags.isOpenDemo,
+    saveStage,
+    drupalPreSaveQueue?.tractstack,
+    thisStoryFragment.tractstack,
+    drupalResponse,
+    removeDrupalPreSaveQueue,
+    removeDrupalResponse,
+    setCleanerQueue,
+    setDrupalSaveNode,
+    thisTractStack,
+  ])
+
+  // update tractstack on save
+  useEffect(() => {
+    if (
+      saveStage === SaveStages.SavingTractStack &&
+      updateTractStackPayload.length
+    ) {
+      updateTractStackPayload.forEach((e: any) => {
+        setTractStack(e.id, e.payload)
+      })
+      setUpdateTractStackPayload([])
+      setSaveStage(SaveStages.SavedTractStack)
+    }
+  }, [saveStage, updateTractStackPayload, setTractStack])
 
   // handle insert new pane
   useEffect(() => {
