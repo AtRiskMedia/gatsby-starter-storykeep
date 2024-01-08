@@ -29,6 +29,7 @@ import { SaveStages } from '../../types'
 
 const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
   const { state } = payload
+  const isEmpty = state.panes.length === 0
   const {
     handleChange,
     handleInsertPane,
@@ -241,7 +242,7 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
                         <p className="block text-sm leading-6 text-black">
                           Panes
                         </p>
-                        {!flags.isEmpty ? (
+                        {!isEmpty ? (
                           state.panes?.map((e: any) => (
                             <div
                               key={e}
@@ -526,9 +527,7 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
                       <button
                         type="button"
                         disabled={
-                          flags.saveStage >= SaveStages.PrepareSave ||
-                          flags.slugCollision ||
-                          state.slug === ``
+                          flags.saveStage >= SaveStages.PrepareSave
                         }
                         onClick={() => navigate(`/storykeep`)}
                         className={classNames(
@@ -550,10 +549,8 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
                       <button
                         type="button"
                         disabled={
-                          flags.saveStage >= SaveStages.PrepareSave ||
-                          flags.slugCollision ||
-                          state.slug === ``
-                        }
+                          flags.saveStage >= SaveStages.PrepareSave
+                          }
                         onClick={() => {
                           if (
                             window.confirm(
@@ -689,7 +686,7 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
             {flags.saveStage >= SaveStages.PrepareSave ? (
               <div className="z-50 absolute top-0 bg-transparent inset-y-0 right-0 w-full h-screen"></div>
             ) : null}
-            {flags.isEmpty ? (
+            {isEmpty ? (
               <div className="w-full px-6 pt-2 max-w-screen-2xl mt-2 ml-2">
                 <span className="font-action pr-3 text-base font-bold text-black">
                   Story Fragment Details

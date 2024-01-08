@@ -255,7 +255,7 @@ export interface IDrupalState {
     childType: null | string
     parent: null | string
     parentType: null | string
-    parentPanes: undefined | string
+    parentState: undefined | any // FIX
     grandChild: undefined | string
     grandChildType: undefined | string
   }

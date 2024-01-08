@@ -514,9 +514,7 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                     <button
                       type="button"
                       disabled={
-                        flags.saveStage >= SaveStages.PrepareSave ||
-                        flags.slugCollision ||
-                        state.slug === ``
+                        flags.saveStage >= SaveStages.PrepareSave
                       }
                       onClick={() => {
                         if (

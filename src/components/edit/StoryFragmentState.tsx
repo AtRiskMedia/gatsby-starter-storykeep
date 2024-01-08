@@ -64,7 +64,6 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
       return null
     })
     .filter((e) => e)
-  const isEmpty = thisStoryFragment.panes.length === 0
   const hasContextPanes = Object.keys(thisStoryFragment.contextPanes).length > 0
 
   const handleChange = (e: any) => {
@@ -95,6 +94,12 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
       newPaneId,
       ...state.panes.slice(offset),
     ]
+    setState((prev: any) => {
+      return {
+        ...prev,
+        panes: newPanes,
+      }
+    })
     if (!paneId) {
       const newPane = {
         id: newPaneId,
@@ -103,15 +108,8 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
         slug: ``,
       }
       updatePanes(newPane)
-      setEmbeddedEdit(newPaneId, `panes`, uuid, `storyfragments`, newPanes)
       setInsertNewPane(newPaneId)
     }
-    setState((prev: any) => {
-      return {
-        ...prev,
-        panes: newPanes,
-      }
-    })
     setToggleCheck(true)
   }
 
@@ -328,7 +326,7 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
     if (insertNewPane) {
       const newPaneId = insertNewPane
       setInsertNewPane(``)
-      setEmbeddedEdit(newPaneId, `panes`, uuid, `storyfragments`, state.panes)
+      setEmbeddedEdit(newPaneId, `panes`, uuid, `storyfragments`, state)
       navigate(`/storykeep/panes/${newPaneId}`)
     }
   }, [insertNewPane, setEmbeddedEdit, uuid, state?.panes])
@@ -340,11 +338,13 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
       flags?.editStage === EditStages.Booting &&
       (!state || Object.keys(state).length === 0)
     ) {
-      if (embeddedEdit.parentPanes)
-        setState({ ...payload.initialState, panes: embeddedEdit.parentPanes })
+      if (embeddedEdit.parentState) {
+        setState( embeddedEdit.parentState )
+        setToggleCheck(true)
+      }
       else setState(payload.initialState)
     }
-  }, [flags.editStage, payload.initialState, state, embeddedEdit?.parentPanes])
+  }, [flags.editStage, payload.initialState, state, embeddedEdit?.parentState])
   useEffect(() => {
     if (
       flags.editStage === EditStages.Booting &&
@@ -369,7 +369,6 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
         ...flags,
         saveStage,
         saved,
-        isEmpty,
         hasContextPanes,
         slugCollision,
         storyFragmentId,
