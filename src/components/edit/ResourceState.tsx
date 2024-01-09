@@ -36,6 +36,7 @@ const ResourceState = ({ uuid, payload, flags }: any) => {
   const setCleanerQueue = useDrupalStore((state) => state.setCleanerQueue)
   const cleanerQueue = useDrupalStore((state) => state.cleanerQueue)
   const removeCleanerQueue = useDrupalStore((state) => state.removeCleanerQueue)
+  const removeResource = useDrupalStore((state) => state.removeResource)
   const drupalResponse = useDrupalStore((state) => state.drupalResponse)
   const allResourceSlugs = Object.keys(allResources)
     .map((e) => {
@@ -90,13 +91,11 @@ const ResourceState = ({ uuid, payload, flags }: any) => {
 
   // handle stages
   useEffect(() => {
-    console.log(`--saveStage`, SaveStages[saveStage])
     switch (saveStage) {
       case SaveStages.NoChanges:
         Object.keys(cleanerQueue).forEach((e: string) => {
           if (cleanerQueue[e] === `resource` && e !== uuid) {
-            // removeStoryFragment(e)
-            console.log(`remove resource e`)
+            removeResource(e)
             removeCleanerQueue(e)
           }
         })
@@ -163,6 +162,7 @@ const ResourceState = ({ uuid, payload, flags }: any) => {
     saveStage,
     cleanerQueue,
     removeCleanerQueue,
+    removeResource,
     setDrupalPreSaveQueue,
     uuid,
     newUuid,
@@ -199,8 +199,14 @@ const ResourceState = ({ uuid, payload, flags }: any) => {
       if (thisResource.drupalNid === -1) {
         const newResourceId = drupalResponse[uuid].data.id
         const newResource = {
-          ...thisResource,
           drupalNid: drupalResponse[uuid].data.attributes.drupal_internal__nid,
+          title: drupalResponse[uuid].data.attributes?.title,
+          actionLisp: drupalResponse[uuid].data.attributes?.field_action_lisp,
+          categorySlug:
+            drupalResponse[uuid].data.attributes?.field_category_slug,
+          oneliner: drupalResponse[uuid].data.attributes?.field_oneliner,
+          optionsPayload: drupalResponse[uuid].data.attributes?.field_options,
+          slug: drupalResponse[uuid].data.attributes?.field_slug,
         }
         setUpdateResourcePayload([{ id: newResourceId, payload: newResource }])
         setCleanerQueue(uuid, `resource`)

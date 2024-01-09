@@ -116,10 +116,11 @@ const TractStackState = ({ uuid, payload, flags }: any) => {
   const setNavLocked = useDrupalStore((state) => state.setNavLocked)
   const allTractStacks = useDrupalStore((state) => state.allTractStacks)
   const updatePanes = useDrupalStore((state) => state.updatePanes)
-  const setTractStack = useDrupalStore((state) => state.setTractStack)
+  const updateResources = useDrupalStore((state) => state.updateResources)
   const updateStoryFragments = useDrupalStore(
     (state) => state.updateStoryFragments,
   )
+  const setTractStack = useDrupalStore((state) => state.setTractStack)
   const thisTractStack = allTractStacks[uuid]
   const drupalPreSaveQueue = useDrupalStore((state) => state.drupalPreSaveQueue)
   const removeDrupalPreSaveQueue = useDrupalStore(
@@ -197,8 +198,22 @@ const TractStackState = ({ uuid, payload, flags }: any) => {
       case `tractstack`:
         break
 
-      case `resource`:
+      case `resource`: {
+        const newUuid = uuidv4()
+        const newResource = {
+          id: newUuid,
+          drupalNid: -1,
+          title: `Untitled`,
+          slug: ``,
+          actionLisp: ``,
+          categorySlug: ``,
+          oneliner: ``,
+          optionsPayload: ``,
+        }
+        updateResources(newResource)
+        navigate(`/storykeep/resources/${newUuid}`)
         break
+      }
     }
   }
 

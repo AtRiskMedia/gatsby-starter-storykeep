@@ -8,6 +8,11 @@ export function resourcePayload(
     attributes: {
       title: state.title,
       field_slug: state.slug,
+      drupalNid: state.drupalNid,
+      field_action_lisp: state.actionLisp || ``,
+      field_category_slug: state.categorySlug || null,
+      field_oneliner: state.oneliner || ``,
+      field_options: state.optionsPayload || `{}`,
     },
   }
 }

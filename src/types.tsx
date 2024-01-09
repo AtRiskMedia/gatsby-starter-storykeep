@@ -293,6 +293,8 @@ export interface IDrupalState {
   allResources: any // FIX
   allMarkdown: any // FIX
   allCollections: any // FIX
+  removeTractStack: Function
+  removeResource: Function
   removePane: Function
   removeMarkdown: Function
   removeStoryFragment: Function

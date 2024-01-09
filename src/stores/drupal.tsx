@@ -234,10 +234,8 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
       }
 
       case `tractstack`: {
-        const thisTractStack = get().allTractStacks[uuid]
         const updateTractStacks = get().updateTractStacks
         const newTractStack = {
-          ...thisTractStack,
           id: uuid,
           title: payload.attributes.title,
           socialImagePath: payload?.attributes?.field_social_image_path || ``,
@@ -259,7 +257,22 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
         break
       }
 
-      case `resource`:
+      case `resource`: {
+        const updateResources = get().updateResources
+        const newResource = {
+          id: uuid,
+          drupalNid: payload?.attributes?.drupal_internal__nid,
+          title: payload?.attributes?.title,
+          actionLisp: payload?.attributes?.field_action_lisp,
+          categorySlug: payload?.attributes?.field_category_slug,
+          oneliner: payload?.attributes?.field_oneliner,
+          optionsPayload: payload?.attributes?.field_options,
+          slug: payload?.attributes?.field_slug,
+        }
+        updateResources(newResource)
+        break
+      }
+
       case `file`:
       case `menu`:
         console.log(`todo SaveDrupalNode`, type)
@@ -495,6 +508,19 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
     set((state) => ({
       allPanes: { ...state.allPanes, [payload.id]: thisPane },
     }))
+  },
+  removeTractStack: (uuid: string) => {
+    const allTractStacks = get().allTractStacks
+    const newPayload = { ...allTractStacks }
+    delete newPayload[uuid]
+    set((state) => ({ ...state, allTractStacks: newPayload }))
+  },
+  removeResource: (uuid: string) => {
+    const allResources = get().allResources
+    const newPayload = { ...allResources }
+    delete newPayload[uuid]
+    console.log(`deleted`, uuid, newPayload)
+    set((state) => ({ ...state, allResources: newPayload }))
   },
   removePane: (uuid: string) => {
     const allPanes = get().allPanes
