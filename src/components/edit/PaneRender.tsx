@@ -8,6 +8,7 @@ import React, {
   useCallback,
 } from 'react'
 import { renderToString } from 'react-dom/server'
+import { ArrowDownIcon } from '@heroicons/react/20/solid'
 import styled from 'styled-components'
 import { classNames, Compositor } from '@tractstack/helpers'
 import { fromMarkdown } from 'mdast-util-from-markdown'
@@ -33,6 +34,50 @@ const StyledWrapperSection = styled.section<IStyledWrapperSectionProps>`
 const StyledWrapperDiv = styled.div<IStyledWrapperSectionProps>`
   ${(props: any) => props.css};
 `
+
+const CurrentlyDesigning = ({ viewportKey }) => {
+  return (
+    <>
+      <div className="my-2 flex items-center px-3">
+        <span className="mr-2 text-sm text-mydarkgrey">
+          Currently designing for:
+        </span>
+        <span className="font-bold text-xl text-myblue">{viewportKey}</span>
+      </div>
+      <div className="mb-3 text-myorange">
+        <div className="flex justify-between flex-row">
+            <div className="w-1/3 grid justify-items-center">
+            {viewportKey===`mobile` ? (
+              <span className="inline-flex">
+              <ArrowDownIcon className="h-8 w-8" />
+              <ArrowDownIcon className="h-8 w-8" />
+              <ArrowDownIcon className="h-8 w-8" />
+              </span>
+            ): null}
+            </div>
+            <div className="w-1/3 grid justify-items-center">
+            {viewportKey===`tablet` ? (
+<span className="inline-flex">
+              <ArrowDownIcon className="h-8 w-8" />
+              <ArrowDownIcon className="h-8 w-8" />
+              <ArrowDownIcon className="h-8 w-8" />
+              </span>
+            ): null}
+            </div>
+            <div className="w-1/3 grid justify-items-center">
+            {viewportKey===`desktop` ? (
+<span className="inline-flex">
+              <ArrowDownIcon className="h-8 w-8" />
+              <ArrowDownIcon className="h-8 w-8" />
+              <ArrowDownIcon className="h-8 w-8" />
+              </span>
+            ): null}
+            </div>
+          </div>
+      </div>
+    </>
+  )
+}
 
 const tags = {
   h1: `Heading`,
@@ -658,7 +703,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: any) => {
         <StyledWrapperDiv
           key={`${viewportKey}-${uuid}-wrapper-outer`}
           className={classNames(
-            `bg-mylightgrey/20 sticky top-0`,
+            `bg-mylightgrey/20 sticky top-22`,
             viewportClasses,
           )}
           ref={elementRef as React.RefObject<HTMLDivElement>}
@@ -691,23 +736,26 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: any) => {
       {!emptyPane && !codeHook && interceptMode === `edit` ? (
         <div className="pl-4 flex-1 flex-shrink">
           <div className="w-80 xl:w-96 mb-6 sticky top-4">
-            <PaneEditInPlace
-              tag={tag}
-              tagType={tagType}
-              nth={nth}
-              childNth={childNth}
-              childGlobalNth={childGlobalNth}
-              stateLivePreview={stateLivePreview}
-              stateLivePreviewMarkdown={stateLivePreviewMarkdown}
-              handleChangeEditInPlace={handleChangeEditInPlace}
-              viewportKey={viewportKey}
-              reset={EditInPlaceReset}
-              pageStylesPagination={pageStylesPagination}
-              setPageStylesPagination={setPageStylesPagination}
-              hasBgColour={thisPane.hasBgColour}
-              hasBgColourId={thisPane.hasBgColourId}
-              hasBreaks={thisPane.hasBreaks}
-            />
+            <>
+              <CurrentlyDesigning viewportKey={viewportKey} />
+              <PaneEditInPlace
+                tag={tag}
+                tagType={tagType}
+                nth={nth}
+                childNth={childNth}
+                childGlobalNth={childGlobalNth}
+                stateLivePreview={stateLivePreview}
+                stateLivePreviewMarkdown={stateLivePreviewMarkdown}
+                handleChangeEditInPlace={handleChangeEditInPlace}
+                viewportKey={viewportKey}
+                reset={EditInPlaceReset}
+                pageStylesPagination={pageStylesPagination}
+                setPageStylesPagination={setPageStylesPagination}
+                hasBgColour={thisPane.hasBgColour}
+                hasBgColourId={thisPane.hasBgColourId}
+                hasBreaks={thisPane.hasBreaks}
+              />
+            </>
           </div>
         </div>
       ) : null}
