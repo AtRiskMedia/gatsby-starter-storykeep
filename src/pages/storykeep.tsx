@@ -20,6 +20,7 @@ const StoryKeepPage = () => {
     url: process.env.DRUPAL_URL || ``,
   }
   const tractStackSelect = useDrupalStore((state) => state.tractStackSelect)
+  const allTractStacks = useDrupalStore((state) => state.allTractStacks)
   const stage = useDrupalStore((state) => state.stage)
   const setStage = useDrupalStore((state) => state.setStage)
   const validToken = useAuthStore((state) => state.validToken)
@@ -56,13 +57,22 @@ const StoryKeepPage = () => {
 
   // valid data check
   useEffect(() => {
-    if (tractStackSelected !== `` && !tractStackSelect)
+    if (
+      tractStackSelected !== `` &&
+      !tractStackSelect &&
+      typeof allTractStacks[tractStackSelected] !== `undefined`
+    )
       navigate(`/storykeep/tractstacks/${tractStackSelected}`)
-    else if (homeTractStackId && !tractStackSelect) {
+    else if (
+      homeTractStackId &&
+      !tractStackSelect &&
+      typeof allTractStacks[homeTractStackId] !== `undefined`
+    ) {
       setTractStackSelected(homeTractStackId)
       navigate(`/storykeep/tractstacks/${homeTractStackId}`)
     } else setIsLoaded(true)
   }, [
+    allTractStacks,
     homeTractStackId,
     tractStackSelect,
     tractStackSelected,

@@ -112,6 +112,15 @@ const TractStackState = ({ uuid, payload, flags }: any) => {
   const setTractStackSelect = useDrupalStore(
     (state) => state.setTractStackSelect,
   )
+  const setTractStackSelected = useDrupalStore(
+    (state) => state.setTractStackSelected,
+  )
+  const tractStackTriggerSave = useDrupalStore(
+    (state) => state.tractStackTriggerSave,
+  )
+  const setTractStackTriggerSave = useDrupalStore(
+    (state) => state.setTractStackTriggerSave,
+  )
   const selectedCollection = useDrupalStore((state) => state.selectedCollection)
   const setNavLocked = useDrupalStore((state) => state.setNavLocked)
   const allTractStacks = useDrupalStore((state) => state.allTractStacks)
@@ -120,6 +129,7 @@ const TractStackState = ({ uuid, payload, flags }: any) => {
   const updateStoryFragments = useDrupalStore(
     (state) => state.updateStoryFragments,
   )
+  const removeTractStack = useDrupalStore((state) => state.removeTractStack)
   const setTractStack = useDrupalStore((state) => state.setTractStack)
   const thisTractStack = allTractStacks[uuid]
   const drupalPreSaveQueue = useDrupalStore((state) => state.drupalPreSaveQueue)
@@ -194,9 +204,6 @@ const TractStackState = ({ uuid, payload, flags }: any) => {
         navigate(`/storykeep/storyfragments/${newUuid}`)
         break
       }
-
-      case `tractstack`:
-        break
 
       case `resource`: {
         const newUuid = uuidv4()
@@ -339,14 +346,15 @@ const TractStackState = ({ uuid, payload, flags }: any) => {
       case SaveStages.NoChanges:
         Object.keys(cleanerQueue).forEach((e: string) => {
           if (cleanerQueue[e] === `tractstack` && e !== uuid) {
-            // removeStoryFragment(e)
-            console.log(`remove tractstack e`)
+            removeTractStack(e)
             removeCleanerQueue(e)
           }
         })
+        if (tractStackTriggerSave) setSaveStage(SaveStages.PrepareSave)
         break
 
       case SaveStages.PrepareSave: {
+        setTractStackTriggerSave(false)
         setSaveStage(SaveStages.PrepareNodes)
         break
       }
@@ -357,7 +365,7 @@ const TractStackState = ({ uuid, payload, flags }: any) => {
           title: state.title,
           socialImagePath: state?.socialImagePath || ``,
           slug: state.slug,
-          storyfragments: state.storyfragments,
+          storyFragments: state.storyFragments,
           contextPanes: state.contextPanes,
         }
         setUpdateTractStackPayload([{ id: uuid, payload: newTractStack }])
@@ -394,6 +402,7 @@ const TractStackState = ({ uuid, payload, flags }: any) => {
         })
         setSaveStage(SaveStages.NoChanges)
         if (newUuid) {
+          setTractStackSelected(newUuid)
           const goto = newUuid
           setNewUuid(``)
           navigate(`/storykeep/tractstacks/${goto}`)
@@ -413,6 +422,10 @@ const TractStackState = ({ uuid, payload, flags }: any) => {
     flags.isOpenDemo,
     state,
     thisTractStack,
+    removeTractStack,
+    tractStackTriggerSave,
+    setTractStackTriggerSave,
+    setTractStackSelected,
   ])
 
   // save tractstack for drupal
@@ -439,7 +452,7 @@ const TractStackState = ({ uuid, payload, flags }: any) => {
       saveStage === SaveStages.PreSavedTractStack &&
       typeof drupalResponse[uuid] !== `undefined`
     ) {
-      if (thisTractStack.drupalNid === -1) {
+      if (!thisTractStack || thisTractStack.drupalNid === -1) {
         const newTractStackId = drupalResponse[uuid].data.id
         const newTractStack = {
           ...thisTractStack,

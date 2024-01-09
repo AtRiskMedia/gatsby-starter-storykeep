@@ -119,8 +119,8 @@ export default function EditTractStack({
         title: thisTractStack?.title,
         slug: thisTractStack?.slug,
         socialImagePath: thisTractStack?.socialImagePath || ``,
-        storyFragments: thisTractStack?.storyFragments || {},
-        contextPanes: thisTractStack?.contextPanes || {},
+        storyFragments: thisTractStack?.storyFragments || [],
+        contextPanes: thisTractStack?.contextPanes || [],
       }
       const payload = {
         initialState,

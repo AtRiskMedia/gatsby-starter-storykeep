@@ -258,6 +258,8 @@ export interface IDrupalState {
   stage: number
   setStage: Function
   apiStage: number
+  tractStackTriggerSave: boolean
+  setTractStackTriggerSave: Function
   setApiStage: Function
   embeddedEdit: IEmbeddedEdit
   setEmbeddedEdit: Function

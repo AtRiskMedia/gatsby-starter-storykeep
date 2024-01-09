@@ -544,27 +544,25 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
         <div className="mx-6 mb-8 bg-white/50 px-4 py-4 shadow xs:rounded-md xs:px-6">
           <div className="border-b border-gray-200 pb-1.5 flex items-center justify-between">
             <span className="isolate inline-flex rounded-md shadow-sm">
-              {tags
-                .filter((tag) => tag.count)
-                .map((tag, idx) => (
-                  <button
-                    key={tag.id}
-                    type="button"
-                    onClick={() => setSelectedCollection(tag.id)}
-                    className={classNames(
-                      tag.current
-                        ? `bg-myorange/10 text-black`
-                        : `bg-black/10 text-mydarkgrey`,
-                      idx === 0 ? `rounded-l-md` : ``,
-                      idx + 1 === tags.filter((tag) => tag.count).length
-                        ? `rounded-r-md`
-                        : ``,
-                      `relative inline-flex items-center px-3 py-2 text-sm font-bold ring-1 ring-inset ring-myorange/20 hover:text-black hover:bg-myorange/20`,
-                    )}
-                  >
-                    {`${tag.name} (${tag.count})`}
-                  </button>
-                ))}
+              {tags.map((tag, idx) => (
+                <button
+                  key={tag.id}
+                  type="button"
+                  onClick={() => setSelectedCollection(tag.id)}
+                  className={classNames(
+                    tag.current
+                      ? `bg-myorange/10 text-black`
+                      : `bg-black/10 text-mydarkgrey`,
+                    idx === 0 ? `rounded-l-md` : ``,
+                    idx + 1 === tags.filter((tag) => tag.count).length
+                      ? `rounded-r-md`
+                      : ``,
+                    `relative inline-flex items-center px-3 py-2 text-sm font-bold ring-1 ring-inset ring-myorange/20 hover:text-black hover:bg-myorange/20`,
+                  )}
+                >
+                  {`${tag.name} (${tag.count})`}
+                </button>
+              ))}
               {noTags ? (
                 <div className="relative inline-flex items-center rounded-l-md bg-mywhite px-3 py-2 text-sm font-bold text-black">
                   No content found.
@@ -676,303 +674,228 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
         </div>
       </section>
 
-      <section className="relative bg-slate-50">
-        <div className="text-xl font-action mb-12 xl:max-w-screen-2xl mt-4 px-4 xl:px-8">
-          <div className="-mx-4">
-            <table className="w-full divide-y divide-slate-200">
-              <thead>
-                <tr>
-                  <th
-                    scope="col"
-                    className="py-3.5 pl-4 pr-3 text-left text-sm font-bold text-black"
-                  >
-                    {rowOneHeading}
-                  </th>
-                  {(selectedCollection === `pane` &&
-                    typeof flags?.panesDaysSinceData !== `undefined`) ||
-                  (selectedCollection === `storyfragment` &&
-                    typeof flags?.storyFragmentDaysSinceData !==
-                      `undefined`) ? (
+      {Object.keys(nodes).length === 0 ? null : (
+        <section className="relative bg-slate-50">
+          <div className="text-xl font-action mb-12 xl:max-w-screen-2xl mt-4 px-4 xl:px-8">
+            <div className="-mx-4">
+              <table className="w-full divide-y divide-slate-200">
+                <thead>
+                  <tr>
                     <th
                       scope="col"
-                      className="hidden whitespace-nowrap px-3 py-4 text-left text-sm text-mydarkgrey xs:table-cell"
+                      className="py-3.5 pl-4 pr-3 text-left text-sm font-bold text-black"
                     >
-                      Activity
+                      {rowOneHeading}
                     </th>
-                  ) : null}
-                  <th
-                    scope="col"
-                    className="hidden whitespace-nowrap px-3 py-4 text-left text-sm text-mydarkgrey md:table-cell"
-                  >
-                    Slug
-                  </th>
-                  <th scope="col" className="relative py-3.5 pl-3 pr-4">
-                    <span className="sr-only">Edit</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200 bg-mywhite font-main">
-                {filterKeys.map(
-                  (
-                    record: string, // FIX
-                  ) => (
-                    <tr key={record}>
-                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-black">
-                        {(selectedCollection === `storyfragment` &&
-                          typeof flags?.storyFragmentDaysSinceData !==
-                            `undefined`) ||
-                        (selectedCollection === `pane` &&
-                          typeof flags?.panesDaysSinceData !== `undefined`) ? (
-                          <span
-                            className="mr-1"
-                            title={`Recent activity score | ${
-                              selectedCollection === `storyfragment` &&
-                              typeof flags?.storyFragmentDaysSinceData[
-                                record
-                              ] !== `undefined` &&
-                              typeof flags?.storyFragmentDaysSinceData[record]
-                                .engagement !== `undefined`
-                                ? `${flags.storyFragmentDaysSinceData[record].engagement}%`
-                                : selectedCollection === `pane` &&
-                                    typeof flags?.panesDaysSinceData[record] !==
-                                      `undefined` &&
-                                    typeof flags?.panesDaysSinceData[record]
-                                      .engagement !== `undefined`
-                                  ? `${flags.panesDaysSinceData[record].engagement}%`
-                                  : `no activity`
-                            }`}
-                          >
-                            <FireIcon
-                              className={classNames(
-                                typeof flags?.storyFragmentDaysSinceData[
-                                  record
-                                ] !== `undefined`
-                                  ? `opacity-${flags.storyFragmentDaysSinceData[record].colorOffset}`
-                                  : typeof flags?.panesDaysSinceData[record] !==
-                                      `undefined`
-                                    ? `opacity-${flags.panesDaysSinceData[record].colorOffset}`
-                                    : `opacity-5`,
-                                `w-4 h-4 text-myorange inline`,
-                              )}
-                            />
-                          </span>
-                        ) : (
-                          <span className="mr-5"></span>
-                        )}
-                        <button
-                          className="truncate text-md font-main"
-                          onClick={() => {
-                            if (selectedCollection === `pane`)
-                              navigate(`/storykeep/panes/${record}`)
-                            else if (selectedCollection === `storyfragment`)
-                              navigate(`/storykeep/storyfragments/${record}`)
-                            else if (selectedCollection === `resource`)
-                              navigate(`/storykeep/resources/${record}`)
-                            else
-                              console.log(`miss on collection`, [
-                                selectedCollection,
-                              ])
-                            // else {
-                            // setSelectedCollection(current)
-                            // setSelected(record)
-                            // }
-                          }}
-                        >
-                          {nodes[record].title}
-                        </button>
-                      </td>
-
-                      {(selectedCollection === `pane` &&
-                        typeof flags?.panesDaysSinceData !== `undefined`) ||
-                      (selectedCollection === `storyfragment` &&
-                        typeof flags?.storyFragmentDaysSinceData !==
-                          `undefined`) ? (
-                        <td className="hidden whitespace-nowrap pt-4 pb-2 text-sm text-mydarkgrey xs:table-cell">
-                          <div
-                            className={classNames(
-                              `grid`,
-                              selectedCollection === `storyfragment` &&
+                    {(selectedCollection === `pane` &&
+                      typeof flags?.panesDaysSinceData !== `undefined`) ||
+                    (selectedCollection === `storyfragment` &&
+                      typeof flags?.storyFragmentDaysSinceData !==
+                        `undefined`) ? (
+                      <th
+                        scope="col"
+                        className="hidden whitespace-nowrap px-3 py-4 text-left text-sm text-mydarkgrey xs:table-cell"
+                      >
+                        Activity
+                      </th>
+                    ) : null}
+                    <th
+                      scope="col"
+                      className="hidden whitespace-nowrap px-3 py-4 text-left text-sm text-mydarkgrey md:table-cell"
+                    >
+                      Slug
+                    </th>
+                    <th scope="col" className="relative py-3.5 pl-3 pr-4">
+                      <span className="sr-only">Edit</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200 bg-mywhite font-main">
+                  {filterKeys.map(
+                    (
+                      record: string, // FIX
+                    ) => (
+                      <tr key={record}>
+                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-black">
+                          {(selectedCollection === `storyfragment` &&
+                            typeof flags?.storyFragmentDaysSinceData !==
+                              `undefined`) ||
+                          (selectedCollection === `pane` &&
+                            typeof flags?.panesDaysSinceData !==
+                              `undefined`) ? (
+                            <span
+                              className="mr-1"
+                              title={`Recent activity score | ${
+                                selectedCollection === `storyfragment` &&
                                 typeof flags?.storyFragmentDaysSinceData[
                                   record
                                 ] !== `undefined` &&
-                                (flags.storyFragmentDaysSinceData[record]
-                                  .entered ||
-                                  flags.storyFragmentDaysSinceData[record]
-                                    .discovered)
-                                ? `grid-rows-2`
-                                : `grid-rows-1`,
-                            )}
-                          >
-                            <div className="flex flex-row flex-nowrap">
-                              {(selectedCollection === `storyfragment` &&
-                                typeof flags?.storyFragmentDaysSinceData[
-                                  record
-                                ] !== `undefined` &&
-                                ((typeof flags?.storyFragmentDaysSinceData[
-                                  record
-                                ].read === `number` &&
-                                  flags.storyFragmentDaysSinceData[record]
-                                    .read > 0) ||
-                                  (typeof flags?.storyFragmentDaysSinceData[
+                                typeof flags?.storyFragmentDaysSinceData[record]
+                                  .engagement !== `undefined`
+                                  ? `${flags.storyFragmentDaysSinceData[record].engagement}%`
+                                  : selectedCollection === `pane` &&
+                                      typeof flags?.panesDaysSinceData[
+                                        record
+                                      ] !== `undefined` &&
+                                      typeof flags?.panesDaysSinceData[record]
+                                        .engagement !== `undefined`
+                                    ? `${flags.panesDaysSinceData[record].engagement}%`
+                                    : `no activity`
+                              }`}
+                            >
+                              <FireIcon
+                                className={classNames(
+                                  typeof flags?.storyFragmentDaysSinceData[
                                     record
-                                  ].glossed === `number` &&
-                                    flags.storyFragmentDaysSinceData[record]
-                                      .glossed > 0))) ||
-                              (selectedCollection === `pane` &&
-                                typeof flags?.panesDaysSinceData[record] !==
-                                  `undefined`) ? (
-                                <>
-                                  <div title="Glossed | Read">
-                                    <span
-                                      title="Glossed | Read"
-                                      className="sr-only"
-                                    >
-                                      Glossed | Read
-                                    </span>
-                                    <DocumentTextIcon
-                                      className="h-4 w-4 text-mydarkgrey"
-                                      aria-hidden="true"
-                                    />
-                                  </div>
-                                  <div
-                                    className="text-xs leading-6 text-black ml-1 mr-2"
-                                    title="Glossed | Read"
-                                  >
-                                    {selectedCollection === `storyfragment` &&
-                                    flags.storyFragmentDaysSinceData[record]
-                                      .glossed > 0
-                                      ? flags.storyFragmentDaysSinceData[record]
-                                          .glossed
-                                      : selectedCollection === `pane` &&
-                                          flags.panesDaysSinceData[record]
-                                            .glossed > 0
-                                        ? flags.panesDaysSinceData[record]
-                                            .glossed
-                                        : null}
-                                    {(selectedCollection === `storyfragment` &&
-                                      flags.storyFragmentDaysSinceData[record]
-                                        .read > 0 &&
-                                      flags.storyFragmentDaysSinceData[record]
-                                        .glossed > 0) ||
-                                    (selectedCollection === `pane` &&
-                                      flags.panesDaysSinceData[record].read >
-                                        0 &&
-                                      flags.panesDaysSinceData[record].glossed >
-                                        0)
-                                      ? `, `
-                                      : null}
-                                    {selectedCollection === `storyfragment` &&
-                                    flags.storyFragmentDaysSinceData[record]
-                                      .read > 0
-                                      ? flags.storyFragmentDaysSinceData[record]
-                                          .read
-                                      : selectedCollection === `pane` &&
-                                          flags.panesDaysSinceData[record]
-                                            .read > 0
-                                        ? flags.panesDaysSinceData[record].read
-                                        : null}
-                                  </div>
-                                </>
-                              ) : null}
+                                  ] !== `undefined`
+                                    ? `opacity-${flags.storyFragmentDaysSinceData[record].colorOffset}`
+                                    : typeof flags?.panesDaysSinceData[
+                                          record
+                                        ] !== `undefined`
+                                      ? `opacity-${flags.panesDaysSinceData[record].colorOffset}`
+                                      : `opacity-5`,
+                                  `w-4 h-4 text-myorange inline`,
+                                )}
+                              />
+                            </span>
+                          ) : (
+                            <span className="mr-5"></span>
+                          )}
+                          <button
+                            className="truncate text-md font-main"
+                            onClick={() => {
+                              if (selectedCollection === `pane`)
+                                navigate(`/storykeep/panes/${record}`)
+                              else if (selectedCollection === `storyfragment`)
+                                navigate(`/storykeep/storyfragments/${record}`)
+                              else if (selectedCollection === `resource`)
+                                navigate(`/storykeep/resources/${record}`)
+                              else
+                                console.log(`miss on collection`, [
+                                  selectedCollection,
+                                ])
+                              // else {
+                              // setSelectedCollection(current)
+                              // setSelected(record)
+                              // }
+                            }}
+                          >
+                            {nodes[record].title}
+                          </button>
+                        </td>
 
-                              {(selectedCollection === `storyfragment` &&
-                                typeof flags?.storyFragmentDaysSinceData[
-                                  record
-                                ] !== `undefined` &&
-                                flags.storyFragmentDaysSinceData[record]
-                                  .clicked > 0) ||
-                              (selectedCollection === `pane` &&
-                                typeof flags?.panesDaysSinceData[record] !==
-                                  `undefined` &&
-                                flags.panesDaysSinceData[record].clicked >
-                                  0) ? (
-                                <>
-                                  <div title="Clicked">
-                                    <span className="sr-only">Clicked</span>
-                                    <CursorArrowRaysIcon
-                                      className="h-4 w-4 text-mydarkgrey"
-                                      aria-hidden="true"
-                                    />
-                                  </div>
-
-                                  {selectedCollection === `storyfragment` ? (
-                                    <div
-                                      className="text-xs leading-6 text-black ml-1 mr-2"
-                                      title="Clicked"
-                                    >
-                                      <span>
-                                        {
-                                          flags.storyFragmentDaysSinceData[
-                                            record
-                                          ].clicked
-                                        }
-                                      </span>
-                                    </div>
-                                  ) : (
-                                    <div
-                                      className="text-xs leading-6 text-black ml-1 mr-2"
-                                      title="Clicked"
-                                    >
-                                      <span>
-                                        {
-                                          flags.panesDaysSinceData[record]
-                                            .clicked
-                                        }
-                                      </span>
-                                    </div>
-                                  )}
-                                </>
-                              ) : null}
-                            </div>
-
-                            {selectedCollection === `storyfragment` &&
-                            typeof flags?.storyFragmentDaysSinceData[record] !==
-                              `undefined` &&
-                            (flags.storyFragmentDaysSinceData[record].entered ||
-                              flags.storyFragmentDaysSinceData[record]
-                                .discovered) ? (
+                        {(selectedCollection === `pane` &&
+                          typeof flags?.panesDaysSinceData !== `undefined`) ||
+                        (selectedCollection === `storyfragment` &&
+                          typeof flags?.storyFragmentDaysSinceData !==
+                            `undefined`) ? (
+                          <td className="hidden whitespace-nowrap pt-4 pb-2 text-sm text-mydarkgrey xs:table-cell">
+                            <div
+                              className={classNames(
+                                `grid`,
+                                selectedCollection === `storyfragment` &&
+                                  typeof flags?.storyFragmentDaysSinceData[
+                                    record
+                                  ] !== `undefined` &&
+                                  (flags.storyFragmentDaysSinceData[record]
+                                    .entered ||
+                                    flags.storyFragmentDaysSinceData[record]
+                                      .discovered)
+                                  ? `grid-rows-2`
+                                  : `grid-rows-1`,
+                              )}
+                            >
                               <div className="flex flex-row flex-nowrap">
-                                {selectedCollection === `storyfragment` &&
-                                typeof flags?.storyFragmentDaysSinceData[
-                                  record
-                                ] !== `undefined` &&
-                                flags.storyFragmentDaysSinceData[record]
-                                  .entered > 0 ? (
+                                {(selectedCollection === `storyfragment` &&
+                                  typeof flags?.storyFragmentDaysSinceData[
+                                    record
+                                  ] !== `undefined` &&
+                                  ((typeof flags?.storyFragmentDaysSinceData[
+                                    record
+                                  ].read === `number` &&
+                                    flags.storyFragmentDaysSinceData[record]
+                                      .read > 0) ||
+                                    (typeof flags?.storyFragmentDaysSinceData[
+                                      record
+                                    ].glossed === `number` &&
+                                      flags.storyFragmentDaysSinceData[record]
+                                        .glossed > 0))) ||
+                                (selectedCollection === `pane` &&
+                                  typeof flags?.panesDaysSinceData[record] !==
+                                    `undefined`) ? (
                                   <>
-                                    <div title="Entered">
-                                      <span className="sr-only">Entered</span>
-                                      <FingerPrintIcon
+                                    <div title="Glossed | Read">
+                                      <span
+                                        title="Glossed | Read"
+                                        className="sr-only"
+                                      >
+                                        Glossed | Read
+                                      </span>
+                                      <DocumentTextIcon
                                         className="h-4 w-4 text-mydarkgrey"
                                         aria-hidden="true"
                                       />
                                     </div>
                                     <div
                                       className="text-xs leading-6 text-black ml-1 mr-2"
-                                      title="Entered"
+                                      title="Glossed | Read"
                                     >
-                                      <span>
-                                        {
-                                          flags.storyFragmentDaysSinceData[
+                                      {selectedCollection === `storyfragment` &&
+                                      flags.storyFragmentDaysSinceData[record]
+                                        .glossed > 0
+                                        ? flags.storyFragmentDaysSinceData[
                                             record
-                                          ].entered
-                                        }
-                                      </span>
+                                          ].glossed
+                                        : selectedCollection === `pane` &&
+                                            flags.panesDaysSinceData[record]
+                                              .glossed > 0
+                                          ? flags.panesDaysSinceData[record]
+                                              .glossed
+                                          : null}
+                                      {(selectedCollection ===
+                                        `storyfragment` &&
+                                        flags.storyFragmentDaysSinceData[record]
+                                          .read > 0 &&
+                                        flags.storyFragmentDaysSinceData[record]
+                                          .glossed > 0) ||
+                                      (selectedCollection === `pane` &&
+                                        flags.panesDaysSinceData[record].read >
+                                          0 &&
+                                        flags.panesDaysSinceData[record]
+                                          .glossed > 0)
+                                        ? `, `
+                                        : null}
+                                      {selectedCollection === `storyfragment` &&
+                                      flags.storyFragmentDaysSinceData[record]
+                                        .read > 0
+                                        ? flags.storyFragmentDaysSinceData[
+                                            record
+                                          ].read
+                                        : selectedCollection === `pane` &&
+                                            flags.panesDaysSinceData[record]
+                                              .read > 0
+                                          ? flags.panesDaysSinceData[record]
+                                              .read
+                                          : null}
                                     </div>
                                   </>
                                 ) : null}
 
-                                {selectedCollection === `storyfragment` &&
-                                typeof flags?.storyFragmentDaysSinceData[
-                                  record
-                                ] !== `undefined` &&
-                                flags.storyFragmentDaysSinceData[record]
-                                  .discovered > 0 ? (
+                                {(selectedCollection === `storyfragment` &&
+                                  typeof flags?.storyFragmentDaysSinceData[
+                                    record
+                                  ] !== `undefined` &&
+                                  flags.storyFragmentDaysSinceData[record]
+                                    .clicked > 0) ||
+                                (selectedCollection === `pane` &&
+                                  typeof flags?.panesDaysSinceData[record] !==
+                                    `undefined` &&
+                                  flags.panesDaysSinceData[record].clicked >
+                                    0) ? (
                                   <>
-                                    <div title="Discovered">
-                                      <span className="sr-only">
-                                        Discovered
-                                      </span>
-                                      <BookOpenIcon
+                                    <div title="Clicked">
+                                      <span className="sr-only">Clicked</span>
+                                      <CursorArrowRaysIcon
                                         className="h-4 w-4 text-mydarkgrey"
                                         aria-hidden="true"
                                       />
@@ -981,25 +904,25 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                                     {selectedCollection === `storyfragment` ? (
                                       <div
                                         className="text-xs leading-6 text-black ml-1 mr-2"
-                                        title="Discovered"
+                                        title="Clicked"
                                       >
                                         <span>
                                           {
                                             flags.storyFragmentDaysSinceData[
                                               record
-                                            ].discovered
+                                            ].clicked
                                           }
                                         </span>
                                       </div>
                                     ) : (
                                       <div
                                         className="text-xs leading-6 text-black ml-1 mr-2"
-                                        title="Discovered"
+                                        title="Clicked"
                                       >
                                         <span>
                                           {
                                             flags.panesDaysSinceData[record]
-                                              .discovered
+                                              .clicked
                                           }
                                         </span>
                                       </div>
@@ -1007,56 +930,143 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                                   </>
                                 ) : null}
                               </div>
-                            ) : null}
-                          </div>
+
+                              {selectedCollection === `storyfragment` &&
+                              typeof flags?.storyFragmentDaysSinceData[
+                                record
+                              ] !== `undefined` &&
+                              (flags.storyFragmentDaysSinceData[record]
+                                .entered ||
+                                flags.storyFragmentDaysSinceData[record]
+                                  .discovered) ? (
+                                <div className="flex flex-row flex-nowrap">
+                                  {selectedCollection === `storyfragment` &&
+                                  typeof flags?.storyFragmentDaysSinceData[
+                                    record
+                                  ] !== `undefined` &&
+                                  flags.storyFragmentDaysSinceData[record]
+                                    .entered > 0 ? (
+                                    <>
+                                      <div title="Entered">
+                                        <span className="sr-only">Entered</span>
+                                        <FingerPrintIcon
+                                          className="h-4 w-4 text-mydarkgrey"
+                                          aria-hidden="true"
+                                        />
+                                      </div>
+                                      <div
+                                        className="text-xs leading-6 text-black ml-1 mr-2"
+                                        title="Entered"
+                                      >
+                                        <span>
+                                          {
+                                            flags.storyFragmentDaysSinceData[
+                                              record
+                                            ].entered
+                                          }
+                                        </span>
+                                      </div>
+                                    </>
+                                  ) : null}
+
+                                  {selectedCollection === `storyfragment` &&
+                                  typeof flags?.storyFragmentDaysSinceData[
+                                    record
+                                  ] !== `undefined` &&
+                                  flags.storyFragmentDaysSinceData[record]
+                                    .discovered > 0 ? (
+                                    <>
+                                      <div title="Discovered">
+                                        <span className="sr-only">
+                                          Discovered
+                                        </span>
+                                        <BookOpenIcon
+                                          className="h-4 w-4 text-mydarkgrey"
+                                          aria-hidden="true"
+                                        />
+                                      </div>
+
+                                      {selectedCollection ===
+                                      `storyfragment` ? (
+                                        <div
+                                          className="text-xs leading-6 text-black ml-1 mr-2"
+                                          title="Discovered"
+                                        >
+                                          <span>
+                                            {
+                                              flags.storyFragmentDaysSinceData[
+                                                record
+                                              ].discovered
+                                            }
+                                          </span>
+                                        </div>
+                                      ) : (
+                                        <div
+                                          className="text-xs leading-6 text-black ml-1 mr-2"
+                                          title="Discovered"
+                                        >
+                                          <span>
+                                            {
+                                              flags.panesDaysSinceData[record]
+                                                .discovered
+                                            }
+                                          </span>
+                                        </div>
+                                      )}
+                                    </>
+                                  ) : null}
+                                </div>
+                              ) : null}
+                            </div>
+                          </td>
+                        ) : null}
+
+                        <td className="hidden whitespace-nowrap px-3 py-4 text-xs font-main text-mydarkgrey md:table-cell">
+                          {nodes[record].slug || nodes[record].categorySlug}
                         </td>
-                      ) : null}
 
-                      <td className="hidden whitespace-nowrap px-3 py-4 text-xs font-main text-mydarkgrey md:table-cell">
-                        {nodes[record].slug || nodes[record].categorySlug}
-                      </td>
-
-                      <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm">
-                        <button
-                          onClick={() => {
-                            if (selectedCollection === `pane`)
-                              navigate(`/storykeep/panes/${record}`)
-                            else if (selectedCollection === `storyfragment`)
-                              navigate(`/storykeep/storyfragments/${record}`)
-                            else if (selectedCollection === `resource`)
-                              navigate(`/storykeep/resources/${record}`)
-                            else console.log(`goto`, selectedCollection)
-                          }}
-                          className="text-myblue underline underline-offset-2 text-sm hover:text-myorange"
-                        >
-                          Edit
-                          <span className="sr-only">
-                            , {nodes[record].title}
-                          </span>
-                        </button>
-                      </td>
-                    </tr>
-                  ),
-                )}
-              </tbody>
-            </table>
-            {(selectedCollection === `pane` &&
-              typeof flags?.panesDaysSinceData !== `undefined`) ||
-            (selectedCollection === `storyfragment` &&
-              typeof flags?.storyFragmentDaysSinceData !== `undefined`) ? (
-              <div className="my-6">
-                <FireIcon
-                  className={classNames(`w-4 h-4 text-myorange inline`)}
-                />
-                <span className="ml-1 text-black font-main text-sm">
-                  Recent activity score | between 0 and 100%, a value of 100%
-                  means very recent activity.
-                </span>
-              </div>
-            ) : null}
+                        <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm">
+                          <button
+                            onClick={() => {
+                              if (selectedCollection === `pane`)
+                                navigate(`/storykeep/panes/${record}`)
+                              else if (selectedCollection === `storyfragment`)
+                                navigate(`/storykeep/storyfragments/${record}`)
+                              else if (selectedCollection === `resource`)
+                                navigate(`/storykeep/resources/${record}`)
+                              else console.log(`goto`, selectedCollection)
+                            }}
+                            className="text-myblue underline underline-offset-2 text-sm hover:text-myorange"
+                          >
+                            Edit
+                            <span className="sr-only">
+                              , {nodes[record].title}
+                            </span>
+                          </button>
+                        </td>
+                      </tr>
+                    ),
+                  )}
+                </tbody>
+              </table>
+              {(selectedCollection === `pane` &&
+                typeof flags?.panesDaysSinceData !== `undefined`) ||
+              (selectedCollection === `storyfragment` &&
+                typeof flags?.storyFragmentDaysSinceData !== `undefined`) ? (
+                <div className="my-6">
+                  <FireIcon
+                    className={classNames(`w-4 h-4 text-myorange inline`)}
+                  />
+                  <span className="ml-1 text-black font-main text-sm">
+                    Recent activity score | between 0 and 100%, a value of 100%
+                    means very recent activity.
+                  </span>
+                </div>
+              ) : null}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   )
 }

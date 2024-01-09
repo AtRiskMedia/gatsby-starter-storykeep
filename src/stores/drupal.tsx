@@ -9,6 +9,9 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
   setStage: (stage: number) => set((state) => ({ ...state, stage })),
   apiStage: 0,
   setApiStage: (apiStage: number) => set((state) => ({ ...state, apiStage })),
+  tractStackTriggerSave: false,
+  setTractStackTriggerSave: (tractStackTriggerSave: boolean) =>
+    set((state) => ({ ...state, tractStackTriggerSave })),
   embeddedEdit: {
     child: null,
     childType: null,
@@ -226,8 +229,11 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
         )
           newStoryFragment.tailwindBgColour =
             payload.attributes.field_tailwind_background_colour
-        if (payload.socialImagePath !== thisStoryFragment.socialImagePath)
-          newStoryFragment.attributes.field_social_image_path =
+        if (
+          payload.attributes.field_social_image_path !==
+          thisStoryFragment.socialImagePath
+        )
+          newStoryFragment.socialImagePath =
             payload.attributes.field_social_image_path
         updateStoryFragments(newStoryFragment)
         break
@@ -235,11 +241,10 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
 
       case `tractstack`: {
         const updateTractStacks = get().updateTractStacks
+        const thisTractStack = get().allTractStacks[uuid]
         const newTractStack = {
+          ...thisTractStack,
           id: uuid,
-          title: payload.attributes.title,
-          socialImagePath: payload?.attributes?.field_social_image_path || ``,
-          slug: payload.attributes.field_slug,
           contextPanes:
             payload?.relationships?.field_context_panes?.data
               ?.map((f: any) => {
@@ -253,6 +258,16 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
               })
               .filter((e: string) => e !== `missing`) || [],
         }
+        if (payload.attributes.title !== thisTractStack.title)
+          newTractStack.title = payload.attributes.title
+        if (payload.attributes.field_slug !== thisTractStack.slug)
+          newTractStack.slug = payload.attributes.field_slug
+        if (
+          payload.attributes.field_social_image_path !==
+          thisTractStack.socialImagePath
+        )
+          newTractStack.socialImagePath =
+            payload.attributes.field_social_image_path
         updateTractStacks(newTractStack)
         break
       }
@@ -421,17 +436,22 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
         payload?.socialImagePath,
       slug: payload?.attributes?.field_slug || payload?.slug,
       contextPanes:
-        payload?.relationships?.field_context_panes?.data
-          ?.map((f: any) => {
-            return f.id
-          })
-          .filter((e: string) => e !== `missing`) || payload.contextPanes,
+        typeof payload?.relationships?.field_context_panes?.data !== `undefined`
+          ? payload.relationships.field_context_panes.data
+              ?.map((f: any) => {
+                return f.id
+              })
+              .filter((e: string) => e !== `missing`)
+          : payload.contextPanes || [],
       storyFragments:
-        payload?.relationships?.field_story_fragments?.data
-          ?.map((f: any) => {
-            return f.id
-          })
-          .filter((e: string) => e !== `missing`) || payload.storyFragments,
+        typeof payload?.relationships?.field_story_fragments?.data !==
+        `undefined`
+          ? payload.relationships.field_story_fragments.data
+              ?.map((f: any) => {
+                return f.id
+              })
+              .filter((e: string) => e !== `missing`)
+          : payload?.storyFragments || [],
     }
     set((state) => ({
       allTractStacks: { ...state.allTractStacks, [payload.id]: thisTractStack },
@@ -519,7 +539,6 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
     const allResources = get().allResources
     const newPayload = { ...allResources }
     delete newPayload[uuid]
-    console.log(`deleted`, uuid, newPayload)
     set((state) => ({ ...state, allResources: newPayload }))
   },
   removePane: (uuid: string) => {
