@@ -55,6 +55,7 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
     saveStage: SaveStages.Booting,
   })
   const [isSSR, setIsSSR] = useState(true)
+  const [isLoaded, setIsLoaded] = useState(false)
 
   // AuthorCheck
   useEffect(() => {
@@ -257,6 +258,7 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
         initialStateLivePreviewMarkdown,
       }
       setPayload(payload)
+      setIsLoaded(true)
       setEditStage(EditStages.InitialStateSet)
     }
   }, [
@@ -311,7 +313,9 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
     <DrupalProvider config={drupalConfig}>
       <DrupalApi>
         <Layout current="storykeepInner">
-          <PaneState uuid={uuid} payload={payload} flags={flags} />
+          {isLoaded ? (
+            <PaneState uuid={uuid} payload={payload} flags={flags} />
+          ) : null}
         </Layout>
       </DrupalApi>
     </DrupalProvider>

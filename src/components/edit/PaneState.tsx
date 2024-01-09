@@ -3161,38 +3161,12 @@ const PaneState = ({ uuid, payload, flags }: IPaneState) => {
   // set initial state
   useEffect(() => {
     if (
-      flags?.editStage === EditStages.Booting &&
-      (!state || Object.keys(state).length === 0)
-    ) {
-      setStateHeldBeliefs(payload.initialStateHeldBeliefs)
-      setStateWithheldBeliefs(payload.initialStateWithheldBeliefs)
-      setStateImpressions(payload.initialStateImpressions)
-      setStateLivePreview(payload.initialStateLivePreview)
-      setStateLivePreviewMarkdown(payload.initialStateLivePreviewMarkdown)
-      setStatePaneFragments(payload.initialStatePaneFragments)
-      setState(payload.initialState)
-    }
-    if (
       flags.editStage === EditStages.Booting &&
-      state &&
-      Object.keys(state).length &&
       saveStage === SaveStages.Booting
     ) {
       setSaveStage(SaveStages.NoChanges)
     }
-  }, [
-    flags.editStage,
-    saveStage,
-    setSaveStage,
-    payload.initialState,
-    payload.initialStateImpressions,
-    payload.initialStateHeldBeliefs,
-    payload.initialStateWithheldBeliefs,
-    payload.initialStateLivePreview,
-    payload.initialStateLivePreviewMarkdown,
-    payload.initialStatePaneFragments,
-    state,
-  ])
+  }, [state, flags.editStage, saveStage, setSaveStage])
 
   if (saveStage < SaveStages.NoChanges) return null
 
