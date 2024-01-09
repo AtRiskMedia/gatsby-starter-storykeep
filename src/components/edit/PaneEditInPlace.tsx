@@ -22,7 +22,15 @@ import {
   artpackCollectionImages,
 } from '../../helpers/allowedShapeNames'
 
-const EditCodeHook = ({ id, payload, handleChangeEditInPlace }: any) => {
+const EditCodeHook = ({
+  id,
+  payload,
+  handleChangeEditInPlace,
+}: {
+  id: string
+  payload: any
+  handleChangeEditInPlace: Function
+}) => {
   return (
     <div key={id}>
       <div className="my-2">
@@ -104,7 +112,12 @@ const EditLink = ({
   payload,
   viewportKey,
   handleChangeEditInPlace,
-}: any) => {
+}: {
+  id: string
+  payload: any
+  viewportKey: string
+  handleChangeEditInPlace: Function
+}) => {
   return (
     <div key={id}>
       <div className="my-2">
@@ -244,7 +257,12 @@ const EditShape = ({
   payload,
   viewportKey,
   handleChangeEditInPlace,
-}: any) => {
+}: {
+  id: string
+  payload: any
+  viewportKey: string
+  handleChangeEditInPlace: Function
+}) => {
   const isBreaks = payload.type === `breaksShape`
   const isModal = payload.type === `modalShape`
   const isArtpackImage =
@@ -327,8 +345,15 @@ const InputTailwindClass = ({
   viewportKey,
   allowOverride,
   handleChangeEditInPlace,
-}: any) => {
+}: {
+  id: string | null
+  payload: any
+  viewportKey: string
+  allowOverride: boolean
+  handleChangeEditInPlace: Function
+}) => {
   if (Object.keys(payload).length === 0) return null
+  if (!id) console.log(`why isn't id set?`, payload)
   const selector = Object.keys(payload)[0]
   const thisId = `${id}--${selector}`
   const hasOverrideTemp = [...payload[selector]]
@@ -491,7 +516,12 @@ const InputShapeName = ({
   payload,
   viewportKey,
   handleChangeEditInPlace,
-}: any) => {
+}: {
+  id: string
+  payload: any
+  viewportKey: string
+  handleChangeEditInPlace: Function
+}) => {
   const thisId = `${id}--name`
   const mobileValue = [`paneShape`, `modalShape`, `textShapeOutside`].includes(
     payload.type,
@@ -643,7 +673,12 @@ const InputModalPayload = ({
   payload,
   viewportKey,
   handleChangeEditInPlace,
-}: any) => {
+}: {
+  id: string
+  payload: any
+  viewportKey: string
+  handleChangeEditInPlace: Function
+}) => {
   return (
     <>
       <div className="my-3">
@@ -876,7 +911,11 @@ const InputBreaksShapePayload = ({
   id,
   payload,
   handleChangeEditInPlace,
-}: any) => {
+}: {
+  id: string
+  payload: any
+  handleChangeEditInPlace: Function
+}) => {
   return (
     <div className="my-3">
       <fieldset>
@@ -933,7 +972,11 @@ const InputArtpackImagePayload = ({
   id,
   payload,
   handleChangeEditInPlace,
-}: any) => {
+}: {
+  id: string
+  payload: any
+  handleChangeEditInPlace: Function
+}) => {
   const thisCollection = payload?.artpackPayload?.all?.collection
   const thisImage = payload?.artpackPayload?.all?.image
   const objectFit = payload?.artpackPayload?.all?.objectFit
@@ -1405,7 +1448,7 @@ const PaneEditInPlace = ({
                 viewportKey={viewportKey}
                 handleChangeEditInPlace={handleChangeEditInPlace}
               />
-              {Object.keys(shapesData[s].parentClasses).map((e: any) => {
+              {Object.keys(shapesData[s].parentClasses).map((e: string) => {
                 return (
                   <InputTailwindClass
                     key={`paneShapeClasses---${shapesData[s].paneFragmentId}-${e}`}
@@ -1453,7 +1496,7 @@ const PaneEditInPlace = ({
             </div>
 
             {typeof modalData !== `undefined` &&
-              Object.keys(modalData).map((s: any, idx: number) => (
+              Object.keys(modalData).map((s: string, idx: number) => (
                 <EditShape
                   key={idx}
                   id={`modalShape---${modalData[s].paneFragmentId}`}
@@ -1465,7 +1508,7 @@ const PaneEditInPlace = ({
             {modalState && modalId && !Object.keys(modalState).length ? (
               <span className="block my-2">No styles</span>
             ) : (
-              Object.keys(modalState).map((e: any) => (
+              Object.keys(modalState).map((e: string) => (
                 <InputTailwindClass
                   id={modalId}
                   key={`${id}-${e}-modal-${viewportKey}`}
@@ -1567,7 +1610,7 @@ const PaneEditInPlace = ({
               {parentState && parentId && !Object.keys(parentState).length ? (
                 <span className="block my-2">No styles</span>
               ) : (
-                Object.keys(parentState).map((e: any) => (
+                Object.keys(parentState).map((e: string) => (
                   <InputTailwindClass
                     id={parentId}
                     key={`${parentId}-${e}`}

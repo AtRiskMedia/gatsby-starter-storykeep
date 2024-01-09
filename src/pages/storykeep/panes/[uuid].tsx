@@ -247,16 +247,8 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
         hasBgColour,
         hasBreaks,
       }
-      const initialFormState = {
-        submitted: false,
-        saving: false,
-        success: false,
-        changes: false,
-        slugCollision: false,
-      }
       const payload = {
         initialState,
-        initialFormState,
         initialStatePaneFragments,
         initialStateImpressions,
         initialStateHeldBeliefs,

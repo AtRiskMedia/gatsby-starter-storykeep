@@ -29,7 +29,7 @@ import PaneStarter from './PaneStarter'
 import EditBelief from './EditBelief'
 import PaneRender from './PaneRender'
 import SlideOver from './SlideOver'
-import { SaveStages } from '../../types'
+import { SaveStages, IPaneForm } from '../../types'
 
 const insertModeTags = [
   { name: `p`, title: `Paragraph` },
@@ -43,7 +43,7 @@ const insertModeTags = [
   { name: `ol`, title: `Ordered List` },
 ]
 
-const PaneForm = ({ uuid, payload, flags, fn }: any) => {
+const PaneForm = ({ uuid, payload, flags, fn }: IPaneForm) => {
   const {
     state,
     statePaneFragments,
@@ -173,7 +173,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                               id="title"
                               className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                               value={state.title}
-                              onChange={handleChange}
+                              onChange={(e) => handleChange(e)}
                             />
                           </div>
                         </div>
@@ -211,7 +211,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                               pattern="[a-zA-Z\-]+"
                               className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                               value={state.slug}
-                              onChange={handleChange}
+                              onChange={(e) => handleChange(e)}
                             />
                           </div>
                         </div>
@@ -288,7 +288,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                                     pattern="([A-Za-z]|h5p)+"
                                     className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                                     value={state.codeHookTarget}
-                                    onChange={handleChange}
+                                    onChange={(e) => handleChange(e)}
                                   />
                                 </div>
                               </div>
@@ -310,7 +310,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                                         id="codeHookTargetUrl"
                                         className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                                         value={state.codeHookTargetUrl}
-                                        onChange={handleChange}
+                                        onChange={(e) => handleChange(e)}
                                       />
                                     </div>
                                   </div>
@@ -330,7 +330,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                                         id="codeHookHeight"
                                         className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                                         value={state.codeHookHeight}
-                                        onChange={handleChange}
+                                        onChange={(e) => handleChange(e)}
                                       />
                                     </div>
                                   </div>
@@ -350,7 +350,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                                         id="codeHookWidth"
                                         className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                                         value={state.codeHookWidth}
-                                        onChange={handleChange}
+                                        onChange={(e) => handleChange(e)}
                                       />
                                     </div>
                                   </div>
@@ -661,7 +661,9 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                                       id="title"
                                       className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                                       value={stateImpressions.title}
-                                      onChange={handleChangeImpression}
+                                      onChange={(e) =>
+                                        handleChangeImpression(e)
+                                      }
                                     />
                                   </div>
                                 </div>
@@ -681,7 +683,9 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                                       id="buttonText"
                                       className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                                       value={stateImpressions.buttonText}
-                                      onChange={handleChangeImpression}
+                                      onChange={(e) =>
+                                        handleChangeImpression(e)
+                                      }
                                       maxLength={32}
                                     />
                                   </div>
@@ -703,7 +707,9 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                                       pattern="[A-Za-z\(\) ]+"
                                       className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                                       value={stateImpressions.actionsLisp}
-                                      onChange={handleChangeImpression}
+                                      onChange={(e) =>
+                                        handleChangeImpression(e)
+                                      }
                                     />
                                   </div>
                                 </div>
@@ -723,7 +729,9 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                                       id="body"
                                       className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                                       value={stateImpressions.body}
-                                      onChange={handleChangeImpression}
+                                      onChange={(e) =>
+                                        handleChangeImpression(e)
+                                      }
                                       maxLength={140}
                                     />
                                   </div>
@@ -802,7 +810,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                                 name="heightRatioDesktop"
                                 id="heightRatioDesktop"
                                 className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
-                                onChange={handleChange}
+                                onChange={(e) => handleChange(e)}
                                 value={state.heightRatioDesktop}
                               />
                             </div>
@@ -822,7 +830,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                                 name="heightRatioTablet"
                                 id="heightRatioTablet"
                                 className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
-                                onChange={handleChange}
+                                onChange={(e) => handleChange(e)}
                                 value={state.heightRatioTablet}
                               />
                             </div>
@@ -842,7 +850,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                                 name="heightRatioMobile"
                                 id="heightRatioMobile"
                                 className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
-                                onChange={handleChange}
+                                onChange={(e) => handleChange(e)}
                                 value={state.heightRatioMobile}
                               />
                             </div>
@@ -866,7 +874,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                                 name="heightOffsetDesktop"
                                 id="heightOffsetDesktop"
                                 className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
-                                onChange={handleChange}
+                                onChange={(e) => handleChange(e)}
                                 value={state.heightOffsetDesktop}
                               />
                             </div>
@@ -885,7 +893,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                                 name="heightOffsetTablet"
                                 id="heightOffsetTablet"
                                 className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
-                                onChange={handleChange}
+                                onChange={(e) => handleChange(e)}
                                 value={state.heightOffsetTablet}
                               />
                             </div>
@@ -904,7 +912,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                                 name="heightOffsetMobile"
                                 id="heightOffsetMobile"
                                 className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
-                                onChange={handleChange}
+                                onChange={(e) => handleChange(e)}
                                 value={state.heightOffsetMobile}
                               />
                             </div>
@@ -1032,7 +1040,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: any) => {
                     <span className="xs:ml-3">
                       <button
                         type="button"
-                        onClick={handleSubmit}
+                        onClick={(e) => handleSubmit(e)}
                         disabled={
                           flags.saveStage >= SaveStages.PrepareSave ||
                           flags.slugCollision ||

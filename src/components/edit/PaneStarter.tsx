@@ -1,7 +1,9 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 import React from 'react'
 
-const PaneStarter = ({ state, fn, flags }: any) => {
+import { IPaneStarter } from '../../types'
+
+const PaneStarter = ({ state, fn, flags }: IPaneStarter) => {
   const { handleChangeEditInPlace, handleChange } = fn
 
   return (
@@ -50,7 +52,7 @@ const PaneStarter = ({ state, fn, flags }: any) => {
                         id="title"
                         className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                         value={state.title}
-                        onChange={handleChange}
+                        onChange={(e) => handleChange(e)}
                       />
                     </div>
                   </div>
@@ -83,7 +85,7 @@ const PaneStarter = ({ state, fn, flags }: any) => {
                         pattern="[a-zA-Z\-]+"
                         className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                         value={state.slug}
-                        onChange={handleChange}
+                        onChange={(e) => handleChange(e)}
                       />
                     </div>
                   </div>

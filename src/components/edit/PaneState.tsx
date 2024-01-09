@@ -20,7 +20,28 @@ import { starterTemplate } from '../../helpers/starterTemplates'
 import PaneForm from './PaneForm'
 import { IEmbeddedEdit, EditStages, SaveStages } from '../../types'
 
-const PaneState = ({ uuid, payload, flags }: any) => {
+export interface IPaneState {
+  uuid: string
+  payload: {
+    initialState: any
+    initialStateHeldBeliefs: any
+    initialStateImpressions: any
+    initialStateLivePreview: any
+    initialStateLivePreviewMarkdown: any
+    initialStatePaneFragments: any
+    initialStateWithheldBeliefs: any
+  }
+  flags: {
+    isAuthor: boolean
+    isAdmin: boolean
+    isBuilder: boolean
+    isOpenDemo: boolean
+    isEmpty: boolean
+    editStage: number
+    saveStage: number
+  }
+}
+const PaneState = ({ uuid, payload, flags }: IPaneState) => {
   const [stateHeldBeliefs, setStateHeldBeliefs] = useState(
     payload.initialStateHeldBeliefs,
   )
@@ -28,20 +49,20 @@ const PaneState = ({ uuid, payload, flags }: any) => {
     payload.initialStateWithheldBeliefs,
   )
   const [stateImpressions, setStateImpressions] = useState(
-    payload.stateImpressions,
+    payload.initialStateImpressions,
   )
   const [stateLivePreview, setStateLivePreview] = useState(
-    payload.stateLivePreview,
+    payload.initialStateLivePreview,
   )
   const [stateLivePreviewMarkdown, setStateLivePreviewMarkdown] = useState(
-    payload.stateLivePreviewMarkdown,
+    payload.initialStateLivePreviewMarkdown,
   )
   const [statePaneFragments, setStatePaneFragments] = useState(
-    payload.statePaneFragments,
+    payload.initialStatePaneFragments,
   )
   const [lastSavedState, setLastSavedState] = useState(payload)
   const [saved, setSaved] = useState(false)
-  const [state, setState] = useState(payload.state)
+  const [state, setState] = useState(payload.initialState)
   const [slugCollision, setSlugCollision] = useState(false)
   const [newUuid, setNewUuid] = useState(``)
   const [newEmbeddedPayload, setNewEmbeddedPayload] = useState<IEmbeddedEdit>({
@@ -3164,7 +3185,6 @@ const PaneState = ({ uuid, payload, flags }: any) => {
     saveStage,
     setSaveStage,
     payload.initialState,
-    payload.initialFormState,
     payload.initialStateImpressions,
     payload.initialStateHeldBeliefs,
     payload.initialStateWithheldBeliefs,

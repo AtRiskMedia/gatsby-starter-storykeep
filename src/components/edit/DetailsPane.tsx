@@ -6,7 +6,15 @@ import { DetailsPie } from '@tractstack/nivo'
 import { useDrupalStore } from '../../stores/drupal'
 import { SaveStages } from '../../types'
 
-const DetailsPane = ({ uuid, data, flags }: any) => {
+const DetailsPane = ({
+  uuid,
+  data,
+  flags,
+}: {
+  uuid: string
+  data: any[]
+  flags: { panes: string[]; saveStage: number; storyFragmentId: string }
+}) => {
   const setEmbeddedEdit = useDrupalStore((state) => state.setEmbeddedEdit)
   const thisPane = useDrupalStore((state) => state.allPanes[uuid])
   const payload = useMemo(() => {

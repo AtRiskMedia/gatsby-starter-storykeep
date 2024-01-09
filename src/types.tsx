@@ -105,6 +105,32 @@ export interface IEditPanePayload {
   initialStateLivePreviewMarkdown: any
 }
 
+export interface IPaneRender {
+  uuid: string
+  previewPayload: {
+    state: any
+    statePaneFragments: any
+    stateImpressions: any
+    stateHeldBeliefs: any
+    stateWithheldBeliefs: any
+    stateLivePreview: any
+    stateLivePreviewMarkdown: any
+  }
+  fn: {
+    handleChangeEditInPlace: Function
+    handleEditMarkdown: Function
+    handleMutateMarkdown: Function
+    setInterceptMode: Function
+  }
+  flags: {
+    interceptMode: string
+    interceptModeTag: string
+    slugCollision: boolean
+    viewportKey: string
+    width: number
+  }
+}
+
 export interface IEditFlags {
   isAuthor: boolean
   isAdmin: boolean
@@ -173,6 +199,11 @@ export interface IReactChild {
 export interface IUUID {
   uuid: string
   viewportKey?: string
+}
+
+export interface ICurrentlyDesigning {
+  viewportKey: string
+  visible: boolean
 }
 
 export interface IEditViewport {
@@ -330,6 +361,45 @@ export interface IEdit {
   uuid: string
   handleToggle: Function
   handleReplacePane?: Function
+}
+
+export interface IPaneForm {
+  uuid: string
+  payload: any
+  flags: {
+    isAuthor: boolean
+    isAdmin: boolean
+    isBuilder: boolean
+    isOpenDemo: boolean
+    isEmpty: boolean
+    slugCollision: boolean
+    saved: boolean
+    saveStage: number
+  }
+  fn: {
+    handleChange: Function
+    handleChangeEditInPlace: Function
+    toggleBelief: Function
+    handleChangeBelief: Function
+    addBelief: Function
+    handleChangeImpression: Function
+    handleSubmit: Function
+    handleEditMarkdown: Function
+    handleMutateMarkdown: Function
+    setSaved: Function
+  }
+}
+
+export interface IPaneStarter {
+  state: any
+  fn: {
+    handleChange: Function
+    handleChangeEditInPlace: Function
+  }
+  flags: {
+    slugCollision: boolean
+    isEmbeddedEdit: boolean
+  }
 }
 
 export interface IEditBelief {

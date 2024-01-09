@@ -23,6 +23,8 @@ import {
   IEditInPlace,
   IInterceptOverride,
   IContentEditableContainer,
+  ICurrentlyDesigning,
+  IPaneRender,
 } from '../../types'
 
 interface IStyledWrapperSectionProps {
@@ -35,7 +37,8 @@ const StyledWrapperDiv = styled.div<IStyledWrapperSectionProps>`
   ${(props: any) => props.css};
 `
 
-const CurrentlyDesigning = ({ viewportKey }) => {
+const CurrentlyDesigning = ({ viewportKey, visible }: ICurrentlyDesigning) => {
+  if (!visible) return null
   return (
     <>
       <div className="my-2 flex items-center px-3">
@@ -46,34 +49,49 @@ const CurrentlyDesigning = ({ viewportKey }) => {
       </div>
       <div className="mb-3 text-myorange">
         <div className="flex justify-between flex-row">
-            <div className="w-1/3 grid justify-items-center">
-            {viewportKey===`mobile` ? (
-              <span className="inline-flex">
+          <div className="w-1/3 grid justify-items-center">
+            <span
+              className={classNames(
+                viewportKey === `mobile`
+                  ? `text-myorange`
+                  : `text-mydarkgrey/5`,
+                `inline-flex`,
+              )}
+            >
               <ArrowDownIcon className="h-8 w-8" />
               <ArrowDownIcon className="h-8 w-8" />
               <ArrowDownIcon className="h-8 w-8" />
-              </span>
-            ): null}
-            </div>
-            <div className="w-1/3 grid justify-items-center">
-            {viewportKey===`tablet` ? (
-<span className="inline-flex">
-              <ArrowDownIcon className="h-8 w-8" />
-              <ArrowDownIcon className="h-8 w-8" />
-              <ArrowDownIcon className="h-8 w-8" />
-              </span>
-            ): null}
-            </div>
-            <div className="w-1/3 grid justify-items-center">
-            {viewportKey===`desktop` ? (
-<span className="inline-flex">
-              <ArrowDownIcon className="h-8 w-8" />
-              <ArrowDownIcon className="h-8 w-8" />
-              <ArrowDownIcon className="h-8 w-8" />
-              </span>
-            ): null}
-            </div>
+            </span>
           </div>
+          <div className="w-1/3 grid justify-items-center">
+            <span
+              className={classNames(
+                viewportKey === `tablet`
+                  ? `text-myorange`
+                  : `text-mydarkgrey/5`,
+                `inline-flex`,
+              )}
+            >
+              <ArrowDownIcon className="h-8 w-8" />
+              <ArrowDownIcon className="h-8 w-8" />
+              <ArrowDownIcon className="h-8 w-8" />
+            </span>
+          </div>
+          <div className="w-1/3 grid justify-items-center">
+            <span
+              className={classNames(
+                viewportKey === `desktop`
+                  ? `text-myorange`
+                  : `text-mydarkgrey/5`,
+                `inline-flex`,
+              )}
+            >
+              <ArrowDownIcon className="h-8 w-8" />
+              <ArrowDownIcon className="h-8 w-8" />
+              <ArrowDownIcon className="h-8 w-8" />
+            </span>
+          </div>
+        </div>
       </div>
     </>
   )
@@ -111,7 +129,7 @@ const useRefCallback = <T extends any[]>(
   return result
 }
 
-const PaneRender = ({ uuid, previewPayload, fn, flags }: any) => {
+const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
   const {
     setInterceptMode,
     handleEditMarkdown,
@@ -735,9 +753,12 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: any) => {
 
       {!emptyPane && !codeHook && interceptMode === `edit` ? (
         <div className="pl-4 flex-1 flex-shrink">
-          <div className="w-80 xl:w-96 mb-6 sticky top-4">
+          <div className="w-80 xl:w-96 mb-6 sticky top-20">
             <>
-              <CurrentlyDesigning viewportKey={viewportKey} />
+              <CurrentlyDesigning
+                viewportKey={viewportKey}
+                visible={nth > -1}
+              />
               <PaneEditInPlace
                 tag={tag}
                 tagType={tagType}
