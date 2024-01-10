@@ -9,6 +9,7 @@ import {
   XMarkIcon,
 } from '@heroicons/react/20/solid'
 import { classNames, Compositor } from '@tractstack/helpers'
+import { IStoryFragmentId } from '@tractstack/types'
 
 import { IAdd } from '../../types'
 import { useDrupalStore } from '../../stores/drupal'
@@ -44,7 +45,24 @@ const StyledWrapperDiv = styled.div<IStyledWrapperSectionProps>`
   ${(props: any) => props.css};
 `
 
-const StoryFragmentRender = ({ uuid, previewPayload, flags, fn }: any) => {
+const StoryFragmentRender = ({
+  uuid,
+  previewPayload,
+  flags,
+  fn,
+}: {
+  uuid: string
+  previewPayload: any
+  flags: {
+    width: number
+    viewportKey: string
+    slugCollision: boolean
+    storyFragmentId: IStoryFragmentId
+    saveStage: number
+    panes: string[]
+  }
+  fn: { handleInsertPane: Function; handleReorderPane: Function }
+}) => {
   const { handleInsertPane, handleReorderPane } = fn
   const { width, viewportKey } = flags
   const elementRef = useRef<HTMLElement>(null)
@@ -270,7 +288,7 @@ const StoryFragmentRender = ({ uuid, previewPayload, flags, fn }: any) => {
                   >
                     <Dialog.Panel className="max-w-3xl relative transform px-4 pb-4 pt-5 text-left transition-all xs:my-8 xs:w-full xs:p-6">
                       <StoryFragmentStarter
-                        fn={{ handleAdd, addModalOpen }}
+                        fn={{ handleAdd, setAddModalOpen }}
                         flags={{ allowCancel: true }}
                       />
                     </Dialog.Panel>

@@ -7,7 +7,13 @@ import { classNames } from '@tractstack/helpers'
 
 import { useDrupalStore } from '../../stores/drupal'
 
-const StoryFragmentStarter = ({ fn, flags }: any) => {
+const StoryFragmentStarter = ({
+  fn,
+  flags,
+}: {
+  fn: { handleAdd: Function; setAddModalOpen?: Function }
+  flags: { allowCancel: boolean }
+}) => {
   const { allowCancel } = flags
   const { handleAdd, setAddModalOpen } = fn
   const [query, setQuery] = useState(``)

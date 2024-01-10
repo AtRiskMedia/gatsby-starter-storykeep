@@ -2,7 +2,7 @@
 import React from 'react'
 import { navigate } from 'gatsby'
 import { classNames } from '@tractstack/helpers'
-import { ICodeHookProps } from '@tractstack/types'
+import { ICodeHookProps, IStoryFragmentId } from '@tractstack/types'
 
 import { useDrupalStore } from '../../stores/drupal'
 import codeHooks from '../../custom/codehooks'
@@ -38,7 +38,14 @@ const StoryFragmentPaneRender = ({
   storyFragmentId,
   viewportClasses,
   flags,
-}: any) => {
+}: {
+  viewportKey: string
+  payload: any
+  paneId: string
+  storyFragmentId: IStoryFragmentId
+  viewportClasses: string
+  flags: { saveStage: number }
+}) => {
   const setEmbeddedEdit = useDrupalStore((state) => state.setEmbeddedEdit)
   const p = paneId
   const thisPane = payload.panePayload

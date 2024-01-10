@@ -191,6 +191,19 @@ export interface IEditTractStackFormFlags {
   storyFragmentDaysSinceData: IActivityDetails
   panesDaysSinceData: IActivityDetails
 }
+export interface IEditStoryFragmentFormFlags {
+  slugCollision: boolean
+  saved: boolean
+  isAuthor: boolean
+  isAdmin: boolean
+  isBuilder: boolean
+  isOpenDemo: boolean
+  isEmpty: boolean
+  hasContextPanes: boolean
+  saveStage: number
+  editStage: number
+  storyFragmentId: IStoryFragmentId
+}
 
 export interface ISiteBuilderConfig {
   openDemo: boolean

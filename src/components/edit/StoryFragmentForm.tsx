@@ -25,9 +25,25 @@ import { config } from '../../../data/SiteConfig'
 import SlideOver from './SlideOver'
 import StoryFragmentRender from './StoryFragmentRender'
 import StoryFragmentStarter from './StoryFragmentStarter'
-import { SaveStages } from '../../types'
+import { SaveStages, IEditStoryFragmentFormFlags } from '../../types'
 
-const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
+const StoryFragmentForm = ({
+  uuid,
+  payload,
+  flags,
+  fn,
+}: {
+  uuid: string
+  payload: any
+  flags: IEditStoryFragmentFormFlags
+  fn: {
+    handleChange: Function
+    handleInsertPane: Function
+    handleReorderPane: Function
+    handleSubmit: Function
+    setSaved: Function
+  }
+}) => {
   const { state } = payload
   const isEmpty = state.panes.length === 0
   const {
@@ -147,7 +163,7 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
                               id="title"
                               className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                               value={state.title}
-                              onChange={handleChange}
+                              onChange={(e) => handleChange(e)}
                             />
                           </div>
                         </div>
@@ -185,7 +201,7 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
                               pattern="[a-zA-Z\-]+"
                               className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                               value={state.slug}
-                              onChange={handleChange}
+                              onChange={(e) => handleChange(e)}
                             />
                           </div>
                         </div>
@@ -205,7 +221,7 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
                               id="tailwindBgColour"
                               className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                               value={state.tailwindBgColour}
-                              onChange={handleChange}
+                              onChange={(e) => handleChange(e)}
                             />
                           </div>
                         </div>
@@ -232,7 +248,7 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
                               id="socialImagePath"
                               className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                               value={state.socialImagePath}
-                              onChange={handleChange}
+                              onChange={(e) => handleChange(e)}
                             />
                           </div>
                         </div>
@@ -475,7 +491,7 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
                     <span className="xs:ml-3">
                       <button
                         type="button"
-                        onClick={handleSubmit}
+                        onClick={(e) => handleSubmit(e)}
                         disabled={
                           flags.saveStage >= SaveStages.PrepareSave ||
                           flags.slugCollision ||
@@ -717,7 +733,7 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
                                 id="title"
                                 className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                                 value={state.title}
-                                onChange={handleChange}
+                                onChange={(e) => handleChange(e)}
                               />
                             </div>
                           </div>
@@ -750,7 +766,7 @@ const StoryFragmentForm = ({ uuid, payload, flags, fn }: any) => {
                                 pattern="[a-zA-Z\-]+"
                                 className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                                 value={state.slug}
-                                onChange={handleChange}
+                                onChange={(e) => handleChange(e)}
                               />
                             </div>
                           </div>

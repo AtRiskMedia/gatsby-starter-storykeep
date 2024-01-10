@@ -1093,7 +1093,13 @@ const PaneForm = ({ uuid, payload, flags, fn }: IPaneForm) => {
                       <button
                         type="button"
                         disabled={flags.saveStage >= SaveStages.PrepareSave}
-                        onClick={() => navigate(`/storykeep`)}
+                        onClick={() => {
+                          if (embeddedEdit.parentType === `storyfragments`)
+                            navigate(
+                              `/storykeep/storyfragments/${embeddedEdit.parent}`,
+                            )
+                          else navigate(`/storykeep`)
+                        }}
                         className={classNames(
                           flags.saveStage >= SaveStages.PrepareSave
                             ? ``

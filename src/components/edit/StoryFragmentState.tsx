@@ -9,14 +9,24 @@ import {
   storyFragmentPayload,
   tractStackPayload,
 } from '../../helpers/generateDrupalPayload'
-import { EditStages, SaveStages } from '../../types'
+import { EditStages, SaveStages, IEditFlags } from '../../types'
 
-const StoryFragmentState = ({ uuid, payload, flags }: any) => {
+const StoryFragmentState = ({
+  uuid,
+  payload,
+  flags,
+}: {
+  uuid: string
+  payload: any
+  flags: IEditFlags
+}) => {
   const apiBase = process.env.DRUPAL_APIBASE
+  const embeddedEdit = useDrupalStore((state) => state.embeddedEdit)
+  const setEmbeddedEdit = useDrupalStore((state) => state.setEmbeddedEdit)
   const [lastSavedState, setLastSavedState] = useState(payload)
   const [insertNewPane, setInsertNewPane] = useState(``)
   const [saved, setSaved] = useState(false)
-  const [state, setState] = useState(payload.state)
+  const [state, setState] = useState(payload.initialState)
   const [slugCollision, setSlugCollision] = useState(false)
   const [newUuid, setNewUuid] = useState(``)
   const [saveStage, setSaveStage] = useState(SaveStages.Booting)
@@ -54,8 +64,6 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
   const cleanerQueue = useDrupalStore((state) => state.cleanerQueue)
   const removeCleanerQueue = useDrupalStore((state) => state.removeCleanerQueue)
   const drupalResponse = useDrupalStore((state) => state.drupalResponse)
-  const embeddedEdit = useDrupalStore((state) => state.embeddedEdit)
-  const setEmbeddedEdit = useDrupalStore((state) => state.setEmbeddedEdit)
   const storyFragmentId = {
     id: uuid,
     title: thisStoryFragment.title,
@@ -73,9 +81,8 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
     .filter((e) => e)
   const hasContextPanes = Object.keys(thisStoryFragment.contextPanes).length > 0
 
-  const handleChange = (e: any) => {
-    // FIX
-    const { name, value } = e.target
+  const handleChange = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const { name, value } = e.target as HTMLInputElement
     if (
       value !== thisStoryFragment.slug &&
       allStoryFragmentSlugs.includes(value)
@@ -144,7 +151,7 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
     setToggleCheck(true)
   }
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     setSaveStage(SaveStages.PrepareSave)
   }
@@ -458,27 +465,22 @@ const StoryFragmentState = ({ uuid, payload, flags }: any) => {
   // set initial state
   useEffect(() => {
     if (
-      Object.keys(payload.initialState).length > 0 &&
-      flags?.editStage === EditStages.Booting &&
-      (!state || Object.keys(state).length === 0)
-    ) {
-      if (embeddedEdit.parentState) {
-        setState(embeddedEdit.parentState)
-        setToggleCheck(true)
-      } else setState(payload.initialState)
-    }
-  }, [flags.editStage, payload.initialState, state, embeddedEdit?.parentState])
-  useEffect(() => {
-    if (
       flags.editStage === EditStages.Booting &&
-      state &&
-      Object.keys(state).length &&
       saveStage === SaveStages.Booting
     ) {
-      setEmbeddedEdit(null, null, null, undefined, undefined, undefined)
-      setSaveStage(SaveStages.NoChanges)
+      if (typeof embeddedEdit?.parentState !== `undefined`) {
+        setState(embeddedEdit.parentState)
+        setEmbeddedEdit(null, null, null, undefined, undefined, undefined)
+        setToggleCheck(true)
+      } else setSaveStage(SaveStages.NoChanges)
     }
-  }, [flags.editStage, saveStage, setSaveStage, state, setEmbeddedEdit])
+  }, [
+    flags.editStage,
+    saveStage,
+    setSaveStage,
+    setEmbeddedEdit,
+    embeddedEdit.parentState,
+  ])
 
   if (saveStage < SaveStages.NoChanges) return null
 
