@@ -60,6 +60,7 @@ export default function EditTractStack({
     panesDaysSinceData: undefined,
   })
   const [isSSR, setIsSSR] = useState(true)
+  const [isLoaded, setIsLoaded] = useState(false)
 
   // AuthorCheck
   useEffect(() => {
@@ -126,6 +127,7 @@ export default function EditTractStack({
         initialState,
       }
       setPayload(payload)
+      setIsLoaded(true)
       setEditStage(EditStages.InitialStateSet)
     }
   }, [
@@ -192,7 +194,11 @@ export default function EditTractStack({
       <DrupalApi>
         <Layout current="storykeep">
           <ConciergeApi>
-            <TractStackState uuid={uuid} payload={payload} flags={flags} />
+            {isLoaded ? (
+              <TractStackState uuid={uuid} payload={payload} flags={flags} />
+            ) : (
+              <></>
+            )}
           </ConciergeApi>
         </Layout>
       </DrupalApi>

@@ -176,6 +176,21 @@ export interface IEditTractStackFlags {
   storyFragmentDaysSinceData: undefined | IActivityDetails
   panesDaysSinceData: undefined | IActivityDetails
 }
+export interface IEditTractStackFormFlags {
+  slugCollision: boolean
+  saved: boolean
+  isAuthor: boolean
+  isAdmin: boolean
+  isBuilder: boolean
+  isOpenDemo: boolean
+  isEmpty: boolean
+  hasStoryFragments: boolean
+  hasContextPanes: boolean
+  saveStage: number
+  editStage: number
+  storyFragmentDaysSinceData: IActivityDetails
+  panesDaysSinceData: IActivityDetails
+}
 
 export interface ISiteBuilderConfig {
   openDemo: boolean

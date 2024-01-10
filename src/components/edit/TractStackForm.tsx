@@ -27,9 +27,24 @@ import {
 import { useDrupalStore } from '../../stores/drupal'
 import SlideOver from './SlideOver'
 import { config } from '../../../data/SiteConfig'
-import { SaveStages } from '../../types'
+import { SaveStages, IEditTractStackFormFlags } from '../../types'
 
-const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
+const TractStackForm = ({
+  uuid,
+  payload,
+  flags,
+  fn,
+}: {
+  uuid: string
+  payload: any
+  flags: IEditTractStackFormFlags
+  fn: {
+    setSaved: Function
+    handleChange: Function
+    handleSubmit: Function
+    handleAdd: Function
+  }
+}) => {
   const { state } = payload
   const { setSaved, handleChange, handleSubmit, handleAdd } = fn
   const [toggleAdvOpt, setToggleAdvOpt] = useState(false)
@@ -182,7 +197,7 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
               <form
                 className="max-w-3xl"
                 id="editTractStack"
-                onSubmit={handleSubmit}
+                onSubmit={(e) => handleSubmit(e)}
               >
                 <div className="space-y-12">
                   <div className="border-b border-black/10 pb-12">
@@ -211,7 +226,7 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                               id="title"
                               className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black focus:ring-0 xs:text-sm xs:leading-6"
                               value={state.title}
-                              onChange={handleChange}
+                              onChange={(e) => handleChange(e)}
                             />
                           </div>
                         </div>
@@ -249,7 +264,7 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                               pattern="[a-zA-Z\-]+"
                               className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                               value={state.slug}
-                              onChange={handleChange}
+                              onChange={(e) => handleChange(e)}
                             />
                           </div>
                         </div>
@@ -270,7 +285,7 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                               id="socialImagePath"
                               className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black focus:ring-0 xs:text-sm xs:leading-6"
                               value={state.socialImagePath}
-                              onChange={handleChange}
+                              onChange={(e) => handleChange(e)}
                             />
                           </div>
                         </div>
@@ -461,7 +476,7 @@ const TractStackForm = ({ uuid, payload, flags, fn }: any) => {
                   <span className="xs:ml-3">
                     <button
                       type="button"
-                      onClick={handleSubmit}
+                      onClick={(e) => handleSubmit(e)}
                       disabled={
                         flags.saveStage >= SaveStages.PrepareSave ||
                         flags.slugCollision ||

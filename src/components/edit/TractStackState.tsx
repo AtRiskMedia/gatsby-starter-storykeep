@@ -6,7 +6,12 @@ import { v4 as uuidv4 } from 'uuid'
 import { useDrupalStore } from '../../stores/drupal'
 import TractStackForm from './TractStackForm'
 import { tractStackPayload } from '../../helpers/generateDrupalPayload'
-import { IActivityDetails, EditStages, SaveStages } from '../../types'
+import {
+  IEditTractStackFlags,
+  IActivityDetails,
+  EditStages,
+  SaveStages,
+} from '../../types'
 import {
   getPanesDaysSince,
   getStoryFragmentDaysSince,
@@ -96,11 +101,19 @@ const daysSinceDataPayload = (data: any) => {
   return payload
 }
 
-const TractStackState = ({ uuid, payload, flags }: any) => {
+const TractStackState = ({
+  uuid,
+  payload,
+  flags,
+}: {
+  uuid: string
+  payload: any
+  flags: IEditTractStackFlags
+}) => {
   const apiBase = process.env.DRUPAL_APIBASE
   const [lastSavedState, setLastSavedState] = useState(payload)
   const [saved, setSaved] = useState(false)
-  const [state, setState] = useState(payload.state)
+  const [state, setState] = useState(payload.initialState)
   const [slugCollision, setSlugCollision] = useState(false)
   const [newUuid, setNewUuid] = useState(``)
   const [saveStage, setSaveStage] = useState(SaveStages.Booting)
@@ -171,7 +184,7 @@ const TractStackState = ({ uuid, payload, flags }: any) => {
     undefined | boolean
   >(undefined)
 
-  const handleAdd = (e: any) => {
+  const handleAdd = (e: string) => {
     switch (e) {
       case `pane`: {
         const newUuid = uuidv4()
@@ -224,9 +237,9 @@ const TractStackState = ({ uuid, payload, flags }: any) => {
     }
   }
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     // FIX
-    const { name, value } = e.target
+    const { name, value } = e.target as HTMLInputElement
     if (value !== thisTractStack.slug && allTractStacksSlugs.includes(value))
       setSlugCollision(true)
     else setSlugCollision(false)
@@ -236,7 +249,7 @@ const TractStackState = ({ uuid, payload, flags }: any) => {
     setToggleCheck(true)
   }
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     setSaveStage(SaveStages.PrepareSave)
   }
@@ -342,6 +355,7 @@ const TractStackState = ({ uuid, payload, flags }: any) => {
 
   // handle stages
   useEffect(() => {
+    console.log(SaveStages[saveStage])
     switch (saveStage) {
       case SaveStages.NoChanges:
         Object.keys(cleanerQueue).forEach((e: string) => {
@@ -497,28 +511,13 @@ const TractStackState = ({ uuid, payload, flags }: any) => {
   // set initial state
   useEffect(() => {
     if (
-      flags?.editStage === EditStages.Booting &&
-      (!state || Object.keys(state).length === 0)
-    ) {
-      setState(payload.initialState)
-    }
-    if (
       flags.editStage === EditStages.Booting &&
-      state &&
-      Object.keys(state).length &&
       saveStage === SaveStages.Booting
     ) {
       setTractStackSelect(false)
       setSaveStage(SaveStages.NoChanges)
     }
-  }, [
-    flags.editStage,
-    saveStage,
-    setSaveStage,
-    payload.initialState,
-    state,
-    setTractStackSelect,
-  ])
+  }, [flags.editStage, saveStage, setSaveStage, setTractStackSelect])
 
   if (saveStage < SaveStages.NoChanges) return null
 
