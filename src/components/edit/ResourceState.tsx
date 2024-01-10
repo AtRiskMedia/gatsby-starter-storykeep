@@ -5,13 +5,21 @@ import { navigate } from 'gatsby'
 import { useDrupalStore } from '../../stores/drupal'
 import ResourceForm from './ResourceForm'
 import { resourcePayload } from '../../helpers/generateDrupalPayload'
-import { EditStages, SaveStages } from '../../types'
+import { EditStages, SaveStages, IEditResourceFlags } from '../../types'
 
-const ResourceState = ({ uuid, payload, flags }: any) => {
+const ResourceState = ({
+  uuid,
+  payload,
+  flags,
+}: {
+  uuid: string
+  payload: any
+  flags: IEditResourceFlags
+}) => {
   const apiBase = process.env.DRUPAL_APIBASE
   const [lastSavedState, setLastSavedState] = useState(payload)
   const [saved, setSaved] = useState(false)
-  const [state, setState] = useState(payload.state)
+  const [state, setState] = useState(payload.initialState)
   const [slugCollision, setSlugCollision] = useState(false)
   const [newUuid, setNewUuid] = useState(``)
   const [saveStage, setSaveStage] = useState(SaveStages.Booting)
@@ -172,7 +180,7 @@ const ResourceState = ({ uuid, payload, flags }: any) => {
     thisResource,
   ])
 
-  // save storyfragment for drupal
+  // save resource for drupal
   useEffect(() => {
     // first pass save to drupal
     if (
@@ -228,7 +236,7 @@ const ResourceState = ({ uuid, payload, flags }: any) => {
     thisResource,
   ])
 
-  // update tractstack on save
+  // update resource on save
   useEffect(() => {
     if (
       saveStage === SaveStages.SavingResource &&
@@ -245,22 +253,14 @@ const ResourceState = ({ uuid, payload, flags }: any) => {
   // set initial state
   useEffect(() => {
     if (
-      flags?.editStage === EditStages.Booting &&
-      (!state || Object.keys(state).length === 0)
-    ) {
-      setState(payload.initialState)
-    }
-    if (
       flags.editStage === EditStages.Booting &&
-      state &&
-      Object.keys(state).length &&
       saveStage === SaveStages.Booting
     ) {
       setSaveStage(SaveStages.NoChanges)
     }
-  }, [flags.editStage, saveStage, setSaveStage, payload.initialState, state])
+  }, [flags.editStage, saveStage, setSaveStage])
 
-  if (saveStage < SaveStages.NoChanges) return <p>Loading...</p>
+  if (saveStage < SaveStages.NoChanges) return null
 
   return (
     <ResourceForm
@@ -274,7 +274,6 @@ const ResourceState = ({ uuid, payload, flags }: any) => {
         slugCollision,
       }}
       fn={{
-        setSaved,
         handleChange,
         handleSubmit,
       }}

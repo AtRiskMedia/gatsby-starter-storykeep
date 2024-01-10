@@ -315,7 +315,9 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
         <Layout current="storykeepInner">
           {isLoaded ? (
             <PaneState uuid={uuid} payload={payload} flags={flags} />
-          ) : null}
+          ) : (
+            <></>
+          )}
         </Layout>
       </DrupalApi>
     </DrupalProvider>

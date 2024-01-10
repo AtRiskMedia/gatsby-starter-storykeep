@@ -136,9 +136,9 @@ export interface IEditFlags {
   isAdmin: boolean
   isBuilder: boolean
   isOpenDemo: boolean
-  isEmpty: boolean
   saveStage: number
   editStage: number
+  isEmpty: boolean
 }
 
 export interface IEditResourceFlags {
@@ -363,19 +363,21 @@ export interface IEdit {
   handleReplacePane?: Function
 }
 
+export interface IFlags {
+  isAuthor: boolean
+  isAdmin: boolean
+  isBuilder: boolean
+  isOpenDemo: boolean
+  slugCollision: boolean
+  saved: boolean
+  saveStage: number
+  isEmpty?: boolean
+}
+
 export interface IPaneForm {
   uuid: string
   payload: any
-  flags: {
-    isAuthor: boolean
-    isAdmin: boolean
-    isBuilder: boolean
-    isOpenDemo: boolean
-    isEmpty: boolean
-    slugCollision: boolean
-    saved: boolean
-    saveStage: number
-  }
+  flags: IFlags
   fn: {
     handleChange: Function
     handleChangeEditInPlace: Function

@@ -12,11 +12,17 @@ import {
 } from '@heroicons/react/24/outline'
 import { CheckIcon, LinkIcon, TrashIcon } from '@heroicons/react/20/solid'
 
-// import { useDrupalStore } from '../../stores/drupal'
-// import { config } from '../../../data/SiteConfig'
-import { SaveStages } from '../../types'
+import { SaveStages, IFlags } from '../../types'
 
-const ResourceForm = ({ payload, flags, fn }: any) => {
+const ResourceForm = ({
+  payload,
+  flags,
+  fn,
+}: {
+  payload: any
+  flags: IFlags
+  fn: { handleChange: Function; handleSubmit: Function }
+}) => {
   const { state } = payload
   const { handleChange, handleSubmit } = fn
   const AuthorIcon =
@@ -117,7 +123,7 @@ const ResourceForm = ({ payload, flags, fn }: any) => {
                   <span className="xs:ml-3">
                     <button
                       type="button"
-                      onClick={handleSubmit}
+                      onClick={(e) => handleSubmit(e)}
                       disabled={
                         flags.saveStage >= SaveStages.PrepareSave ||
                         flags.slugCollision ||
@@ -229,7 +235,11 @@ const ResourceForm = ({ payload, flags, fn }: any) => {
       </section>
       <section className="relative bg-slate-50">
         <div className="p-6">
-          <form className="max-w-3xl" id="editResource" onSubmit={handleSubmit}>
+          <form
+            className="max-w-3xl"
+            id="editResource"
+            onSubmit={(e) => handleSubmit(e)}
+          >
             <div className="space-y-12">
               <div className="border-b border-black/10 pb-12">
                 <div className="grid grid-cols-1 gap-x-6 gap-y-8 xs:grid-cols-6">
@@ -257,7 +267,7 @@ const ResourceForm = ({ payload, flags, fn }: any) => {
                           id="title"
                           className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black focus:ring-0 xs:text-sm xs:leading-6"
                           value={state.title}
-                          onChange={handleChange}
+                          onChange={(e) => handleChange(e)}
                         />
                       </div>
                     </div>
@@ -295,7 +305,7 @@ const ResourceForm = ({ payload, flags, fn }: any) => {
                           pattern="[a-zA-Z\-]+"
                           className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                           value={state.slug}
-                          onChange={handleChange}
+                          onChange={(e) => handleChange(e)}
                         />
                       </div>
                     </div>
@@ -317,7 +327,7 @@ const ResourceForm = ({ payload, flags, fn }: any) => {
                           pattern="[a-zA-Z\-]+"
                           className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                           value={state.categorySlug}
-                          onChange={handleChange}
+                          onChange={(e) => handleChange(e)}
                         />
                       </div>
                     </div>
@@ -338,7 +348,7 @@ const ResourceForm = ({ payload, flags, fn }: any) => {
                           id="oneliner"
                           className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                           value={state.oneliner}
-                          onChange={handleChange}
+                          onChange={(e) => handleChange(e)}
                         />
                       </div>
                     </div>
@@ -360,7 +370,7 @@ const ResourceForm = ({ payload, flags, fn }: any) => {
                           pattern="[a-zA-Z0-9\(\)\- ]+"
                           className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                           value={state.actionLisp}
-                          onChange={handleChange}
+                          onChange={(e) => handleChange(e)}
                         />
                       </div>
                     </div>
@@ -380,7 +390,7 @@ const ResourceForm = ({ payload, flags, fn }: any) => {
                         rows={7}
                         className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-mylightgrey focus:ring-2 focus:ring-inset focus:ring-indigo-600 xs:text-sm xs:leading-6"
                         value={state.optionsPayload}
-                        onChange={handleChange}
+                        onChange={(e) => handleChange(e)}
                       />
                     </div>
                   </div>

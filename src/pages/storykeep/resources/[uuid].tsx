@@ -42,6 +42,7 @@ export default function EditResource({ params }: { params: { uuid: string } }) {
     saveStage: SaveStages.Booting,
   })
   const [isSSR, setIsSSR] = useState(true)
+  const [isLoaded, setIsLoaded] = useState(false)
 
   // AuthorCheck
   useEffect(() => {
@@ -110,6 +111,7 @@ export default function EditResource({ params }: { params: { uuid: string } }) {
         initialState,
       }
       setPayload(payload)
+      setIsLoaded(true)
       setEditStage(EditStages.InitialStateSet)
     }
   }, [
@@ -166,7 +168,11 @@ export default function EditResource({ params }: { params: { uuid: string } }) {
     <DrupalProvider config={drupalConfig}>
       <DrupalApi>
         <Layout current="storykeepInner">
-          <ResourceState uuid={uuid} payload={payload} flags={flags} />
+          {isLoaded ? (
+            <ResourceState uuid={uuid} payload={payload} flags={flags} />
+          ) : (
+            <></>
+          )}
         </Layout>
       </DrupalApi>
     </DrupalProvider>
