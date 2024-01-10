@@ -172,6 +172,17 @@ export interface IActivityDetails {
   }
 }
 
+export interface IEditTractStackInitialFlags {
+  isAuthor: boolean
+  isAdmin: boolean
+  isBuilder: boolean
+  isOpenDemo: boolean
+  isEmpty: boolean
+  hasStoryFragments: boolean
+  hasContextPanes: boolean
+  storyFragmentDaysSinceData: undefined | IActivityDetails
+  panesDaysSinceData: undefined | IActivityDetails
+}
 export interface IEditTractStackFlags {
   isAuthor: boolean
   isAdmin: boolean
@@ -180,7 +191,6 @@ export interface IEditTractStackFlags {
   isEmpty: boolean
   hasStoryFragments: boolean
   hasContextPanes: boolean
-  saveStage: number
   editStage: number
   storyFragmentDaysSinceData: undefined | IActivityDetails
   panesDaysSinceData: undefined | IActivityDetails

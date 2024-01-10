@@ -11,10 +11,9 @@ import Layout from '../../../components/Layout'
 import TractStackState from '../../../components/edit/TractStackState'
 import {
   Stages,
-  SaveStages,
   EditStages,
   IEditPayload,
-  IEditTractStackFlags,
+  IEditTractStackInitialFlags,
 } from '../../../types'
 
 export default function EditTractStack({
@@ -44,7 +43,7 @@ export default function EditTractStack({
   const [payload, setPayload] = useState<IEditPayload>({
     initialState: {},
   })
-  const [flags, setFlags] = useState<IEditTractStackFlags>({
+  const [flags, setFlags] = useState<IEditTractStackInitialFlags>({
     isAuthor: false,
     isAdmin: false,
     isBuilder: false,
@@ -54,8 +53,6 @@ export default function EditTractStack({
       !!thisTractStack?.storyFragments?.length,
     hasStoryFragments: !!thisTractStack?.storyFragments?.length,
     hasContextPanes: !!thisTractStack?.contextPanes?.length,
-    editStage,
-    saveStage: SaveStages.Booting,
     storyFragmentDaysSinceData: undefined,
     panesDaysSinceData: undefined,
   })
@@ -159,6 +156,7 @@ export default function EditTractStack({
           setEditStage(EditStages.Activated)
           break
       }
+    else if (editStage === EditStages.Deleted) navigate(`/storykeep`)
   }, [
     thisTractStack,
     editStage,
@@ -195,7 +193,12 @@ export default function EditTractStack({
         <Layout current="storykeep">
           <ConciergeApi>
             {isLoaded ? (
-              <TractStackState uuid={uuid} payload={payload} flags={flags} />
+              <TractStackState
+                uuid={uuid}
+                payload={payload}
+                flags={{ ...flags, editStage }}
+                fn={{ setEditStage }}
+              />
             ) : (
               <></>
             )}

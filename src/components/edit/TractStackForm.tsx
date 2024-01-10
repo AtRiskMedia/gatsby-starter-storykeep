@@ -43,10 +43,11 @@ const TractStackForm = ({
     handleChange: Function
     handleSubmit: Function
     handleAdd: Function
+    handleDelete: Function
   }
 }) => {
   const { state } = payload
-  const { setSaved, handleChange, handleSubmit, handleAdd } = fn
+  const { setSaved, handleChange, handleSubmit, handleAdd, handleDelete } = fn
   const [toggleAdvOpt, setToggleAdvOpt] = useState(false)
   const selectedCollection = useDrupalStore((state) => state.selectedCollection)
   const setTractStackSelect = useDrupalStore(
@@ -461,7 +462,14 @@ const TractStackForm = ({
                     <button
                       type="button"
                       className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-100"
-                      onClick={() => alert(`todo`)}
+                      onClick={() => {
+                        if (
+                          window.confirm(
+                            `Are you sure you want to delete this Resource? This cannot be undone.`,
+                          )
+                        )
+                          handleDelete()
+                      }}
                     >
                       <TrashIcon
                         className="-ml-0.5 mr-1.5 h-5 w-5 text-mydarkgrey"

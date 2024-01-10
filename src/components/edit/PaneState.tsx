@@ -2853,6 +2853,7 @@ const PaneState = ({ uuid, payload, flags }: IPaneState) => {
           initialStateLivePreviewMarkdown: stateLivePreviewMarkdown,
         })
         setSaveStage(SaveStages.NoChanges)
+        setNavLocked(false)
         if (newUuid) {
           const goto = newUuid
           setNewUuid(``)
@@ -2865,6 +2866,7 @@ const PaneState = ({ uuid, payload, flags }: IPaneState) => {
   }, [
     flags.isOpenDemo,
     saveStage,
+    setNavLocked,
     uuid,
     newUuid,
     thisPane.drupalNid,

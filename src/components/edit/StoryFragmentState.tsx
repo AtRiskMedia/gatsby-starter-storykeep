@@ -278,6 +278,7 @@ const StoryFragmentState = ({
           initialState: state,
         })
         setSaveStage(SaveStages.NoChanges)
+        setNavLocked(false)
         if (newUuid) {
           const goto = newUuid
           setNewUuid(``)
@@ -289,6 +290,7 @@ const StoryFragmentState = ({
     }
   }, [
     saveStage,
+    setNavLocked,
     cleanerQueue,
     removeCleanerQueue,
     removeStoryFragment,

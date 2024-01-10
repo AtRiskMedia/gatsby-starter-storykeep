@@ -105,12 +105,15 @@ const TractStackState = ({
   uuid,
   payload,
   flags,
+  fn,
 }: {
   uuid: string
   payload: any
   flags: IEditTractStackFlags
+  fn: { setEditStage: Function }
 }) => {
   const apiBase = process.env.DRUPAL_APIBASE
+  const { setEditStage } = fn
   const [lastSavedState, setLastSavedState] = useState(payload)
   const [saved, setSaved] = useState(false)
   const [state, setState] = useState(payload.initialState)
@@ -145,6 +148,9 @@ const TractStackState = ({
   const removeTractStack = useDrupalStore((state) => state.removeTractStack)
   const setTractStack = useDrupalStore((state) => state.setTractStack)
   const thisTractStack = allTractStacks[uuid]
+  const setDrupalDeleteNode = useDrupalStore(
+    (state) => state.setDrupalDeleteNode,
+  )
   const drupalPreSaveQueue = useDrupalStore((state) => state.drupalPreSaveQueue)
   const removeDrupalPreSaveQueue = useDrupalStore(
     (state) => state.removeDrupalPreSaveQueue,
@@ -252,6 +258,10 @@ const TractStackState = ({
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     setSaveStage(SaveStages.PrepareSave)
+  }
+
+  const handleDelete = () => {
+    setEditStage(EditStages.Delete)
   }
 
   useEffect(() => {
@@ -414,6 +424,7 @@ const TractStackState = ({
           initialState: state,
         })
         setSaveStage(SaveStages.NoChanges)
+        setNavLocked(false)
         if (newUuid) {
           setTractStackSelected(newUuid)
           const goto = newUuid
@@ -429,6 +440,7 @@ const TractStackState = ({
     cleanerQueue,
     removeCleanerQueue,
     setDrupalPreSaveQueue,
+    setNavLocked,
     uuid,
     newUuid,
     apiBase,
@@ -440,6 +452,19 @@ const TractStackState = ({
     setTractStackTriggerSave,
     setTractStackSelected,
   ])
+
+  // delete from from drupal
+  useEffect(() => {
+    if (flags.editStage === EditStages.Delete) {
+      setDrupalDeleteNode(`tractstack`, uuid)
+      setEditStage(EditStages.Deleting)
+    } else if (
+      flags.editStage === EditStages.Deleting &&
+      typeof drupalResponse[uuid] !== `undefined`
+    ) {
+      setEditStage(EditStages.Deleted)
+    }
+  }, [flags.editStage, uuid, drupalResponse, setDrupalDeleteNode, setEditStage])
 
   // save tractstack for drupal
   useEffect(() => {
@@ -510,7 +535,7 @@ const TractStackState = ({
   // set initial state
   useEffect(() => {
     if (
-      flags.editStage === EditStages.Booting &&
+      flags.editStage === EditStages.Activated &&
       saveStage === SaveStages.Booting
     ) {
       setTractStackSelect(false)
@@ -539,6 +564,7 @@ const TractStackState = ({
         handleChange,
         handleSubmit,
         handleAdd,
+        handleDelete,
       }}
     />
   )

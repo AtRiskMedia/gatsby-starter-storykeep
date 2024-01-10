@@ -167,6 +167,7 @@ const ResourceState = ({
           initialState: state,
         })
         setSaveStage(SaveStages.NoChanges)
+        setNavLocked(false)
         if (newUuid) {
           const goto = newUuid
           setNewUuid(``)
@@ -178,6 +179,7 @@ const ResourceState = ({
     }
   }, [
     saveStage,
+    setNavLocked,
     cleanerQueue,
     removeCleanerQueue,
     removeResource,
