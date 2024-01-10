@@ -414,7 +414,7 @@ const Layout = ({ children, current }: ILayout) => {
         <div
           className={classNames(
             current === `storykeepInner` ? `` : `xl:hidden`,
-            `z-10 sticky top-0 flex items-center gap-x-6 bg-black px-4 py-4 shadow-sm`,
+            `z-99 sticky top-0 flex items-center gap-x-6 bg-black px-4 py-4 shadow-sm`,
           )}
         >
           <button

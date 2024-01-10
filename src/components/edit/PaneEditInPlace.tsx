@@ -430,9 +430,7 @@ const InputTailwindClass = ({
                 id={`${thisId}-mobile`}
                 onChange={(e) => handleChangeEditInPlace(e)}
                 className={classNames(
-                  viewportKey === `mobile`
-                    ? `bg-myorange/5`
-                    : `bg-mylightgrey/50`,
+                  viewportKey === `mobile` ? `bg-myorange/20` : `bg-black/20`,
                   `font-action relative block w-full rounded-none rounded-bl-md border-0 py-1.5 text-black ring-1 ring-inset ring-slate-200 placeholder:text-mydarkgrey focus:z-10 focus:ring-2 focus:ring-inset focus:ring-myorange text-xs leading-6`,
                 )}
                 value={
@@ -458,9 +456,7 @@ const InputTailwindClass = ({
                 id={`${thisId}-tablet`}
                 onChange={(e) => handleChangeEditInPlace(e)}
                 className={classNames(
-                  viewportKey === `tablet`
-                    ? `bg-myorange/5`
-                    : `bg-mylightgrey/50`,
+                  viewportKey === `tablet` ? `bg-myorange/20` : `bg-black/20`,
                   `font-action relative block w-full rounded-none rounded-bl-md border-0 py-1.5 text-black ring-1 ring-inset ring-slate-200 placeholder:text-mydarkgrey focus:z-10 focus:ring-2 focus:ring-inset focus:ring-myorange text-xs leading-6`,
                 )}
                 value={
@@ -486,9 +482,7 @@ const InputTailwindClass = ({
                 id={`${thisId}-desktop`}
                 onChange={(e) => handleChangeEditInPlace(e)}
                 className={classNames(
-                  viewportKey === `desktop`
-                    ? `bg-myorange/5`
-                    : `bg-mylightgrey/50`,
+                  viewportKey === `desktop` ? `bg-myorange/20` : `bg-black/20`,
                   `font-action relative block w-full rounded-none rounded-bl-md border-0 py-1.5 text-black ring-1 ring-inset ring-slate-200 placeholder:text-mydarkgrey focus:z-10 focus:ring-2 focus:ring-inset focus:ring-myorange text-xs leading-6`,
                 )}
                 value={
