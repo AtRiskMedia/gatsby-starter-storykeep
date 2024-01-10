@@ -8,10 +8,9 @@ import DrupalApi from '../../../components/DrupalApi'
 import Layout from '../../../components/Layout'
 import ResourceState from '../../../components/edit/ResourceState'
 import {
-  SaveStages,
   EditStages,
   IEditPayload,
-  IEditResourceFlags,
+  IEditResourceInitialFlags,
 } from '../../../types'
 
 export default function EditResource({ params }: { params: { uuid: string } }) {
@@ -33,13 +32,11 @@ export default function EditResource({ params }: { params: { uuid: string } }) {
   const [payload, setPayload] = useState<IEditPayload>({
     initialState: {},
   })
-  const [flags, setFlags] = useState<IEditResourceFlags>({
+  const [flags, setFlags] = useState<IEditResourceInitialFlags>({
     isAuthor: false,
     isAdmin: false,
     isBuilder: false,
     isOpenDemo: openDemoEnabled,
-    editStage,
-    saveStage: SaveStages.Booting,
   })
   const [isSSR, setIsSSR] = useState(true)
   const [isLoaded, setIsLoaded] = useState(false)
@@ -145,6 +142,7 @@ export default function EditResource({ params }: { params: { uuid: string } }) {
           setEditStage(EditStages.Activated)
           break
       }
+    else if (editStage === EditStages.Deleted) navigate(`/storykeep`)
   }, [
     thisResource,
     editStage,
@@ -169,7 +167,12 @@ export default function EditResource({ params }: { params: { uuid: string } }) {
       <DrupalApi>
         <Layout current="storykeepInner">
           {isLoaded ? (
-            <ResourceState uuid={uuid} payload={payload} flags={flags} />
+            <ResourceState
+              uuid={uuid}
+              payload={payload}
+              fn={{ setEditStage }}
+              flags={{ ...flags, editStage }}
+            />
           ) : (
             <></>
           )}

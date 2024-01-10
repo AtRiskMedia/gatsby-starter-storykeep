@@ -129,6 +129,32 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
         },
       },
     })),
+  setDrupalDeleteNode: (type: string, uuid: string) => {
+    const apiBase = process.env.DRUPAL_APIBASE
+    const setDrupalQueue = get().setDrupalQueue
+    const removeTractStack = get().removeTractStack
+    const removeStoryFragment = get().removeStoryFragment
+    const removePane = get().removePane
+    const removeResource = get().removeResource
+    const fullPayload = {
+      endpoint: `${apiBase}/node/${type}/${uuid}`,
+      method: `DELETE`,
+    }
+    setDrupalQueue(uuid, fullPayload)
+    switch (type) {
+      case `resource`:
+        removeResource(uuid)
+        break
+      case `pane`:
+        removePane(uuid)
+        break
+      case `story_fragment`:
+        removeStoryFragment(uuid)
+        break
+      case `tractstack`:
+        removeTractStack(uuid)
+    }
+  },
   setDrupalSaveNode: (
     payload: any,
     type: string,
@@ -199,7 +225,7 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
         break
       }
 
-      case `storyfragment`: {
+      case `story_fragment`: {
         const thisStoryFragment = get().allStoryFragments[uuid]
         const updateStoryFragments = get().updateStoryFragments
         const newStoryFragment = {
@@ -274,9 +300,10 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
 
       case `resource`: {
         const updateResources = get().updateResources
+        const thisResource = get().allResources[uuid]
         const newResource = {
+          ...thisResource,
           id: uuid,
-          drupalNid: payload?.attributes?.drupal_internal__nid,
           title: payload?.attributes?.title,
           actionLisp: payload?.attributes?.field_action_lisp,
           categorySlug: payload?.attributes?.field_category_slug,
@@ -284,6 +311,20 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
           optionsPayload: payload?.attributes?.field_options,
           slug: payload?.attributes?.field_slug,
         }
+        if (payload.attributes.title !== thisResource.title)
+          newResource.title = payload.attributes.title
+        if (payload.attributes.field_slug !== thisResource.slug)
+          newResource.slug = payload.attributes.field_slug
+        if (
+          payload.attributes.field_category_slug !== thisResource.categorySlug
+        )
+          newResource.categorySlug = payload.attributes.field_category_slug
+        if (payload.attributes.field_oneliner !== thisResource.oneliner)
+          newResource.oneliner = payload.attributes.field_oneliner
+        if (payload.attributes.field_action_lisp !== thisResource.actionLisp)
+          newResource.actionLisp = payload.attributes.field_action_lisp
+        if (payload.attributes.field_options !== thisResource.optionsPayload)
+          newResource.optionsPayload = payload.attributes.field_options
         updateResources(newResource)
         break
       }

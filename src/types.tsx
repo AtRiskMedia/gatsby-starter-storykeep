@@ -37,6 +37,9 @@ export enum EditStages {
   SettingInitialState,
   InitialStateSet,
   Activated,
+  Delete,
+  Deleting,
+  Deleted,
 }
 
 export enum SaveStages {
@@ -147,8 +150,13 @@ export interface IEditResourceFlags {
   isAdmin: boolean
   isBuilder: boolean
   isOpenDemo: boolean
-  saveStage: number
   editStage: number
+}
+export interface IEditResourceInitialFlags {
+  isAuthor: boolean
+  isAdmin: boolean
+  isBuilder: boolean
+  isOpenDemo: boolean
 }
 
 export interface IActivityDetails {
@@ -364,6 +372,7 @@ export interface IDrupalState {
   removeDrupalQueue: Function
   removeDrupalPreSaveQueue: Function
   removeDrupalResponse: Function
+  setDrupalDeleteNode: Function
   setDrupalSaveNode: Function
   setDrupalPreSaveQueue: Function
   setDrupalLocked: Function

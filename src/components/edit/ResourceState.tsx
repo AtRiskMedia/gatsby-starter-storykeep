@@ -11,12 +11,15 @@ const ResourceState = ({
   uuid,
   payload,
   flags,
+  fn,
 }: {
   uuid: string
   payload: any
   flags: IEditResourceFlags
+  fn: { setEditStage: Function }
 }) => {
   const apiBase = process.env.DRUPAL_APIBASE
+  const { setEditStage } = fn
   const [lastSavedState, setLastSavedState] = useState(payload)
   const [saved, setSaved] = useState(false)
   const [state, setState] = useState(payload.initialState)
@@ -36,6 +39,9 @@ const ResourceState = ({
   )
   const setDrupalPreSaveQueue = useDrupalStore(
     (state) => state.setDrupalPreSaveQueue,
+  )
+  const setDrupalDeleteNode = useDrupalStore(
+    (state) => state.setDrupalDeleteNode,
   )
   const setDrupalSaveNode = useDrupalStore((state) => state.setDrupalSaveNode)
   const removeDrupalResponse = useDrupalStore(
@@ -74,6 +80,10 @@ const ResourceState = ({
   const handleSubmit = (e: any) => {
     e.preventDefault()
     setSaveStage(SaveStages.PrepareSave)
+  }
+
+  const handleDelete = () => {
+    setEditStage(EditStages.Delete)
   }
 
   useEffect(() => {
@@ -180,6 +190,19 @@ const ResourceState = ({
     thisResource,
   ])
 
+  // delete from from drupal
+  useEffect(() => {
+    if (flags.editStage === EditStages.Delete) {
+      setDrupalDeleteNode(`resource`, uuid)
+      setEditStage(EditStages.Deleting)
+    } else if (
+      flags.editStage === EditStages.Deleting &&
+      typeof drupalResponse[uuid] !== `undefined`
+    ) {
+      setEditStage(EditStages.Deleted)
+    }
+  }, [flags.editStage, uuid, drupalResponse, setDrupalDeleteNode, setEditStage])
+
   // save resource for drupal
   useEffect(() => {
     // first pass save to drupal
@@ -253,7 +276,7 @@ const ResourceState = ({
   // set initial state
   useEffect(() => {
     if (
-      flags.editStage === EditStages.Booting &&
+      flags.editStage === EditStages.Activated &&
       saveStage === SaveStages.Booting
     ) {
       setSaveStage(SaveStages.NoChanges)
@@ -276,6 +299,7 @@ const ResourceState = ({
       fn={{
         handleChange,
         handleSubmit,
+        handleDelete,
       }}
     />
   )
