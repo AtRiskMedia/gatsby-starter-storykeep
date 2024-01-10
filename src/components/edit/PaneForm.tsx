@@ -117,6 +117,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: IPaneForm) => {
     handleMutateMarkdown,
     handleEditMarkdown,
     handleChangeEditInPlace,
+    setViewportKey,
   }
   const passFlags = {
     interceptMode,

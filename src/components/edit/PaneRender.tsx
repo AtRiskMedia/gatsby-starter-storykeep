@@ -37,7 +37,11 @@ const StyledWrapperDiv = styled.div<IStyledWrapperSectionProps>`
   ${(props: any) => props.css};
 `
 
-const CurrentlyDesigning = ({ viewportKey, visible }: ICurrentlyDesigning) => {
+const CurrentlyDesigning = ({
+  viewportKey,
+  setViewportKey,
+  visible,
+}: ICurrentlyDesigning) => {
   if (!visible) return null
   return (
     <>
@@ -50,7 +54,9 @@ const CurrentlyDesigning = ({ viewportKey, visible }: ICurrentlyDesigning) => {
       <div className="mb-3 text-myorange">
         <div className="flex justify-between flex-row">
           <div className="w-1/3 grid justify-items-center">
-            <span
+            <button
+              onClick={() => setViewportKey(`mobile`)}
+              title="Design for mobile"
               className={classNames(
                 viewportKey === `mobile`
                   ? `text-myorange`
@@ -61,10 +67,12 @@ const CurrentlyDesigning = ({ viewportKey, visible }: ICurrentlyDesigning) => {
               <ArrowDownIcon className="h-8 w-8" />
               <ArrowDownIcon className="h-8 w-8" />
               <ArrowDownIcon className="h-8 w-8" />
-            </span>
+            </button>
           </div>
           <div className="w-1/3 grid justify-items-center">
-            <span
+            <button
+              onClick={() => setViewportKey(`tablet`)}
+              title="Design for tablet"
               className={classNames(
                 viewportKey === `tablet`
                   ? `text-myorange`
@@ -75,10 +83,12 @@ const CurrentlyDesigning = ({ viewportKey, visible }: ICurrentlyDesigning) => {
               <ArrowDownIcon className="h-8 w-8" />
               <ArrowDownIcon className="h-8 w-8" />
               <ArrowDownIcon className="h-8 w-8" />
-            </span>
+            </button>
           </div>
           <div className="w-1/3 grid justify-items-center">
-            <span
+            <button
+              onClick={() => setViewportKey(`desktop`)}
+              title="Design for desktop"
               className={classNames(
                 viewportKey === `desktop`
                   ? `text-myorange`
@@ -89,7 +99,7 @@ const CurrentlyDesigning = ({ viewportKey, visible }: ICurrentlyDesigning) => {
               <ArrowDownIcon className="h-8 w-8" />
               <ArrowDownIcon className="h-8 w-8" />
               <ArrowDownIcon className="h-8 w-8" />
-            </span>
+            </button>
           </div>
         </div>
       </div>
@@ -135,6 +145,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
     handleEditMarkdown,
     handleMutateMarkdown,
     handleChangeEditInPlace,
+    setViewportKey,
   } = fn
   const { width, interceptMode, interceptModeTag, viewportKey } = flags
   const [pageStylesPagination, setPageStylesPagination] = useState(-1)
@@ -757,6 +768,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
             <>
               <CurrentlyDesigning
                 viewportKey={viewportKey}
+                setViewportKey={setViewportKey}
                 visible={nth > -1}
               />
               <PaneEditInPlace

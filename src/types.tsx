@@ -121,6 +121,7 @@ export interface IPaneRender {
     handleEditMarkdown: Function
     handleMutateMarkdown: Function
     setInterceptMode: Function
+    setViewportKey: Function
   }
   flags: {
     interceptMode: string
@@ -231,6 +232,7 @@ export interface IUUID {
 
 export interface ICurrentlyDesigning {
   viewportKey: string
+  setViewportKey: Function
   visible: boolean
 }
 
