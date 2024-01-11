@@ -15,12 +15,15 @@ const StoryFragmentState = ({
   uuid,
   payload,
   flags,
+  fn,
 }: {
   uuid: string
   payload: any
   flags: IEditFlags
+  fn: { setEditStage: Function }
 }) => {
   const apiBase = process.env.DRUPAL_APIBASE
+  const { setEditStage } = fn
   const embeddedEdit = useDrupalStore((state) => state.embeddedEdit)
   const setEmbeddedEdit = useDrupalStore((state) => state.setEmbeddedEdit)
   const [lastSavedState, setLastSavedState] = useState(payload)
@@ -47,11 +50,14 @@ const StoryFragmentState = ({
   const allStoryFragments = useDrupalStore((state) => state.allStoryFragments)
   const thisStoryFragment = allStoryFragments[uuid]
   const thisTractStack = useDrupalStore(
-    (state) => state.allTractStacks[thisStoryFragment.tractstack],
+    (state) => state.allTractStacks[thisStoryFragment?.tractstack],
   )
   const drupalPreSaveQueue = useDrupalStore((state) => state.drupalPreSaveQueue)
   const removeDrupalPreSaveQueue = useDrupalStore(
     (state) => state.removeDrupalPreSaveQueue,
+  )
+  const setDrupalDeleteNode = useDrupalStore(
+    (state) => state.setDrupalDeleteNode,
   )
   const setDrupalPreSaveQueue = useDrupalStore(
     (state) => state.setDrupalPreSaveQueue,
@@ -66,11 +72,11 @@ const StoryFragmentState = ({
   const drupalResponse = useDrupalStore((state) => state.drupalResponse)
   const storyFragmentId = {
     id: uuid,
-    title: thisStoryFragment.title,
-    slug: thisStoryFragment.slug,
-    tractStackId: thisStoryFragment.tractstack,
-    tractStackTitle: thisTractStack.title,
-    tractStackSlug: thisTractStack.slug,
+    title: thisStoryFragment?.title,
+    slug: thisStoryFragment?.slug,
+    tractStackId: thisStoryFragment?.tractstack,
+    tractStackTitle: thisTractStack?.title,
+    tractStackSlug: thisTractStack?.slug,
   }
   const allStoryFragmentSlugs = Object.keys(allStoryFragments)
     .map((e) => {
@@ -79,12 +85,12 @@ const StoryFragmentState = ({
       return null
     })
     .filter((e) => e)
-  const hasContextPanes = Object.keys(thisStoryFragment.contextPanes).length > 0
+  const hasContextPanes = thisStoryFragment?.contextPanes ? Object.keys(thisStoryFragment?.contextPanes).length > 0 : null
 
   const handleChange = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const { name, value } = e.target as HTMLInputElement
     if (
-      value !== thisStoryFragment.slug &&
+      value !== thisStoryFragment?.slug &&
       allStoryFragmentSlugs.includes(value)
     ) {
       setState((prev: any) => {
@@ -156,6 +162,10 @@ const StoryFragmentState = ({
     setSaveStage(SaveStages.PrepareSave)
   }
 
+  const handleDelete = () => {
+    setEditStage(EditStages.PreDeleteUpdateAffectedNode)
+  }
+
   useEffect(() => {
     if (toggleCheck) {
       const hasChanges = !deepEqual(state, lastSavedState.initialState)
@@ -196,7 +206,7 @@ const StoryFragmentState = ({
 
       case SaveStages.PrepareNodes: {
         const newStoryFragment = {
-          drupalNid: thisStoryFragment.drupalNid,
+          drupalNid: thisStoryFragment?.drupalNid,
           title: state.title,
           socialImagePath: state?.socialImagePath || ``,
           slug: state.slug,
@@ -213,7 +223,7 @@ const StoryFragmentState = ({
             storyFragment,
             `storyfragment`,
             uuid,
-            thisStoryFragment.drupalNid,
+            thisStoryFragment?.drupalNid,
           )
         }
         setSaveStage(SaveStages.SaveStoryFragment)
@@ -241,17 +251,17 @@ const StoryFragmentState = ({
           storyFragments: newStoryFragments,
         }
         setUpdateTractStackPayload([
-          { id: thisStoryFragment.tractstack, payload: newTractStack },
+          { id: thisStoryFragment?.tractstack, payload: newTractStack },
         ])
         if (!flags.isOpenDemo) {
           const tractStack = tractStackPayload(
             newTractStack,
-            thisStoryFragment.tractstack,
+            thisStoryFragment?.tractstack,
           )
           setDrupalPreSaveQueue(
             tractStack,
             `tractstack`,
-            thisStoryFragment.tractstack,
+            thisStoryFragment?.tractstack,
             thisTractStack.drupalNid,
           )
         }
@@ -304,6 +314,53 @@ const StoryFragmentState = ({
     thisTractStack,
   ])
 
+  // on delete, update tract stack, remove storyFragment
+  useEffect(() => {
+    if (flags.editStage === EditStages.PreDeleteUpdateAffectedNode) {
+      const newStoryFragments = thisTractStack.storyFragments
+        .map((e: string) => (e !== uuid ? e : null))
+        .filter((n: string | null) => n)
+      const newTractStack = {
+        ...thisTractStack,
+        storyFragments: newStoryFragments,
+      }
+      setUpdateTractStackPayload([
+        { id: thisStoryFragment?.tractstack, payload: newTractStack },
+      ])
+      const tractStack = tractStackPayload(
+        newTractStack,
+        thisStoryFragment?.tractstack,
+      )
+      setDrupalPreSaveQueue(
+        tractStack,
+        `tractstack`,
+        thisStoryFragment?.tractstack,
+        thisTractStack.drupalNid,
+      )
+      setEditStage(EditStages.PreDeleteUpdatingAffectedNode)
+    }
+  }, [
+    flags.editStage,
+    setEditStage,
+    setDrupalPreSaveQueue,
+    thisStoryFragment?.tractstack,
+    thisTractStack,
+    uuid,
+  ])
+
+  // delete from from drupal
+  useEffect(() => {
+    if (flags.editStage === EditStages.Delete) {
+      setDrupalDeleteNode(`story_fragment`, uuid)
+      setEditStage(EditStages.Deleting)
+    } else if (
+      flags.editStage === EditStages.Deleting &&
+      typeof drupalResponse[uuid] !== `undefined`
+    ) {
+      setEditStage(EditStages.Deleted)
+    }
+  }, [flags.editStage, uuid, drupalResponse, setDrupalDeleteNode, setEditStage])
+
   // save storyfragment for drupal
   useEffect(() => {
     // first pass save to drupal
@@ -317,7 +374,7 @@ const StoryFragmentState = ({
         drupalPreSaveQueue.storyfragment[uuid].payload,
         `story_fragment`,
         uuid,
-        thisStoryFragment.drupalNid,
+        thisStoryFragment?.drupalNid,
       )
       removeDrupalPreSaveQueue(uuid, `storyfragment`)
       setSaveStage(SaveStages.PreSavedStoryFragment)
@@ -328,7 +385,7 @@ const StoryFragmentState = ({
       saveStage === SaveStages.PreSavedStoryFragment &&
       typeof drupalResponse[uuid] !== `undefined`
     ) {
-      if (thisStoryFragment.drupalNid === -1) {
+      if (thisStoryFragment?.drupalNid === -1) {
         const newStoryFragmentId = drupalResponse[uuid].data.id
         const newStoryFragment = {
           drupalNid: drupalResponse[uuid].data.attributes.drupal_internal__nid,
@@ -390,48 +447,50 @@ const StoryFragmentState = ({
     // first pass save to drupal
     if (
       !flags.isOpenDemo &&
-      saveStage === SaveStages.PreSavingTractStack &&
+      (saveStage === SaveStages.PreSavingTractStack ||
+        flags.editStage === EditStages.PreDeleteUpdatingAffectedNode) &&
       typeof drupalPreSaveQueue?.tractstack !== `undefined` &&
       Object.keys(drupalPreSaveQueue?.tractstack).length
     ) {
       setDrupalSaveNode(
-        drupalPreSaveQueue.tractstack[thisStoryFragment.tractstack].payload,
+        drupalPreSaveQueue.tractstack[thisStoryFragment?.tractstack].payload,
         `tractstack`,
-        thisStoryFragment.tractstack,
+        thisStoryFragment?.tractstack,
         thisTractStack.drupalNid,
       )
-      removeDrupalPreSaveQueue(thisStoryFragment.tractstack, `tractstack`)
-      setSaveStage(SaveStages.PreSavedTractStack)
+      removeDrupalPreSaveQueue(thisStoryFragment?.tractstack, `tractstack`)
+      if (saveStage === SaveStages.PreSavingTractStack)
+        setSaveStage(SaveStages.PreSavedTractStack)
+      else setEditStage(EditStages.PreDeleteUpdatedAffectedNode)
     }
     // second pass, intercept / process response, get uuid from Drupal for new node
     if (
       !flags.isOpenDemo &&
-      saveStage === SaveStages.PreSavedTractStack &&
-      typeof drupalResponse[thisStoryFragment.tractstack] !== `undefined`
+      (saveStage === SaveStages.PreSavedTractStack ||
+        flags.editStage === EditStages.PreDeleteUpdatedAffectedNode) &&
+      typeof drupalResponse[thisStoryFragment?.tractstack] !== `undefined`
     ) {
-      if (thisTractStack.drupalNid === -1) {
-        const newTractStackId =
-          drupalResponse[thisStoryFragment.tractstack].data.id
-        const newTractStack = {
-          ...thisTractStack,
-          drupalNid:
-            drupalResponse[thisStoryFragment.tractstack].data.attributes
-              .drupal_internal__nid,
-        }
-        setUpdateTractStackPayload([
-          { id: newTractStackId, payload: newTractStack },
-        ])
-        setCleanerQueue(thisStoryFragment.tractstack, `tractstack`)
-        setNewUuid(newTractStackId)
-      }
-      removeDrupalResponse(thisStoryFragment.tractstack)
-      setSaveStage(SaveStages.SavingTractStack)
+      removeDrupalResponse(thisStoryFragment?.tractstack)
+      if (saveStage === SaveStages.PreSavedTractStack)
+        setSaveStage(SaveStages.SavingTractStack)
+      else setEditStage(EditStages.Delete)
+    }
+    // on delete
+    if (
+      !flags.isOpenDemo &&
+      flags.editStage === EditStages.PreDeleteUpdateAffectedNode &&
+      typeof drupalResponse[thisStoryFragment?.tractstack] !== `undefined`
+    ) {
+      removeDrupalResponse(thisStoryFragment?.tractstack)
+      setEditStage(EditStages.Delete)
     }
   }, [
     flags.isOpenDemo,
     saveStage,
+    setEditStage,
+    flags.editStage,
     drupalPreSaveQueue?.tractstack,
-    thisStoryFragment.tractstack,
+    thisStoryFragment?.tractstack,
     drupalResponse,
     removeDrupalPreSaveQueue,
     removeDrupalResponse,
@@ -440,7 +499,7 @@ const StoryFragmentState = ({
     thisTractStack,
   ])
 
-  // update tractstack on save
+  // update tractstack on save or delete
   useEffect(() => {
     if (
       saveStage === SaveStages.SavingTractStack &&
@@ -451,8 +510,23 @@ const StoryFragmentState = ({
       })
       setUpdateTractStackPayload([])
       setSaveStage(SaveStages.SavedTractStack)
+    } else if (
+      flags.editStage === EditStages.PreDeleteUpdateAffectedNode &&
+      updateTractStackPayload.length
+    ) {
+      updateTractStackPayload.forEach((e: any) => {
+        setTractStack(e.id, e.payload)
+      })
+      setUpdateTractStackPayload([])
+      setEditStage(EditStages.Delete)
     }
-  }, [saveStage, updateTractStackPayload, setTractStack])
+  }, [
+    saveStage,
+    flags.editStage,
+    setEditStage,
+    updateTractStackPayload,
+    setTractStack,
+  ])
 
   // handle insert new pane
   useEffect(() => {
@@ -467,7 +541,7 @@ const StoryFragmentState = ({
   // set initial state
   useEffect(() => {
     if (
-      flags.editStage === EditStages.Booting &&
+      flags.editStage === EditStages.Activated &&
       saveStage === SaveStages.Booting
     ) {
       if (typeof embeddedEdit?.parentState !== `undefined`) {
@@ -499,6 +573,7 @@ const StoryFragmentState = ({
         hasContextPanes,
         slugCollision,
         storyFragmentId,
+        drupalNid: thisStoryFragment?.drupalNid,
       }}
       fn={{
         handleChange,
@@ -506,6 +581,7 @@ const StoryFragmentState = ({
         handleReorderPane,
         handleSubmit,
         setSaved,
+        handleDelete,
       }}
     />
   )

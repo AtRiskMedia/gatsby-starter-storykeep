@@ -18,7 +18,7 @@ import {
 } from '../../helpers/allowedShapeNames'
 import { starterTemplate } from '../../helpers/starterTemplates'
 import PaneForm from './PaneForm'
-import { IEmbeddedEdit, EditStages, SaveStages } from '../../types'
+import { IEditFlags, IEmbeddedEdit, EditStages, SaveStages } from '../../types'
 
 export interface IPaneState {
   uuid: string
@@ -31,15 +31,7 @@ export interface IPaneState {
     initialStatePaneFragments: any
     initialStateWithheldBeliefs: any
   }
-  flags: {
-    isAuthor: boolean
-    isAdmin: boolean
-    isBuilder: boolean
-    isOpenDemo: boolean
-    isEmpty: boolean
-    editStage: number
-    saveStage: number
-  }
+  flags: IEditFlags
 }
 const PaneState = ({ uuid, payload, flags }: IPaneState) => {
   const [stateHeldBeliefs, setStateHeldBeliefs] = useState(
@@ -3163,7 +3155,7 @@ const PaneState = ({ uuid, payload, flags }: IPaneState) => {
   // set initial state
   useEffect(() => {
     if (
-      flags.editStage === EditStages.Booting &&
+      flags.editStage === EditStages.Activated &&
       saveStage === SaveStages.Booting
     ) {
       setSaveStage(SaveStages.NoChanges)

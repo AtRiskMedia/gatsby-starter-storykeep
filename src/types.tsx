@@ -37,6 +37,9 @@ export enum EditStages {
   SettingInitialState,
   InitialStateSet,
   Activated,
+  PreDeleteUpdateAffectedNode,
+  PreDeleteUpdatingAffectedNode,
+  PreDeleteUpdatedAffectedNode,
   Delete,
   Deleting,
   Deleted,
@@ -135,12 +138,19 @@ export interface IPaneRender {
   }
 }
 
+export interface IEditInitialFlags {
+  isAuthor: boolean
+  isAdmin: boolean
+  isBuilder: boolean
+  isOpenDemo: boolean
+  isEmpty: boolean
+}
+
 export interface IEditFlags {
   isAuthor: boolean
   isAdmin: boolean
   isBuilder: boolean
   isOpenDemo: boolean
-  saveStage: number
   editStage: number
   isEmpty: boolean
 }
@@ -221,6 +231,7 @@ export interface IEditStoryFragmentFormFlags {
   hasContextPanes: boolean
   saveStage: number
   editStage: number
+  drupalNid: number
   storyFragmentId: IStoryFragmentId
 }
 

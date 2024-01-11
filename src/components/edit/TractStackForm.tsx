@@ -466,7 +466,7 @@ const TractStackForm = ({
                       onClick={() => {
                         if (
                           window.confirm(
-                            `Are you sure you want to delete this Resource? This cannot be undone.`,
+                            `Are you sure you want to delete this Tract Stack? This cannot be undone.`,
                           )
                         )
                           handleDelete()

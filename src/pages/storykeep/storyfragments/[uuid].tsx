@@ -8,10 +8,9 @@ import DrupalApi from '../../../components/DrupalApi'
 import Layout from '../../../components/Layout'
 import StoryFragmentState from '../../../components/edit/StoryFragmentState'
 import {
-  SaveStages,
   EditStages,
   IEditStoryFragmentPayload,
-  IEditFlags,
+  IEditInitialFlags,
 } from '../../../types'
 
 export default function EditStoryFragment({
@@ -46,14 +45,12 @@ export default function EditStoryFragment({
   const [payload, setPayload] = useState<IEditStoryFragmentPayload>({
     initialState: {},
   })
-  const [flags, setFlags] = useState<IEditFlags>({
+  const [flags, setFlags] = useState<IEditInitialFlags>({
     isAuthor: false,
     isAdmin: false,
     isBuilder: false,
     isOpenDemo: openDemoEnabled,
     isEmpty: false,
-    editStage,
-    saveStage: SaveStages.Booting,
   })
   const [isSSR, setIsSSR] = useState(true)
   const [isLoaded, setIsLoaded] = useState(false)
@@ -169,6 +166,7 @@ export default function EditStoryFragment({
           setEditStage(EditStages.Activated)
           break
       }
+    else if (editStage === EditStages.Deleted) navigate(`/storykeep`)
   }, [
     thisStoryFragment,
     editStage,
@@ -193,7 +191,12 @@ export default function EditStoryFragment({
       <DrupalApi>
         <Layout current="storykeepInner">
           {isLoaded ? (
-            <StoryFragmentState uuid={uuid} payload={payload} flags={flags} />
+            <StoryFragmentState
+              uuid={uuid}
+              payload={payload}
+              flags={{ ...flags, editStage }}
+              fn={{ setEditStage }}
+            />
           ) : (
             <></>
           )}

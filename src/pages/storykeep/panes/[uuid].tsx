@@ -10,12 +10,7 @@ import { generateLivePreviewInitialState } from '../../../helpers/generateLivePr
 import DrupalApi from '../../../components/DrupalApi'
 import Layout from '../../../components/Layout'
 import PaneState from '../../../components/edit/PaneState'
-import {
-  EditStages,
-  SaveStages,
-  IEditPanePayload,
-  IEditFlags,
-} from '../../../types'
+import { EditStages, IEditPanePayload, IEditInitialFlags } from '../../../types'
 
 export default function EditPane({ params }: { params: { uuid: string } }) {
   const uuid = params.uuid
@@ -45,14 +40,12 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
     initialStateLivePreview: {},
     initialStateLivePreviewMarkdown: {},
   })
-  const [flags, setFlags] = useState<IEditFlags>({
+  const [flags, setFlags] = useState<IEditInitialFlags>({
     isAuthor: false,
     isAdmin: false,
     isBuilder: false,
     isOpenDemo: openDemoEnabled,
     isEmpty: false,
-    editStage,
-    saveStage: SaveStages.Booting,
   })
   const [isSSR, setIsSSR] = useState(true)
   const [isLoaded, setIsLoaded] = useState(false)
@@ -314,7 +307,11 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
       <DrupalApi>
         <Layout current="storykeepInner">
           {isLoaded ? (
-            <PaneState uuid={uuid} payload={payload} flags={flags} />
+            <PaneState
+              uuid={uuid}
+              payload={payload}
+              flags={{ ...flags, editStage }}
+            />
           ) : (
             <></>
           )}

@@ -42,6 +42,7 @@ const StoryFragmentForm = ({
     handleReorderPane: Function
     handleSubmit: Function
     setSaved: Function
+    handleDelete: Function
   }
 }) => {
   const { state } = payload
@@ -52,6 +53,7 @@ const StoryFragmentForm = ({
     handleReorderPane,
     handleSubmit,
     setSaved,
+    handleDelete,
   } = fn
   const [toggleAdvOpt, setToggleAdvOpt] = useState(false)
   const viewportKey = useDrupalStore((state) => state.viewportKey)
@@ -471,12 +473,19 @@ const StoryFragmentForm = ({
                     </button>
                   </span>
 
-                  {flags.isAuthor || flags.isAdmin ? (
+                  {(flags.isAuthor || flags.isAdmin) && flags.drupalNid > -1 ? (
                     <span className="ml-3 hidden xs:block">
                       <button
                         type="button"
                         className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-100"
-                        onClick={() => alert(`todo`)}
+                        onClick={() => {
+                          if (
+                            window.confirm(
+                              `Are you sure you want to delete this Story Fragment? This cannot be undone.`,
+                            )
+                          )
+                            handleDelete()
+                        }}
                       >
                         <TrashIcon
                           className="-ml-0.5 mr-1.5 h-5 w-5 text-mydarkgrey"
