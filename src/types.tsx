@@ -433,11 +433,23 @@ export interface IFlags {
   saveStage: number
   isEmpty?: boolean
 }
+export interface IFlagsPaneForm {
+  isAuthor: boolean
+  isAdmin: boolean
+  isBuilder: boolean
+  isOpenDemo: boolean
+  slugCollision: boolean
+  saved: boolean
+  saveStage: number
+  editStage: number
+  drupalNid: number
+  isEmpty?: boolean
+}
 
 export interface IPaneForm {
   uuid: string
   payload: any
-  flags: IFlags
+  flags: IFlagsPaneForm
   fn: {
     handleChange: Function
     handleChangeEditInPlace: Function
@@ -449,6 +461,7 @@ export interface IPaneForm {
     handleEditMarkdown: Function
     handleMutateMarkdown: Function
     setSaved: Function
+    handleDelete: Function
   }
 }
 

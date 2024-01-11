@@ -29,7 +29,7 @@ import PaneStarter from './PaneStarter'
 import EditBelief from './EditBelief'
 import PaneRender from './PaneRender'
 import SlideOver from './SlideOver'
-import { SaveStages, IPaneForm } from '../../types'
+import { SaveStages, EditStages, IPaneForm } from '../../types'
 
 const insertModeTags = [
   { name: `p`, title: `Paragraph` },
@@ -64,6 +64,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: IPaneForm) => {
     handleChangeEditInPlace,
     handleChange,
     setSaved,
+    handleDelete,
   } = fn
   const [toggleAdvOpt, setToggleAdvOpt] = useState(false)
   const [interceptMode, setInterceptMode] = useState(`edit`)
@@ -1021,12 +1022,19 @@ const PaneForm = ({ uuid, payload, flags, fn }: IPaneForm) => {
                     </button>
                   </span>
 
-                  {flags.isAuthor || flags.isAdmin ? (
+                  {(flags.isAuthor || flags.isAdmin) && flags.drupalNid > -1 ? (
                     <span className="ml-3">
                       <button
                         type="button"
                         className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-100"
-                        onClick={() => alert(`todo`)}
+                        onClick={() => {
+                          if (
+                            window.confirm(
+                              `Are you sure you want to delete this Content Pane? This cannot be undone.`,
+                            )
+                          )
+                            handleDelete()
+                        }}
                       >
                         <TrashIcon
                           className="-ml-0.5 mr-1.5 h-5 w-5 text-mydarkgrey"
@@ -1407,7 +1415,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: IPaneForm) => {
                   isEmbeddedEdit: !!embeddedEdit?.parentState,
                 }}
               />
-            ) : (
+            ) : flags.editStage > EditStages.Activated ? null : (
               <PaneRender
                 uuid={uuid}
                 previewPayload={{

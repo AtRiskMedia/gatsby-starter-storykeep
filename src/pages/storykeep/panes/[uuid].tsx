@@ -290,6 +290,7 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
           setEditStage(EditStages.Activated)
           break
       }
+    else if (editStage === EditStages.Deleted) navigate(`/storykeep`)
   }, [thisPane, editStage, setEditStage, openDemoEnabled, setNavLocked, uuid])
 
   // SSR + valid data check
@@ -311,6 +312,7 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
               uuid={uuid}
               payload={payload}
               flags={{ ...flags, editStage }}
+              fn={{ setEditStage }}
             />
           ) : (
             <></>

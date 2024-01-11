@@ -85,7 +85,9 @@ const StoryFragmentState = ({
       return null
     })
     .filter((e) => e)
-  const hasContextPanes = thisStoryFragment?.contextPanes ? Object.keys(thisStoryFragment?.contextPanes).length > 0 : null
+  const hasContextPanes = thisStoryFragment?.contextPanes
+    ? Object.keys(thisStoryFragment?.contextPanes).length > 0
+    : false
 
   const handleChange = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const { name, value } = e.target as HTMLInputElement

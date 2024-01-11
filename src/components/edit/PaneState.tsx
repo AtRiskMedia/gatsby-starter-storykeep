@@ -32,8 +32,11 @@ export interface IPaneState {
     initialStateWithheldBeliefs: any
   }
   flags: IEditFlags
+  fn: { setEditStage: Function }
 }
-const PaneState = ({ uuid, payload, flags }: IPaneState) => {
+const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
+  // const apiBase = process.env.DRUPAL_APIBASE
+  const { setEditStage } = fn
   const [stateHeldBeliefs, setStateHeldBeliefs] = useState(
     payload.initialStateHeldBeliefs,
   )
@@ -79,6 +82,9 @@ const PaneState = ({ uuid, payload, flags }: IPaneState) => {
   const allMarkdown = useDrupalStore((state) => state.allMarkdown)
   const updateMarkdown = useDrupalStore((state) => state.updateMarkdown)
   const drupalPreSaveQueue = useDrupalStore((state) => state.drupalPreSaveQueue)
+  const setDrupalDeleteNode = useDrupalStore(
+    (state) => state.setDrupalDeleteNode,
+  )
   const removeDrupalPreSaveQueue = useDrupalStore(
     (state) => state.removeDrupalPreSaveQueue,
   )
@@ -2679,6 +2685,12 @@ const PaneState = ({ uuid, payload, flags }: IPaneState) => {
     setSaveStage(SaveStages.PrepareSave)
   }
 
+  const handleDelete = () => {
+    if (stateLivePreviewMarkdown.markdownId)
+      setEditStage(EditStages.PreDeleteUpdatingAffectedNode)
+    else setEditStage(EditStages.Delete)
+  }
+
   useEffect(() => {
     if (toggleCheck) {
       const hasChanges = !deepEqual(state, lastSavedState.initialState)
@@ -2861,8 +2873,8 @@ const PaneState = ({ uuid, payload, flags }: IPaneState) => {
     setNavLocked,
     uuid,
     newUuid,
-    thisPane.drupalNid,
-    thisPane.relationships,
+    thisPane?.drupalNid,
+    thisPane?.relationships,
     allMarkdown,
     setDrupalPreSaveQueue,
     state,
@@ -2881,6 +2893,37 @@ const PaneState = ({ uuid, payload, flags }: IPaneState) => {
     removeMarkdown,
     embeddedEdit,
     setNewEmbeddedPayload,
+  ])
+
+  // delete from from drupal
+  useEffect(() => {
+    // markdown
+    if (flags.editStage === EditStages.PreDeleteUpdatingAffectedNode) {
+      setDrupalDeleteNode(`markdown`, stateLivePreviewMarkdown.markdownId)
+      setEditStage(EditStages.PreDeleteUpdatedAffectedNode)
+    } else if (
+      flags.editStage === EditStages.PreDeleteUpdatedAffectedNode &&
+      typeof drupalResponse[stateLivePreviewMarkdown.markdownId] !== `undefined`
+    ) {
+      setEditStage(EditStages.Delete)
+    }
+    // pane
+    if (flags.editStage === EditStages.Delete) {
+      setDrupalDeleteNode(`pane`, uuid)
+      setEditStage(EditStages.Deleting)
+    } else if (
+      flags.editStage === EditStages.Deleting &&
+      typeof drupalResponse[uuid] !== `undefined`
+    ) {
+      setEditStage(EditStages.Deleted)
+    }
+  }, [
+    flags.editStage,
+    uuid,
+    drupalResponse,
+    setDrupalDeleteNode,
+    setEditStage,
+    stateLivePreviewMarkdown.markdownId,
   ])
 
   // save markdown for drupal
@@ -2953,7 +2996,7 @@ const PaneState = ({ uuid, payload, flags }: IPaneState) => {
           newPreSavePayload,
           `pane`,
           uuid,
-          thisPane.drupalNid,
+          thisPane?.drupalNid,
           true,
           newMarkdown.id,
           stateLivePreviewMarkdown.markdownId,
@@ -2974,7 +3017,7 @@ const PaneState = ({ uuid, payload, flags }: IPaneState) => {
     setDrupalPreSaveQueue,
     drupalResponse,
     removeDrupalResponse,
-    thisPane.drupalNid,
+    thisPane?.drupalNid,
     uuid,
   ])
 
@@ -3004,7 +3047,7 @@ const PaneState = ({ uuid, payload, flags }: IPaneState) => {
       const newMarkdownId = drupalPreSaveQueue.pane[uuid].markdownId
       if (
         newMarkdownId &&
-        newMarkdownId !== thisPane.relationships.markdown[0]
+        newMarkdownId !== thisPane?.relationships.markdown[0]
       ) {
         const fullOptionsPayload = ParseOptions(state.optionsPayloadString)
         const currentOptionsPayload = fullOptionsPayload.paneFragmentsPayload
@@ -3025,7 +3068,7 @@ const PaneState = ({ uuid, payload, flags }: IPaneState) => {
         }
         const newPane = {
           id: uuid,
-          drupalNid: thisPane.drupalNid,
+          drupalNid: thisPane?.drupalNid,
           heightOffsetDesktop: state.heightOffsetDesktop,
           heightOffketMobile: state.heightOffsetMobile,
           heightOffsetTablet: state.heightOffsetTablet,
@@ -3036,7 +3079,7 @@ const PaneState = ({ uuid, payload, flags }: IPaneState) => {
           optionsPayload: JSON.stringify(newOptionsPayload),
           relationships: {
             // FIX --- should pull all from state
-            ...thisPane.relationships,
+            ...thisPane?.relationships,
             markdown: [newMarkdownId],
           },
           slug: state.slug,
@@ -3083,13 +3126,13 @@ const PaneState = ({ uuid, payload, flags }: IPaneState) => {
       saveStage === SaveStages.PreSavedPane &&
       typeof drupalResponse[uuid] !== `undefined`
     ) {
-      if (thisPane.drupalNid === -1) {
+      if (thisPane?.drupalNid === -1) {
         const newPaneId = drupalResponse[uuid].data.id
         const newPane = {
           ...thisPane,
           drupalNid: drupalResponse[uuid].data.attributes.drupal_internal__nid,
           relationships: {
-            ...thisPane.relationships,
+            ...thisPane?.relationships,
             markdown: [stateLivePreviewMarkdown.markdownId],
           },
         }
@@ -3176,7 +3219,14 @@ const PaneState = ({ uuid, payload, flags }: IPaneState) => {
         stateLivePreview,
         stateLivePreviewMarkdown,
       }}
-      flags={{ ...flags, saveStage, saved, isEmpty, slugCollision }}
+      flags={{
+        ...flags,
+        saveStage,
+        saved,
+        isEmpty,
+        slugCollision,
+        drupalNid: thisPane?.drupalNid,
+      }}
       fn={{
         toggleBelief,
         handleChangeBelief,
@@ -3188,6 +3238,7 @@ const PaneState = ({ uuid, payload, flags }: IPaneState) => {
         handleChangeEditInPlace,
         handleChange,
         setSaved,
+        handleDelete,
       }}
     />
   )
