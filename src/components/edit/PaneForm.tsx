@@ -983,6 +983,13 @@ const PaneForm = ({ uuid, payload, flags, fn }: IPaneForm) => {
                       />
                       {state.slug}
                     </div>
+                    {flags.isUsed ? (
+                      <div className="mt-2 flex items-center">
+                        <span className="inline-flex items-center rounded-md bg-myblue px-2 py-1 text-sm text-mywhite ring-1 ring-inset ring-mydarkgrey/10">
+                          IN USE
+                        </span>
+                      </div>
+                    ) : null}
                     <div className="mt-2 flex items-center">
                       {flags.saved ? (
                         <span className="inline-flex items-center rounded-md bg-red-500 px-2 py-1 text-sm text-white ring-1 ring-inset ring-mydarkgrey/10">
@@ -1022,7 +1029,9 @@ const PaneForm = ({ uuid, payload, flags, fn }: IPaneForm) => {
                     </button>
                   </span>
 
-                  {(flags.isAuthor || flags.isAdmin) && flags.drupalNid > -1 ? (
+                  {(flags.isAuthor || flags.isAdmin) &&
+                  !flags.isUsed &&
+                  flags.drupalNid > -1 ? (
                     <span className="ml-3">
                       <button
                         type="button"

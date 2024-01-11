@@ -143,7 +143,6 @@ export interface IEditInitialFlags {
   isAdmin: boolean
   isBuilder: boolean
   isOpenDemo: boolean
-  isEmpty: boolean
 }
 
 export interface IEditFlags {
@@ -152,7 +151,6 @@ export interface IEditFlags {
   isBuilder: boolean
   isOpenDemo: boolean
   editStage: number
-  isEmpty: boolean
 }
 
 export interface IEditResourceFlags {
@@ -227,7 +225,6 @@ export interface IEditStoryFragmentFormFlags {
   isAdmin: boolean
   isBuilder: boolean
   isOpenDemo: boolean
-  isEmpty: boolean
   hasContextPanes: boolean
   saveStage: number
   editStage: number
@@ -443,6 +440,7 @@ export interface IFlagsPaneForm {
   saveStage: number
   editStage: number
   drupalNid: number
+  isUsed: boolean
   isEmpty?: boolean
 }
 

@@ -80,6 +80,8 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
   const thisPane = typeof allPanes[uuid] !== `undefined` ? allPanes[uuid] : null
   const allFiles = useDrupalStore((state) => state.allFiles)
   const allMarkdown = useDrupalStore((state) => state.allMarkdown)
+  const allStoryFragments = useDrupalStore((state) => state.allStoryFragments)
+  const allTractStacks = useDrupalStore((state) => state.allTractStacks)
   const updateMarkdown = useDrupalStore((state) => state.updateMarkdown)
   const drupalPreSaveQueue = useDrupalStore((state) => state.drupalPreSaveQueue)
   const setDrupalDeleteNode = useDrupalStore(
@@ -110,6 +112,28 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
     statePaneFragments &&
     Object.keys(statePaneFragments).length === 0 &&
     !state?.hasCodeHook
+  const isUsed =
+    allTractStacks &&
+    Object.keys(allTractStacks)
+      .map((e: string) => {
+        if (
+          allTractStacks[e].contextPanes.includes(uuid) ||
+          allTractStacks[e].storyFragments.includes(uuid)
+        )
+          return true
+        return null
+      })
+      .filter((n: boolean | null) => n).length + allStoryFragments &&
+    Object.keys(allStoryFragments)
+      .map((e: string) => {
+        if (
+          allStoryFragments[e].contextPanes.includes(uuid) ||
+          allStoryFragments[e].panes.includes(uuid)
+        )
+          return true
+        return null
+      })
+      .filter((n: boolean | null) => n).length
 
   const regenerateState = useCallback(
     (
@@ -3226,6 +3250,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         isEmpty,
         slugCollision,
         drupalNid: thisPane?.drupalNid,
+        isUsed,
       }}
       fn={{
         toggleBelief,

@@ -45,7 +45,6 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
     isAdmin: false,
     isBuilder: false,
     isOpenDemo: openDemoEnabled,
-    isEmpty: false,
   })
   const [isSSR, setIsSSR] = useState(true)
   const [isLoaded, setIsLoaded] = useState(false)
