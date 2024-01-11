@@ -60,21 +60,27 @@ const ResourceState = ({
     })
     .filter((e) => e)
 
-  const handleChange = (e: any) => {
-    // FIX
-    const { name, value } = e.target
-    if (value !== thisResource.slug && allResourceSlugs.includes(value)) {
-      setState((prev: any) => {
-        return { ...prev, [name]: thisResource.slug }
-      })
+  const handleChange = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const { name, value } = e.target as HTMLInputElement
+    if (value !== thisResource.slug && allResourceSlugs.includes(value))
       setSlugCollision(true)
-    } else {
-      setState((prev: any) => {
-        return { ...prev, [name]: value }
-      })
-      setSlugCollision(false)
+    else setSlugCollision(false)
+    const validateSlug = (v: string) => {
+      const re1 = /^[a-z]/
+      const re2 = /^[a-z][a-z0-9-_]+$/
+      if (v.length === 0) return ``
+      const match = v.length === 1 ? re1.test(v) : re2.test(v)
+      if (match) return v
+      return state.slug
     }
-    setToggleCheck(true)
+    const thisValue =
+      name !== `slug` ? value : validateSlug(value.toLowerCase())
+    if (thisValue !== null) {
+      setState((prev: any) => {
+        return { ...prev, [name]: thisValue }
+      })
+      setToggleCheck(true)
+    }
   }
 
   const handleSubmit = (e: any) => {

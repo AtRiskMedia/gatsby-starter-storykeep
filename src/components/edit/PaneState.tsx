@@ -455,45 +455,46 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
   }
 */
 
-  const handleChange = (e: any) => {
-    // FIX
-    const { name, value } = e.target
-    if (
-      name === `slug` &&
-      value !== thisPane.slug &&
-      value &&
-      allPanesSlugs.includes(value)
-    ) {
-      setState((prev: any) => {
-        return { ...prev, [name]: value }
-      })
+  const handleChange = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const { name, value } = e.target as HTMLInputElement
+    if (value !== thisPane.slug && allPanesSlugs.includes(value))
       setSlugCollision(true)
-    } else {
-      setState((prev: any) => {
-        return { ...prev, [name]: value }
-      })
-      setSlugCollision(false)
+    else setSlugCollision(false)
+    const validateSlug = (v: string) => {
+      const re1 = /^[a-z]/
+      const re2 = /^[a-z][a-zA-Z0-9-]+$/
+      if (v.length === 0) return ``
+      const match = v.length === 1 ? re1.test(v) : re2.test(v)
+      if (match) return v
+      return state.slug
     }
-    const impressionsPayload = stateImpressions?.title
-      ? {
-          [stateImpressions.id]: stateImpressions,
+    const thisValue =
+      name !== `slug` ? value : validateSlug(value.toLowerCase())
+    if (thisValue !== null) {
+      setState((prev: any) => {
+        return { ...prev, [name]: thisValue }
+      })
+      const impressionsPayload = stateImpressions?.title
+        ? {
+            [stateImpressions.id]: stateImpressions,
+          }
+        : null
+      const newOptionsPayload: any = {}
+      if (impressionsPayload) newOptionsPayload.impressions = impressionsPayload
+      if (Object.keys(stateHeldBeliefs).length)
+        newOptionsPayload.heldBeliefs = stateHeldBeliefs
+      if (Object.keys(stateWithheldBeliefs).length)
+        newOptionsPayload.withheldBeliefs = stateWithheldBeliefs
+      newOptionsPayload.paneFragmentsPayload = Object.values(statePaneFragments)
+      if (state.hiddenPane) newOptionsPayload.hiddenPane = state.hiddenPane
+      setState((prev: any) => {
+        return {
+          ...prev,
+          optionsPayloadString: JSON.stringify(newOptionsPayload),
         }
-      : null
-    const newOptionsPayload: any = {}
-    if (impressionsPayload) newOptionsPayload.impressions = impressionsPayload
-    if (Object.keys(stateHeldBeliefs).length)
-      newOptionsPayload.heldBeliefs = stateHeldBeliefs
-    if (Object.keys(stateWithheldBeliefs).length)
-      newOptionsPayload.withheldBeliefs = stateWithheldBeliefs
-    newOptionsPayload.paneFragmentsPayload = Object.values(statePaneFragments)
-    if (state.hiddenPane) newOptionsPayload.hiddenPane = state.hiddenPane
-    setState((prev: any) => {
-      return {
-        ...prev,
-        optionsPayloadString: JSON.stringify(newOptionsPayload),
-      }
-    })
-    setToggleCheck(true)
+      })
+      setToggleCheck(true)
+    }
   }
 
   function insertPaneFragmentsRegenerateState(

@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-import React, { useState } from 'react'
+import React, { useState, ChangeEvent } from 'react'
 import { navigate } from 'gatsby'
 import { ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline'
 import { v4 as uuidv4 } from 'uuid'
@@ -47,15 +47,26 @@ const StoryKeep = () => {
     navigate(`/storykeep/tractstacks/${newUuid}`)
   }
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     // FIX
-    const { name, value } = e.target
-    if (value !== state.slug && allTractStacksSlugs.includes(value))
-      setSlugCollision(true)
+    const { name, value } = e.target as HTMLInputElement
+    if (allTractStacksSlugs.includes(value)) setSlugCollision(true)
     else setSlugCollision(false)
-    setState((prev: any) => {
-      return { ...prev, [name]: value }
-    })
+    const validateSlug = (v: string) => {
+      const re1 = /^[A-Z]/
+      const re2 = /^[A-Z][A-Za-z0-9-_]+$/
+      if (v.length === 0) return ``
+      const match = v.length === 1 ? re1.test(v) : re2.test(v)
+      if (match) return v
+      return null
+    }
+    const thisValue =
+      name !== `slug` ? value : validateSlug(value.toUpperCase())
+    if (thisValue !== null) {
+      setState((prev: any) => {
+        return { ...prev, [name]: thisValue }
+      })
+    }
   }
 
   return (
@@ -132,7 +143,7 @@ const StoryKeep = () => {
                     id="title"
                     className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black focus:ring-0 xs:text-sm xs:leading-6"
                     value={state.title}
-                    onChange={handleChange}
+                    onChange={(e) => handleChange(e)}
                   />
                 </div>
               </div>
@@ -167,10 +178,9 @@ const StoryKeep = () => {
                     type="text"
                     name="slug"
                     id="slug"
-                    pattern="[a-zA-Z\-]+"
                     className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                     value={state.slug}
-                    onChange={handleChange}
+                    onChange={(e) => handleChange(e)}
                   />
                 </div>
               </div>

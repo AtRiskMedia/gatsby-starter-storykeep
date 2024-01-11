@@ -92,20 +92,27 @@ const StoryFragmentState = ({
   const handleChange = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const { name, value } = e.target as HTMLInputElement
     if (
-      value !== thisStoryFragment?.slug &&
+      value !== thisStoryFragment.slug &&
       allStoryFragmentSlugs.includes(value)
-    ) {
-      setState((prev: any) => {
-        return { ...prev, [name]: value }
-      })
+    )
       setSlugCollision(true)
-    } else {
-      setState((prev: any) => {
-        return { ...prev, [name]: value }
-      })
-      setSlugCollision(false)
+    else setSlugCollision(false)
+    const validateSlug = (v: string) => {
+      const re1 = /^[a-z]/
+      const re2 = /^[a-z][a-z0-9-]+$/
+      if (v.length === 0) return ``
+      const match = v.length === 1 ? re1.test(v) : re2.test(v)
+      if (match) return v
+      return state.slug
     }
-    setToggleCheck(true)
+    const thisValue =
+      name !== `slug` ? value : validateSlug(value.toLowerCase())
+    if (thisValue !== null) {
+      setState((prev: any) => {
+        return { ...prev, [name]: thisValue }
+      })
+      setToggleCheck(true)
+    }
   }
 
   const handleInsertPane = (offset: number, paneId?: string) => {

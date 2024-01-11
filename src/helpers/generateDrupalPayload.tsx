@@ -119,12 +119,12 @@ export function panePayload(
     if (typeof heldBeliefs[e] === `string`)
       paneOptionsHeldBeliefs = {
         ...paneOptionsHeldBeliefs,
-        [e]: heldBeliefs[e],
+        [e]: heldBeliefs[e].split(`,`),
       }
     else
       paneOptionsHeldBeliefs = {
         ...paneOptionsHeldBeliefs,
-        [e]: heldBeliefs[e].join(`,`),
+        [e]: heldBeliefs[e],
       }
   })
   let paneOptionsWithheldBeliefs = {}
@@ -133,12 +133,12 @@ export function panePayload(
     if (typeof withheldBeliefs[e] === `string`)
       paneOptionsWithheldBeliefs = {
         ...paneOptionsWithheldBeliefs,
-        [e]: withheldBeliefs[e],
+        [e]: withheldBeliefs[e].split(`,`),
       }
     else
       paneOptionsWithheldBeliefs = {
         ...paneOptionsWithheldBeliefs,
-        [e]: withheldBeliefs[e].join(`,`),
+        [e]: withheldBeliefs[e],
       }
   })
   const thisOptionsRaw: any = {} // FIX

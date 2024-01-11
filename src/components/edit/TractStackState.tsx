@@ -244,15 +244,26 @@ const TractStackState = ({
   }
 
   const handleChange = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    // FIX
     const { name, value } = e.target as HTMLInputElement
     if (value !== thisTractStack.slug && allTractStacksSlugs.includes(value))
       setSlugCollision(true)
     else setSlugCollision(false)
-    setState((prev: any) => {
-      return { ...prev, [name]: value }
-    })
-    setToggleCheck(true)
+    const validateSlug = (v: string) => {
+      const re1 = /^[A-Z]/
+      const re2 = /^[A-Z][A-Z0-9-]+$/
+      if (v.length === 0) return ``
+      const match = v.length === 1 ? re1.test(v) : re2.test(v)
+      if (match) return v
+      return null
+    }
+    const thisValue =
+      name !== `slug` ? value : validateSlug(value.toUpperCase())
+    if (thisValue !== null) {
+      setState((prev: any) => {
+        return { ...prev, [name]: thisValue }
+      })
+      setToggleCheck(true)
+    }
   }
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {

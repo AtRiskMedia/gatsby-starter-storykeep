@@ -99,16 +99,16 @@ export const starterTemplate = (key: string, title: string, slug: string) => {
       }
       const newClassNamesPayload = {
         parent: {
-          classes: {
-            0: {
+          classes: [
+            {
               my: [12, 16],
             },
-            1: {
+            {
               maxW: [`2xl`, `3xl`],
               mx: [`auto`],
               px: [8],
             },
-          },
+          ],
         },
         h2: {
           classes: {
@@ -194,16 +194,16 @@ export const starterTemplate = (key: string, title: string, slug: string) => {
       }
       const newClassNamesPayload = {
         parent: {
-          classes: {
-            0: {
+          classes: [
+            {
               my: [12, 16],
             },
-            1: {
+            {
               maxW: [`2xl`, `3xl`],
               mx: [`auto`],
               px: [8],
             },
-          },
+          ],
         },
         p: {
           classes: {
@@ -280,12 +280,12 @@ export const starterTemplate = (key: string, title: string, slug: string) => {
       }
       const newClassNamesPayload = {
         parent: {
-          classes: {
-            0: {
+          classes: [
+            {
               my: [12, 16],
               px: [12],
             },
-            1: {
+            {
               bgCOLOR: [`slate-50`],
               border: [true],
               borderCOLOR: [`mylightgrey`],
@@ -294,12 +294,12 @@ export const starterTemplate = (key: string, title: string, slug: string) => {
               maxW: [`none`, `3xl`],
               mx: [`auto`],
             },
-            2: {
+            {
               maxW: [`none`, `2xl`],
               mx: [`auto`],
               p: [8],
             },
-          },
+          ],
         },
         h2: {
           classes: {
@@ -392,6 +392,7 @@ export const starterTemplate = (key: string, title: string, slug: string) => {
             textCOLOR: [`myblue`],
             textSIZE: [`r6xl`, `r7xl`, `r8xl`],
             z: [1],
+            relative: [true],
           },
         },
         p: {
@@ -400,6 +401,8 @@ export const starterTemplate = (key: string, title: string, slug: string) => {
             textSIZE: [`r4xl`, `r5xl`, `r6xl`],
             mt: [`r12`],
             rotate: [`!1`],
+            z: [1],
+            relative: [true],
           },
         },
       }

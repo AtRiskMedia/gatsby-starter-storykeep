@@ -262,7 +262,6 @@ const TractStackForm = ({
                               type="text"
                               name="slug"
                               id="slug"
-                              pattern="[a-zA-Z\-]+"
                               className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                               value={state.slug}
                               onChange={(e) => handleChange(e)}
