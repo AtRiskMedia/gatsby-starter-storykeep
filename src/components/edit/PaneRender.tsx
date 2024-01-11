@@ -40,6 +40,8 @@ const StyledWrapperDiv = styled.div<IStyledWrapperSectionProps>`
 const CurrentlyDesigning = ({
   viewportKey,
   setViewportKey,
+  setWidth,
+  innerWidth,
   visible,
 }: ICurrentlyDesigning) => {
   if (!visible) return null
@@ -55,7 +57,10 @@ const CurrentlyDesigning = ({
         <div className="flex justify-between flex-row">
           <div className="w-1/3 grid justify-items-center">
             <button
-              onClick={() => setViewportKey(`mobile`)}
+              onClick={() => {
+                setWidth(innerWidth[0])
+                setViewportKey(`mobile`)
+              }}
               title="Design for mobile"
               className={classNames(
                 viewportKey === `mobile`
@@ -71,7 +76,10 @@ const CurrentlyDesigning = ({
           </div>
           <div className="w-1/3 grid justify-items-center">
             <button
-              onClick={() => setViewportKey(`tablet`)}
+              onClick={() => {
+                setWidth(innerWidth[1])
+                setViewportKey(`tablet`)
+              }}
               title="Design for tablet"
               className={classNames(
                 viewportKey === `tablet`
@@ -87,7 +95,10 @@ const CurrentlyDesigning = ({
           </div>
           <div className="w-1/3 grid justify-items-center">
             <button
-              onClick={() => setViewportKey(`desktop`)}
+              onClick={() => {
+                setWidth(innerWidth[2])
+                setViewportKey(`desktop`)
+              }}
               title="Design for desktop"
               className={classNames(
                 viewportKey === `desktop`
@@ -146,8 +157,10 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
     handleMutateMarkdown,
     handleChangeEditInPlace,
     setViewportKey,
+    setWidth,
   } = fn
-  const { width, interceptMode, interceptModeTag, viewportKey } = flags
+  const { innerWidth, width, interceptMode, interceptModeTag, viewportKey } =
+    flags
   const [pageStylesPagination, setPageStylesPagination] = useState(-1)
   const thisPane = previewPayload.state
   const paneFragmentsPayload = previewPayload.statePaneFragments
@@ -769,6 +782,8 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
               <CurrentlyDesigning
                 viewportKey={viewportKey}
                 setViewportKey={setViewportKey}
+                setWidth={setWidth}
+                innerWidth={innerWidth}
                 visible={nth > -1}
               />
               <PaneEditInPlace

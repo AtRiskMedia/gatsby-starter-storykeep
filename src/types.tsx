@@ -128,6 +128,7 @@ export interface IPaneRender {
     handleMutateMarkdown: Function
     setInterceptMode: Function
     setViewportKey: Function
+    setWidth: Function
   }
   flags: {
     interceptMode: string
@@ -135,6 +136,7 @@ export interface IPaneRender {
     slugCollision: boolean
     viewportKey: string
     width: number
+    innerWidth: number[]
   }
 }
 
@@ -259,7 +261,9 @@ export interface IUUID {
 export interface ICurrentlyDesigning {
   viewportKey: string
   setViewportKey: Function
+  setWidth: Function
   visible: boolean
+  innerWidth: number[]
 }
 
 export interface IEditViewport {

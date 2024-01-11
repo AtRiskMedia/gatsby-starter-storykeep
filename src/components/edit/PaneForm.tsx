@@ -119,6 +119,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: IPaneForm) => {
     handleEditMarkdown,
     handleChangeEditInPlace,
     setViewportKey,
+    setWidth,
   }
   const passFlags = {
     interceptMode,
@@ -126,6 +127,11 @@ const PaneForm = ({ uuid, payload, flags, fn }: IPaneForm) => {
     width,
     slugCollision: flags.slugCollision,
     viewportKey,
+    innerWidth: [
+      innerViewportMobile,
+      innerViewportTablet,
+      innerViewportDesktop,
+    ],
   }
 
   useEffect(() => {
