@@ -53,13 +53,13 @@ const Layout = ({ children, current }: ILayout) => {
     },
   ]
   const actions = [
-    {
-      id: 1,
-      name: `Backup/Restore`,
-      href: `/backups`,
-      icon: CircleStackIcon,
-      current: current === `backups`,
-    },
+    //{
+    //  id: 1,
+    //  name: `Backup/Restore`,
+    //  href: `/backups`,
+    //  icon: CircleStackIcon,
+    //  current: current === `backups`,
+    //},
     {
       id: 2,
       name: `Publish Settings`,
