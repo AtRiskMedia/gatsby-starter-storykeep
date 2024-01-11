@@ -10,7 +10,7 @@ import {
   WrenchScrewdriverIcon,
   ChartPieIcon,
   BoltIcon,
-  CircleStackIcon,
+  // CircleStackIcon,
   UserIcon,
 } from '@heroicons/react/24/outline'
 import { classNames } from '@tractstack/helpers'
@@ -53,13 +53,13 @@ const Layout = ({ children, current }: ILayout) => {
     },
   ]
   const actions = [
-    //{
+    // {
     //  id: 1,
     //  name: `Backup/Restore`,
     //  href: `/backups`,
     //  icon: CircleStackIcon,
     //  current: current === `backups`,
-    //},
+    // },
     {
       id: 2,
       name: `Publish Settings`,
