@@ -457,7 +457,8 @@ const TractStackForm = ({
                   </button>
                 </span>
 
-                {flags.isAuthor || flags.isAdmin ? (
+                {(flags.isAuthor || flags.isAdmin) &&
+                !flags.hasStoryFragments ? (
                   <span className="ml-3">
                     <button
                       type="button"
