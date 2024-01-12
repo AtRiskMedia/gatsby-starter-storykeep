@@ -61,20 +61,21 @@ const Graph = () => {
     <section className="xl:max-w-screen-2xl">
       <>
         <div className="p-6 w-full text-center font-action text-xl text-myblue">
-        Double Click to open Node</div>
-      <div className="h-screen shadow-sm bg-white">
-        {!loaded ? (
-          <div className="flex items-center justify-center h-full">
-            <div className="max-w-xs leading-6 text-lg text-mydarkgrey">
-              <p>
-                <strong>LOADING</strong>
-              </p>
+          Double Click to open Node
+        </div>
+        <div className="h-screen shadow-sm bg-white">
+          {!loaded ? (
+            <div className="flex items-center justify-center h-full">
+              <div className="max-w-xs leading-6 text-lg text-mydarkgrey">
+                <p>
+                  <strong>LOADING</strong>
+                </p>
+              </div>
             </div>
-          </div>
-        ) : (
-          <VisNetwork payload={graphData} />
-        )}
-      </div>
+          ) : (
+            <VisNetwork payload={graphData} />
+          )}
+        </div>
       </>
     </section>
   )

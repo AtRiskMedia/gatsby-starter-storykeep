@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 import React, { useEffect } from 'react'
 import { Network } from 'vis-network'
-import {navigate} from 'gatsby'
+import { navigate } from 'gatsby'
 
 import { useDrupalStore } from '../stores/drupal'
 
@@ -23,16 +23,16 @@ const VisNetwork = ({ payload }: any) => {
       },
     }
 
-    const goto = ({title,type}:{title:string, type:string})=>{
+    const goto = ({ title, type }: { title: string; type: string }) => {
       const nodes = type === `StoryFragment` ? allStoryFragments : allPanes
       const thisType = type === `StoryFragment` ? `storyfragments` : `panes`
       let uuid
-      if(nodes ) Object.keys(nodes).map((e:string)=> {
-        if( nodes[e].title === title ) uuid = e
-      })
-      if(uuid)navigate(`/storykeep/${thisType}/${uuid}`)
-      else
-      console.log(`${type} not found.`)
+      if (nodes)
+        Object.keys(nodes).forEach((e: string) => {
+          if (nodes[e].title === title) uuid = e
+        })
+      if (uuid) navigate(`/storykeep/${thisType}/${uuid}`)
+      else console.log(`${type} not found.`)
     }
 
     if (container) {
@@ -41,11 +41,12 @@ const VisNetwork = ({ payload }: any) => {
         const nid = params?.nodes?.length > 0 ? params.nodes[0] : null
         if (nid) {
           const thisNode = payload.nodes.filter((e: any) => nid === e.id)
-          if (thisNode.length) goto( { title:thisNode[0].label, type: thisNode[0].title } )
+          if (thisNode.length)
+            goto({ title: thisNode[0].label, type: thisNode[0].title })
         }
       })
     }
-  }, [payload])
+  }, [payload, allStoryFragments, allPanes])
 
   return <div id="mynetwork" className="w-full h-full"></div>
 }
