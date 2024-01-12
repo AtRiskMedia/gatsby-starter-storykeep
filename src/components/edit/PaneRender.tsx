@@ -784,7 +784,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
                 setViewportKey={setViewportKey}
                 setWidth={setWidth}
                 innerWidth={innerWidth}
-                visible={nth > -1}
+                visible={nth > -1 || previewPayload.state.hasBreaks}
               />
               <PaneEditInPlace
                 tag={tag}
