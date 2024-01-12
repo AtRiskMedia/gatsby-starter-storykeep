@@ -59,6 +59,9 @@ const Graph = () => {
 
   return (
     <section className="xl:max-w-screen-2xl">
+      <>
+        <div className="p-6 w-full text-center font-action text-xl text-myblue">
+        Double Click to open Node</div>
       <div className="h-screen shadow-sm bg-white">
         {!loaded ? (
           <div className="flex items-center justify-center h-full">
@@ -72,6 +75,7 @@ const Graph = () => {
           <VisNetwork payload={graphData} />
         )}
       </div>
+      </>
     </section>
   )
 }
