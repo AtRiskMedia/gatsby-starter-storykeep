@@ -2517,45 +2517,44 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         : null
     const hasOverride = typeof thisClassNamesPayload?.override !== `undefined`
     const thisClassNamesPayloadInner =
-      [`pre`, `post`].includes(mode) &&
-      [`ul`, `ol`, `imageContainer`].includes(thisTag) &&
+      [`pre`, `post`, `imagePre`, `imagePost`].includes(mode) &&
+      [`ul`, `ol`, `imageContainer`, `img`].includes(thisTag) &&
       typeof classNamesPayload.li !== `undefined`
         ? classNamesPayload.li
         : null
     const hasOverrideInner =
       typeof thisClassNamesPayloadInner?.override !== `undefined`
-
     // must update paneFragment optionsPayload classNamesPayload and regenerate classNames [all]
     let thisOverride = {}
     let thisOverrideInner = {}
 
-    console.log(
-      `handleMutateMarkdown mode:${mode} nth:${nth} childNth:${childNth} tag:${thisTag} thisTag:${thisTag} overrideTag:${overrideTag} childGlobalNth:${childGlobalNth}`,
-    )
+    // console.log(
+    //  `handleMutateMarkdown mode:${mode} nth:${nth} childNth:${childNth} tag:${thisTag} thisTag:${thisTag} overrideTag:${overrideTag} childGlobalNth:${childGlobalNth}`,
+    // )
     if (
-      [`pre`, `post`].includes(mode) &&
-      [`ol`, `ul`, `imageContainer`].includes(thisTag) &&
+      [`pre`, `post`, `imagePre`, `imagePost`].includes(mode) &&
+      [`ol`, `ul`, `imageContainer`, `img`].includes(thisTag) &&
       hasOverrideInner
     ) {
       let listItemNth = 0
       Object.keys(stateLivePreviewMarkdown.listItems).forEach((e: string) => {
         if (
-          (mode === `pre` &&
-            stateLivePreviewMarkdown.listItems[e].parentNth <= nth) ||
-          (mode === `post` &&
-            stateLivePreviewMarkdown.listItems[e].parentNth < nth)
+          ([`pre`, `imagePre`].includes(mode) &&
+            stateLivePreviewMarkdown.listItems[e].parentNth < nth) ||
+          ([`post`, `imagePost`].includes(mode) &&
+            stateLivePreviewMarkdown.listItems[e].parentNth <= nth)
         )
           listItemNth++
       })
-      // insert ul|ol, must account for +1 li
+      // insert ul|ol or img in li, must account for +1 li
       Object.keys(thisClassNamesPayloadInner.override).forEach((e: any) => {
         let thatOverrideInner = {}
         Object.keys(thisClassNamesPayloadInner.override[e]).forEach(
           (f: any) => {
             const thisVal = thisClassNamesPayloadInner.override[e][f]
             if (
-              (mode === `pre` && +f >= listItemNth) ||
-              (mode === `post` && +f >= listItemNth)
+              ([`pre`, `imagePre`].includes(mode) && +f >= listItemNth) ||
+              ([`post`, `imagePost`].includes(mode) && +f >= listItemNth)
             )
               thatOverrideInner = {
                 ...thatOverrideInner,
@@ -3370,13 +3369,13 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
 
   if (saveStage < SaveStages.NoChanges) return null
 
-  console.log(
-    `classNamesPayload`,
-    statePaneFragments[stateLivePreviewMarkdown.paneFragmentId].optionsPayload
-      .classNamesPayload,
-  )
-  console.log(`childClasses`, stateLivePreview.childClasses)
-  console.log(stateLivePreviewMarkdown)
+  // console.log(
+  //  `classNamesPayload`,
+  //  statePaneFragments[stateLivePreviewMarkdown.paneFragmentId].optionsPayload
+  //    .classNamesPayload,
+  // )
+  // console.log(`childClasses`, stateLivePreview.childClasses)
+  // console.log(stateLivePreviewMarkdown)
   return (
     <PaneForm
       uuid={uuid}
