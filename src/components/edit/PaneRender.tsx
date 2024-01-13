@@ -508,7 +508,21 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
             Tag={Tag}
           />
         )
-      } else if (interceptMode === `delete` && ![`ul`, `ol`].includes(Tag))
+      } else if (interceptMode === `delete` && ![`ul`, `ol`].includes(Tag)) {
+        // prevent collapse of lists in markdown; breaks out current data model
+        if (
+          typeof stateLivePreviewMarkdown?.markdownTags[thisNth - 1] !==
+            `undefined` &&
+          [`ul`, `ol`].includes(
+            stateLivePreviewMarkdown.markdownTags[thisNth - 1],
+          ) &&
+          typeof stateLivePreviewMarkdown?.markdownTags[thisNth + 1] !==
+            `undefined` &&
+          [`ul`, `ol`].includes(
+            stateLivePreviewMarkdown.markdownTags[thisNth + 1],
+          )
+        )
+          return <div className={className}>{value}</div>
         return (
           <>
             <button
@@ -527,7 +541,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
             <div className={className}>{value}</div>
           </>
         )
-      else if (
+      } else if (
         interceptMode === `insert` &&
         [`ul`, `ol`].includes(Tag) &&
         [`p`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6`].includes(interceptModeTag)
