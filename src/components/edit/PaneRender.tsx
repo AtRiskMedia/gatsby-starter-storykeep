@@ -505,7 +505,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
             Tag={Tag}
           />
         )
-      } else if (interceptMode === `delete`)
+      } else if (interceptMode === `delete` && ![`ul`, `ol`].includes(Tag))
         return (
           <>
             <button

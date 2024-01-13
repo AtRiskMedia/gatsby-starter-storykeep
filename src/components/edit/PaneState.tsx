@@ -2604,6 +2604,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       classNamesModal: reduced?.classNamesModal || ``,
       classNamesPayload: newClassNamesPayload,
     }
+    console.log(`becomes`, thisOptionsPayload)
 
     // mutate markdown
     const oldMarkdownArray = [...stateLivePreviewMarkdown.markdownArray]
@@ -2664,6 +2665,29 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       ]
       newMarkdownArray = [...oldMarkdownArray]
       newMarkdownArray[nth] = `${newCurrent.join(`\n`)}\n`
+    } else if (childNth > -1 && mode === `imagePre`) {
+      const current = oldMarkdownArray[nth].split(`\n`).filter((n: any) => n)
+      const newCurrent = [
+        ...current.slice(0, childNth),
+        `${listPrefix} ![ImagePlaceholder](ImagePlaceholder)`,
+        ...current.slice(childNth),
+      ]
+      console.log(newCurrent)
+      newMarkdownArray = [...oldMarkdownArray]
+      newMarkdownArray[nth] = `${newCurrent.join(`\n`)}\n`
+    } else if (childNth > -1 && mode === `imagePost`) {
+      const current = oldMarkdownArray[nth].split(`\n`).filter((n: any) => n)
+      const newCurrent = [
+        ...current.slice(0, childNth + 1),
+        `${listPrefix} ![ImagePlaceholder](ImagePlaceholder)`,
+        ...current.slice(childNth + 1),
+      ]
+      console.log(newCurrent)
+      newMarkdownArray = [...oldMarkdownArray]
+      newMarkdownArray[nth] = `${newCurrent.join(`\n`)}\n`
+    } else {
+      console.log(`missed on insert`)
+      return null
     }
     const markdownBody = newMarkdownArray?.join(`\n`)
 
@@ -2674,6 +2698,18 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         markdownBody,
       },
     }
+    console.log({
+      payload: [
+        {
+          ...statePaneFragments[paneFragmentId],
+          markdownBody,
+          optionsPayload: thisOptionsPayload,
+          optionsPayloadString: JSON.stringify(thisOptionsPayload),
+        },
+      ],
+      allMarkdown: thisMarkdown,
+      allFiles,
+    })
     const {
       initialStateLivePreview,
       initialStateLivePreviewMarkdown,

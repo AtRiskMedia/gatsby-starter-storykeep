@@ -67,11 +67,11 @@ export function generateClassNamesPayload(payload: any, markdownPayload: any) {
     ) {
       const thisCount =
         thisSelector === `li`
-          ? Object.keys(listItems).length
+          ? listItems && Object.keys(listItems).length
           : thisSelector === `img`
-            ? Object.keys(images).length
+            ? images && Object.keys(images).length
             : thisSelector === `code`
-              ? Object.keys(codeItems).length
+              ? codeItems && Object.keys(codeItems).length
               : 0
       returnPayload.childClasses[thisSelector] = {}
       Object.keys(selectorClasses).forEach((g: any) => {

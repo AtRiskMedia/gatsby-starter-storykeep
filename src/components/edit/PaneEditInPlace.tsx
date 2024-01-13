@@ -1081,7 +1081,7 @@ const PaneEditInPlace = ({
   const links = stateLivePreviewMarkdown.links
   const linksLookup = stateLivePreviewMarkdown.linksLookup
   const linksData =
-    tag === `p` && typeof linksLookup[nth] !== `undefined`
+    tag === `p` && linksLookup && typeof linksLookup[nth] !== `undefined`
       ? Object.keys(linksLookup[nth])?.map(
           (l: any) => links[linksLookup[nth][l]],
         )
@@ -1090,6 +1090,8 @@ const PaneEditInPlace = ({
   const imagesLookup = stateLivePreviewMarkdown.imagesLookup
   const imageData =
     tag === `img` &&
+    imagesLookup &&
+    images &&
     typeof imagesLookup[nth] !== `undefined` &&
     typeof images[imagesLookup[nth][childNth]] !== `undefined`
       ? images[imagesLookup[nth][childNth]]
@@ -1141,7 +1143,12 @@ const PaneEditInPlace = ({
       ? stateLivePreview.childClasses.li[listItemGlobalNth]
       : {}
   const listItemId = tag === `img` ? `${nth}-${childNth}--li` : null
-  const actualTag = stateLivePreviewMarkdown.markdownTags[nth]
+  const actualTag =
+    stateLivePreviewMarkdown &&
+    stateLivePreviewMarkdown?.markdownTags &&
+    typeof stateLivePreviewMarkdown.markdownTags[nth] !== `undefined`
+      ? stateLivePreviewMarkdown.markdownTags[nth]
+      : null
   const outerListState =
     [`img`, `li`].includes(tag) &&
     childNth > -1 &&
@@ -1191,11 +1198,15 @@ const PaneEditInPlace = ({
             ) : null}
             {imageData ? (
               <>
-                <img
-                  className="w-auto h-10"
-                  src={imageData.publicURL}
-                  alt={imageData.alt}
-                />
+                {imageData.alt === `ImagePlaceholder` ? (
+                  <div>[UPLOAD AN IMAGE]</div>
+                ) : (
+                  <img
+                    className="w-auto h-10"
+                    src={imageData.publicURL}
+                    alt={imageData.alt}
+                  />
+                )}
                 <label
                   htmlFor={`image-${childGlobalNth}--alt`}
                   className="block text-sm leading-6 text-black"
@@ -1205,6 +1216,7 @@ const PaneEditInPlace = ({
                 <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                   <input
                     type="text"
+                    disabled={imageData.alt === `ImagePlaceholder`}
                     name={`image-${childGlobalNth}--alt`}
                     id={`image-${childGlobalNth}--alt`}
                     className="block h-12 flex-1 border-0 bg-transparent focus:ring-0"
