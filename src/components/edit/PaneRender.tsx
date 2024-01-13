@@ -386,6 +386,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
       if (!deepEqual(newArray, oldArray)) handleEditMarkdown(newArray)
     }
     const interceptInsert = ({ nth, childNth, mode }: IInterceptOverride) => {
+      console.log(`interceptInsert`, nth, childNth, mode,interceptModeTag)
       handleMutateMarkdown(nth, childNth, mode, interceptModeTag)
       setInterceptMode(`edit`)
     }
@@ -417,6 +418,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
 
         case `ul`:
         case `ol`:
+          console.log(`does this ever happen?`)
           specialMode = `list`
           specialModeOn = true
           if (
@@ -492,7 +494,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
             <ThisTag>{value}</ThisTag>
           </>
         )
-      else if (interceptMode === `edit`) {
+      else if (interceptMode === `edit` && ![`ul`, `ol`].includes(Tag)) {
         const html = renderToString(value)
         return (
           <ContentEditableContainer
@@ -524,7 +526,40 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
             <div className={className}>{value}</div>
           </>
         )
-      else if (interceptMode === `insert` && specialMode && specialModeOn) {
+      else if (interceptMode === `insert` && [`ul`, `ol`].includes(Tag)) {
+        return (
+          <>
+            <button
+              className="absolute top-0 left-0 w-1/2 h-full border border-transparent hover:border-myorange border-dashed z-8 hover:bg-myorange hover:bg-opacity-20"
+              title={`Insert before ${thisTagType}`}
+              onClick={() =>
+                interceptInsert({
+                  nth: nth,
+                  childNth: -1,
+                  mode: `pre`,
+                })
+              }
+            ></button>
+            <button
+              className="absolute top-0 right-0 w-1/2 h-full border border-transparent hover:border-myorange border-dashed z-8 hover:bg-myorange hover:bg-opacity-20"
+              title={`Insert after ${thisTagType}`}
+              onClick={() =>
+                interceptInsert({
+                  nth: nth,
+                  childNth: -1,
+                  mode: `post`,
+                })
+              }
+            ></button>
+            <div className={className}>{value}</div>
+          </>
+        )
+      } else if (
+        interceptMode === `insert` &&
+        specialMode &&
+        specialModeOn &&
+        Tag !== `img`
+      ) {
         return (
           <>
             {specialModePre ? (
@@ -559,6 +594,40 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
                 }
               ></button>
             ) : null}
+            <div className={className}>{value}</div>
+          </>
+        )
+      } else if (
+        interceptMode === `insert` &&
+        Tag === `img` &&
+        interceptModeTag === `image`
+      ) {
+        return (
+          <>
+            <button
+              className="absolute top-0 left-0 w-1/2 h-full border border-transparent hover:border-myorange border-dashed z-8 hover:bg-myorange hover:bg-opacity-20"
+              title={`Insert image before this one`}
+              onClick={() =>
+                interceptInsert({
+                  nth: typeof parent === `number` && parent > -1 ? parent : nth,
+                  childNth:
+                    typeof parent === `number` && parent > -1 ? nth : -1,
+                  mode: `imagePre`,
+                })
+              }
+            ></button>
+            <button
+              className="absolute top-0 right-0 w-1/2 h-full border border-transparent hover:border-myorange border-dashed z-8 hover:bg-myorange hover:bg-opacity-20"
+              title={`Insert image after this one`}
+              onClick={() =>
+                interceptInsert({
+                  nth: typeof parent === `number` && parent > -1 ? parent : nth,
+                  childNth:
+                    typeof parent === `number` && parent > -1 ? nth : -1,
+                  mode: `imagePost`,
+                })
+              }
+            ></button>
             <div className={className}>{value}</div>
           </>
         )

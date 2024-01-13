@@ -2476,11 +2476,15 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
               ([`ul`, `ol`].includes(
                 stateLivePreviewMarkdown.markdownTags[nth],
               ) &&
-                [`parentpre`, `parentpost`].includes(mode))
+                [`pre`,`post`,`parentpre`, `parentpost`].includes(mode))
             ? insertTag
-            : [`ul`, `ol`].includes(stateLivePreviewMarkdown.markdownTags[nth])
-              ? `li`
-              : stateLivePreviewMarkdown.markdownTags[nth]
+            : [`imagePre`, `imagePost`].includes(mode)
+              ? `img`
+              : [`ul`, `ol`].includes(
+                    stateLivePreviewMarkdown.markdownTags[nth],
+                  )
+                ? `li`
+                : stateLivePreviewMarkdown.markdownTags[nth]
     const actualTag = stateLivePreviewMarkdown.markdownTags[nth]
     const listPrefix = actualTag === `ul` ? `*` : actualTag === `ol` ? `1.` : ``
     const sliceOffset = [`parentpost`, `post`].includes(mode) ? nth + 1 : nth
@@ -2499,7 +2503,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       typeof optionsPayload?.classNamesPayload !== `undefined`
         ? optionsPayload?.classNamesPayload
         : {}
-    const overrideTag = [`ul`, `ol`].includes(thisTag) ? `li` : thisTag
+    const overrideTag = [`ul`, `ol`].includes(thisTag) && ![`pre`,`post`].includes(mode) ? `li` : thisTag
     const thisClassNamesPayload =
       typeof classNamesPayload[overrideTag] !== `undefined`
         ? classNamesPayload[overrideTag]
@@ -2508,6 +2512,17 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
     // must update paneFragment optionsPayload classNamesPayload and regenerate classNames [all]
     let thisOverride = {}
 
+    console.log(
+      `handleMutateMarkdown`,
+      nth,
+      childNth,
+      tag,
+      thisTag,
+      overrideTag,
+      hasOverride,
+      childGlobalNth,
+      mode,
+    )
     if (hasOverride) {
       let overrideNth = 0
       Object.keys(stateLivePreviewMarkdown.listItems).forEach((e) => {
@@ -3232,6 +3247,9 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
 
   if (saveStage < SaveStages.NoChanges) return null
 
+console.log(statePaneFragments[stateLivePreviewMarkdown.paneFragmentId].optionsPayload.classNamesPayload)
+console.log(stateLivePreview)
+console.log(stateLivePreviewMarkdown)
   return (
     <PaneForm
       uuid={uuid}

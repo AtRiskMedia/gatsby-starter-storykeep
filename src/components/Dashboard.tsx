@@ -80,7 +80,9 @@ const processPaneSwarm = (data: any) => {
       return {
         id: e.title,
         group: `pane`,
-        engagement: (100 * (maxSince - e.hours_since_activity)) / maxSince,
+        engagement: Math.round(
+          (100 * (maxSince - e.hours_since_activity)) / maxSince,
+        ),
         hoursSince: e.hours_since_activity,
         events: parseInt(e.clicked) + parseInt(e.red) + parseInt(e.glossed),
         categories: [
@@ -108,7 +110,9 @@ const processStoryFragmentSwarm = (data: any) => {
       return {
         id: e.title,
         group: `storyfragment`,
-        engagement: (100 * (maxSince - e.hours_since_activity)) / maxSince,
+        engagement: Math.round(
+          (100 * (maxSince - e.hours_since_activity)) / maxSince,
+        ),
         hoursSince: e.hours_since_activity,
         events:
           parseInt(e.clicked) +
