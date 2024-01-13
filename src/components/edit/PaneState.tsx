@@ -2529,35 +2529,33 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
     let thisOverride = {}
     let thisOverrideInner = {}
 
-    // console.log(
-    //  `handleMutateMarkdown mode:${mode} nth:${nth} childNth:${childNth} tag:${thisTag} thisTag:${thisTag} overrideTag:${overrideTag} childGlobalNth:${childGlobalNth}`,
-    // )
+    console.log(
+      `handleMutateMarkdown mode:${mode} nth:${nth} childNth:${childNth} tag:${thisTag} thisTag:${thisTag} overrideTag:${overrideTag} childGlobalNth:${childGlobalNth}`,
+    )
     if (
       [`pre`, `post`].includes(mode) &&
       [`ol`, `ul`, `imageContainer`].includes(thisTag) &&
       hasOverrideInner
     ) {
-      // must determine actual listItem global nth to insert this +1 li
-      let offset = 0
+      let listItemNth = 0
       Object.keys(stateLivePreviewMarkdown.listItems).forEach((e: string) => {
         if (
-          !(
-            (mode === `pre` &&
-              stateLivePreviewMarkdown.listItems[e].parentNth >= nth) ||
-            (mode === `post` &&
-              stateLivePreviewMarkdown.listItems[e].parentNth > nth)
-          )
+          (mode === `pre` &&
+            stateLivePreviewMarkdown.listItems[e].parentNth <= nth) ||
+          (mode === `post` &&
+            stateLivePreviewMarkdown.listItems[e].parentNth < nth)
         )
-          offset = +e
+          listItemNth++
       })
+      // insert ul|ol, must account for +1 li
       Object.keys(thisClassNamesPayloadInner.override).forEach((e: any) => {
         let thatOverrideInner = {}
         Object.keys(thisClassNamesPayloadInner.override[e]).forEach(
           (f: any) => {
             const thisVal = thisClassNamesPayloadInner.override[e][f]
             if (
-              (mode === `pre` && +f >= offset) ||
-              (mode === `post` && +f > offset)
+              (mode === `pre` && +f >= listItemNth) ||
+              (mode === `post` && +f >= listItemNth)
             )
               thatOverrideInner = {
                 ...thatOverrideInner,
@@ -2569,6 +2567,34 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         thisOverrideInner = { ...thisOverrideInner, [e]: thatOverrideInner }
       })
     }
+    /*
+    else if (
+      mode === `delete` &&
+      [`ol`, `ul`, `imageContainer`].includes(thisTag) &&
+      hasOverrideInner
+    ) {
+      console.log(`inner pass delete`)
+      // delete ul|ol, must account for listItems
+      Object.keys(thisClassNamesPayloadInner.override).forEach((e: any) => {
+        console.log(e)
+        let thatOverrideInner = {}
+        Object.keys(thisClassNamesPayloadInner.override[e]).forEach(
+          (f: any) => {
+            console.log(+f, childGlobalNth, mode)
+            const thisVal = thisClassNamesPayloadInner.override[e][f]
+            if ((mode === `pre` && +f >= childGlobalNth) || (mode===`post`&& +f >= childGlobalNth) )
+              thatOverrideInner = {
+                ...thatOverrideInner,
+                [`${+f + 1}`]: thisVal,
+              }
+            else thatOverrideInner = { ...thatOverrideInner, [f]: thisVal }
+          },
+        )
+        thisOverrideInner = { ...thisOverrideInner, [e]: thatOverrideInner }
+        console.log(thisOverrideInner)
+      })
+    }
+*/
 
     if (hasOverride) {
       let overrideNth = 0
@@ -3344,12 +3370,13 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
 
   if (saveStage < SaveStages.NoChanges) return null
 
-  // console.log(
-  //  statePaneFragments[stateLivePreviewMarkdown.paneFragmentId].optionsPayload
-  //    .classNamesPayload,
-  // )
-  // console.log(stateLivePreview)
-  // console.log(stateLivePreviewMarkdown)
+  console.log(
+    `classNamesPayload`,
+    statePaneFragments[stateLivePreviewMarkdown.paneFragmentId].optionsPayload
+      .classNamesPayload,
+  )
+  console.log(`childClasses`, stateLivePreview.childClasses)
+  console.log(stateLivePreviewMarkdown)
   return (
     <PaneForm
       uuid={uuid}
