@@ -386,7 +386,6 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
       if (!deepEqual(newArray, oldArray)) handleEditMarkdown(newArray)
     }
     const interceptInsert = ({ nth, childNth, mode }: IInterceptOverride) => {
-      console.log(`interceptInsert`, nth, childNth, mode,interceptModeTag)
       handleMutateMarkdown(nth, childNth, mode, interceptModeTag)
       setInterceptMode(`edit`)
     }
@@ -418,7 +417,6 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
 
         case `ul`:
         case `ol`:
-          console.log(`does this ever happen?`)
           specialMode = `list`
           specialModeOn = true
           if (
@@ -526,7 +524,11 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
             <div className={className}>{value}</div>
           </>
         )
-      else if (interceptMode === `insert` && [`ul`, `ol`].includes(Tag)) {
+      else if (
+        interceptMode === `insert` &&
+        [`ul`, `ol`].includes(Tag) &&
+        [`p`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6`].includes(interceptModeTag)
+      ) {
         return (
           <>
             <button
@@ -534,7 +536,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
               title={`Insert before ${thisTagType}`}
               onClick={() =>
                 interceptInsert({
-                  nth: nth,
+                  nth,
                   childNth: -1,
                   mode: `pre`,
                 })
@@ -545,7 +547,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
               title={`Insert after ${thisTagType}`}
               onClick={() =>
                 interceptInsert({
-                  nth: nth,
+                  nth,
                   childNth: -1,
                   mode: `post`,
                 })

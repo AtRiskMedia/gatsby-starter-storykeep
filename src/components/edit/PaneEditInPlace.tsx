@@ -1141,15 +1141,17 @@ const PaneEditInPlace = ({
       ? stateLivePreview.childClasses.li[listItemGlobalNth]
       : {}
   const listItemId = tag === `img` ? `${nth}-${childNth}--li` : null
+  const actualTag = stateLivePreviewMarkdown.markdownTags[nth]
   const outerListState =
-    tag === `img` &&
+    [`img`, `li`].includes(tag) &&
     childNth > -1 &&
     childGlobalNth > -1 &&
-    typeof stateLivePreview?.childClasses.ul !== `undefined` &&
-    typeof stateLivePreview?.childClasses.ul[nth] !== `undefined`
-      ? stateLivePreview.childClasses.ul[nth]
+    typeof stateLivePreview?.childClasses[actualTag] !== `undefined` &&
+    typeof stateLivePreview?.childClasses[actualTag][nth] !== `undefined`
+      ? stateLivePreview.childClasses[actualTag][nth]
       : {}
-  const outerListId = tag === `img` || tag === `li` ? `${nth}--ul` : null
+  const outerListId =
+    tag === `img` || tag === `li` ? `${nth}--${actualTag}` : null
   const outerCodeState =
     tag === `code` &&
     childNth > -1 &&
@@ -1345,6 +1347,10 @@ const PaneEditInPlace = ({
                     ))}
                   </select>
                 </div>
+              </>
+            ) : null}
+            {[`img`, `li`].includes(tag) ? (
+              <>
                 <span className="block mt-6 font-action my-auto">
                   Outer Container
                 </span>
@@ -1354,12 +1360,12 @@ const PaneEditInPlace = ({
                   Object.keys(outerListState).map((e: any) => (
                     <InputTailwindClass
                       id={outerListId}
-                      key={`${id}-${e}-ul-${viewportKey}`}
+                      key={`${id}-${e}-${actualTag}-${viewportKey}`}
                       payload={{
                         [e]: outerListState[e],
                       }}
                       viewportKey={viewportKey}
-                      allowOverride={true}
+                      allowOverride={false}
                       handleChangeEditInPlace={handleChangeEditInPlace}
                     />
                   ))
@@ -1594,7 +1600,7 @@ const PaneEditInPlace = ({
               <button
                 key={`add---${parentId}`}
                 onClick={() => {
-                  console.log(`add`)
+                  console.log(`todo add parentStyle`)
                 }}
                 className="text-black hover:bg-myorange px-3 py-2 text-sm font-action"
                 title="Add layer"

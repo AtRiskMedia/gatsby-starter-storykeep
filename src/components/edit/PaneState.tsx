@@ -679,14 +679,14 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
     const regexpLinkHover =
       /^hover---(\d+)(?:(?:-(\d+))?)--(li|p)---link-(\d+)--([^-]+)(?:-)?(mobile|tablet|desktop|remove)?/
     const regexp =
-      /^(\d+)(?:(?:-(\d+))?)--(ul|li|p|h1|h2|h3|h4|h5|h6|code|img|parent)--([^-]+)(?:-)?(mobile|tablet|desktop|remove)?/
+      /^(\d+)(?:(?:-(\d+))?)--(ol|ul|li|p|h1|h2|h3|h4|h5|h6|code|img|parent)--([^-]+)(?:-)?(mobile|tablet|desktop|remove)?/
     const regexpOverride =
       /^override---(\d+)(?:(?:-(\d+))?)--(li|p|h1|h2|h3|h4|h5|h6|code|img|parent)--([^-]+)(?:-)?(mobile|tablet|desktop)?/
     const regexpModal = /^(modal)--([^-]+)(?:-)?(mobile|tablet|desktop|remove)?/
     const regexpBgColour = /^(bgColour)--(.*)/
     const regexpImage = /^(image)-(\d+)--(.*)/
     const regexpAdd =
-      /^(add)---(\d+)(?:(?:-(\d+))?)--(ul|li|p|h1|h2|h3|h4|h5|h6|code|img|parent)$/
+      /^(add)---(\d+)(?:(?:-(\d+))?)--(ul|ol|li|p|h1|h2|h3|h4|h5|h6|code|img|parent)$/
     const regexpAddPane =
       /^(paneShape|paneShapeClasses|paneShapeArtpackPayload|paneShapeBreaksPayload|modalShape|textShapeOutside|modal)---(.*)-(add)/
     const regexpAddLink = /^(add)---(\d+)(?:(?:-(\d+))?)--(li|p)---link-(\d+)$/
@@ -964,6 +964,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       }
 
       case `addStyle`: {
+        // applies to all of same element, no override by default
         const thisTag = result[4]
         const current =
           typeof statePaneFragments[stateLivePreviewMarkdown.paneFragmentId]
@@ -2476,7 +2477,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
               ([`ul`, `ol`].includes(
                 stateLivePreviewMarkdown.markdownTags[nth],
               ) &&
-                [`pre`,`post`,`parentpre`, `parentpost`].includes(mode))
+                [`pre`, `post`, `parentpre`, `parentpost`].includes(mode))
             ? insertTag
             : [`imagePre`, `imagePost`].includes(mode)
               ? `img`
@@ -2503,7 +2504,10 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       typeof optionsPayload?.classNamesPayload !== `undefined`
         ? optionsPayload?.classNamesPayload
         : {}
-    const overrideTag = [`ul`, `ol`].includes(thisTag) && ![`pre`,`post`].includes(mode) ? `li` : thisTag
+    const overrideTag =
+      [`ul`, `ol`].includes(thisTag) && ![`pre`, `post`].includes(mode)
+        ? `li`
+        : thisTag
     const thisClassNamesPayload =
       typeof classNamesPayload[overrideTag] !== `undefined`
         ? classNamesPayload[overrideTag]
@@ -3247,9 +3251,9 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
 
   if (saveStage < SaveStages.NoChanges) return null
 
-console.log(statePaneFragments[stateLivePreviewMarkdown.paneFragmentId].optionsPayload.classNamesPayload)
-console.log(stateLivePreview)
-console.log(stateLivePreviewMarkdown)
+  // console.log(statePaneFragments[stateLivePreviewMarkdown.paneFragmentId].optionsPayload.classNamesPayload)
+  // console.log(stateLivePreview)
+  // console.log(stateLivePreviewMarkdown)
   return (
     <PaneForm
       uuid={uuid}

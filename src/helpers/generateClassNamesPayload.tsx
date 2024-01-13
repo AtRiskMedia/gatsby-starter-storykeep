@@ -124,5 +124,6 @@ export function generateClassNamesPayload(payload: any, markdownPayload: any) {
       })
     }
   })
+
   return returnPayload
 }
