@@ -2486,7 +2486,10 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
                   )
                 ? `li`
                 : stateLivePreviewMarkdown.markdownTags[nth]
-    const actualTag = stateLivePreviewMarkdown.markdownTags[nth]
+    const actualTag =
+      thisTag !== `imageContainer`
+        ? stateLivePreviewMarkdown.markdownTags[nth]
+        : `ul`
     const listPrefix = actualTag === `ul` ? `*` : actualTag === `ol` ? `1.` : ``
     const sliceOffset = [`parentpost`, `post`].includes(mode) ? nth + 1 : nth
     const tagsCount = stateLivePreviewMarkdown.markdownTags.slice(
@@ -2513,36 +2516,73 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         ? classNamesPayload[overrideTag]
         : null
     const hasOverride = typeof thisClassNamesPayload?.override !== `undefined`
+    const thisClassNamesPayloadInner =
+      [`pre`, `post`].includes(mode) &&
+      [`ul`, `ol`, `imageContainer`].includes(thisTag) &&
+      typeof classNamesPayload.li !== `undefined`
+        ? classNamesPayload.li
+        : null
+    const hasOverrideInner =
+      typeof thisClassNamesPayloadInner?.override !== `undefined`
+
     // must update paneFragment optionsPayload classNamesPayload and regenerate classNames [all]
     let thisOverride = {}
+    let thisOverrideInner = {}
 
-    console.log(
-      `handleMutateMarkdown`,
-      nth,
-      childNth,
-      tag,
-      thisTag,
-      overrideTag,
-      hasOverride,
-      childGlobalNth,
-      mode,
-    )
+    // console.log(
+    //  `handleMutateMarkdown mode:${mode} nth:${nth} childNth:${childNth} tag:${thisTag} thisTag:${thisTag} overrideTag:${overrideTag} childGlobalNth:${childGlobalNth}`,
+    // )
+    if (
+      [`pre`, `post`].includes(mode) &&
+      [`ol`, `ul`, `imageContainer`].includes(thisTag) &&
+      hasOverrideInner
+    ) {
+      // must determine actual listItem global nth to insert this +1 li
+      let offset = 0
+      Object.keys(stateLivePreviewMarkdown.listItems).forEach((e: string) => {
+        if (
+          !(
+            (mode === `pre` &&
+              stateLivePreviewMarkdown.listItems[e].parentNth >= nth) ||
+            (mode === `post` &&
+              stateLivePreviewMarkdown.listItems[e].parentNth > nth)
+          )
+        )
+          offset = +e
+      })
+      Object.keys(thisClassNamesPayloadInner.override).forEach((e: any) => {
+        let thatOverrideInner = {}
+        Object.keys(thisClassNamesPayloadInner.override[e]).forEach(
+          (f: any) => {
+            const thisVal = thisClassNamesPayloadInner.override[e][f]
+            if (
+              (mode === `pre` && +f >= offset) ||
+              (mode === `post` && +f > offset)
+            )
+              thatOverrideInner = {
+                ...thatOverrideInner,
+                [`${+f + 1}`]: thisVal,
+              }
+            else thatOverrideInner = { ...thatOverrideInner, [f]: thisVal }
+          },
+        )
+        thisOverrideInner = { ...thisOverrideInner, [e]: thatOverrideInner }
+      })
+    }
+
     if (hasOverride) {
       let overrideNth = 0
       Object.keys(stateLivePreviewMarkdown.listItems).forEach((e) => {
         const checkVal = stateLivePreviewMarkdown.listItems[e]
         if (
-          overrideTag === `li` &&
-          [`ul`, `ol`].includes(thisTag) &&
-          [`pre`, `parentpre`].includes(mode) &&
-          checkVal.parentNth < nth
-        )
-          overrideNth++
-        if (
-          overrideTag === `li` &&
-          [`ul`, `ol`].includes(thisTag) &&
-          [`post`, `parentpost`].includes(mode) &&
-          checkVal.parentNth <= nth
+          (overrideTag === `li` &&
+            [`ul`, `ol`].includes(thisTag) &&
+            [`pre`, `parentpre`].includes(mode) &&
+            checkVal.parentNth < nth) ||
+          (overrideTag === `li` &&
+            [`ul`, `ol`].includes(thisTag) &&
+            [`post`, `parentpost`].includes(mode) &&
+            checkVal.parentNth <= nth)
         )
           overrideNth++
       })
@@ -2593,10 +2633,22 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
             classes: {},
           }
         : classNamesPayload[overrideTag]
+    const newThisClassNamesPayloadInner = hasOverrideInner
+      ? {
+          ...classNamesPayload.li,
+          count: classNamesPayload.li.count + countOffset,
+          override: {
+            ...classNamesPayload.li.override,
+            ...thisOverrideInner,
+          },
+        }
+      : null
     const newClassNamesPayload = {
       ...classNamesPayload,
       [overrideTag]: newThisClassNamesPayload,
     }
+    if (newThisClassNamesPayloadInner)
+      newClassNamesPayload.li = newThisClassNamesPayloadInner
     const reduced = reduceTailwindClasses(newClassNamesPayload)
     const thisOptionsPayload = {
       ...optionsPayload,
@@ -2604,7 +2656,6 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       classNamesModal: reduced?.classNamesModal || ``,
       classNamesPayload: newClassNamesPayload,
     }
-    console.log(`becomes`, thisOptionsPayload)
 
     // mutate markdown
     const oldMarkdownArray = [...stateLivePreviewMarkdown.markdownArray]
@@ -2629,6 +2680,26 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         newMarkdownArray = [...oldMarkdownArray]
         newMarkdownArray[nth] = `${newCurrent.join(`\n`)}\n`
       }
+    } else if (
+      childNth === -1 &&
+      mode === `pre` &&
+      thisTag === `imageContainer`
+    ) {
+      newMarkdownArray = [
+        ...oldMarkdownArray.slice(0, nth),
+        `* ![ImagePlaceholder](ImagePlaceholder)\n`,
+        ...oldMarkdownArray.slice(nth),
+      ]
+    } else if (
+      childNth === -1 &&
+      mode === `post` &&
+      thisTag === `imageContainer`
+    ) {
+      newMarkdownArray = [
+        ...oldMarkdownArray.slice(0, nth + 1),
+        `* ![ImagePlaceholder](ImagePlaceholder)\n`,
+        ...oldMarkdownArray.slice(nth + 1),
+      ]
     } else if (
       (childNth === -1 && mode === `pre`) ||
       (childNth > -1 && mode === `parentpre`)
@@ -2672,7 +2743,6 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         `${listPrefix} ![ImagePlaceholder](ImagePlaceholder)`,
         ...current.slice(childNth),
       ]
-      console.log(newCurrent)
       newMarkdownArray = [...oldMarkdownArray]
       newMarkdownArray[nth] = `${newCurrent.join(`\n`)}\n`
     } else if (childNth > -1 && mode === `imagePost`) {
@@ -2682,7 +2752,6 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         `${listPrefix} ![ImagePlaceholder](ImagePlaceholder)`,
         ...current.slice(childNth + 1),
       ]
-      console.log(newCurrent)
       newMarkdownArray = [...oldMarkdownArray]
       newMarkdownArray[nth] = `${newCurrent.join(`\n`)}\n`
     } else {
@@ -2698,18 +2767,6 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         markdownBody,
       },
     }
-    console.log({
-      payload: [
-        {
-          ...statePaneFragments[paneFragmentId],
-          markdownBody,
-          optionsPayload: thisOptionsPayload,
-          optionsPayloadString: JSON.stringify(thisOptionsPayload),
-        },
-      ],
-      allMarkdown: thisMarkdown,
-      allFiles,
-    })
     const {
       initialStateLivePreview,
       initialStateLivePreviewMarkdown,
@@ -3287,7 +3344,10 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
 
   if (saveStage < SaveStages.NoChanges) return null
 
-  // console.log(statePaneFragments[stateLivePreviewMarkdown.paneFragmentId].optionsPayload.classNamesPayload)
+  // console.log(
+  //  statePaneFragments[stateLivePreviewMarkdown.paneFragmentId].optionsPayload
+  //    .classNamesPayload,
+  // )
   // console.log(stateLivePreview)
   // console.log(stateLivePreviewMarkdown)
   return (

@@ -417,7 +417,10 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
 
         case `ul`:
         case `ol`:
-          specialMode = `list`
+        case `imageContainer`:
+          if (interceptModeTag === `imageContainer`)
+            specialMode = `imageContainer`
+          else specialMode = `list`
           specialModeOn = true
           if (
             [`ul`, `ol`].includes(

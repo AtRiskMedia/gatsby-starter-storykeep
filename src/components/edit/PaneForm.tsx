@@ -33,15 +33,16 @@ import { SaveStages, EditStages, IPaneForm } from '../../types'
 
 const insertModeTags = [
   { name: `p`, title: `Paragraph` },
-  { name: `image`, title: `Image` },
   { name: `li`, title: `List Item` },
   { name: `h2`, title: `Heading 2` },
   { name: `h3`, title: `Heading 3` },
+  { name: `image`, title: `Image` },
+  { name: `imageContainer`, title: `Image Container` },
+  { name: `ul`, title: `List` },
+  { name: `ol`, title: `Ordered List` },
   { name: `h4`, title: `Heading 4` },
   { name: `h5`, title: `Heading 5` },
   { name: `h6`, title: `Heading 6` },
-  { name: `ul`, title: `List` },
-  { name: `ol`, title: `Ordered List` },
 ]
 
 const PaneForm = ({ uuid, payload, flags, fn }: IPaneForm) => {
