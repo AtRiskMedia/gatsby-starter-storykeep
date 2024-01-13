@@ -1131,7 +1131,10 @@ const PaneEditInPlace = ({
       ? `${nth}-${childNth}--${tag}`
       : `${nth}--${tag}`
   const listItemGlobalNth =
-    tag === `img` && typeof listItemsLookup[nth][childNth] !== `undefined`
+    tag === `img` &&
+    listItemsLookup &&
+    typeof listItemsLookup[nth] !== `undefined` &&
+    typeof listItemsLookup[nth][childNth] !== `undefined`
       ? listItemsLookup[nth][childNth]
       : null
   const listItemState =
