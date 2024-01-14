@@ -564,7 +564,7 @@ const TractStackForm = ({
       </section>
 
       <section className="relative bg-slate-50">
-        <div className="mx-6 mb-8 bg-white/50 px-4 py-4 shadow xs:rounded-md xs:px-6">
+        <div className="mx-6 mb-8 bg-white/50 px-4 py-4 shadow xs:rounded-md xs:px-6 xl:max-w-screen-2xl">
           <div className="border-b border-gray-200 pb-1.5 flex items-center justify-between">
             <span className="isolate inline-flex rounded-md shadow-sm">
               {tags.map((tag, idx) => (
