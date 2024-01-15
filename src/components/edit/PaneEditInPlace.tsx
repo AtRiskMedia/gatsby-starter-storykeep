@@ -845,6 +845,10 @@ const InputModalPayload = ({
                 </label>
                 <input
                   name={`${id}--zoomFactor-mobile`}
+                  type="number"
+                  step="0.1"
+                  min="0.1"
+                  max="2"
                   id={`${id}--zoomFactor-mobile`}
                   onChange={(e) => handleChangeEditInPlace(e)}
                   className={classNames(
@@ -863,6 +867,10 @@ const InputModalPayload = ({
                 <input
                   name={`${id}--zoomFactor-tablet`}
                   id={`${id}--zoomFactor-tablet`}
+                  type="number"
+                  step="0.1"
+                  min="0.1"
+                  max="2"
                   onChange={(e) => handleChangeEditInPlace(e)}
                   className={classNames(
                     viewportKey === `tablet`
@@ -883,6 +891,10 @@ const InputModalPayload = ({
                 <input
                   name={`${id}--zoomFactor-desktop`}
                   id={`${id}--zoomFactor-desktop`}
+                  type="number"
+                  step="0.1"
+                  min="0.1"
+                  max="2"
                   onChange={(e) => handleChangeEditInPlace(e)}
                   className={classNames(
                     viewportKey === `desktop`
