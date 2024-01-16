@@ -699,6 +699,10 @@ const InputModalPayload = ({
                 <input
                   name={`${id}--paddingLeft-mobile`}
                   id={`${id}--paddingLeft-mobile`}
+                  type="number"
+                  step="1"
+                  min="0"
+                  max="600"
                   onChange={(e) => handleChangeEditInPlace(e)}
                   className={classNames(
                     viewportKey === `mobile`
@@ -719,6 +723,10 @@ const InputModalPayload = ({
                 <input
                   name={`${id}--paddingLeft-tablet`}
                   id={`${id}--paddingLeft-tablet`}
+                  type="number"
+                  step="1"
+                  min="0"
+                  max="1080"
                   onChange={(e) => handleChangeEditInPlace(e)}
                   className={classNames(
                     viewportKey === `tablet`
@@ -739,6 +747,10 @@ const InputModalPayload = ({
                 <input
                   name={`${id}--paddingLeft-desktop`}
                   id={`${id}--paddingLeft-desktop`}
+                  type="number"
+                  step="1"
+                  min="0"
+                  max="1920"
                   onChange={(e) => handleChangeEditInPlace(e)}
                   className={classNames(
                     viewportKey === `desktop`
@@ -774,6 +786,10 @@ const InputModalPayload = ({
                 <input
                   name={`${id}--paddingTop-mobile`}
                   id={`${id}--paddingTop-mobile`}
+                  type="number"
+                  step="1"
+                  min="0"
+                  max="300"
                   onChange={(e) => handleChangeEditInPlace(e)}
                   className={classNames(
                     viewportKey === `mobile`
@@ -791,6 +807,10 @@ const InputModalPayload = ({
                 <input
                   name={`${id}--paddingTop-tablet`}
                   id={`${id}--paddingTop-tablet`}
+                  type="number"
+                  step="1"
+                  min="0"
+                  max="540"
                   onChange={(e) => handleChangeEditInPlace(e)}
                   className={classNames(
                     viewportKey === `tablet`
@@ -811,6 +831,10 @@ const InputModalPayload = ({
                 <input
                   name={`${id}--paddingTop-desktop`}
                   id={`${id}--paddingTop-desktop`}
+                  type="number"
+                  step="1"
+                  min="0"
+                  max="960"
                   onChange={(e) => handleChangeEditInPlace(e)}
                   className={classNames(
                     viewportKey === `desktop`
