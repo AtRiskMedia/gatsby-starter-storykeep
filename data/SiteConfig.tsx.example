@@ -1,7 +1,7 @@
 import { ISiteConfig } from "../src/types"
 
 export const config: ISiteConfig = {
-  openDemo: false,
-  messageDelay: 7000, // in milliseconds
-  home: "prelaunch",
+  openDemo: process.env.OPENDEMO,
+  messageDelay: process.env.MESSAGE_DELAY,
+  home: process.env.HOME,
 }
