@@ -234,7 +234,7 @@ export interface IEditStoryFragmentFormFlags {
   storyFragmentId: IStoryFragmentId
 }
 
-export interface ISiteBuilderConfig {
+export interface IStoryKeepConfig {
   openDemo: boolean
   messageDelay: number
   home: string
