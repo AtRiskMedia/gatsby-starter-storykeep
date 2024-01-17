@@ -314,6 +314,7 @@ export interface IEditFormPaneFragment {
   state: any // FIX
   handleChange: Function
 }
+
 export interface IFormHandler {
   state: any // FIX
   handleChange: Function
