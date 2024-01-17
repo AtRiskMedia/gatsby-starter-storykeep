@@ -10,7 +10,6 @@ import {
   WrenchScrewdriverIcon,
   ChartPieIcon,
   BoltIcon,
-  // CircleStackIcon,
   UserIcon,
 } from '@heroicons/react/24/outline'
 import { classNames } from '@tractstack/helpers'
@@ -22,6 +21,7 @@ import Logo from '../../assets/logo.svg'
 const Layout = ({ children, current }: ILayout) => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const navLocked = useDrupalStore((state) => state.navLocked)
+  const setNavLocked = useDrupalStore((state) => state.setNavLocked)
   const navigation = [
     {
       id: `dashboard`,
@@ -184,8 +184,10 @@ const Layout = ({ children, current }: ILayout) => {
                                             window.confirm(
                                               `There are unsaved changes. Proceed?`,
                                             )
-                                          )
+                                          ) {
+                                            setNavLocked(false)
                                             navigate(item.href)
+                                          }
                                         } else navigate(item.href)
                                       }}
                                       className={classNames(
@@ -243,8 +245,10 @@ const Layout = ({ children, current }: ILayout) => {
                                             window.confirm(
                                               `There are unsaved changes. Proceed?`,
                                             )
-                                          )
+                                          ) {
+                                            setNavLocked(false)
                                             navigate(action.href)
+                                          }
                                         } else navigate(action.href)
                                       }}
                                       className={classNames(
@@ -321,8 +325,10 @@ const Layout = ({ children, current }: ILayout) => {
                                     window.confirm(
                                       `There are unsaved changes. Proceed?`,
                                     )
-                                  )
+                                  ) {
+                                    setNavLocked(false)
                                     navigate(item.href)
+                                  }
                                 } else navigate(item.href)
                               }}
                               className={classNames(
@@ -378,8 +384,10 @@ const Layout = ({ children, current }: ILayout) => {
                                     window.confirm(
                                       `There are unsaved changes. Proceed?`,
                                     )
-                                  )
+                                  ) {
+                                    setNavLocked(false)
                                     navigate(action.href)
+                                  }
                                 } else navigate(action.href)
                               }}
                               className={classNames(
@@ -452,8 +460,10 @@ const Layout = ({ children, current }: ILayout) => {
                               window.confirm(
                                 `There are unsaved changes. Proceed?`,
                               )
-                            )
+                            ) {
+                              setNavLocked(false)
                               navigate(e.href)
+                            }
                           } else navigate(e.href)
                         }}
                         className="text-mywhite hover:text-mygreen"
