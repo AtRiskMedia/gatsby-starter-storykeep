@@ -6,7 +6,7 @@ import {
 } from '../types'
 
 export async function connect({ fingerprint }: IAxiosConnectProps) {
-  const secret = process.env.CONCIERGE_SECRET || ``
+  const secret = process.env.BUILDER_SECRET_KEY || ``
   const payload = {
     fingerprint,
     secret,
@@ -61,5 +61,20 @@ export async function getTriggerPublish({
   if (process.env.NODE_ENV !== `development`)
     return client.post(`/builder/publish`, payload)
   console.log(`dev mode: skipping triggerPublish`)
+  return null
+}
+
+export async function getSettings() {
+  if (process.env.NODE_ENV !== `development`)
+    return client.get(`/builder/settings`)
+  console.log(`dev mode: skipping settings`)
+  return null
+}
+
+export async function postPublish({ payload }: any) {
+  console.log(payload)
+  if (process.env.NODE_ENV !== `development`)
+    return client.post(`/builder/publish`, payload)
+  console.log(`dev mode: skipping publish`)
   return null
 }

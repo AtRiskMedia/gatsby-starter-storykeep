@@ -1,17 +1,89 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-import React from 'react'
+import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react'
 
+import { useAuthStore } from '../stores/authStore'
 import { useDrupalStore } from '../stores/drupal'
 import { DemoProhibited } from './DemoProhibited'
+import { getSettings } from '../api/services'
+
+const goGetSettings = async () => {
+  try {
+    const response = await getSettings()
+    const data = JSON.parse(response?.data?.data)
+    return { data, error: null }
+  } catch (error: any) {
+    return {
+      error: error?.message,
+      data: null,
+    }
+  }
+}
 
 const Settings = () => {
   const openDemoEnabled = useDrupalStore((state) => state.openDemoEnabled)
-  if (openDemoEnabled) return <DemoProhibited />
+  const [settingsData, setSettingsData] = useState<any>({})
+  const [loading, setLoading] = useState(false)
+  const [loaded, setLoaded] = useState(false)
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn())
 
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target as HTMLInputElement
+    setSettingsData((prev: any) => {
+      return { ...prev, [name]: value }
+    })
+  }
+
+  const handleToggle = (name: string, value: boolean) => {
+    setSettingsData((prev: any) => {
+      return { ...prev, [name]: value }
+    })
+  }
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    console.log(`submitted`, settingsData)
+  }
+
+  useEffect(() => {
+    if (
+      isLoggedIn &&
+      settingsData &&
+      Object.keys(settingsData).length === 0 &&
+      !loading &&
+      !loaded
+    ) {
+      setLoading(true)
+      goGetSettings()
+        .then((res: any) => {
+          setSettingsData({
+            ...res?.data?.frontend,
+            ...res?.data?.storykeep,
+            OPENDEMO: res?.data?.storykeep?.OPENDEMO === `1`,
+          })
+        })
+        .catch((e) => {
+          console.log(`An error occurred.`, e)
+        })
+        .finally(() => setLoaded(true))
+      setLoading(false)
+    }
+  }, [
+    isLoggedIn,
+    settingsData,
+    setSettingsData,
+    loaded,
+    loading,
+    setLoaded,
+    setLoading,
+  ])
+
+  if (openDemoEnabled) return <DemoProhibited />
   return (
     <>
       <section>
-        <form>
+        <form onSubmit={(e) => handleSubmit(e)}>
           <div className="space-y-6">
             <div className="border-b border-mydarkgrey/10 pb-6">
               <h2 className="text-xl font-bold leading-7 text-myblack">
@@ -33,7 +105,7 @@ const Settings = () => {
               <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                 <div className="sm:col-span-5">
                   <label
-                    htmlFor="slogan"
+                    htmlFor="SLOGAN"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Slogan
@@ -42,10 +114,11 @@ const Settings = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
-                        name="slogan"
-                        id="slogan"
+                        name="SLOGAN"
+                        id="SLOGAN"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
-                        placeholder=""
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.SLOGAN}
                       />
                     </div>
                   </div>
@@ -53,7 +126,7 @@ const Settings = () => {
 
                 <div className="sm:col-span-5">
                   <label
-                    htmlFor="footer"
+                    htmlFor="FOOTER"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Footer Text
@@ -62,10 +135,11 @@ const Settings = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
-                        name="footer"
-                        id="footer"
+                        name="FOOTER"
+                        id="FOOTER"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
-                        placeholder=""
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.FOOTER}
                       />
                     </div>
                   </div>
@@ -74,7 +148,7 @@ const Settings = () => {
                 <div className="clear" />
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="home"
+                    htmlFor="HOMEPAGE"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Slug of Story Fragment to use as homepage
@@ -83,10 +157,11 @@ const Settings = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
                       <input
                         type="text"
-                        name="home"
-                        id="home"
+                        name="HOMEPAGE"
+                        id="HOMEPAGE"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
-                        placeholder=""
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.HOMEPAGE}
                       />
                     </div>
                   </div>
@@ -94,7 +169,7 @@ const Settings = () => {
 
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="action"
+                    htmlFor="ACTION"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Conversion Action for Email Sign-up
@@ -103,10 +178,11 @@ const Settings = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
                       <input
                         type="text"
-                        name="action"
-                        id="action"
+                        name="ACTION"
+                        id="ACTION"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
-                        placeholder=""
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.ACTION}
                       />
                     </div>
                   </div>
@@ -115,7 +191,7 @@ const Settings = () => {
                 <div className="clear" />
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="readThreshold"
+                    htmlFor="READ_THRESHOLD"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Read Threshold
@@ -126,11 +202,12 @@ const Settings = () => {
                         type="number"
                         min="1"
                         max="600000"
-                        name="readThreshold"
-                        id="readThreshold"
-                        autoComplete="readThreshold"
+                        name="READ_THRESHOLD"
+                        id="READ_THRESHOLD"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
                         placeholder="42000"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.READ_THRESHOLD}
                       />
                     </div>
                   </div>
@@ -138,7 +215,7 @@ const Settings = () => {
 
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="softReadThreshold"
+                    htmlFor="SOFT_READ_THRESHOLD"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     (Soft) Read Threshold
@@ -149,11 +226,12 @@ const Settings = () => {
                         type="number"
                         min="1"
                         max="600000"
-                        name="softReadThreshold"
-                        id="softReadThreshold"
-                        autoComplete="softReadThreshold"
+                        name="SOFT_READ_THRESHOLD"
+                        id="SOFT_READ_THRESHOLD"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
                         placeholder="7000"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.SOFT_READ_THRESHOLD}
                       />
                     </div>
                   </div>
@@ -162,7 +240,7 @@ const Settings = () => {
                 <div className="clear" />
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="conciergeSync"
+                    htmlFor="CONCIERGE_SYNC"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Concierge Sync frequency (milliseconds)
@@ -173,11 +251,12 @@ const Settings = () => {
                         type="number"
                         min="1"
                         max="600000"
-                        name="conciergeSync"
-                        id="conciergeSync"
-                        autoComplete="conciergeSync"
+                        name="CONCIERGE_SYNC"
+                        id="CONCIERGE_SYNC"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
                         placeholder="45000"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.CONCIERGE_SYNC}
                       />
                     </div>
                   </div>
@@ -185,7 +264,7 @@ const Settings = () => {
 
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="conciergeForceInterval"
+                    htmlFor="CONCIERGE_FORCE_INTERVAL"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Multiplier to force immediate eventStream on page load
@@ -196,11 +275,12 @@ const Settings = () => {
                         type="number"
                         min="1"
                         max="3"
-                        name="conciergeForceInterval"
-                        id="conciergeForceInterval"
-                        autoComplete="conciergeForceInterval"
+                        name="CONCIERGE_FORCE_INTERVAL"
+                        id="CONCIERGE_FORCE_INTERVAL"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
                         placeholder="2"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.CONCIERGE_FORCE_INTERVAL}
                       />
                     </div>
                   </div>
@@ -209,7 +289,7 @@ const Settings = () => {
                 <div className="clear" />
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="impressionsDelay"
+                    htmlFor="IMPRESSIONS_DELAY"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Cycle impressions delay interval (milliseconds)
@@ -220,11 +300,12 @@ const Settings = () => {
                         type="number"
                         min="1"
                         max="600000"
-                        name="impressionsDelay"
-                        id="impressionsDelay"
-                        autoComplete="impressionsDelay"
+                        name="IMPRESSIONS_DELAY"
+                        id="IMPRESSIONS_DELAY"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
                         placeholder="22000"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.IMPRESSIONS_DELAY}
                       />
                     </div>
                   </div>
@@ -232,7 +313,7 @@ const Settings = () => {
 
                 <div className="sm:col-span-full">
                   <label
-                    htmlFor="social"
+                    htmlFor="SOCIAL"
                     className="block text-sm leading-6 text-mydarkgrey"
                   >
                     <span className="font-bold">Social Links payload</span> |
@@ -242,32 +323,13 @@ const Settings = () => {
                   <div className="mt-2">
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-xl">
                       <textarea
-                        name="social"
-                        id="social"
+                        name="SOCIAL"
+                        id="SOCIAL"
                         rows={4}
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
                         defaultValue=""
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="sm:col-span-full">
-                  <label
-                    htmlFor="conciergeNav"
-                    className="block text-sm leading-6 text-mydarkgrey"
-                  >
-                    <span className="font-bold">Admin Panel menu</span> | must
-                    be {`[ {id:string, title:string, href:string} ]`}
-                  </label>
-                  <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-xl">
-                      <textarea
-                        name="conciergeNav"
-                        id="conciergeNav"
-                        rows={7}
-                        className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
-                        defaultValue=""
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.SOCIAL}
                       />
                     </div>
                   </div>
@@ -287,13 +349,17 @@ const Settings = () => {
                 <div className="sm:col-span-full">
                   <div className="flex items-center gap-x-3">
                     <input
-                      id="openDemoEnabled"
-                      name="openDemoEnabled"
-                      type="radio"
+                      id="OPENDEMO"
+                      name="OPENDEMO"
+                      type="checkbox"
                       className="h-4 w-4 border-mylightgrey text-myorange focus:ring-myorange"
+                      checked={settingsData?.OPENDEMO}
+                      onChange={() =>
+                        handleToggle(`OPENDEMO`, !settingsData?.OPENDEMO)
+                      }
                     />
                     <label
-                      htmlFor="openDemoEnabled"
+                      htmlFor="OPENDEMO"
                       className="pl-2 block text-md leading-6 text-mydarkgrey"
                     >
                       <span className="font-bold">
@@ -307,27 +373,37 @@ const Settings = () => {
 
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="messageDelay"
+                    htmlFor="MESSAGE_DELAY"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
-                    Read Threshold
+                    Message Lifetime (milliseconds)
                   </label>
                   <div className="mt-2">
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
                       <input
                         type="number"
                         min="1"
-                        max="600000"
-                        name="messageDelay"
-                        id="messageDelay"
+                        max="60000"
+                        name="MESSAGE_DELAY"
+                        id="MESSAGE_DELAY"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
                         placeholder="7000"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.MESSAGE_DELAY}
                       />
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+          <div className="border-b border-mydarkgrey-900/10 p-6 my-3">
+            <button
+              type="submit"
+              className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-100"
+            >
+              Save Settings
+            </button>
           </div>
         </form>
       </section>

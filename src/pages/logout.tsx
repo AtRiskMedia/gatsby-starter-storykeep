@@ -34,7 +34,7 @@ const LogoutPage = () => {
         <section>
           {stage !== Stages.Booting ? (
             <button
-              className="font-action rounded-md bg-black px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-mygreen hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mygreen"
+              className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-100"
               onClick={() => {
                 setStage(Stages.Booting)
                 if (openDemoEnabled) setOpenDemoEnabled(false)

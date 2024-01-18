@@ -1,17 +1,93 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-import React from 'react'
+import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react'
 
+import { useAuthStore } from '../stores/authStore'
 import { useDrupalStore } from '../stores/drupal'
 import { DemoProhibited } from './DemoProhibited'
+import { getSettings } from '../api/services'
+
+const goGetSettings = async () => {
+  try {
+    const response = await getSettings()
+    const data = JSON.parse(response?.data?.data)
+    return { data, error: null }
+  } catch (error: any) {
+    return {
+      error: error?.message,
+      data: null,
+    }
+  }
+}
 
 const Account = () => {
   const openDemoEnabled = useDrupalStore((state) => state.openDemoEnabled)
-  if (openDemoEnabled) return <DemoProhibited />
+  const [settingsData, setSettingsData] = useState<any>({})
+  const [loading, setLoading] = useState(false)
+  const [loaded, setLoaded] = useState(false)
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn())
 
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target as HTMLInputElement
+    setSettingsData((prev: any) => {
+      return { ...prev, [name]: value }
+    })
+  }
+
+  const handleToggle = (name: string, value: boolean) => {
+    setSettingsData((prev: any) => {
+      return { ...prev, [name]: value }
+    })
+  }
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    console.log(`submitted`, settingsData)
+  }
+
+  useEffect(() => {
+    if (
+      isLoggedIn &&
+      settingsData &&
+      Object.keys(settingsData).length === 0 &&
+      !loading &&
+      !loaded
+    ) {
+      setLoading(true)
+      goGetSettings()
+        .then((res: any) => {
+          setSettingsData({
+            ...res?.data?.concierge,
+            ...res?.data?.frontend,
+            ...res?.data?.storykeep,
+            OAUTH_PUBLIC_KEY: res?.data?.oauth_public_key,
+            OAUTH_PRIVATE_KEY: res?.data?.oauth_private_key,
+            INITIALIZE_SHOPIFY: res?.data?.frontend?.INITIALIZE_SHOPIFY === `1`,
+            NEO4J_ENABLED: res?.data?.concierge?.NEO4J_ENABLED === `1`,
+          })
+        })
+        .catch((e) => {
+          console.log(`An error occurred.`, e)
+        })
+        .finally(() => setLoaded(true))
+      setLoading(false)
+    }
+  }, [
+    isLoggedIn,
+    settingsData,
+    setSettingsData,
+    loaded,
+    loading,
+    setLoaded,
+    setLoading,
+  ])
+
+  if (openDemoEnabled) return <DemoProhibited />
   return (
     <>
       <section>
-        <form>
+        <form onSubmit={(e) => handleSubmit(e)}>
           <div className="space-y-6">
             <div className="border-b border-mydarkgrey/10 pb-6">
               <h2 className="text-xl font-bold leading-7 text-myblack">
@@ -32,7 +108,7 @@ const Account = () => {
               <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                 <div className="sm:col-span-4">
                   <label
-                    htmlFor="siteUrl"
+                    htmlFor="SITE_URL"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Site URL
@@ -41,9 +117,31 @@ const Account = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
                       <input
                         type="text"
-                        name="siteUrl"
-                        id="siteUrl"
+                        name="SITE_URL"
+                        id="SITE_URL"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        value={settingsData?.SITE_URL}
+                        onChange={(e) => handleChange(e)}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="sm:col-span-4">
+                  <label
+                    htmlFor="FRONT_ROOT"
+                    className="block text-sm leading-6 text-mydarkgrey font-bold"
+                  >
+                    Front-end root folder
+                  </label>
+                  <div className="mt-2">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                      <input
+                        type="text"
+                        name="FRONT_ROOT"
+                        id="FRONT_ROOT"
+                        className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        value={settingsData?.FRONT_ROOT}
+                        onChange={(e) => handleChange(e)}
                       />
                     </div>
                   </div>
@@ -61,7 +159,7 @@ const Account = () => {
               <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                 <div className="sm:col-span-4">
                   <label
-                    htmlFor="storyKeepUrl"
+                    htmlFor="STORYKEEP_URL"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Story Keep URL
@@ -70,9 +168,31 @@ const Account = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
                       <input
                         type="text"
-                        name="storyKeepUrl"
-                        id="storyKeepUrl"
+                        name="STORYKEEP_URL"
+                        id="STORYKEEP_URL"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        value={settingsData?.STORYKEEP_URL}
+                        onChange={(e) => handleChange(e)}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="sm:col-span-4">
+                  <label
+                    htmlFor="STORYKEEP_ROOT"
+                    className="block text-sm leading-6 text-mydarkgrey font-bold"
+                  >
+                    Story Keep root folder
+                  </label>
+                  <div className="mt-2">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                      <input
+                        type="text"
+                        name="STORYKEEP_ROOT"
+                        id="STORYKEEP_ROOT"
+                        className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        value={settingsData?.STORYKEEP_ROOT}
+                        onChange={(e) => handleChange(e)}
                       />
                     </div>
                   </div>
@@ -90,7 +210,7 @@ const Account = () => {
               <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                 <div className="sm:col-span-4">
                   <label
-                    htmlFor="conciergeBaseUrl"
+                    htmlFor="CONCIERGE_BASE_URL"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Concierge Base URL
@@ -99,16 +219,18 @@ const Account = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
                       <input
                         type="text"
-                        name="conciergeBaseUrl"
-                        id="conciergeBaseUrl"
+                        name="CONCIERGE_BASE_URL"
+                        id="CONCIERGE_BASE_URL"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        value={settingsData?.CONCIERGE_BASE_URL}
+                        onChange={(e) => handleChange(e)}
                       />
                     </div>
                   </div>
                 </div>
                 <div className="sm:col-span-4">
                   <label
-                    htmlFor="conciergeRefreshTokenUrl"
+                    htmlFor="CONCIERGE_REFRESH_TOKEN_URL"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Concierge Refresh Token URL
@@ -117,9 +239,11 @@ const Account = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
                       <input
                         type="text"
-                        name="conciergeRefreshTokenUrl"
-                        id="conciergeRefreshTokenUrl"
+                        name="CONCIERGE_REFRESH_TOKEN_URL"
+                        id="CONCIERGE_REFRESH_TOKEN_URL"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        value={settingsData?.CONCIERGE_REFRESH_TOKEN_URL}
+                        onChange={(e) => handleChange(e)}
                       />
                     </div>
                   </div>
@@ -127,7 +251,7 @@ const Account = () => {
                 <div className="clear" />
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="conciergeSecret"
+                    htmlFor="SECRET_KEY"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Concierge Secret for Frontend
@@ -136,16 +260,19 @@ const Account = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="password"
-                        name="conciergeSecret"
-                        id="conciergeSecret"
+                        name="SECRET_KEY"
+                        id="SECRET_KEY"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        value={settingsData?.SECRET_KEY}
+                        onChange={(e) => handleChange(e)}
                       />
                     </div>
                   </div>
                 </div>
+
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="conciergeSecretStoryKeep"
+                    htmlFor="BUILDER_SECRET_KEY"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Concierge Secret for Story Keep backend
@@ -154,9 +281,32 @@ const Account = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="password"
-                        name="conciergeSecretStoryKeep"
-                        id="conciergeSecretStoryKeep"
+                        name="BUILDER_SECRET_KEY"
+                        id="BUILDER_SECRET_KEY"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        value={settingsData?.BUILDER_SECRET_KEY}
+                        onChange={(e) => handleChange(e)}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="clear" />
+                <div className="sm:col-span-4">
+                  <label
+                    htmlFor="CONCIERGE_ROOT"
+                    className="block text-sm leading-6 text-mydarkgrey font-bold"
+                  >
+                    Concierge root folder
+                  </label>
+                  <div className="mt-2">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                      <input
+                        type="text"
+                        name="CONCIERGE_ROOT"
+                        id="CONCIERGE_ROOT"
+                        className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        value={settingsData?.CONCIERGE_ROOT}
+                        onChange={(e) => handleChange(e)}
                       />
                     </div>
                   </div>
@@ -175,10 +325,17 @@ const Account = () => {
                 <div className="sm:col-span-full">
                   <div className="flex items-center gap-x-3">
                     <input
-                      id="initializeShopify"
-                      name="initializeShopify"
-                      type="radio"
+                      id="INITIALIZE_SHOPIFY"
+                      name="INITIALIZE_SHOPIFY"
+                      type="checkbox"
                       className="h-4 w-4 border-mylightgrey text-myorange focus:ring-myorange"
+                      checked={settingsData?.INITIALIZE_SHOPIFY}
+                      onChange={() =>
+                        handleToggle(
+                          `INITIALIZE_SHOPIFY`,
+                          !settingsData?.INITIALIZE_SHOPIFY,
+                        )
+                      }
                     />
                     <label
                       htmlFor="initializeShopify"
@@ -202,6 +359,8 @@ const Account = () => {
                         name="shopifyStoreUrl"
                         id="shopifyStoreUrl"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        value={settingsData?.GATSBY_SHOPIFY_STORE_URL}
+                        onChange={(e) => handleChange(e)}
                       />
                     </div>
                   </div>
@@ -209,7 +368,7 @@ const Account = () => {
                 <div className="clear" />
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="shopifyShopPassword"
+                    htmlFor="SHOPIFY_SHOP_PASSWORD"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Shopify Shop Password
@@ -218,16 +377,18 @@ const Account = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="password"
-                        name="shopifyShopPassword"
-                        id="shopifyShopPassword"
+                        name="SHOPIFY_SHOP_PASSWORD"
+                        id="SHOPIFY_SHOP_PASSWORD"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        value={settingsData?.SHOPIFY_SHOP_PASSWORD}
+                        onChange={(e) => handleChange(e)}
                       />
                     </div>
                   </div>
                 </div>
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="shopifyStorefrontAccessToken"
+                    htmlFor="GATSBY_STOREFRONT_ACCESS_TOKEN"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Shopify Storefront Access Token
@@ -236,16 +397,18 @@ const Account = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="password"
-                        name="shopifyStorefrontAccessToken"
-                        id="shopifyStorefrontAccessToken"
+                        name="GATSBY_STOREFRONT_ACCESS_TOKEN"
+                        id="GATSBY_STOREFRONT_ACCESS_TOKEN"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        value={settingsData?.GATSBY_STOREFRONT_ACCESS_TOKEN}
+                        onChange={(e) => handleChange(e)}
                       />
                     </div>
                   </div>
                 </div>
                 <div className="sm:col-span-4">
                   <label
-                    htmlFor="localStorageKey"
+                    htmlFor="LOCAL_STORAGE_KEY"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Shopify localStorageKey
@@ -254,10 +417,12 @@ const Account = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
                       <input
                         type="text"
-                        name="localStorageKey"
-                        id="localStorageKey"
+                        name="LOCAL_STORAGE_KEY"
+                        id="LOCAL_STORAGE_KEY"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
                         placeholder="localStorageKey"
+                        value={settingsData?.LOCAL_STORAGE_KEY}
+                        onChange={(e) => handleChange(e)}
                       />
                     </div>
                   </div>
@@ -277,10 +442,17 @@ const Account = () => {
                 <div className="sm:col-span-full">
                   <div className="flex items-center gap-x-3">
                     <input
-                      id="neo4jEnabled"
-                      name="neo4jEnabled"
-                      type="radio"
+                      id="NEO4J_ENABLED"
+                      name="NEO4J_ENABLED"
+                      type="checkbox"
                       className="h-4 w-4 border-mylightgrey text-myorange focus:ring-myorange"
+                      checked={settingsData?.NEO4J_ENABLED}
+                      onChange={() =>
+                        handleToggle(
+                          `NEO4J_ENABLED`,
+                          !settingsData?.NEO4J_ENABLED,
+                        )
+                      }
                     />
                     <label
                       htmlFor="neo4jEnabled"
@@ -292,7 +464,7 @@ const Account = () => {
                 </div>
                 <div className="sm:col-span-4">
                   <label
-                    htmlFor="neo4jUri"
+                    htmlFor="NEO4J_URI"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Neo4j URI
@@ -301,9 +473,11 @@ const Account = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
                       <input
                         type="text"
-                        name="neo4jUri"
-                        id="neo4jUri"
+                        name="NEO4J_URI"
+                        id="NEO4J_URI"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.NEO4J_URI}
                       />
                     </div>
                   </div>
@@ -311,7 +485,7 @@ const Account = () => {
                 <div className="clear" />
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="neo4jUser"
+                    htmlFor="NEO4J_USER"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Neo4j User
@@ -320,16 +494,18 @@ const Account = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
-                        name="neo4jUser"
-                        id="neo4jUser"
+                        name="NEO4J_USER"
+                        id="NEO4J_USER"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.NEO4J_USER}
                       />
                     </div>
                   </div>
                 </div>
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="neo4jPassword"
+                    htmlFor="NEO4J_SECRET"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Neo4j Password
@@ -338,9 +514,11 @@ const Account = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="password"
-                        name="neo4jPassword"
-                        id="neo4jPassword"
+                        name="NEO4J_SECRET"
+                        id="NEO4J_SECRET"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.NEO4J_SECRET}
                       />
                     </div>
                   </div>
@@ -360,7 +538,7 @@ const Account = () => {
               <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="dbHost"
+                    htmlFor="DB_HOST"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Database Host
@@ -369,17 +547,19 @@ const Account = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
-                        name="dbHost"
-                        id="dbHost"
+                        name="DB_HOST"
+                        id="DB_HOST"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
                         placeholder="localhost"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.DB_HOST}
                       />
                     </div>
                   </div>
                 </div>
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="dbName"
+                    htmlFor="DB_NAME"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Database Name
@@ -388,10 +568,12 @@ const Account = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
-                        name="dbName"
-                        id="dbName"
+                        name="DB_NAME"
+                        id="DB_NAME"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
                         placeholder="tractstack"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.DB_NAME}
                       />
                     </div>
                   </div>
@@ -401,7 +583,7 @@ const Account = () => {
 
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="dbUser"
+                    htmlFor="DB_USER"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Database User
@@ -410,16 +592,18 @@ const Account = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
-                        name="dbUser"
-                        id="dbUser"
+                        name="DB_USER"
+                        id="DB_USER"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.DB_USER}
                       />
                     </div>
                   </div>
                 </div>
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="dbPassword"
+                    htmlFor="DB_PASSWORD"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Database Password
@@ -428,9 +612,11 @@ const Account = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="password"
-                        name="dbPassword"
-                        id="dbPassword"
+                        name="DB_PASSWORD"
+                        id="DB_PASSWORD"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.DB_PASSWORD}
                       />
                     </div>
                   </div>
@@ -449,7 +635,7 @@ const Account = () => {
               <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                 <div className="sm:col-span-3">
                   <label
-                    htmlFor="drupalUrl"
+                    htmlFor="DRUPAL_URL"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Drupal URL
@@ -458,16 +644,18 @@ const Account = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
                       <input
                         type="text"
-                        name="drupalUrl"
-                        id="drupalUrl"
+                        name="DRUPAL_URL"
+                        id="DRUPAL_URL"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.DRUPAL_URL}
                       />
                     </div>
                   </div>
                 </div>
                 <div className="sm:col-span-1">
                   <label
-                    htmlFor="drupalApiBase"
+                    htmlFor="DRUPAL_APIBASE"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Drupal API Base
@@ -476,10 +664,12 @@ const Account = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
-                        name="drupalApiBase"
-                        id="drupalApiBase"
+                        name="DRUPAL_APIBASE"
+                        id="DRUPAL_APIBASE"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
                         placeholder="jsonapi"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.DRUPAL_APIBASE}
                       />
                     </div>
                   </div>
@@ -487,7 +677,7 @@ const Account = () => {
                 <div className="clear" />
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="basicAuthUsername"
+                    htmlFor="BASIC_AUTH_USERNAME"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Drupal Username
@@ -496,16 +686,18 @@ const Account = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
-                        name="basicAuthUsername"
-                        id="basicAuthUsername"
+                        name="BASIC_AUTH_USERNAME"
+                        id="BASIC_AUTH_USERNAME"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.BASIC_AUTH_USERNAME}
                       />
                     </div>
                   </div>
                 </div>
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="basicAuthPassword"
+                    htmlFor="BASIC_AUTH_PASSWORD"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Drupal Password
@@ -514,9 +706,11 @@ const Account = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="password"
-                        name="basicAuthPassword"
-                        id="basicAuthPassword"
+                        name="BASIC_AUTH_PASSWORD"
+                        id="BASIC_AUTH_PASSWORD"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.BASIC_AUTH_PASSWORD}
                       />
                     </div>
                   </div>
@@ -524,7 +718,7 @@ const Account = () => {
                 <div className="clear" />
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="drupalOauthClientId"
+                    htmlFor="DRUPAL_OAUTH_CLIENT_ID"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Drupal Oauth Client ID
@@ -533,17 +727,19 @@ const Account = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
-                        name="drupalOauthClientId"
-                        id="drupalOauthClientId"
+                        name="DRUPAL_OAUTH_CLIENT_ID"
+                        id="DRUPAL_OAUTH_CLIENT_ID"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
                         placeholder="builder"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.DRUPAL_OAUTH_CLIENT_ID}
                       />
                     </div>
                   </div>
                 </div>
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="drupalOauthClientSecret"
+                    htmlFor="DRUPAL_OAUTH_CLIENT_SECRET"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Drupal Oauth Client Secret
@@ -552,9 +748,11 @@ const Account = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="password"
-                        name="drupalOauthClientSecret"
-                        id="drupalOauthClientSecret"
+                        name="DRUPAL_OAUTH_CLIENT_SECRET"
+                        id="DRUPAL_OAUTH_CLIENT_SECRET"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.DRUPAL_OAUTH_CLIENT_SECRET}
                       />
                     </div>
                   </div>
@@ -562,7 +760,7 @@ const Account = () => {
                 <div className="clear" />
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="drupalOauthGrantType"
+                    htmlFor="DRUPAL_OAUTH_GRANT_TYPE"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Drupal Oauth Grant Type
@@ -571,17 +769,19 @@ const Account = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
-                        name="drupalOauthGrantType"
-                        id="drupalOauthGrantType"
+                        name="DRUPAL_OAUTH_GRANT_TYPE"
+                        id="DRUPAL_OAUTH_GRANT_TYPE"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
                         placeholder="password"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.DRUPAL_OAUTH_GRANT_TYPE}
                       />
                     </div>
                   </div>
                 </div>
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="drupalOauthScope"
+                    htmlFor="DRUPAL_OAUTH_SCOPE"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Drupal Oauth Scope
@@ -590,16 +790,86 @@ const Account = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
-                        name="drupalOauthScope"
-                        id="drupalOauthScope"
+                        name="DRUPAL_OAUTH_SCOPE"
+                        id="DRUPAL_OAUTH_SCOPE"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
                         placeholder="builder"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.DRUPAL_OAUTH_SCOPE}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="sm:col-span-4">
+                  <label
+                    htmlFor="DRUPAL_OAUTH_ROOT"
+                    className="block text-sm leading-6 text-mydarkgrey font-bold"
+                  >
+                    Drupal Oauth folder
+                  </label>
+                  <div className="mt-2">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                      <input
+                        type="text"
+                        name="DRUPAL_OAUTH_ROOT"
+                        id="DRUPAL_OAUTH_ROOT"
+                        className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.DRUPAL_OAUTH_ROOT}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="sm:col-span-full">
+                  <label
+                    htmlFor="OAUTH_PUBLIC_KEY"
+                    className="block text-sm leading-6 text-mydarkgrey font-bold"
+                  >
+                    Drupal Oauth Public Key
+                  </label>
+                  <div className="mt-2">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
+                      <textarea
+                        name="OAUTH_PUBLIC_KEY"
+                        id="OAUTH_PUBLIC_KEY"
+                        rows={5}
+                        className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.OAUTH_PUBLIC_KEY}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="sm:col-span-full">
+                  <label
+                    htmlFor="OAUTH_PRIVATE_KEY"
+                    className="block text-sm leading-6 text-mydarkgrey font-bold"
+                  >
+                    Drupal Oauth Private Key
+                  </label>
+                  <div className="mt-2">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
+                      <textarea
+                        name="OAUTH_PRIVATE_KEY"
+                        id="OAUTH_PRIVATE_KEY"
+                        rows={5}
+                        className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.OAUTH_PRIVATE_KEY}
                       />
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+          <div className="border-b border-mydarkgrey-900/10 p-6 my-3">
+            <button
+              type="submit"
+              className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-100"
+            >
+              Save Settings
+            </button>
           </div>
         </form>
       </section>

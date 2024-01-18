@@ -19,7 +19,7 @@ function logout() {
 
 function getAuthData() {
   return {
-    secret: process.env.CONCIERGE_SECRET,
+    secret: process.env.BUILDER_SECRET_KEY,
   }
 }
 
