@@ -2775,10 +2775,10 @@
   dependencies:
     buffer "^6.0.3"
 
-"@tractstack/nivo@0.1.9":
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/@tractstack/nivo/-/nivo-0.1.9.tgz#4443f77426140a508578530bc388a9290c803138"
-  integrity sha512-xTCTdnstXMekmzmWciPtLRPCt7MnKksqwO5NJM3Adxgq3Cglswp5jOMLRH8xMc+tEJ25pmZAK3wov2+mkzo7yQ==
+"@tractstack/nivo@0.1.10":
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/@tractstack/nivo/-/nivo-0.1.10.tgz#d9e3b56b1fe7fcf53314c45f33828000ff257c78"
+  integrity sha512-6G2E3B1uy5Nyu5WPSJ92fUmrdTUnWICC9bJ1l9SDIRmMBWiIcn4TQO1gamtZE01+i896pIL45HkKALrc6SFVFQ==
   dependencies:
     "@nivo/core" "^0.84.0"
     "@nivo/generators" "^0.84.0"

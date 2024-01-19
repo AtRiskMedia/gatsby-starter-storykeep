@@ -303,7 +303,7 @@ const Dashboard = () => {
               <div className="h-80 m-3">
                 {loadedDashboardPayloads ? (
                   <StoryFragmentActivitySwarm
-                    handleClick={handleClick}
+                    handleClick={(e)=>handleClick(e)}
                     data={{
                       data: storyFragmentActivityData,
                       groups: [`storyfragment`],
@@ -321,7 +321,7 @@ const Dashboard = () => {
               <div className="h-80 mt-2">
                 {loadedDashboardPayloads ? (
                   <PaneActivitySwarm
-                    handleClick={handleClick}
+                    handleClick={(e)=>handleClick(e)}
                     data={{ data: paneActivityData, groups: [`pane`] }}
                   />
                 ) : null}

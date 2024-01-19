@@ -44,7 +44,7 @@
     "@heroicons/react": "2.0.18",
     "@tractstack/drupal-react-oauth-provider": "0.1.0",
     "@tractstack/helpers": "0.1.16",
-    "@tractstack/nivo": "0.1.9",
+    "@tractstack/nivo": "0.1.10",
     "@tractstack/types": "0.1.3",
     "babel-plugin-styled-components": "2.1.4",
     "deep-equal": "2.2.3",
