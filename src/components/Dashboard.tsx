@@ -134,6 +134,7 @@ const processStoryFragmentSwarm = (data: any) => {
 }
 
 const Dashboard = () => {
+  const [maxAttempts, setMaxAttempts] = useState<undefined | boolean>(undefined)
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn())
   const allTractStacks = useDrupalStore((state) => state.allTractStacks)
   const allStoryFragments = useDrupalStore((state) => state.allStoryFragments)
@@ -191,9 +192,6 @@ const Dashboard = () => {
   const [loadingDashboardPayloads, setLoadingDashboardPayloads] =
     useState(false)
   const [loadedDashboardPayloads, setLoadedDashboardPayloads] = useState(false)
-  const [maxRetryDashboardPayloads, setMaxRetyDashboardPayloads] = useState<
-    undefined | boolean
-  >(undefined)
 
   const handleClick = (e: any) => {
     if (e.group === `pane`) {
@@ -217,13 +215,19 @@ const Dashboard = () => {
     } else console.log(`missed on`, e)
   }
 
+      console.log(maxAttempts, typeof maxAttempts)
   useEffect(() => {
     if (
       !loadingDashboardPayloads &&
       !loadedDashboardPayloads &&
-      !maxRetryDashboardPayloads &&
+      !maxAttempts &&
       isLoggedIn
     ) {
+      if (typeof maxAttempts === `undefined`) console.log(1)
+      if (typeof maxAttempts === `boolean` && !maxAttempts) console.log(2)
+      if (typeof maxAttempts === `undefined`) setMaxAttempts(false)
+      if (typeof maxAttempts === `boolean` && !maxAttempts)
+        setMaxAttempts(true)
       setLoadingDashboardPayloads(true)
       goGetDashboardPayloads()
         .then((res: any) => {
@@ -238,18 +242,7 @@ const Dashboard = () => {
             )
             setRecentMetricsData(payload.recentMetrics[0])
             setLoadedDashboardPayloads(true)
-          } else {
-            if (typeof maxRetryDashboardPayloads === `undefined`) {
-              setMaxRetyDashboardPayloads(false)
-              setLoadingDashboardPayloads(false)
-            } else if (
-              typeof maxRetryDashboardPayloads === `boolean` &&
-              !maxRetryDashboardPayloads
-            ) {
-              setMaxRetyDashboardPayloads(true)
-              setLoadingDashboardPayloads(false)
-            }
-          }
+          } else setLoadingDashboardPayloads(false)
         })
         .catch((e) => {
           console.log(`An error occurred.`, e)
@@ -259,7 +252,7 @@ const Dashboard = () => {
     isLoggedIn,
     loadedDashboardPayloads,
     loadingDashboardPayloads,
-    maxRetryDashboardPayloads,
+    maxAttempts,
   ])
 
   return (

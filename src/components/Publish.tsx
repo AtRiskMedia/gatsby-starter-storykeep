@@ -83,7 +83,7 @@ const Publish = () => {
       setPublish(false)
       setPublishing(false)
     }
-  }, [saved, publishing, publish])
+  }, [whitelistArrayUnique, saved, publishing, publish])
 
   if (openDemoEnabled) return <DemoProhibited />
   return (
