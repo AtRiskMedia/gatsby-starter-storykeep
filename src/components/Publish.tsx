@@ -76,7 +76,7 @@ const Publish = () => {
   useEffect(() => {
     if (publish && !publishing && !saved) {
       setPublishing(true)
-      postPublish({ payload: { todo: true } })
+      postPublish({ payload: { whitelist: whitelistArrayUnique } })
       setSaved(true)
     }
     if (saved && publish && publishing) {
