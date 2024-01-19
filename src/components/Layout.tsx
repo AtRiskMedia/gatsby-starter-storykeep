@@ -146,7 +146,7 @@ const Layout = ({ children, current }: ILayout) => {
                       </button>
                     </div>
                   </Transition.Child>
-                  <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-black/95 px-6 pb-2 ring-1 ring-white/10">
+                  <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-myblack px-6 pb-2 ring-1 ring-white/10">
                     <div className="flex h-16 shrink-0 items-center">
                       <Logo
                         className="h-8 w-auto"
@@ -165,8 +165,8 @@ const Layout = ({ children, current }: ILayout) => {
                                       to={item.href}
                                       className={classNames(
                                         item.current
-                                          ? `mydarkgrey text-white`
-                                          : `text-mylightgrey hover:text-white hover:mydarkgrey`,
+                                          ? `text-mygreen`
+                                          : `text-mywhite/80 hover:text-mygreen`,
                                         `group flex gap-x-3 rounded-md p-2 text-sm font-bold`,
                                       )}
                                     >
@@ -192,8 +192,8 @@ const Layout = ({ children, current }: ILayout) => {
                                       }}
                                       className={classNames(
                                         item.current
-                                          ? `mydarkgrey text-white`
-                                          : `text-mylightgrey hover:text-white hover:mydarkgrey`,
+                                          ? `text-mygreen`
+                                          : `text-mywhite/80 hover:text-mygreen`,
                                         `group flex gap-x-3 rounded-md p-2 text-sm font-bold`,
                                       )}
                                     >
@@ -222,8 +222,8 @@ const Layout = ({ children, current }: ILayout) => {
                                       to={action.href}
                                       className={classNames(
                                         action.current
-                                          ? `mydarkgrey text-white`
-                                          : `text-mylightgrey hover:text-white hover:mydarkgrey`,
+                                          ? `text-mygreen`
+                                          : `text-mywhite/80 hover:text-mygreen`,
                                         `group flex gap-x-3 rounded-md p-2 text-sm font-bold`,
                                       )}
                                     >
@@ -253,8 +253,8 @@ const Layout = ({ children, current }: ILayout) => {
                                       }}
                                       className={classNames(
                                         action.current
-                                          ? `mydarkgrey text-white`
-                                          : `text-mylightgrey hover:text-white hover:mydarkgrey`,
+                                          ? `text-mygreen`
+                                          : `text-mywhite/80 hover:text-mygreen`,
                                         `group flex gap-x-3 rounded-md p-2 text-sm font-bold`,
                                       )}
                                     >
@@ -290,7 +290,7 @@ const Layout = ({ children, current }: ILayout) => {
               : `hidden xl:fixed xl:inset-y-0 xl:flex xl:w-72 xl:flex-col`,
           )}
         >
-          <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-black px-6">
+          <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-myblack px-6">
             <div className="flex h-16 shrink-0 items-center">
               <Logo className="h-8 w-auto" alt="Tract Stack by At Risk Media" />
             </div>
@@ -306,8 +306,8 @@ const Layout = ({ children, current }: ILayout) => {
                               to={item.href}
                               className={classNames(
                                 item.current
-                                  ? `text-white`
-                                  : `text-mylightgrey hover:text-white hover:mydarkgrey`,
+                                  ? `text-mygreen`
+                                  : `text-mywhite/80 hover:text-mygreen`,
                                 `group flex gap-x-3 rounded-md p-2 text-lg font-bold`,
                               )}
                             >
@@ -333,8 +333,8 @@ const Layout = ({ children, current }: ILayout) => {
                               }}
                               className={classNames(
                                 item.current
-                                  ? `text-white`
-                                  : `text-mylightgrey hover:text-white hover:mydarkgrey`,
+                                  ? `text-mygreen`
+                                  : `text-mywhite/80 hover:text-mygreen`,
                                 `group flex gap-x-3 rounded-md p-2 text-lg font-bold`,
                               )}
                             >
@@ -363,8 +363,8 @@ const Layout = ({ children, current }: ILayout) => {
                               to={action.href}
                               className={classNames(
                                 action.current
-                                  ? `mydarkgrey text-white`
-                                  : `text-mylightgrey hover:text-white hover:mydarkgrey`,
+                                  ? `text-mygreen`
+                                  : `text-mywhite/80 hover:text-mygreen`,
                                 `group flex gap-x-3 rounded-md p-2 text-md font-bold`,
                               )}
                             >
@@ -392,8 +392,8 @@ const Layout = ({ children, current }: ILayout) => {
                               }}
                               className={classNames(
                                 action.current
-                                  ? `mydarkgrey text-white`
-                                  : `text-mylightgrey hover:text-white hover:mydarkgrey`,
+                                  ? `text-mygreen`
+                                  : `text-mywhite/80 hover:text-mygreen`,
                                 `group flex gap-x-3 rounded-md p-2 text-md font-bold`,
                               )}
                             >
@@ -422,7 +422,7 @@ const Layout = ({ children, current }: ILayout) => {
         <div
           className={classNames(
             current === `storykeepInner` ? `` : `xl:hidden`,
-            `z-99 sticky top-0 flex items-center gap-x-6 bg-black px-4 py-4 shadow-sm`,
+            `z-99 sticky top-0 flex items-center gap-x-6 bg-myblack px-4 py-4 shadow-sm`,
           )}
         >
           <button
@@ -446,7 +446,7 @@ const Layout = ({ children, current }: ILayout) => {
                       <Link
                         to={e.href}
                         title={e.name}
-                        className="text-mywhite hover:text-mygreen"
+                        className="text-mywhite/80 hover:text-mygreen"
                       >
                         <span className="sr-only">{e.name}</span>
                         <e.icon className="h-6 w-6" aria-hidden="true" />
@@ -466,7 +466,7 @@ const Layout = ({ children, current }: ILayout) => {
                             }
                           } else navigate(e.href)
                         }}
-                        className="text-mywhite hover:text-mygreen"
+                        className="text-mywhite/80 hover:text-mygreen"
                       >
                         <span className="sr-only">{e.name}</span>
                         <e.icon className="h-6 w-6" aria-hidden="true" />

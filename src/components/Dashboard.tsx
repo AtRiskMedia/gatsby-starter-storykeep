@@ -223,8 +223,7 @@ const Dashboard = () => {
       isLoggedIn
     ) {
       if (typeof maxAttempts === `undefined`) setMaxAttempts(false)
-      if (typeof maxAttempts === `boolean` && !maxAttempts)
-        setMaxAttempts(true)
+      if (typeof maxAttempts === `boolean` && !maxAttempts) setMaxAttempts(true)
       setLoadingDashboardPayloads(true)
       goGetDashboardPayloads()
         .then((res: any) => {
@@ -303,7 +302,7 @@ const Dashboard = () => {
               <div className="h-80 m-3">
                 {loadedDashboardPayloads ? (
                   <StoryFragmentActivitySwarm
-                    handleClick={(e)=>handleClick(e)}
+                    handleClick={(e) => handleClick(e)}
                     data={{
                       data: storyFragmentActivityData,
                       groups: [`storyfragment`],
@@ -321,7 +320,7 @@ const Dashboard = () => {
               <div className="h-80 mt-2">
                 {loadedDashboardPayloads ? (
                   <PaneActivitySwarm
-                    handleClick={(e)=>handleClick(e)}
+                    handleClick={(e) => handleClick(e)}
                     data={{ data: paneActivityData, groups: [`pane`] }}
                   />
                 ) : null}

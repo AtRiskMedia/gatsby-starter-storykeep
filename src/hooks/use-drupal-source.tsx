@@ -30,14 +30,11 @@ export const useDrupalSource = async () => {
       sourced.map((result: any) => {
         if (result && result[0] && result[1]) {
           const thisURL =
-            result[0] === `node` &&
-            result[1] === `markdown`
+            result[0] === `node` && result[1] === `markdown`
               ? `${baseURL}${apiBase}/${result[0]}/${result[1]}?include=field_image,field_image_svg&fields[file--file]=uri,url,filemime,filename`
-              :
-            result[0] === `node` &&
-            result[1] === `menu`
-              ? `${baseURL}${apiBase}/${result[0]}/${result[1]}?include=field_image_logo,field_svg_logo&fields[file--file]=uri,url,filemime,filename`
-              : `${baseURL}${apiBase}/${result[0]}/${result[1]}`
+              : result[0] === `node` && result[1] === `menu`
+                ? `${baseURL}${apiBase}/${result[0]}/${result[1]}?include=field_image_logo,field_svg_logo&fields[file--file]=uri,url,filemime,filename`
+                : `${baseURL}${apiBase}/${result[0]}/${result[1]}`
           return fetch(thisURL)
         }
         return null
