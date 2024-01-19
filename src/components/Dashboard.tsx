@@ -215,7 +215,6 @@ const Dashboard = () => {
     } else console.log(`missed on`, e)
   }
 
-      console.log(maxAttempts, typeof maxAttempts)
   useEffect(() => {
     if (
       !loadingDashboardPayloads &&
@@ -223,8 +222,6 @@ const Dashboard = () => {
       !maxAttempts &&
       isLoggedIn
     ) {
-      if (typeof maxAttempts === `undefined`) console.log(1)
-      if (typeof maxAttempts === `boolean` && !maxAttempts) console.log(2)
       if (typeof maxAttempts === `undefined`) setMaxAttempts(false)
       if (typeof maxAttempts === `boolean` && !maxAttempts)
         setMaxAttempts(true)
