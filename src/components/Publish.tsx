@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 
 import { useDrupalStore } from '../stores/drupal'
 import { DemoProhibited } from './DemoProhibited'
@@ -10,11 +10,11 @@ const Publish = () => {
   const [saved, setSaved] = useState(false)
   const [publishing, setPublishing] = useState(false)
   const [publish, setPublish] = useState(false)
+  const [payload, setPayload] = useState<any>({})
   const allPanes = useDrupalStore((state) => state.allPanes)
   const openDemoEnabled = useDrupalStore((state) => state.openDemoEnabled)
 
   let whitelistString = ``
-  console.log(`extracting tailwind.whitelist`)
   Object.keys(allPanes).forEach((e: any) => {
     const thisPayload = JSON.parse(allPanes[e].optionsPayload)
     thisPayload?.paneFragmentsPayload?.forEach((f: any) => {
@@ -64,27 +64,51 @@ const Publish = () => {
     })
   })
   const whitelistArray = whitelistString.split(` `)
-  const whitelistArrayUnique = whitelistArray.filter(
-    (item, index) => whitelistArray.indexOf(item) === index,
-  )
+  const whitelistArrayUnique = whitelistArray
+    .filter((item, index) => whitelistArray.indexOf(item) === index)
+    .filter((e) => e)
 
   const handleClick = () => {
     setSaved(false)
     setPublish(true)
   }
 
+  const goPostPublish = useCallback(async () => {
+    try {
+      const response = await postPublish({
+        payload: { whitelist: whitelistArrayUnique },
+      })
+      const data = response?.data
+      if (data) {
+        return { data, error: null }
+      }
+      return { data: null, error: null }
+    } catch (error: any) {
+      return {
+        error: error?.response?.data?.message || error?.message,
+        graph: null,
+      }
+    }
+  }, [whitelistArrayUnique])
+
   useEffect(() => {
     if (publish && !publishing && !saved) {
       setPublishing(true)
-      postPublish({ payload: { whitelist: whitelistArrayUnique } })
-      setSaved(true)
+      goPostPublish().then((res: any) => {
+        if (res?.data && res.data?.data) {
+          const newPayload = JSON.parse(res.data.data)
+          setPayload(newPayload)
+          setSaved(true)
+        }
+      })
     }
     if (saved && publish && publishing) {
       setPublish(false)
       setPublishing(false)
     }
-  }, [whitelistArrayUnique, saved, publishing, publish])
+  }, [saved, publishing, publish, goPostPublish])
 
+  console.log(payload)
   if (openDemoEnabled) return <DemoProhibited />
   return (
     <>
@@ -112,7 +136,11 @@ const Publish = () => {
               >
                 {saved ? (
                   <div className="text-xl text-myorange pb-12">
-                    <p>Site rebuild has been queued.</p>
+                    {payload.build ? (
+                      <p>Site rebuild has been queued.</p>
+                    ) : payload.locked ? (
+                      <p>Site rebuild has already been queued.</p>
+                    ) : null}
                   </div>
                 ) : null}
               </div>
