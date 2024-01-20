@@ -33,8 +33,7 @@ const ConciergeAPI = ({ children }: IReactChild) => {
     }
   }, [login, stage, setStage, openDemoEnabled, validToken])
 
-  if (stage === Stages.Activated) return children
-  return null
+  return children
 }
 
 export default ConciergeAPI

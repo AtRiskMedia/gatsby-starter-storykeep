@@ -8,7 +8,7 @@ import { useDrupalCollections } from '../hooks/use-drupal-collections'
 import { useDrupalSource } from '../hooks/use-drupal-source'
 import Login from '../components/Login'
 import DrupalApi from '../components/DrupalApi'
-import LoginDetails from '../components/LoginDetails'
+import ConciergeApi from '../components/ConciergeApi'
 import { Stages } from '../types'
 
 const LoginPage = () => {
@@ -119,7 +119,9 @@ const LoginPage = () => {
   return (
     <DrupalProvider config={drupalConfig}>
       <DrupalApi>
-        {stage < Stages.Authenticated ? <Login /> : <LoginDetails />}
+        <ConciergeApi>
+          <Login />
+        </ConciergeApi>
       </DrupalApi>
     </DrupalProvider>
   )
