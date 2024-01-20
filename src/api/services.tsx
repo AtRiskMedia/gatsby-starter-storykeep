@@ -71,6 +71,13 @@ export async function getSettings() {
   return null
 }
 
+export async function postSettings({ payload }: any) {
+  if (process.env.NODE_ENV !== `development`)
+    return client.post(`/builder/settings`, payload)
+  console.log(`dev mode: skipping post settings`)
+  return null
+}
+
 export async function postPublish({ payload }: any) {
   console.log(payload)
   if (process.env.NODE_ENV !== `development`)

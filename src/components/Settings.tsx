@@ -1,10 +1,16 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  ChangeEvent,
+  FormEvent,
+} from 'react'
 
 import { useAuthStore } from '../stores/authStore'
 import { useDrupalStore } from '../stores/drupal'
 import { DemoProhibited } from './DemoProhibited'
-import { getSettings } from '../api/services'
+import { getSettings, postSettings } from '../api/services'
 
 const goGetSettings = async () => {
   try {
@@ -26,6 +32,24 @@ const Settings = () => {
   const [loaded, setLoaded] = useState(false)
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn())
 
+  const goPostSettings = useCallback(async () => {
+    try {
+      const response = await postSettings({
+        payload: { ...settingsData },
+      })
+      const data = response?.data
+      if (data) {
+        return { data, error: null }
+      }
+      return { data: null, error: null }
+    } catch (error: any) {
+      return {
+        error: error?.response?.data?.message || error?.message,
+        graph: null,
+      }
+    }
+  }, [settingsData])
+
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -43,6 +67,7 @@ const Settings = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    goPostSettings()
     console.log(`submitted`, settingsData)
   }
 
