@@ -9,7 +9,7 @@ export const useDrupalSource = async () => {
   const allCollections = useDrupalStore((state) => state.allCollections)
   const regexp = /(file|node|paragraph)--([_a-z]+[_a-z0-9]*$)/
   const apiBase = process.env.DRUPAL_APIBASE
-  const baseURL = process.env.DRUPAL_URL
+  const baseURL = process.env.DRUPAL_URL_BACK
 
   if (stage === Stages.SourceLoad && !locked) {
     setLocked(true)

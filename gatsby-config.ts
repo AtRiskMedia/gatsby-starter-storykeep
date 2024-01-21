@@ -29,7 +29,7 @@ const config: GatsbyConfig = {
     {
       resolve: 'gatsby-source-shopify',
       options: {
-        password: process.env.SHOPIFY_SHOP_PASSWORD,
+        password: process.env.SHOPIFY_SHOP_PASSWORD_BACK,
         storeUrl: process.env.GATSBY_SHOPIFY_STORE_URL,
         shopifyConnections: ['collections'],
       },

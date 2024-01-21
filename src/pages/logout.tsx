@@ -19,7 +19,7 @@ const LogoutPage = () => {
   const stage = useDrupalStore((state) => state.stage)
   const setStage = useDrupalStore((state) => state.setStage)
   const drupalConfig = {
-    url: process.env.DRUPAL_URL || ``,
+    url: process.env.DRUPAL_URL_BACK || ``,
   }
 
   useEffect(() => {

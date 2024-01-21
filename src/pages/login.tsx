@@ -14,7 +14,7 @@ import { Stages } from '../types'
 const LoginPage = () => {
   const [isSSR, setIsSSR] = useState(true)
   const drupalConfig = {
-    url: process.env.DRUPAL_URL || ``,
+    url: process.env.DRUPAL_URL_BACK || ``,
   }
   const stage = useDrupalStore((state) => state.stage)
   const setStage = useDrupalStore((state) => state.setStage)

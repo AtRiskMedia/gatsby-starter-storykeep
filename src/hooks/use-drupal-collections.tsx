@@ -7,7 +7,7 @@ export const useDrupalCollections = async () => {
   const stage = useDrupalStore((state) => state.stage)
   const updateCollections = useDrupalStore((state) => state.updateCollections)
   const apiBase = process.env.DRUPAL_APIBASE
-  const baseURL = process.env.DRUPAL_URL
+  const baseURL = process.env.DRUPAL_URL_BACK
   const thisURL = `${baseURL}${apiBase}`
 
   if (stage === Stages.CollectionsLoad && !locked) {

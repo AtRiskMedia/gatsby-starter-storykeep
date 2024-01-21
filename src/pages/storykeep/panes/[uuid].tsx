@@ -15,7 +15,7 @@ import { EditStages, IEditPanePayload, IEditInitialFlags } from '../../../types'
 export default function EditPane({ params }: { params: { uuid: string } }) {
   const uuid = params.uuid
   const drupalConfig = {
-    url: process.env.DRUPAL_URL || ``,
+    url: process.env.DRUPAL_URL_BACK || ``,
   }
   const setNavLocked = useDrupalStore((state) => state.setNavLocked)
   const [editStage, setEditStage] = useState(EditStages.Booting)

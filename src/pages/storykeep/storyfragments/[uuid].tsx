@@ -20,7 +20,7 @@ export default function EditStoryFragment({
 }) {
   const uuid = params.uuid
   const drupalConfig = {
-    url: process.env.DRUPAL_URL || ``,
+    url: process.env.DRUPAL_URL_BACK || ``,
   }
   const [editStage, setEditStage] = useState(EditStages.Booting)
   const setNavLocked = useDrupalStore((state) => state.setNavLocked)

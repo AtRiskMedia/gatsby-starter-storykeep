@@ -82,6 +82,7 @@ const Account = () => {
       setLoading(true)
       goGetSettings()
         .then((res: any) => {
+          console.log(res?.data)
           setSettingsData({
             ...res?.data?.concierge,
             ...res?.data?.frontend,
@@ -151,6 +152,7 @@ const Account = () => {
                     </div>
                   </div>
                 </div>
+
                 <div className="sm:col-span-4">
                   <label
                     htmlFor="FRONT_ROOT"
@@ -202,6 +204,7 @@ const Account = () => {
                     </div>
                   </div>
                 </div>
+
                 <div className="sm:col-span-4">
                   <label
                     htmlFor="STORYKEEP_ROOT"
@@ -235,26 +238,6 @@ const Account = () => {
               <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                 <div className="sm:col-span-4">
                   <label
-                    htmlFor="CONCIERGE_BASE_URL_BACK"
-                    className="block text-sm leading-6 text-mydarkgrey font-bold"
-                  >
-                    Concierge Base URL
-                  </label>
-                  <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
-                      <input
-                        type="text"
-                        name="CONCIERGE_BASE_URL_BACK"
-                        id="CONCIERGE_BASE_URL_BACK"
-                        className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
-                        value={settingsData?.CONCIERGE_BASE_URL_BACK}
-                        onChange={(e) => handleChange(e)}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="sm:col-span-4">
-                  <label
                     htmlFor="WATCH_ROOT"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
@@ -276,24 +259,88 @@ const Account = () => {
 
                 <div className="sm:col-span-4">
                   <label
-                    htmlFor="CONCIERGE_REFRESH_TOKEN_URL"
+                    htmlFor="CONCIERGE_BASE_URL_FRONT"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
-                    Concierge Refresh Token URL
+                    Concierge Base URL | front-end
                   </label>
                   <div className="mt-2">
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
                       <input
                         type="text"
-                        name="CONCIERGE_REFRESH_TOKEN_URL"
-                        id="CONCIERGE_REFRESH_TOKEN_URL"
+                        name="CONCIERGE_BASE_URL_FRONT"
+                        id="CONCIERGE_BASE_URL_FRONT"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
-                        value={settingsData?.CONCIERGE_REFRESH_TOKEN_URL}
+                        value={settingsData?.CONCIERGE_BASE_URL_FRONT}
                         onChange={(e) => handleChange(e)}
                       />
                     </div>
                   </div>
                 </div>
+
+                <div className="sm:col-span-4">
+                  <label
+                    htmlFor="CONCIERGE_REFRESH_TOKEN_URL_FRONT"
+                    className="block text-sm leading-6 text-mydarkgrey font-bold"
+                  >
+                    Concierge Refresh Token URL | front-end
+                  </label>
+                  <div className="mt-2">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                      <input
+                        type="text"
+                        name="CONCIERGE_REFRESH_TOKEN_URL_FRONT"
+                        id="CONCIERGE_REFRESH_TOKEN_URL_FRONT"
+                        className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        value={settingsData?.CONCIERGE_REFRESH_TOKEN_URL_FRONT}
+                        onChange={(e) => handleChange(e)}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="sm:col-span-4">
+                  <label
+                    htmlFor="CONCIERGE_BASE_URL_BACK"
+                    className="block text-sm leading-6 text-mydarkgrey font-bold"
+                  >
+                    Concierge Base URL | Story Keep
+                  </label>
+                  <div className="mt-2">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                      <input
+                        type="text"
+                        name="CONCIERGE_BASE_URL_BACK"
+                        id="CONCIERGE_BASE_URL_BACK"
+                        className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        value={settingsData?.CONCIERGE_BASE_URL_BACK}
+                        onChange={(e) => handleChange(e)}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="sm:col-span-4">
+                  <label
+                    htmlFor="CONCIERGE_REFRESH_TOKEN_URL_BACK"
+                    className="block text-sm leading-6 text-mydarkgrey font-bold"
+                  >
+                    Concierge Refresh Token URL | backend
+                  </label>
+                  <div className="mt-2">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                      <input
+                        type="text"
+                        name="CONCIERGE_REFRESH_TOKEN_URL_BACK"
+                        id="CONCIERGE_REFRESH_TOKEN_URL_BACK"
+                        className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        value={settingsData?.CONCIERGE_REFRESH_TOKEN_URL_BACK}
+                        onChange={(e) => handleChange(e)}
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 <div className="clear" />
                 <div className="sm:col-span-2">
                   <label
@@ -411,27 +458,51 @@ const Account = () => {
                     </div>
                   </div>
                 </div>
+
                 <div className="clear" />
                 <div className="sm:col-span-2">
                   <label
-                    htmlFor="SHOPIFY_SHOP_PASSWORD"
+                    htmlFor="SHOPIFY_SHOP_PASSWORD_FRONT"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
-                    Shopify Shop Password
+                    Shopify Shop Password | front-end
                   </label>
                   <div className="mt-2">
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="password"
-                        name="SHOPIFY_SHOP_PASSWORD"
-                        id="SHOPIFY_SHOP_PASSWORD"
+                        name="SHOPIFY_SHOP_PASSWORD_FRONT"
+                        id="SHOPIFY_SHOP_PASSWORD_FRONT"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
-                        value={settingsData?.SHOPIFY_SHOP_PASSWORD}
+                        value={settingsData?.SHOPIFY_SHOP_PASSWORD_FRONT}
                         onChange={(e) => handleChange(e)}
                       />
                     </div>
                   </div>
                 </div>
+
+                <div className="sm:col-span-2">
+                  <label
+                    htmlFor="SHOPIFY_SHOP_PASSWORD_BACK"
+                    className="block text-sm leading-6 text-mydarkgrey font-bold"
+                  >
+                    Shopify Shop Password | backend
+                  </label>
+                  <div className="mt-2">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
+                      <input
+                        type="password"
+                        name="SHOPIFY_SHOP_PASSWORD_BACK"
+                        id="SHOPIFY_SHOP_PASSWORD_BACK"
+                        className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        value={settingsData?.SHOPIFY_SHOP_PASSWORD_BACK}
+                        onChange={(e) => handleChange(e)}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="clear" />
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="GATSBY_STOREFRONT_ACCESS_TOKEN"
@@ -452,7 +523,8 @@ const Account = () => {
                     </div>
                   </div>
                 </div>
-                <div className="sm:col-span-4">
+
+                <div className="sm:col-span-3">
                   <label
                     htmlFor="LOCAL_STORAGE_KEY"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
@@ -679,26 +751,6 @@ const Account = () => {
               </p>
 
               <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                <div className="sm:col-span-3">
-                  <label
-                    htmlFor="DRUPAL_URL"
-                    className="block text-sm leading-6 text-mydarkgrey font-bold"
-                  >
-                    Drupal URL
-                  </label>
-                  <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
-                      <input
-                        type="text"
-                        name="DRUPAL_URL"
-                        id="DRUPAL_URL"
-                        className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
-                        onChange={(e) => handleChange(e)}
-                        value={settingsData?.DRUPAL_URL}
-                      />
-                    </div>
-                  </div>
-                </div>
                 <div className="sm:col-span-1">
                   <label
                     htmlFor="DRUPAL_APIBASE"
@@ -720,6 +772,49 @@ const Account = () => {
                     </div>
                   </div>
                 </div>
+
+                <div className="sm:col-span-4">
+                  <label
+                    htmlFor="DRUPAL_URL_FRONT"
+                    className="block text-sm leading-6 text-mydarkgrey font-bold"
+                  >
+                    Drupal URL | front-end
+                  </label>
+                  <div className="mt-2">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                      <input
+                        type="text"
+                        name="DRUPAL_URL_FRONT"
+                        id="DRUPAL_URL_FRONT"
+                        className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.DRUPAL_URL_FRONT}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="sm:col-span-4">
+                  <label
+                    htmlFor="DRUPAL_URL_BACK"
+                    className="block text-sm leading-6 text-mydarkgrey font-bold"
+                  >
+                    Drupal URL | backend
+                  </label>
+                  <div className="mt-2">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                      <input
+                        type="text"
+                        name="DRUPAL_URL_BACK"
+                        id="DRUPAL_URL_BACK"
+                        className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                        onChange={(e) => handleChange(e)}
+                        value={settingsData?.DRUPAL_URL_BACK}
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 <div className="clear" />
                 <div className="sm:col-span-2">
                   <label
