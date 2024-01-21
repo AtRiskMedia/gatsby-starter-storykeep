@@ -235,7 +235,7 @@ const Account = () => {
               <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                 <div className="sm:col-span-4">
                   <label
-                    htmlFor="CONCIERGE_BASE_URL"
+                    htmlFor="CONCIERGE_BASE_URL_BACK"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
                   >
                     Concierge Base URL
@@ -244,10 +244,10 @@ const Account = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
                       <input
                         type="text"
-                        name="CONCIERGE_BASE_URL"
-                        id="CONCIERGE_BASE_URL"
+                        name="CONCIERGE_BASE_URL_BACK"
+                        id="CONCIERGE_BASE_URL_BACK"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
-                        value={settingsData?.CONCIERGE_BASE_URL}
+                        value={settingsData?.CONCIERGE_BASE_URL_BACK}
                         onChange={(e) => handleChange(e)}
                       />
                     </div>

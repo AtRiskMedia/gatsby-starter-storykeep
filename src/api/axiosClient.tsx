@@ -25,7 +25,7 @@ function getAuthData() {
 
 export const client = createAxiosClient({
   options: {
-    baseURL: process.env.CONCIERGE_BASE_URL,
+    baseURL: process.env.CONCIERGE_BASE_URL_BACK,
     timeout: 10000,
     headers: {
       'Content-Type': `application/json`,
