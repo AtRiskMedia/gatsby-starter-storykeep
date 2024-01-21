@@ -111,63 +111,61 @@ const Publish = () => {
 
   if (openDemoEnabled) return <DemoProhibited />
   return (
-    <section>
-      <div className="w-full xl:max-w-screen-2xl">
-        <div className="bg-white px-4 py-4 shadow xs:rounded-md xs:px-6">
-          <div className="border-b border-gray-200 pb-1.5 flex items-center justify-between">
-            <h3 className="text-base font-action leading-6 text-black">
-              Re-Publish your Website
-            </h3>
-            <div className="flex flex-nowrap space-x-3">
-              <div className="flex justify-center items-center">
-                <button
-                  className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-100"
-                  onClick={() => handleClick()}
-                >
-                  Trigger Re-Publish
-                </button>
-              </div>
-              <div>
-                <label
-                  htmlFor="target"
-                  className="block text-sm leading-6 text-mydarkgrey"
-                >
-                  Build Target
-                </label>
-                <select
-                  id="target"
-                  name="target"
-                  className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-mydarkgrey ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen sm:text-sm sm:leading-6"
-                  defaultValue="front"
-                  onClick={(e: MouseEvent) => {
-                    setTarget((e.target as HTMLInputElement).value)
-                  }}
-                >
-                  <option>front</option>
-                  <option>back</option>
-                  <option>all</option>
-                </select>
-              </div>
+    <section className="w-full xl:max-w-screen-2xl">
+      <div className="bg-white px-4 py-4 shadow xs:rounded-md xs:px-6">
+        <div className="border-b border-gray-200 pb-1.5 flex items-center justify-between">
+          <h3 className="text-base font-action leading-6 text-black">
+            Re-Publish your Website
+          </h3>
+          <div className="flex flex-nowrap space-x-3">
+            <div className="flex justify-center items-center">
+              <button
+                className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-100"
+                onClick={() => handleClick()}
+              >
+                Trigger Re-Publish
+              </button>
+            </div>
+            <div>
+              <label
+                htmlFor="target"
+                className="block text-sm leading-6 text-mydarkgrey"
+              >
+                Build Target
+              </label>
+              <select
+                id="target"
+                name="target"
+                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-mydarkgrey ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen sm:text-sm sm:leading-6"
+                defaultValue="front"
+                onClick={(e: MouseEvent) => {
+                  setTarget((e.target as HTMLInputElement).value)
+                }}
+              >
+                <option>front</option>
+                <option>back</option>
+                <option>all</option>
+              </select>
             </div>
           </div>
-          <div className="mt-4">
-            <p className="text-mydarkgrey text-xl">
-              To make your changes live, click to publish.
-            </p>
-            <div
-              id="message"
-              className="mt-6 flex items-center justify-end gap-x-6"
-            >
-              {saved ? (
-                <div className="text-xl text-myorange pb-12">
-                  {payload.build ? (
-                    <p>Site rebuild has been queued.</p>
-                  ) : payload.locked ? (
-                    <p>Site rebuild has already been queued.</p>
-                  ) : null}
-                </div>
-              ) : null}
-            </div>
+        </div>
+        <div className="mt-4">
+          <p className="text-mydarkgrey text-xl">
+            To make your changes live, click to publish.
+          </p>
+          <div
+            id="message"
+            className="mt-6 flex items-center justify-end gap-x-6"
+          >
+            {saved ? (
+              <div className="text-xl text-myorange pb-12">
+                {payload.build ? (
+                  <p>Site rebuild has been queued.</p>
+                ) : payload.locked ? (
+                  <p>Site rebuild has already been queued.</p>
+                ) : null}
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

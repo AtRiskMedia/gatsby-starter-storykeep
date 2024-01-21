@@ -112,7 +112,7 @@ const Account = () => {
   if (openDemoEnabled) return <DemoProhibited />
   return (
     <>
-      <section>
+      <section className="w-full xl:max-w-screen-2xl">
         <form onSubmit={(e) => handleSubmit(e)}>
           <div className="space-y-6">
             <div className="border-b border-mydarkgrey/10 pb-6">
@@ -132,7 +132,7 @@ const Account = () => {
                 These settings affect the frontend web experience
               </p>
               <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                <div className="sm:col-span-4">
+                <div className="sm:col-span-2">
                   <label
                     htmlFor="SITE_URL"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
@@ -140,7 +140,7 @@ const Account = () => {
                     Site URL
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
                         name="SITE_URL"
@@ -153,7 +153,7 @@ const Account = () => {
                   </div>
                 </div>
 
-                <div className="sm:col-span-4">
+                <div className="sm:col-span-2">
                   <label
                     htmlFor="FRONT_ROOT"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
@@ -161,7 +161,7 @@ const Account = () => {
                     Front-end root folder
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
                         name="FRONT_ROOT"
@@ -184,7 +184,7 @@ const Account = () => {
                 These settings affect the backend editor experience
               </p>
               <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                <div className="sm:col-span-4">
+                <div className="sm:col-span-2">
                   <label
                     htmlFor="STORYKEEP_URL"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
@@ -192,7 +192,7 @@ const Account = () => {
                     Story Keep URL
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
                         name="STORYKEEP_URL"
@@ -205,7 +205,7 @@ const Account = () => {
                   </div>
                 </div>
 
-                <div className="sm:col-span-4">
+                <div className="sm:col-span-2">
                   <label
                     htmlFor="STORYKEEP_ROOT"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
@@ -213,7 +213,7 @@ const Account = () => {
                     Story Keep root folder
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
                         name="STORYKEEP_ROOT"
@@ -236,7 +236,7 @@ const Account = () => {
                 These settings affect the backend service
               </p>
               <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                <div className="sm:col-span-4">
+                <div className="sm:col-span-2">
                   <label
                     htmlFor="WATCH_ROOT"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
@@ -244,7 +244,7 @@ const Account = () => {
                     Build watch root folder
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
                         name="WATCH_ROOT"
@@ -257,7 +257,7 @@ const Account = () => {
                   </div>
                 </div>
 
-                <div className="sm:col-span-4">
+                <div className="sm:col-span-2">
                   <label
                     htmlFor="CONCIERGE_BASE_URL_FRONT"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
@@ -265,7 +265,7 @@ const Account = () => {
                     Concierge Base URL | front-end
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
                         name="CONCIERGE_BASE_URL_FRONT"
@@ -278,7 +278,7 @@ const Account = () => {
                   </div>
                 </div>
 
-                <div className="sm:col-span-4">
+                <div className="sm:col-span-2">
                   <label
                     htmlFor="CONCIERGE_REFRESH_TOKEN_URL_FRONT"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
@@ -286,7 +286,7 @@ const Account = () => {
                     Concierge Refresh Token URL | front-end
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
                         name="CONCIERGE_REFRESH_TOKEN_URL_FRONT"
@@ -299,7 +299,7 @@ const Account = () => {
                   </div>
                 </div>
 
-                <div className="sm:col-span-4">
+                <div className="sm:col-span-2">
                   <label
                     htmlFor="CONCIERGE_BASE_URL_BACK"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
@@ -307,7 +307,7 @@ const Account = () => {
                     Concierge Base URL | Story Keep
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
                         name="CONCIERGE_BASE_URL_BACK"
@@ -320,7 +320,7 @@ const Account = () => {
                   </div>
                 </div>
 
-                <div className="sm:col-span-4">
+                <div className="sm:col-span-2">
                   <label
                     htmlFor="CONCIERGE_REFRESH_TOKEN_URL_BACK"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
@@ -328,7 +328,7 @@ const Account = () => {
                     Concierge Refresh Token URL | backend
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
                         name="CONCIERGE_REFRESH_TOKEN_URL_BACK"
@@ -341,7 +341,6 @@ const Account = () => {
                   </div>
                 </div>
 
-                <div className="clear" />
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="SECRET_KEY"
@@ -383,8 +382,7 @@ const Account = () => {
                     </div>
                   </div>
                 </div>
-                <div className="clear" />
-                <div className="sm:col-span-4">
+                <div className="sm:col-span-2">
                   <label
                     htmlFor="CONCIERGE_ROOT"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
@@ -392,7 +390,7 @@ const Account = () => {
                     Concierge root folder
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
                         name="CONCIERGE_ROOT"
@@ -415,7 +413,7 @@ const Account = () => {
                 These settings affect the Shopify integration
               </p>
               <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                <div className="sm:col-span-full">
+                <div className="sm:col-span-2">
                   <div className="flex items-center gap-x-3">
                     <input
                       id="INITIALIZE_SHOPIFY"
@@ -438,7 +436,7 @@ const Account = () => {
                     </label>
                   </div>
                 </div>
-                <div className="sm:col-span-4">
+                <div className="sm:col-span-2">
                   <label
                     htmlFor="shopifyStoreUrl"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
@@ -446,7 +444,7 @@ const Account = () => {
                     Shopify Store Url
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
                         name="shopifyStoreUrl"
@@ -459,7 +457,6 @@ const Account = () => {
                   </div>
                 </div>
 
-                <div className="clear" />
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="SHOPIFY_SHOP_PASSWORD_FRONT"
@@ -502,7 +499,6 @@ const Account = () => {
                   </div>
                 </div>
 
-                <div className="clear" />
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="GATSBY_STOREFRONT_ACCESS_TOKEN"
@@ -524,7 +520,7 @@ const Account = () => {
                   </div>
                 </div>
 
-                <div className="sm:col-span-3">
+                <div className="sm:col-span-2">
                   <label
                     htmlFor="LOCAL_STORAGE_KEY"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
@@ -532,7 +528,7 @@ const Account = () => {
                     Shopify localStorageKey
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
                         name="LOCAL_STORAGE_KEY"
@@ -557,7 +553,7 @@ const Account = () => {
               </p>
 
               <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                <div className="sm:col-span-full">
+                <div className="sm:col-span-2">
                   <div className="flex items-center gap-x-3">
                     <input
                       id="NEO4J_ENABLED"
@@ -580,7 +576,7 @@ const Account = () => {
                     </label>
                   </div>
                 </div>
-                <div className="sm:col-span-4">
+                <div className="sm:col-span-2">
                   <label
                     htmlFor="NEO4J_URI"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
@@ -588,7 +584,7 @@ const Account = () => {
                     Neo4j URI
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
                         name="NEO4J_URI"
@@ -600,7 +596,6 @@ const Account = () => {
                     </div>
                   </div>
                 </div>
-                <div className="clear" />
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="NEO4J_USER"
@@ -697,8 +692,6 @@ const Account = () => {
                   </div>
                 </div>
 
-                <div className="clear" />
-
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="DB_USER"
@@ -751,7 +744,7 @@ const Account = () => {
               </p>
 
               <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                <div className="sm:col-span-1">
+                <div className="sm:col-span-2">
                   <label
                     htmlFor="DRUPAL_APIBASE"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
@@ -773,7 +766,7 @@ const Account = () => {
                   </div>
                 </div>
 
-                <div className="sm:col-span-4">
+                <div className="sm:col-span-2">
                   <label
                     htmlFor="DRUPAL_URL_FRONT"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
@@ -781,7 +774,7 @@ const Account = () => {
                     Drupal URL | front-end
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
                         name="DRUPAL_URL_FRONT"
@@ -794,7 +787,7 @@ const Account = () => {
                   </div>
                 </div>
 
-                <div className="sm:col-span-4">
+                <div className="sm:col-span-2">
                   <label
                     htmlFor="DRUPAL_URL_BACK"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
@@ -802,7 +795,7 @@ const Account = () => {
                     Drupal URL | backend
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
                         name="DRUPAL_URL_BACK"
@@ -815,7 +808,6 @@ const Account = () => {
                   </div>
                 </div>
 
-                <div className="clear" />
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="BASIC_AUTH_USERNAME"
@@ -856,7 +848,6 @@ const Account = () => {
                     </div>
                   </div>
                 </div>
-                <div className="clear" />
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="DRUPAL_OAUTH_CLIENT_ID"
@@ -898,7 +889,6 @@ const Account = () => {
                     </div>
                   </div>
                 </div>
-                <div className="clear" />
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="DRUPAL_OAUTH_GRANT_TYPE"
@@ -941,7 +931,7 @@ const Account = () => {
                     </div>
                   </div>
                 </div>
-                <div className="sm:col-span-4">
+                <div className="sm:col-span-2">
                   <label
                     htmlFor="DRUPAL_OAUTH_ROOT"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
@@ -949,7 +939,7 @@ const Account = () => {
                     Drupal Oauth folder
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
                         name="DRUPAL_OAUTH_ROOT"

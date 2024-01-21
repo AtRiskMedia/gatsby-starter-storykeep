@@ -107,7 +107,7 @@ const Settings = () => {
   if (openDemoEnabled) return <DemoProhibited />
   return (
     <>
-      <section>
+      <section className="w-full xl:max-w-screen-2xl">
         <form onSubmit={(e) => handleSubmit(e)}>
           <div className="space-y-6">
             <div className="border-b border-mydarkgrey/10 pb-6">
@@ -128,7 +128,7 @@ const Settings = () => {
               </p>
 
               <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                <div className="sm:col-span-5">
+                <div className="sm:col-span-full">
                   <label
                     htmlFor="SLOGAN"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
@@ -149,7 +149,7 @@ const Settings = () => {
                   </div>
                 </div>
 
-                <div className="sm:col-span-5">
+                <div className="sm:col-span-full">
                   <label
                     htmlFor="FOOTER"
                     className="block text-sm leading-6 text-mydarkgrey font-bold"
@@ -170,7 +170,6 @@ const Settings = () => {
                   </div>
                 </div>
 
-                <div className="clear" />
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="HOMEPAGE"
@@ -179,7 +178,7 @@ const Settings = () => {
                     Slug of Story Fragment to use as homepage
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
                         name="HOMEPAGE"
@@ -200,7 +199,7 @@ const Settings = () => {
                     Conversion Action for Email Sign-up
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="text"
                         name="ACTION"
@@ -213,7 +212,6 @@ const Settings = () => {
                   </div>
                 </div>
 
-                <div className="clear" />
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="READ_THRESHOLD"
@@ -222,7 +220,7 @@ const Settings = () => {
                     Read Threshold
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="number"
                         min="1"
@@ -246,7 +244,7 @@ const Settings = () => {
                     (Soft) Read Threshold
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="number"
                         min="1"
@@ -262,7 +260,6 @@ const Settings = () => {
                   </div>
                 </div>
 
-                <div className="clear" />
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="CONCIERGE_SYNC"
@@ -271,7 +268,7 @@ const Settings = () => {
                     Concierge Sync frequency (milliseconds)
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="number"
                         min="1"
@@ -295,7 +292,7 @@ const Settings = () => {
                     Multiplier to force immediate eventStream on page load
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="number"
                         min="1"
@@ -311,7 +308,6 @@ const Settings = () => {
                   </div>
                 </div>
 
-                <div className="clear" />
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="IMPRESSIONS_DELAY"
@@ -320,7 +316,7 @@ const Settings = () => {
                     Cycle impressions delay interval (milliseconds)
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="number"
                         min="1"
@@ -371,7 +367,7 @@ const Settings = () => {
               </p>
 
               <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                <div className="sm:col-span-full">
+                <div className="sm:col-span-2">
                   <div className="flex items-center gap-x-3">
                     <input
                       id="OPENDEMO"
@@ -404,7 +400,7 @@ const Settings = () => {
                     Message Lifetime (milliseconds)
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="number"
                         min="1"
