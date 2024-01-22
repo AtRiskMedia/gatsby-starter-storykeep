@@ -26,6 +26,7 @@ const goGetSettings = async () => {
 }
 
 const Settings = () => {
+  const [maxAttempts, setMaxAttempts] = useState<undefined | boolean>(undefined)
   const openDemoEnabled = useDrupalStore((state) => state.openDemoEnabled)
   const [settingsData, setSettingsData] = useState<any>({})
   const [loading, setLoading] = useState(false)
@@ -75,38 +76,48 @@ const Settings = () => {
   }
 
   useEffect(() => {
-    if (publish && isLoggedIn && !publishing && !saved) {
+    if (publish && isLoggedIn && !publishing && !saved && !maxAttempts) {
       setPublishing(true)
       goPostSettings().then((res: any) => {
+        if (typeof maxAttempts === `undefined`) setMaxAttempts(false)
+        if (typeof maxAttempts === `boolean` && !maxAttempts)
+          setMaxAttempts(true)
         if (res?.error) {
           setPublishing(false)
         } else if (res?.data && res.data?.data) {
           setSaved(true)
           setPublish(false)
           setPublishing(false)
+          setMaxAttempts(undefined)
         }
       })
     }
-  }, [saved, isLoggedIn, publishing, publish, goPostSettings])
+  }, [maxAttempts, saved, isLoggedIn, publishing, publish, goPostSettings])
 
   useEffect(() => {
     if (
       isLoggedIn &&
+      !maxAttempts &&
       settingsData &&
       Object.keys(settingsData).length === 0 &&
       !loading &&
       !loaded
     ) {
+      if (typeof maxAttempts === `undefined`) setMaxAttempts(false)
+      if (typeof maxAttempts === `boolean` && !maxAttempts) setMaxAttempts(true)
       setLoading(true)
       goGetSettings()
         .then((res: any) => {
           if (!res?.error) {
             setSettingsData({
+              ...res?.data?.concierge,
               ...res?.data?.frontend,
               ...res?.data?.storykeep,
-              OPENDEMO: res?.data?.storykeep?.OPENDEMO === `1`,
+              OAUTH_PUBLIC_KEY: res?.data?.oauth_public_key,
+              OAUTH_PRIVATE_KEY: res?.data?.oauth_private_key,
             })
             setLoaded(true)
+            setMaxAttempts(undefined)
           }
         })
         .catch((e) => {
@@ -117,6 +128,7 @@ const Settings = () => {
         })
     }
   }, [
+    maxAttempts,
     isLoggedIn,
     settingsData,
     setSettingsData,
@@ -317,12 +329,12 @@ const Settings = () => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
                         type="number"
-                        min="1"
+                        min="1.5"
                         max="3"
                         name="CONCIERGE_FORCE_INTERVAL"
                         id="CONCIERGE_FORCE_INTERVAL"
                         className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
-                        placeholder="2"
+                        placeholder="1.5"
                         onChange={(e) => handleChange(e)}
                         value={settingsData?.CONCIERGE_FORCE_INTERVAL}
                       />

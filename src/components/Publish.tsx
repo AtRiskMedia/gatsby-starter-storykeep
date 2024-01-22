@@ -8,6 +8,7 @@ import '../styles/default.css'
 import { postPublish } from '../api/services'
 
 const Publish = () => {
+  const [maxAttempts, setMaxAttempts] = useState<undefined | boolean>(undefined)
   const [target, setTarget] = useState(`front`)
   const [publishing, setPublishing] = useState(false)
   const [publish, setPublish] = useState(false)
@@ -102,12 +103,14 @@ const Publish = () => {
   }, [isLoggedIn, saved, publishing, publish, goPostPublish])
 
   useEffect(() => {
-    if (!locked && publishing) {
+    if (!locked && publishing && !maxAttempts) {
+      if (typeof maxAttempts === `undefined`) setMaxAttempts(false)
+      if (typeof maxAttempts === `boolean` && !maxAttempts) setMaxAttempts(true)
       setLocked(true)
       goPostPublish().then((res: any) => {
         if (res?.error) {
           setPublishing(false)
-          setLocked(false)
+          if (!maxAttempts) setLocked(false)
         } else if (res?.data && res.data?.data) {
           const newPayload = JSON.parse(res.data.data)
           setPayload(newPayload)
@@ -115,10 +118,11 @@ const Publish = () => {
           setPublish(false)
           setPublishing(false)
           setLocked(false)
+          setMaxAttempts(undefined)
         }
       })
     }
-  }, [locked, publishing, goPostPublish])
+  }, [maxAttempts, locked, publishing, goPostPublish])
 
   if (openDemoEnabled) return <DemoProhibited />
   return (

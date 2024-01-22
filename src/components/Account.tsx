@@ -26,6 +26,7 @@ const goGetSettings = async () => {
 }
 
 const Account = () => {
+  const [maxAttempts, setMaxAttempts] = useState<undefined | boolean>(undefined)
   const openDemoEnabled = useDrupalStore((state) => state.openDemoEnabled)
   const [settingsData, setSettingsData] = useState<any>({})
   const [loading, setLoading] = useState(false)
@@ -75,7 +76,9 @@ const Account = () => {
   }
 
   useEffect(() => {
-    if (publish && isLoggedIn && !publishing && !saved) {
+    if (publish && isLoggedIn && !publishing && !saved && !maxAttempts) {
+      if (typeof maxAttempts === `undefined`) setMaxAttempts(false)
+      if (typeof maxAttempts === `boolean` && !maxAttempts) setMaxAttempts(true)
       setPublishing(true)
       goPostSettings().then((res: any) => {
         if (res?.error) {
@@ -84,19 +87,23 @@ const Account = () => {
           setSaved(true)
           setPublish(false)
           setPublishing(false)
+          setMaxAttempts(undefined)
         }
       })
     }
-  }, [saved, isLoggedIn, publishing, publish, goPostSettings])
+  }, [saved, isLoggedIn, publishing, publish, goPostSettings, maxAttempts])
 
   useEffect(() => {
     if (
       isLoggedIn &&
+      !maxAttempts &&
       settingsData &&
       Object.keys(settingsData).length === 0 &&
       !loading &&
       !loaded
     ) {
+      if (typeof maxAttempts === `undefined`) setMaxAttempts(false)
+      if (typeof maxAttempts === `boolean` && !maxAttempts) setMaxAttempts(true)
       setLoading(true)
       goGetSettings()
         .then((res: any) => {
@@ -107,11 +114,9 @@ const Account = () => {
               ...res?.data?.storykeep,
               OAUTH_PUBLIC_KEY: res?.data?.oauth_public_key,
               OAUTH_PRIVATE_KEY: res?.data?.oauth_private_key,
-              INITIALIZE_SHOPIFY:
-                res?.data?.frontend?.INITIALIZE_SHOPIFY === `1`,
-              NEO4J_ENABLED: res?.data?.concierge?.NEO4J_ENABLED === `1`,
             })
             setLoaded(true)
+            setMaxAttempts(undefined)
           }
         })
         .catch((e) => {
@@ -123,6 +128,7 @@ const Account = () => {
     }
   }, [
     isLoggedIn,
+    maxAttempts,
     settingsData,
     setSettingsData,
     loaded,
