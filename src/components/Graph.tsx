@@ -39,13 +39,15 @@ const Graph = () => {
       setLoading(true)
       goGetGraph()
         .then((res: any) => {
-          setGraphData(res?.graph)
+          if (!res?.error) {
+            setGraphData(res?.graph)
+            setLoaded(true)
+          }
         })
         .catch((e) => {
           console.log(`An error occurred.`, e)
         })
-        .finally(() => setLoaded(true))
-      setLoading(false)
+        .finally(() => setLoading(false))
     }
   }, [
     isLoggedIn,

@@ -30,6 +30,9 @@ const Account = () => {
   const [settingsData, setSettingsData] = useState<any>({})
   const [loading, setLoading] = useState(false)
   const [loaded, setLoaded] = useState(false)
+  const [publishing, setPublishing] = useState(false)
+  const [publish, setPublish] = useState(false)
+  const [saved, setSaved] = useState(false)
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn())
 
   const goPostSettings = useCallback(async () => {
@@ -67,9 +70,24 @@ const Account = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    goPostSettings()
-    console.log(`submitted`, settingsData)
+    setSaved(false)
+    setPublish(true)
   }
+
+  useEffect(() => {
+    if (publish && isLoggedIn && !publishing && !saved) {
+      setPublishing(true)
+      goPostSettings().then((res: any) => {
+        if (res?.error) {
+          setPublishing(false)
+        } else if (res?.data && res.data?.data) {
+          setSaved(true)
+          setPublish(false)
+          setPublishing(false)
+        }
+      })
+    }
+  }, [saved, isLoggedIn, publishing, publish, goPostSettings])
 
   useEffect(() => {
     if (
@@ -82,22 +100,26 @@ const Account = () => {
       setLoading(true)
       goGetSettings()
         .then((res: any) => {
-          console.log(res?.data)
-          setSettingsData({
-            ...res?.data?.concierge,
-            ...res?.data?.frontend,
-            ...res?.data?.storykeep,
-            OAUTH_PUBLIC_KEY: res?.data?.oauth_public_key,
-            OAUTH_PRIVATE_KEY: res?.data?.oauth_private_key,
-            INITIALIZE_SHOPIFY: res?.data?.frontend?.INITIALIZE_SHOPIFY === `1`,
-            NEO4J_ENABLED: res?.data?.concierge?.NEO4J_ENABLED === `1`,
-          })
+          if (!res?.error) {
+            setSettingsData({
+              ...res?.data?.concierge,
+              ...res?.data?.frontend,
+              ...res?.data?.storykeep,
+              OAUTH_PUBLIC_KEY: res?.data?.oauth_public_key,
+              OAUTH_PRIVATE_KEY: res?.data?.oauth_private_key,
+              INITIALIZE_SHOPIFY:
+                res?.data?.frontend?.INITIALIZE_SHOPIFY === `1`,
+              NEO4J_ENABLED: res?.data?.concierge?.NEO4J_ENABLED === `1`,
+            })
+            setLoaded(true)
+          }
         })
         .catch((e) => {
           console.log(`An error occurred.`, e)
         })
-        .finally(() => setLoaded(true))
-      setLoading(false)
+        .finally(() => {
+          setLoading(false)
+        })
     }
   }, [
     isLoggedIn,

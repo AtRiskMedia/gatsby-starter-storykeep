@@ -30,6 +30,9 @@ const Settings = () => {
   const [settingsData, setSettingsData] = useState<any>({})
   const [loading, setLoading] = useState(false)
   const [loaded, setLoaded] = useState(false)
+  const [publishing, setPublishing] = useState(false)
+  const [publish, setPublish] = useState(false)
+  const [saved, setSaved] = useState(false)
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn())
 
   const goPostSettings = useCallback(async () => {
@@ -67,9 +70,24 @@ const Settings = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    goPostSettings()
-    console.log(`submitted`, settingsData)
+    setSaved(false)
+    setPublish(true)
   }
+
+  useEffect(() => {
+    if (publish && isLoggedIn && !publishing && !saved) {
+      setPublishing(true)
+      goPostSettings().then((res: any) => {
+        if (res?.error) {
+          setPublishing(false)
+        } else if (res?.data && res.data?.data) {
+          setSaved(true)
+          setPublish(false)
+          setPublishing(false)
+        }
+      })
+    }
+  }, [saved, isLoggedIn, publishing, publish, goPostSettings])
 
   useEffect(() => {
     if (
@@ -82,17 +100,21 @@ const Settings = () => {
       setLoading(true)
       goGetSettings()
         .then((res: any) => {
-          setSettingsData({
-            ...res?.data?.frontend,
-            ...res?.data?.storykeep,
-            OPENDEMO: res?.data?.storykeep?.OPENDEMO === `1`,
-          })
+          if (!res?.error) {
+            setSettingsData({
+              ...res?.data?.frontend,
+              ...res?.data?.storykeep,
+              OPENDEMO: res?.data?.storykeep?.OPENDEMO === `1`,
+            })
+            setLoaded(true)
+          }
         })
         .catch((e) => {
           console.log(`An error occurred.`, e)
         })
-        .finally(() => setLoaded(true))
-      setLoading(false)
+        .finally(() => {
+          setLoading(false)
+        })
     }
   }, [
     isLoggedIn,

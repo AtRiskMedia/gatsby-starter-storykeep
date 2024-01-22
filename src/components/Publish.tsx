@@ -1,19 +1,22 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 import React, { useState, useEffect, useCallback, MouseEvent } from 'react'
 
+import { useAuthStore } from '../stores/authStore'
 import { useDrupalStore } from '../stores/drupal'
 import { DemoProhibited } from './DemoProhibited'
 import '../styles/default.css'
 import { postPublish } from '../api/services'
 
 const Publish = () => {
-  const [saved, setSaved] = useState(false)
   const [target, setTarget] = useState(`front`)
   const [publishing, setPublishing] = useState(false)
   const [publish, setPublish] = useState(false)
+  const [saved, setSaved] = useState(false)
   const [payload, setPayload] = useState<any>({})
+  const [locked, setLocked] = useState(false)
   const allPanes = useDrupalStore((state) => state.allPanes)
   const openDemoEnabled = useDrupalStore((state) => state.openDemoEnabled)
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn())
 
   let whitelistString = ``
   Object.keys(allPanes).forEach((e: any) => {
@@ -93,21 +96,29 @@ const Publish = () => {
   }, [whitelistArrayUnique, target])
 
   useEffect(() => {
-    if (publish && !publishing && !saved) {
+    if (publish && isLoggedIn && !publishing && !saved) {
       setPublishing(true)
+    }
+  }, [isLoggedIn, saved, publishing, publish, goPostPublish])
+
+  useEffect(() => {
+    if (!locked && publishing) {
+      setLocked(true)
       goPostPublish().then((res: any) => {
-        if (res?.data && res.data?.data) {
+        if (res?.error) {
+          setPublishing(false)
+          setLocked(false)
+        } else if (res?.data && res.data?.data) {
           const newPayload = JSON.parse(res.data.data)
           setPayload(newPayload)
           setSaved(true)
+          setPublish(false)
+          setPublishing(false)
+          setLocked(false)
         }
       })
     }
-    if (saved && publish && publishing) {
-      setPublish(false)
-      setPublishing(false)
-    }
-  }, [saved, publishing, publish, goPostPublish])
+  }, [locked, publishing, goPostPublish])
 
   if (openDemoEnabled) return <DemoProhibited />
   return (
