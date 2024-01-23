@@ -88,11 +88,11 @@ const Publish = () => {
       if (data) {
         return { data, error: null }
       }
-      return { data: null, error: null }
+      return { data: null, error: true }
     } catch (error: any) {
       return {
         error: error?.response?.data?.message || error?.message,
-        graph: null,
+        data: null,
       }
     }
   }, [whitelistArrayUnique, target])
