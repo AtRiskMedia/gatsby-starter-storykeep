@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { useLazyLogin } from '@tractstack/drupal-react-oauth-provider'
 import { XMarkIcon, CheckIcon } from '@heroicons/react/24/outline'
+import {classNames} from '@tractstack/helpers'
 
 import { useDrupalStore } from '../stores/drupal'
 import Wordmark from '../../assets/wordmark.svg'
@@ -132,7 +133,7 @@ const Login = () => {
               </div>
 
               <div className="max-w-2xl space-y-3 text-xl text-mydarkgrey col-span-2">
-                <p>
+                <p className={classNames(stage >= Stages.Authenticated ? `font-bold` : ``)}>
                   {stage >= Stages.Authenticated ? (
                     <CheckIcon className="w-4 h-4 inline" />
                   ) : (
@@ -141,7 +142,7 @@ const Login = () => {
                   {` `}
                   Authenticating
                 </p>
-                <p>
+                <p className={classNames(stage >= Stages.UuidConfirmed ? `font-bold` : ``)}>
                   {stage >= Stages.UuidConfirmed ? (
                     <CheckIcon className="w-4 h-4 inline" />
                   ) : (
@@ -150,7 +151,7 @@ const Login = () => {
                   {` `}
                   Synchronizing to Drupal
                 </p>
-                <p>
+                <p className={classNames(stage >= Stages.CollectionsLoaded ? `font-bold` : ``)}>
                   {stage >= Stages.CollectionsLoaded ? (
                     <CheckIcon className="w-4 h-4 inline" />
                   ) : (
@@ -159,7 +160,7 @@ const Login = () => {
                   {` `}
                   Loading Collections
                 </p>
-                <p>
+                <p className={classNames(stage >= Stages.SourceLoaded ? `font-bold` : ``)}>
                   {stage >= Stages.SourceLoaded ? (
                     <CheckIcon className="w-4 h-4 inline" />
                   ) : (
@@ -168,7 +169,7 @@ const Login = () => {
                   {` `}
                   Loading Nodes
                 </p>
-                <p>
+                <p className={classNames(stage >= Stages.Initialized ? `font-bold` : ``)}>
                   {stage >= Stages.Initialized ? (
                     <CheckIcon className="w-4 h-4 inline" />
                   ) : (

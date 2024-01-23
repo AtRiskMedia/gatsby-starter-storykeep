@@ -6,6 +6,7 @@ import { useDrupalStore } from '../stores/drupal'
 import { DemoProhibited } from './DemoProhibited'
 import '../styles/default.css'
 import { postPublish } from '../api/services'
+import { config } from '../../data/SiteConfig'
 
 const Publish = () => {
   const [maxAttempts, setMaxAttempts] = useState<undefined | boolean>(undefined)
@@ -123,6 +124,12 @@ const Publish = () => {
       })
     }
   }, [maxAttempts, locked, publishing, goPostPublish])
+
+  useEffect(() => {
+    if (saved) {
+      setTimeout(() => setSaved(false), config.messageDelay)
+    }
+  }, [saved, setSaved])
 
   if (openDemoEnabled) return <DemoProhibited />
   return (
