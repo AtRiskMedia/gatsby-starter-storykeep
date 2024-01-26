@@ -75,17 +75,26 @@ const PaneForm = ({ uuid, payload, flags, fn }: IPaneForm) => {
   const [interceptMode, setInterceptMode] = useState(`edit`)
   const [interceptModeTag, setInterceptModeTag] = useState(`p`)
   const viewportKey = useDrupalStore((state) => state.viewportKey)
-  const innerViewportMobile = Math.min(
-    typeof window !== `undefined` ? window.innerWidth * 0.5 : 400,
+  const innerViewportMobile = Math.max(
     400,
+    Math.min(
+      typeof window !== `undefined` ? window.innerWidth * 0.5 : 600,
+      600,
+    ),
   )
-  const innerViewportTablet = Math.min(
-    typeof window !== `undefined` ? window.innerWidth * 0.6 : 700,
+  const innerViewportTablet = Math.max(
     700,
+    Math.min(
+      typeof window !== `undefined` ? window.innerWidth * 0.6 : 1080,
+      1080,
+    ),
   )
   const innerViewportDesktop = Math.max(
-    typeof window !== `undefined` ? window.innerWidth * 0.6 : 800,
     800,
+    Math.min(
+      typeof window !== `undefined` ? window.innerWidth * 0.6 : 1920,
+      1920,
+    ),
   )
   const innerViewport =
     viewportKey === `mobile`

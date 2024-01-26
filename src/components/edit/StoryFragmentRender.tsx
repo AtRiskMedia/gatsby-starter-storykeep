@@ -61,9 +61,13 @@ const StoryFragmentRender = ({
     saveStage: number
     panes: string[]
   }
-  fn: { handleInsertPane: Function; handleReorderPane: Function }
+  fn: {
+    handleInsertPane: Function
+    handleReorderPane: Function
+    setWidth: Function
+  }
 }) => {
-  const { handleInsertPane, handleReorderPane } = fn
+  const { handleInsertPane, handleReorderPane, setWidth } = fn
   const { width, viewportKey } = flags
   const elementRef = useRef<HTMLElement>(null)
   const thisStoryFragment = previewPayload.state
@@ -230,13 +234,41 @@ const StoryFragmentRender = ({
         `--scale`,
         thisScale.toString(),
       )
+      const innerViewportMobile = Math.max(
+        400,
+        Math.min(
+          typeof window !== `undefined` ? window.innerWidth * 0.5 : 600,
+          600,
+        ),
+      )
+      const innerViewportTablet = Math.max(
+        700,
+        Math.min(
+          typeof window !== `undefined` ? window.innerWidth * 0.6 : 1080,
+          1080,
+        ),
+      )
+      const innerViewportDesktop = Math.max(
+        800,
+        Math.min(
+          typeof window !== `undefined` ? window.innerWidth * 0.6 : 1920,
+          1920,
+        ),
+      )
+      setWidth(
+        viewportKey === `mobile`
+          ? innerViewportMobile
+          : viewportKey === `tablet`
+            ? innerViewportTablet
+            : innerViewportDesktop,
+      )
     }
     window.addEventListener(`resize`, handleResize)
     handleResize()
     const lastWidth = width
     if (width !== lastWidth) handleResize()
     return () => window.removeEventListener(`resize`, handleResize)
-  }, [elementRef, viewportKey, width])
+  }, [elementRef, viewportKey, width, setWidth])
 
   useEffect(() => {
     if (data && Object.keys(data).length === 0 && !loading && !loaded) {

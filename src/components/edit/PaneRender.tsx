@@ -700,9 +700,6 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
                 ),
             )
             .filter((e: any) => e)
-          console.log(`ori`, thisMarkdownImages, thisMarkdownImagesSvg)
-          console.log(`new`, unsavedMarkdownImages, unsavedMarkdownImageSvgs)
-          console.log(``)
           return {
             id: paneFragmentsPayload[e].markdownId,
             drupalNid: thisMarkdownOri.drupalNid,
@@ -774,7 +771,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
         isBuilderPreview: true,
       },
     }
-    console.log(`in`, compositorPayload)
+
     return Compositor(compositorPayload)
   }, [
     unsavedMarkdownImages,
@@ -811,13 +808,41 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
         `--scale`,
         thisScale.toString(),
       )
+      const innerViewportMobile = Math.max(
+        400,
+        Math.min(
+          typeof window !== `undefined` ? window.innerWidth * 0.5 : 600,
+          600,
+        ),
+      )
+      const innerViewportTablet = Math.max(
+        700,
+        Math.min(
+          typeof window !== `undefined` ? window.innerWidth * 0.6 : 1080,
+          1080,
+        ),
+      )
+      const innerViewportDesktop = Math.max(
+        800,
+        Math.min(
+          typeof window !== `undefined` ? window.innerWidth * 0.6 : 1920,
+          1920,
+        ),
+      )
+      setWidth(
+        viewportKey === `mobile`
+          ? innerViewportMobile
+          : viewportKey === `tablet`
+            ? innerViewportTablet
+            : innerViewportDesktop,
+      )
     }
     window.addEventListener(`resize`, handleResize)
     handleResize()
     const lastWidth = width
     if (width !== lastWidth) handleResize()
     return () => window.removeEventListener(`resize`, handleResize)
-  }, [elementRef, viewportKey, width])
+  }, [elementRef, viewportKey, width, setWidth])
 
   useEffect(() => {
     if (focus > -1) {
