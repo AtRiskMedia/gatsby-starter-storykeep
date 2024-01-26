@@ -129,6 +129,9 @@ export interface IPaneRender {
     setInterceptMode: Function
     setViewportKey: Function
     setWidth: Function
+    handleUnsavedImage: Function
+    setLocked: Function
+    setShowImageLibrary: Function
   }
   flags: {
     interceptMode: string
@@ -137,6 +140,10 @@ export interface IPaneRender {
     viewportKey: string
     width: number
     innerWidth: number[]
+    unsavedMarkdownImages: any // FIX
+    unsavedMarkdownImageSvgs: any // FIX
+    locked: boolean
+    showImageLibrary: boolean
   }
 }
 
@@ -447,6 +454,10 @@ export interface IFlagsPaneForm {
   drupalNid: number
   isUsed: boolean
   isEmpty?: boolean
+  unsavedMarkdownImages: any // FIX
+  unsavedMarkdownImageSvgs: any // FIX
+  locked: boolean
+  showImageLibrary: boolean
 }
 
 export interface IPaneForm {
@@ -465,6 +476,9 @@ export interface IPaneForm {
     handleMutateMarkdown: Function
     setSaved: Function
     handleDelete: Function
+    handleUnsavedImage: Function
+    setLocked: Function
+    setShowImageLibrary: Function
   }
 }
 
@@ -619,6 +633,10 @@ export interface IEditInPlaceControls {
   hasBgColourId: string | null
   hasBgColour: string | null
   hasBreaks: boolean
+  setLocked: Function
+  handleUnsavedImage: Function
+  showImageLibrary: Boolean
+  setShowImageLibrary: Function
 }
 
 export interface IAxiosClientProps {

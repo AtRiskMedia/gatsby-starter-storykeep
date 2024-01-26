@@ -8,7 +8,10 @@ export function generateLivePreviewInitialState({
   payload,
   allMarkdown,
   allFiles,
+  unsavedMarkdownImages,
+  unsavedMarkdownImageSvgs,
 }: any) {
+  console.log(`generateLivePreviewInitialState`, payload)
   const initialStateLivePreviewMarkdown: any = {}
   let initialStateLivePreview: any = {}
   const initialStatePaneFragments: any = {}
@@ -25,9 +28,25 @@ export function generateLivePreviewInitialState({
               ...thisMarkdown?.relationships?.imagesSvg,
             ]
           : null
-      const imagesData = hasFiles?.map((f) => {
-        return allFiles[f]
-      })
+      const imagesData = hasFiles
+        ?.map((f) => {
+          return allFiles[f]
+        })
+        .concat(
+          unsavedMarkdownImages &&
+            Object.keys(unsavedMarkdownImages).map(
+              (e: string) => unsavedMarkdownImages[e],
+            ),
+        )
+        .concat(
+          unsavedMarkdownImageSvgs &&
+            Object.keys(unsavedMarkdownImageSvgs).map(
+              (e: string) => unsavedMarkdownImageSvgs[e],
+            ),
+        )
+        .filter((e) => e)
+      console.log(imagesData)
+      console.log(unsavedMarkdownImages, unsavedMarkdownImageSvgs)
       if (payload[e] && Object.keys(payload[e]).length !== 0) {
         initialStatePaneFragments[payload[e].id] = payload[e]
         if (typeof payload[e].optionsPayload !== `undefined`) {

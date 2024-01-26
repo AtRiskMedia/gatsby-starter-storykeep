@@ -158,9 +158,21 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
     handleChangeEditInPlace,
     setViewportKey,
     setWidth,
+    handleUnsavedImage,
+    setLocked,
+    setShowImageLibrary,
   } = fn
-  const { innerWidth, width, interceptMode, interceptModeTag, viewportKey } =
-    flags
+  const {
+    innerWidth,
+    width,
+    interceptMode,
+    interceptModeTag,
+    viewportKey,
+    unsavedMarkdownImages,
+    unsavedMarkdownImageSvgs,
+    locked,
+    showImageLibrary,
+  } = flags
   const [pageStylesPagination, setPageStylesPagination] = useState(-1)
   const thisPane = previewPayload.state
   const paneFragmentsPayload = previewPayload.statePaneFragments
@@ -231,6 +243,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
       )
 
       const handleFocus = useRefCallback(() => {
+        if (locked) return null
         setPageStylesPagination(-1)
         setNth(typeof parent === `number` && parent > -1 ? parent : nth)
         setChildNth(typeof parent === `number` && parent > -1 ? nth : -1)
@@ -664,16 +677,32 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
           const thisMarkdownId = thisMarkdown.markdownId
           if (typeof allMarkdown[thisMarkdownId] === `undefined`) return null
           const thisMarkdownOri = allMarkdown[thisMarkdownId]
-          const thisMarkdownImages = thisMarkdownOri.relationships.images.map(
-            (f: any) => {
+          const thisMarkdownImages = thisMarkdownOri.relationships.images
+            .map((f: any) => {
               if (typeof f === `string`) return allFiles[f]
               return f
-            },
-          )
-          const thisMarkdownImagesSvg =
-            thisMarkdownOri.relationships.imagesSvg.map((f: any) => {
+            })
+            .concat(
+              unsavedMarkdownImages &&
+                Object.keys(unsavedMarkdownImages).map(
+                  (e: string) => unsavedMarkdownImages[e],
+                ),
+            )
+            .filter((e: any) => e)
+          const thisMarkdownImagesSvg = thisMarkdownOri.relationships.imagesSvg
+            .map((f: any) => {
               return allFiles[f]
             })
+            .concat(
+              unsavedMarkdownImageSvgs &&
+                Object.keys(unsavedMarkdownImageSvgs).map(
+                  (e: string) => unsavedMarkdownImageSvgs[e],
+                ),
+            )
+            .filter((e: any) => e)
+          console.log(`ori`, thisMarkdownImages, thisMarkdownImagesSvg)
+          console.log(`new`, unsavedMarkdownImages, unsavedMarkdownImageSvgs)
+          console.log(``)
           return {
             id: paneFragmentsPayload[e].markdownId,
             drupalNid: thisMarkdownOri.drupalNid,
@@ -694,7 +723,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
           }
         } else return null
       })
-      .filter((e) => e)
+      .filter((e: any) => e)
 
     const panePayloadRaw = generateLivePreviewPayload(uuid, previewPayload)
     const panesPayload = [
@@ -745,8 +774,11 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
         isBuilderPreview: true,
       },
     }
+    console.log(`in`, compositorPayload)
     return Compositor(compositorPayload)
   }, [
+    unsavedMarkdownImages,
+    unsavedMarkdownImageSvgs,
     previewPayload,
     allMarkdown,
     allFiles,
@@ -766,6 +798,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
     stateLivePreviewMarkdown.links,
     stateLivePreviewMarkdown.linksLookup,
     setInterceptMode,
+    locked,
   ])
 
   useEffect(() => {
@@ -872,7 +905,9 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
                 setViewportKey={setViewportKey}
                 setWidth={setWidth}
                 innerWidth={innerWidth}
-                visible={nth > -1 || previewPayload.state.hasBreaks}
+                visible={
+                  !locked && (nth > -1 || previewPayload.state.hasBreaks)
+                }
               />
               <PaneEditInPlace
                 tag={tag}
@@ -890,6 +925,10 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
                 hasBgColour={thisPane.hasBgColour}
                 hasBgColourId={thisPane.hasBgColourId}
                 hasBreaks={thisPane.hasBreaks}
+                setLocked={setLocked}
+                handleUnsavedImage={handleUnsavedImage}
+                setShowImageLibrary={setShowImageLibrary}
+                showImageLibrary={showImageLibrary}
               />
             </>
           </div>

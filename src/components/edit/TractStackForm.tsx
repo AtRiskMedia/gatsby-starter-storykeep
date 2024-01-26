@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-import React, { useState, useEffect, Fragment } from 'react'
+import React, { useState, useEffect, Fragment, ChangeEvent } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { classNames } from '@tractstack/helpers'
 import { navigate } from 'gatsby'
@@ -171,10 +171,19 @@ const TractStackForm = ({
     // },
   ]
   const noTags = tags.filter((t) => t.count).length === 0
-  const filterKeys = Object.keys(nodes).map((e: any) => {
-    // console.log(nodes[e])
-    return e
-  })
+  const [filterString, setFilterString] = useState(``)
+  const filterKeys = Object.keys(nodes)
+    .map((e: any) => {
+      if (nodes[e].title.toLowerCase().includes(filterString.toLowerCase()))
+        return e
+      return null
+    })
+    .filter((e) => e)
+
+  const handleChangeFilter = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target as HTMLInputElement
+    if (name === `filterString`) setFilterString(value)
+  }
 
   useEffect(() => {
     if (flags.saved) {
@@ -317,6 +326,7 @@ const TractStackForm = ({
                                         ))
                                     ) {
                                       setSelectedCollection(`storyfragment`)
+                                      setFilterString(``)
                                       navigate(`/storykeep/storyfragments/${e}`)
                                     }
                                   }}
@@ -357,6 +367,7 @@ const TractStackForm = ({
                                         ))
                                     ) {
                                       setSelectedCollection(`pane`)
+                                      setFilterString(``)
                                       navigate(`/storykeep/panes/${e}`)
                                     }
                                   }}
@@ -571,7 +582,10 @@ const TractStackForm = ({
                 <button
                   key={tag.id}
                   type="button"
-                  onClick={() => setSelectedCollection(tag.id)}
+                  onClick={() => {
+                    setSelectedCollection(tag.id)
+                    setFilterString(``)
+                  }}
                   className={classNames(
                     tag.current
                       ? `bg-myorange/10 text-black`
@@ -697,7 +711,32 @@ const TractStackForm = ({
         </div>
       </section>
 
-      {Object.keys(nodes).length === 0 ? null : (
+      {(filterKeys && Object.keys(filterKeys).length) || filterString ? (
+        <div className="px-4 my-4">
+          <div className="my-2">
+            <label
+              htmlFor="filterString"
+              className="text-sm leading-6 text-black inline-block"
+            >
+              Type to filter results
+            </label>
+            <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
+              <input
+                type="text"
+                name="filterString"
+                id="filterString"
+                className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
+                value={filterString}
+                onChange={(e) => handleChangeFilter(e)}
+              />
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {Object.keys(filterKeys).length === 0 ? (
+        <p>No matching records.</p>
+      ) : (
         <section className="relative bg-slate-50">
           <div className="text-xl font-action mb-12 xl:max-w-screen-2xl mt-4 px-4 xl:px-8">
             <div className="-mx-4">
@@ -797,10 +836,6 @@ const TractStackForm = ({
                                 console.log(`miss on collection`, [
                                   selectedCollection,
                                 ])
-                              // else {
-                              // setSelectedCollection(current)
-                              // setSelected(record)
-                              // }
                             }}
                           >
                             {nodes[record].title}

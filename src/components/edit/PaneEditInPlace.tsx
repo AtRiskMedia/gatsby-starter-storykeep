@@ -1,8 +1,10 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-import React from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import { InformationCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { classNames } from '@tractstack/helpers'
+import { Buffer } from 'buffer/'
 
+import { useDrupalStore } from '../../stores/drupal'
 import { IEditInPlaceControls } from '../../types'
 import {
   tailwindSpecialTitle,
@@ -1097,7 +1099,13 @@ const PaneEditInPlace = ({
   hasBgColourId,
   hasBgColour,
   hasBreaks,
+  setLocked,
+  handleUnsavedImage,
+  showImageLibrary,
+  setShowImageLibrary,
 }: IEditInPlaceControls) => {
+  const allFiles = useDrupalStore((state) => state.allFiles)
+  const [filterString, setFilterString] = useState(``)
   const parentClasses = stateLivePreview?.parentClasses
   const hasParentClasses =
     parentClasses && Object.keys(parentClasses).length > 0
@@ -1132,7 +1140,6 @@ const PaneEditInPlace = ({
     typeof images[imagesLookup[nth][childNth]] !== `undefined`
       ? images[imagesLookup[nth][childNth]]
       : null
-
   const modalState =
     typeof stateLivePreview?.modalClasses !== `undefined`
       ? stateLivePreview.modalClasses
@@ -1212,585 +1219,749 @@ const PaneEditInPlace = ({
     ? stateLivePreviewMarkdown.textShapeOutside
     : null
 
+  const convertBase64 = (file: File) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader()
+      fileReader.readAsDataURL(file)
+      fileReader.onload = () => {
+        resolve(fileReader.result)
+      }
+      fileReader.onerror = (error) => {
+        reject(error)
+      }
+    })
+  }
+
+  const handleFileRead = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event?.target?.files?.length ? event?.target?.files[0] : null
+    if (file) {
+      const base64 = await convertBase64(file)
+      console.log(`base64`, base64)
+      const data = Buffer.from(base64 as string, `base64`)
+      const d = data.toString(`utf8`)
+      console.log(`utf-8`, d)
+    }
+  }
+  const files =
+    allFiles &&
+    Object.keys(allFiles)
+      .map((e: any) => {
+        if (
+          !allFiles[e].title.toLowerCase().includes(filterString.toLowerCase())
+        )
+          return null
+        if (
+          [`image/png`, `image/jpeg`, `image/svg+xml`].includes(
+            allFiles[e].filemime,
+          )
+        )
+          return {
+            id: e,
+            name: allFiles[e].title,
+            imageSrc: allFiles[e].localFile.publicURL,
+            imageType: allFiles[e].filemime,
+          }
+        return null
+      })
+      .filter((e) => e)
+
+  const handleChangeFilter = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target as HTMLInputElement
+    if (name === `filterString`) setFilterString(value)
+  }
+
   return (
     <>
-      {state && id && tag ? (
+      {showImageLibrary ? (
         <div className="mb-4 bg-white shadow rounded-lg max-w-md">
           <div className="px-3 py-5 p-6">
-            {tagType ? (
-              <div className="inline-flex">
-                <span className="font-action my-auto">This {tagType}</span>
-                <span className="w-1"></span>
-                <InformationCircleIcon
-                  className="my-auto w-5 h-5 text-myblue hover:text-myorange"
-                  title={`By default styles are applied to all ${tagType}.`}
-                />
-                <span className="w-2"></span>
-                <button
-                  className="bg-transparent text-mydarkgrey hover:bg-myorange rounded-md px-3 py-2 text-xs font-action"
-                  onClick={() => reset()}
-                  title="Toggle out of view"
-                >
-                  Hide
-                </button>
-              </div>
-            ) : null}
-            {imageData ? (
-              <>
-                {imageData.alt === `ImagePlaceholder` ? (
-                  <div>[UPLOAD AN IMAGE]</div>
-                ) : (
-                  <img
-                    className="w-auto h-10"
-                    src={imageData.publicURL}
-                    alt={imageData.alt}
-                  />
-                )}
-                <label
-                  htmlFor={`image-${childGlobalNth}--alt`}
-                  className="block text-sm leading-6 text-black"
-                >
-                  Alternate Description
-                </label>
-                <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
-                  <input
-                    type="text"
-                    disabled={imageData.alt === `ImagePlaceholder`}
-                    name={`image-${childGlobalNth}--alt`}
-                    id={`image-${childGlobalNth}--alt`}
-                    className="block h-12 flex-1 border-0 bg-transparent focus:ring-0"
-                    value={imageData.alt}
-                    onChange={(e) => handleChangeEditInPlace(e)}
-                  />
-                </div>
-              </>
-            ) : null}
-            {!codeHook ? (
-              <>
-                {!Object.keys(state).length ? (
-                  <span className="block my-2">No styles</span>
-                ) : (
-                  Object.keys(state).map((e: any) => (
-                    <InputTailwindClass
-                      id={id}
-                      key={`${id}-${e}-img-${viewportKey}`}
-                      payload={{
-                        [e]: state[e],
-                      }}
-                      viewportKey={viewportKey}
-                      allowOverride={true}
-                      handleChangeEditInPlace={handleChangeEditInPlace}
-                    />
-                  ))
-                )}
-                <div className="mt-2 inline-flex items-center">
-                  <label
-                    htmlFor={`add---${id}`}
-                    className="pr-2 block text-sm leading-6 text-black"
-                  >
-                    Add&nbsp;Style
-                  </label>
-                  <select
-                    id={`add---${id}`}
-                    name={`add---${id}`}
-                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
-                    onChange={(e) => handleChangeEditInPlace(e)}
-                    value={` `}
-                  >
-                    <option>{` `}</option>
-                    {tailwindAllowedClasses.map((e) => (
-                      <option key={e} value={e}>
-                        {tailwindSpecialTitle[e]}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </>
-            ) : null}
-
-            {codeHook ? (
-              <>
-                <EditCodeHook
-                  id={`${id}`}
-                  payload={codeHook}
-                  handleChangeEditInPlace={handleChangeEditInPlace}
-                />
-                <br />
-                <span className="font-action my-auto">Outer Container</span>
-                {!Object.keys(outerCodeState).length ? (
-                  <span className="block my-2">No outer styles</span>
-                ) : (
-                  Object.keys(outerCodeState).map((e: any) => (
-                    <InputTailwindClass
-                      id={outerCodeId}
-                      key={`${id}-${e}-ul-${viewportKey}`}
-                      payload={{
-                        [e]: outerCodeState[e],
-                      }}
-                      viewportKey={viewportKey}
-                      allowOverride={false}
-                      handleChangeEditInPlace={handleChangeEditInPlace}
-                    />
-                  ))
-                )}
-                <div className="mt-2 inline-flex items-center">
-                  <label
-                    htmlFor={`add---${id}`}
-                    className="pr-2 block text-sm leading-6 text-black"
-                  >
-                    Add&nbsp;Style
-                  </label>
-                  <select
-                    id={`add---${id}`}
-                    name={`add---${id}`}
-                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
-                    onChange={(e) => handleChangeEditInPlace(e)}
-                    value={` `}
-                  >
-                    <option>{` `}</option>
-                    {tailwindAllowedClasses.map((e) => (
-                      <option key={e} value={e}>
-                        {tailwindSpecialTitle[e]}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </>
-            ) : null}
-            {tag === `img` ? (
-              <>
-                <span className="block mt-6 font-action">Image Container</span>
-                {!Object.keys(state).length ? (
-                  <span className="block my-2">No list item styles</span>
-                ) : (
-                  Object.keys(listItemState).map((e: any) => (
-                    <InputTailwindClass
-                      id={listItemId}
-                      key={`${id}-${e}-li-${viewportKey}`}
-                      payload={{
-                        [e]: listItemState[e],
-                      }}
-                      viewportKey={viewportKey}
-                      allowOverride={true}
-                      handleChangeEditInPlace={handleChangeEditInPlace}
-                    />
-                  ))
-                )}
-                <div className="mt-2 inline-flex items-center">
-                  <label
-                    htmlFor={`add---${listItemId}`}
-                    className="pr-2 block text-sm leading-6 text-black"
-                  >
-                    Add&nbsp;Style
-                  </label>
-                  <select
-                    id={`add---${listItemId}`}
-                    name={`add---${listItemId}`}
-                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
-                    onChange={(e) => handleChangeEditInPlace(e)}
-                    value={` `}
-                  >
-                    <option>{` `}</option>
-                    {tailwindAllowedClasses.map((e) => (
-                      <option key={e} value={e}>
-                        {tailwindSpecialTitle[e]}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </>
-            ) : null}
-            {[`img`, `li`].includes(tag) ? (
-              <>
-                <span className="block mt-6 font-action my-auto">
-                  Outer Container
-                </span>
-                {!Object.keys(outerListState).length ? (
-                  <span className="block my-2">No list item styles</span>
-                ) : (
-                  Object.keys(outerListState).map((e: any) => (
-                    <InputTailwindClass
-                      id={outerListId}
-                      key={`${id}-${e}-${actualTag}-${viewportKey}`}
-                      payload={{
-                        [e]: outerListState[e],
-                      }}
-                      viewportKey={viewportKey}
-                      allowOverride={false}
-                      handleChangeEditInPlace={handleChangeEditInPlace}
-                    />
-                  ))
-                )}
-                <div className="mt-2 inline-flex items-center">
-                  <label
-                    htmlFor={`add---${outerListId}`}
-                    className="pr-2 block text-sm leading-6 text-black"
-                  >
-                    Add&nbsp;Style
-                  </label>
-                  <select
-                    id={`add---${outerListId}`}
-                    name={`add---${outerListId}`}
-                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
-                    onChange={(e) => handleChangeEditInPlace(e)}
-                    value={` `}
-                  >
-                    <option>{` `}</option>
-                    {tailwindAllowedClasses.map((e) => (
-                      <option key={e} value={e}>
-                        {tailwindSpecialTitle[e]}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </>
-            ) : null}
-
-            {stateLivePreviewMarkdown.hasTextShapeOutside ? (
-              <>
-                <div className="block mb-4 mt-4">
-                  <span className="font-action">Text has inside shape</span>
-                </div>
-                <EditShape
-                  id={`textShapeOutside---${textShapeOutside.paneFragmentId}`}
-                  payload={textShapeOutside}
-                  viewportKey={viewportKey}
-                  handleChangeEditInPlace={handleChangeEditInPlace}
-                />
-              </>
-            ) : null}
-          </div>
-        </div>
-      ) : null}
-
-      {linksData &&
-        Object.keys(linksData).map((l: any, idx: number) => (
-          <div
-            key={idx}
-            className="mb-4 bg-white shadow rounded-lg w-full max-w-md"
-          >
-            <div className="px-4 py-5 p-6">
-              <div className="block mb-4">
-                <span className="font-action">Has Link</span>
-              </div>
-              <EditLink
-                id={`${id}---link-${idx}`}
-                payload={linksData[l]}
-                viewportKey={viewportKey}
-                handleChangeEditInPlace={handleChangeEditInPlace}
-              />
-            </div>
-          </div>
-        ))}
-
-      {typeof shapesData !== `undefined` &&
-        Object.keys(shapesData).map((s: any, idx: number) => (
-          <div
-            key={idx}
-            className="mb-4 bg-white shadow rounded-lg w-full max-w-md"
-          >
-            <div className="px-4 py-5 p-6">
-              <div className="block mb-4">
-                <span className="font-action">Background Shape</span>
-              </div>
-              <EditShape
-                id={`paneShape---${shapesData[s].paneFragmentId}`}
-                payload={shapesData[s]}
-                viewportKey={viewportKey}
-                handleChangeEditInPlace={handleChangeEditInPlace}
-              />
-              {Object.keys(shapesData[s].parentClasses).map((e: string) => {
-                return (
-                  <InputTailwindClass
-                    key={`paneShapeClasses---${shapesData[s].paneFragmentId}-${e}`}
-                    id={`paneShapeClasses---${shapesData[s].paneFragmentId}`}
-                    payload={{ [e]: shapesData[s].parentClasses[e] }}
-                    viewportKey={viewportKey}
-                    allowOverride={false}
-                    handleChangeEditInPlace={handleChangeEditInPlace}
-                  />
-                )
-              })}
-              {!shapesData[s].artpackPayload ? (
-                <div className="mt-2 inline-flex items-center">
-                  <label
-                    htmlFor={`paneShapeClasses---${shapesData[s].paneFragmentId}-add`}
-                    className="pr-2 block text-sm leading-6 text-black"
-                  >
-                    Add&nbsp;Style
-                  </label>
-                  <select
-                    id={`paneShapeClasses---${shapesData[s].paneFragmentId}-add`}
-                    name={`paneShapeClasses---${shapesData[s].paneFragmentId}-add`}
-                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
-                    onChange={(e) => handleChangeEditInPlace(e)}
-                    value={` `}
-                  >
-                    <option>{` `}</option>
-                    {tailwindAllowedClasses.map((e) => (
-                      <option key={e} value={e}>
-                        {tailwindSpecialTitle[e]}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              ) : null}
-            </div>
-          </div>
-        ))}
-
-      {hasModalClasses ? (
-        <div className="mb-4 bg-white shadow rounded-lg w-full max-w-md">
-          <div className="px-4 py-5 p-6">
-            <div className="block mb-4">
-              <span className="pr-2 font-action">Modal Styles</span>
-            </div>
-
-            {typeof modalData !== `undefined` &&
-              Object.keys(modalData).map((s: string, idx: number) => (
-                <EditShape
-                  key={idx}
-                  id={`modalShape---${modalData[s].paneFragmentId}`}
-                  payload={modalData[s]}
-                  viewportKey={viewportKey}
-                  handleChangeEditInPlace={handleChangeEditInPlace}
-                />
-              ))}
-            {modalState && modalId && !Object.keys(modalState).length ? (
-              <span className="block my-2">No styles</span>
-            ) : (
-              Object.keys(modalState).map((e: string) => (
-                <InputTailwindClass
-                  id={modalId}
-                  key={`${id}-${e}-modal-${viewportKey}`}
-                  payload={{
-                    [e]: modalState[e],
-                  }}
-                  viewportKey={viewportKey}
-                  allowOverride={false}
-                  handleChangeEditInPlace={handleChangeEditInPlace}
-                />
-              ))
-            )}
-            <div className="mt-2 inline-flex items-center">
-              <label
-                htmlFor={`add---${modalId}`}
-                className="pr-2 block text-sm leading-6 text-black"
-              >
-                Add&nbsp;Style
-              </label>
-              <select
-                id={`modalShape---0-add`}
-                name={`modalShape---0-add`}
-                className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
-                onChange={(e) => handleChangeEditInPlace(e)}
-                value={` `}
-              >
-                <option>{` `}</option>
-                {tailwindAllowedClasses.map((e) => (
-                  <option key={e} value={e}>
-                    {tailwindSpecialTitle[e]}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
-      ) : null}
-      {hasParentClasses && pageStylesPagination === -1 ? (
-        <div className="mb-4 bg-white shadow rounded-lg w-full max-w-md">
-          <div className="px-4 py-5 p-6">
-            <span className="pr-2 font-action">Pane Styles</span>
-            <button
-              className="bg-slate-200 text-black hover:bg-myorange rounded-md px-3 py-2 text-xs font-action"
-              onClick={() => {
-                setPageStylesPagination(0)
-                reset()
-              }}
-            >
-              Show
-            </button>
-          </div>
-        </div>
-      ) : hasParentClasses && pageStylesPagination > -1 ? (
-        <div className="mb-4 bg-white shadow rounded-lg w-full max-w-md">
-          <div className="px-4 py-5 p-6">
-            <div className="inline-block">
-              <span className="pr-2 font-action">Pane Styles</span>
+            <div className="inline-flex">
+              <span className="font-action my-auto">Select an Image</span>
+              <span className="w-2"></span>
               <button
                 className="bg-transparent text-mydarkgrey hover:bg-myorange rounded-md px-3 py-2 text-xs font-action"
-                onClick={() => setPageStylesPagination(-1)}
+                onClick={() => {
+                  setShowImageLibrary(false)
+                  setLocked(false)
+                }}
                 title="Toggle out of view"
               >
-                Hide
+                Cancel
               </button>
             </div>
-            <div className="inline-block">
-              <span className="pr-2 text-xs font-action">Layer</span>
-              {hasParentClasses &&
-                Object.keys(parentClasses).map((e) => (
-                  <button
-                    key={`${id}-${e}-button-${viewportKey}`}
-                    onClick={() => {
-                      setPageStylesPagination(+e)
-                      reset()
-                    }}
-                    className={classNames(
-                      +e === pageStylesPagination
-                        ? `bg-slate-200 rounded-md`
-                        : `bg-transparent`,
-                      `text-black hover:bg-myorange px-3 py-2 text-sm font-action`,
-                    )}
-                    title={`Layer ${+e + 1}/${
-                      Object.keys(parentClasses).length
-                    }`}
-                  >
-                    {+e + 1}
-                  </button>
-                ))}
-              <button
-                key={`add---${parentId}`}
-                onClick={() => {
-                  console.log(`todo add parentStyle`)
-                }}
-                className="text-black hover:bg-myorange px-3 py-2 text-sm font-action"
-                title="Add layer"
-              >
-                +
-              </button>
-              {parentState && parentId && !Object.keys(parentState).length ? (
-                <span className="block my-2">No styles</span>
-              ) : (
-                Object.keys(parentState).map((e: string) => (
-                  <InputTailwindClass
-                    id={parentId}
-                    key={`${parentId}-${e}`}
-                    payload={{
-                      [e]: parentState[e],
-                    }}
-                    viewportKey={viewportKey}
-                    allowOverride={false}
-                    handleChangeEditInPlace={handleChangeEditInPlace}
+
+            {(files && Object.keys(files).length) || filterString ? (
+              <div className="my-2">
+                <label
+                  htmlFor="filterString"
+                  className="text-sm leading-6 text-black inline-block"
+                >
+                  Type to filter results
+                </label>
+                <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-myorange xs:max-w-md">
+                  <input
+                    type="text"
+                    name="filterString"
+                    id="filterString"
+                    className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
+                    value={filterString}
+                    onChange={(e) => handleChangeFilter(e)}
                   />
+                </div>
+              </div>
+            ) : null}
+
+            <ul role="list" className="divide-y divide-slate-200">
+              {!files ||
+              (files && Object.keys(files).length === 0 && !filterString) ? (
+                <p>no images</p>
+              ) : files && Object.keys(files).length === 0 && filterString ? (
+                <p>no matches</p>
+              ) : (
+                files &&
+                files.map((image: any) => (
+                  <li key={image.id}>
+                    <button
+                      className="flex items-center py-6 hover:bg-mygreen/10 w-full"
+                      title={image.name}
+                      onClick={() =>
+                        handleUnsavedImage(
+                          image.id,
+                          nth,
+                          childNth,
+                          childGlobalNth,
+                        )
+                      }
+                    >
+                      <img
+                        src={image.imageSrc}
+                        alt={image.name}
+                        className="h-auto my-auto w-16 flex-none rounded-md border border-slate-200"
+                      />
+                      <div className="ml-4 flex-auto overflow-hidden">
+                        <h3 className="text-left text-myblack font-action truncate">
+                          {image.name}
+                        </h3>
+                        <p className="text-left text-mydarkgrey font-main text-sm truncate">
+                          {image.imageType}
+                        </p>
+                      </div>
+                    </button>
+                  </li>
                 ))
               )}
-              <div className="mt-2 inline-flex items-center">
-                <label
-                  htmlFor={`add---${parentId}`}
-                  className="pr-2 block text-sm leading-6 text-black"
-                >
-                  Add&nbsp;Style
-                </label>
-                <select
-                  id={`addd---${parentId}`}
-                  name={`add---${parentId}`}
-                  className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
-                  onChange={(e) => handleChangeEditInPlace(e)}
-                  value={` `}
-                >
-                  <option>{` `}</option>
-                  {tailwindAllowedClasses.map((e) => (
-                    <option key={e} value={e}>
-                      {tailwindSpecialTitle[e]}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
+            </ul>
           </div>
         </div>
-      ) : null}
-      {hasBgColourId ? (
-        <div className="mb-4 bg-white shadow rounded-lg w-full max-w-md">
-          <div className="px-4 py-5 p-6">
-            <div className="block mb-4">
-              <div className="grid grid-cols-2">
-                <span className="font-action">Background Colour</span>
-                <div>
-                  <label
-                    htmlFor={`bgColour--${hasBgColourId}`}
-                    className="sr-only"
-                  >
-                    Background Colour
-                  </label>
+      ) : (
+        <>
+          {state && id && tag ? (
+            <div className="mb-4 bg-white shadow rounded-lg max-w-md">
+              <div className="px-3 py-5 p-6">
+                {tagType ? (
                   <div className="inline-flex">
-                    <div className="flex w-20 rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
+                    <span className="font-action my-auto">This {tagType}</span>
+                    <span className="w-1"></span>
+                    <InformationCircleIcon
+                      className="my-auto w-5 h-5 text-myblue hover:text-myorange"
+                      title={`By default styles are applied to all ${tagType}.`}
+                    />
+                    <span className="w-2"></span>
+                    <button
+                      className="bg-transparent text-mydarkgrey hover:bg-myorange rounded-md px-3 py-2 text-xs font-action"
+                      onClick={() => reset()}
+                      title="Toggle out of view"
+                    >
+                      Hide
+                    </button>
+                  </div>
+                ) : null}
+                {imageData ? (
+                  <>
+                    {imageData.alt === `ImagePlaceholder` ? (
+                      <>
+                        <input
+                          type="file"
+                          id={`file-${childGlobalNth}`}
+                          accept="image/*"
+                          className="mb-3"
+                          onChange={(e) => handleFileRead(e)}
+                        />
+                        <div className="clear mb-4">
+                          <p>
+                            or select from{` `}
+                            <button
+                              className="font-main underline underline-2 hover:text-myorange"
+                              onClick={() => {
+                                setShowImageLibrary(true)
+                                setLocked(true)
+                              }}
+                            >
+                              image library
+                            </button>
+                          </p>
+                        </div>
+                      </>
+                    ) : (
+                      <img
+                        className="w-auto h-10"
+                        src={imageData.publicURL}
+                        alt={imageData.alt}
+                      />
+                    )}
+
+                    <label
+                      htmlFor={`image-${childGlobalNth}--alt`}
+                      className="block text-sm leading-6 text-black"
+                    >
+                      Alternate Description
+                    </label>
+                    <div className="flex rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                       <input
-                        type="color"
-                        name={`bgColour--${hasBgColourId}`}
-                        id={`bgColour--${hasBgColourId}`}
+                        type="text"
+                        disabled={imageData.alt === `ImagePlaceholder`}
+                        name={`image-${childGlobalNth}--alt`}
+                        id={`image-${childGlobalNth}--alt`}
                         className="block h-12 flex-1 border-0 bg-transparent focus:ring-0"
-                        value={bgColour}
+                        value={imageData.alt}
                         onChange={(e) => handleChangeEditInPlace(e)}
                       />
                     </div>
-                    <button
-                      onClick={() =>
-                        handleChangeEditInPlace({
-                          target: {
-                            name: `bgColour--${hasBgColourId}`,
-                            value: null,
-                          },
-                        })
-                      }
-                    >
-                      <XMarkIcon
-                        className="ml-2 my-auto w-3 h-3 text-myorange hover:text-black"
-                        title="Remove"
+                  </>
+                ) : null}
+                {!codeHook ? (
+                  // why isn't this if imageData like above?
+                  <>
+                    {!Object.keys(state).length ? (
+                      <span className="block my-2">No image styles</span>
+                    ) : (
+                      Object.keys(state).map((e: any) => (
+                        <InputTailwindClass
+                          id={id}
+                          key={`${id}-${e}-img-${viewportKey}`}
+                          payload={{
+                            [e]: state[e],
+                          }}
+                          viewportKey={viewportKey}
+                          allowOverride={true}
+                          handleChangeEditInPlace={handleChangeEditInPlace}
+                        />
+                      ))
+                    )}
+                    <div className="mt-2 inline-flex items-center">
+                      <label
+                        htmlFor={`add---${id}`}
+                        className="pr-2 block text-sm leading-6 text-black"
+                      >
+                        Add&nbsp;Style
+                      </label>
+                      <select
+                        id={`add---${id}`}
+                        name={`add---${id}`}
+                        className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
+                        onChange={(e) => handleChangeEditInPlace(e)}
+                        value={` `}
+                      >
+                        <option>{` `}</option>
+                        {tailwindAllowedClasses.map((e) => (
+                          <option key={e} value={e}>
+                            {tailwindSpecialTitle[e]}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </>
+                ) : null}
+
+                {codeHook ? (
+                  <>
+                    <EditCodeHook
+                      id={`${id}`}
+                      payload={codeHook}
+                      handleChangeEditInPlace={handleChangeEditInPlace}
+                    />
+                    <br />
+                    <span className="font-action my-auto">Outer Container</span>
+                    {!Object.keys(outerCodeState).length ? (
+                      <span className="block my-2">No outer styles</span>
+                    ) : (
+                      Object.keys(outerCodeState).map((e: any) => (
+                        <InputTailwindClass
+                          id={outerCodeId}
+                          key={`${id}-${e}-ul-${viewportKey}`}
+                          payload={{
+                            [e]: outerCodeState[e],
+                          }}
+                          viewportKey={viewportKey}
+                          allowOverride={false}
+                          handleChangeEditInPlace={handleChangeEditInPlace}
+                        />
+                      ))
+                    )}
+                    <div className="mt-2 inline-flex items-center">
+                      <label
+                        htmlFor={`add---${id}`}
+                        className="pr-2 block text-sm leading-6 text-black"
+                      >
+                        Add&nbsp;Style
+                      </label>
+                      <select
+                        id={`add---${id}`}
+                        name={`add---${id}`}
+                        className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
+                        onChange={(e) => handleChangeEditInPlace(e)}
+                        value={` `}
+                      >
+                        <option>{` `}</option>
+                        {tailwindAllowedClasses.map((e) => (
+                          <option key={e} value={e}>
+                            {tailwindSpecialTitle[e]}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </>
+                ) : null}
+                {tag === `img` ? (
+                  <>
+                    <span className="block mt-6 font-action">
+                      Image Container
+                    </span>
+                    {!Object.keys(state).length ? (
+                      <span className="block my-2">No list item styles</span>
+                    ) : (
+                      Object.keys(listItemState).map((e: any) => (
+                        <InputTailwindClass
+                          id={listItemId}
+                          key={`${id}-${e}-li-${viewportKey}`}
+                          payload={{
+                            [e]: listItemState[e],
+                          }}
+                          viewportKey={viewportKey}
+                          allowOverride={true}
+                          handleChangeEditInPlace={handleChangeEditInPlace}
+                        />
+                      ))
+                    )}
+                    <div className="mt-2 inline-flex items-center">
+                      <label
+                        htmlFor={`add---${listItemId}`}
+                        className="pr-2 block text-sm leading-6 text-black"
+                      >
+                        Add&nbsp;Style
+                      </label>
+                      <select
+                        id={`add---${listItemId}`}
+                        name={`add---${listItemId}`}
+                        className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
+                        onChange={(e) => handleChangeEditInPlace(e)}
+                        value={` `}
+                      >
+                        <option>{` `}</option>
+                        {tailwindAllowedClasses.map((e) => (
+                          <option key={e} value={e}>
+                            {tailwindSpecialTitle[e]}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </>
+                ) : null}
+                {[`img`, `li`].includes(tag) ? (
+                  <>
+                    <span className="block mt-6 font-action my-auto">
+                      Outer Container
+                    </span>
+                    {!Object.keys(outerListState).length ? (
+                      <span className="block my-2">No list item styles</span>
+                    ) : (
+                      Object.keys(outerListState).map((e: any) => (
+                        <InputTailwindClass
+                          id={outerListId}
+                          key={`${id}-${e}-${actualTag}-${viewportKey}`}
+                          payload={{
+                            [e]: outerListState[e],
+                          }}
+                          viewportKey={viewportKey}
+                          allowOverride={false}
+                          handleChangeEditInPlace={handleChangeEditInPlace}
+                        />
+                      ))
+                    )}
+                    <div className="mt-2 inline-flex items-center">
+                      <label
+                        htmlFor={`add---${outerListId}`}
+                        className="pr-2 block text-sm leading-6 text-black"
+                      >
+                        Add&nbsp;Style
+                      </label>
+                      <select
+                        id={`add---${outerListId}`}
+                        name={`add---${outerListId}`}
+                        className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
+                        onChange={(e) => handleChangeEditInPlace(e)}
+                        value={` `}
+                      >
+                        <option>{` `}</option>
+                        {tailwindAllowedClasses.map((e) => (
+                          <option key={e} value={e}>
+                            {tailwindSpecialTitle[e]}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </>
+                ) : null}
+
+                {stateLivePreviewMarkdown.hasTextShapeOutside ? (
+                  <>
+                    <div className="block mb-4 mt-4">
+                      <span className="font-action">Text has inside shape</span>
+                    </div>
+                    <EditShape
+                      id={`textShapeOutside---${textShapeOutside.paneFragmentId}`}
+                      payload={textShapeOutside}
+                      viewportKey={viewportKey}
+                      handleChangeEditInPlace={handleChangeEditInPlace}
+                    />
+                  </>
+                ) : null}
+              </div>
+            </div>
+          ) : null}
+
+          {linksData &&
+            Object.keys(linksData).map((l: any, idx: number) => (
+              <div
+                key={idx}
+                className="mb-4 bg-white shadow rounded-lg w-full max-w-md"
+              >
+                <div className="px-4 py-5 p-6">
+                  <div className="block mb-4">
+                    <span className="font-action">Has Link</span>
+                  </div>
+                  <EditLink
+                    id={`${id}---link-${idx}`}
+                    payload={linksData[l]}
+                    viewportKey={viewportKey}
+                    handleChangeEditInPlace={handleChangeEditInPlace}
+                  />
+                </div>
+              </div>
+            ))}
+
+          {typeof shapesData !== `undefined` &&
+            Object.keys(shapesData).map((s: any, idx: number) => (
+              <div
+                key={idx}
+                className="mb-4 bg-white shadow rounded-lg w-full max-w-md"
+              >
+                <div className="px-4 py-5 p-6">
+                  <div className="block mb-4">
+                    <span className="font-action">Background Shape</span>
+                  </div>
+                  <EditShape
+                    id={`paneShape---${shapesData[s].paneFragmentId}`}
+                    payload={shapesData[s]}
+                    viewportKey={viewportKey}
+                    handleChangeEditInPlace={handleChangeEditInPlace}
+                  />
+                  {Object.keys(shapesData[s].parentClasses).map((e: string) => {
+                    return (
+                      <InputTailwindClass
+                        key={`paneShapeClasses---${shapesData[s].paneFragmentId}-${e}`}
+                        id={`paneShapeClasses---${shapesData[s].paneFragmentId}`}
+                        payload={{ [e]: shapesData[s].parentClasses[e] }}
+                        viewportKey={viewportKey}
+                        allowOverride={false}
+                        handleChangeEditInPlace={handleChangeEditInPlace}
                       />
-                    </button>
+                    )
+                  })}
+                  {!shapesData[s].artpackPayload ? (
+                    <div className="mt-2 inline-flex items-center">
+                      <label
+                        htmlFor={`paneShapeClasses---${shapesData[s].paneFragmentId}-add`}
+                        className="pr-2 block text-sm leading-6 text-black"
+                      >
+                        Add&nbsp;Style
+                      </label>
+                      <select
+                        id={`paneShapeClasses---${shapesData[s].paneFragmentId}-add`}
+                        name={`paneShapeClasses---${shapesData[s].paneFragmentId}-add`}
+                        className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
+                        onChange={(e) => handleChangeEditInPlace(e)}
+                        value={` `}
+                      >
+                        <option>{` `}</option>
+                        {tailwindAllowedClasses.map((e) => (
+                          <option key={e} value={e}>
+                            {tailwindSpecialTitle[e]}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+            ))}
+
+          {hasModalClasses ? (
+            <div className="mb-4 bg-white shadow rounded-lg w-full max-w-md">
+              <div className="px-4 py-5 p-6">
+                <div className="block mb-4">
+                  <span className="pr-2 font-action">Modal Styles</span>
+                </div>
+
+                {typeof modalData !== `undefined` &&
+                  Object.keys(modalData).map((s: string, idx: number) => (
+                    <EditShape
+                      key={idx}
+                      id={`modalShape---${modalData[s].paneFragmentId}`}
+                      payload={modalData[s]}
+                      viewportKey={viewportKey}
+                      handleChangeEditInPlace={handleChangeEditInPlace}
+                    />
+                  ))}
+                {modalState && modalId && !Object.keys(modalState).length ? (
+                  <span className="block my-2">No styles</span>
+                ) : (
+                  Object.keys(modalState).map((e: string) => (
+                    <InputTailwindClass
+                      id={modalId}
+                      key={`${id}-${e}-modal-${viewportKey}`}
+                      payload={{
+                        [e]: modalState[e],
+                      }}
+                      viewportKey={viewportKey}
+                      allowOverride={false}
+                      handleChangeEditInPlace={handleChangeEditInPlace}
+                    />
+                  ))
+                )}
+                <div className="mt-2 inline-flex items-center">
+                  <label
+                    htmlFor={`add---${modalId}`}
+                    className="pr-2 block text-sm leading-6 text-black"
+                  >
+                    Add&nbsp;Style
+                  </label>
+                  <select
+                    id={`modalShape---0-add`}
+                    name={`modalShape---0-add`}
+                    className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
+                    onChange={(e) => handleChangeEditInPlace(e)}
+                    value={` `}
+                  >
+                    <option>{` `}</option>
+                    {tailwindAllowedClasses.map((e) => (
+                      <option key={e} value={e}>
+                        {tailwindSpecialTitle[e]}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+          ) : null}
+          {hasParentClasses && pageStylesPagination === -1 ? (
+            <div className="mb-4 bg-white shadow rounded-lg w-full max-w-md">
+              <div className="px-4 py-5 p-6">
+                <span className="pr-2 font-action">Pane Styles</span>
+                <button
+                  className="bg-slate-200 text-black hover:bg-myorange rounded-md px-3 py-2 text-xs font-action"
+                  onClick={() => {
+                    setPageStylesPagination(0)
+                    reset()
+                  }}
+                >
+                  Show
+                </button>
+              </div>
+            </div>
+          ) : hasParentClasses && pageStylesPagination > -1 ? (
+            <div className="mb-4 bg-white shadow rounded-lg w-full max-w-md">
+              <div className="px-4 py-5 p-6">
+                <div className="inline-block">
+                  <span className="pr-2 font-action">Pane Styles</span>
+                  <button
+                    className="bg-transparent text-mydarkgrey hover:bg-myorange rounded-md px-3 py-2 text-xs font-action"
+                    onClick={() => setPageStylesPagination(-1)}
+                    title="Toggle out of view"
+                  >
+                    Hide
+                  </button>
+                </div>
+                <div className="inline-block">
+                  <span className="pr-2 text-xs font-action">Layer</span>
+                  {hasParentClasses &&
+                    Object.keys(parentClasses).map((e) => (
+                      <button
+                        key={`${id}-${e}-button-${viewportKey}`}
+                        onClick={() => {
+                          setPageStylesPagination(+e)
+                          reset()
+                        }}
+                        className={classNames(
+                          +e === pageStylesPagination
+                            ? `bg-slate-200 rounded-md`
+                            : `bg-transparent`,
+                          `text-black hover:bg-myorange px-3 py-2 text-sm font-action`,
+                        )}
+                        title={`Layer ${+e + 1}/${
+                          Object.keys(parentClasses).length
+                        }`}
+                      >
+                        {+e + 1}
+                      </button>
+                    ))}
+                  <button
+                    key={`add---${parentId}`}
+                    onClick={() => {
+                      console.log(`todo add parentStyle`)
+                    }}
+                    className="text-black hover:bg-myorange px-3 py-2 text-sm font-action"
+                    title="Add layer"
+                  >
+                    +
+                  </button>
+                  {parentState &&
+                  parentId &&
+                  !Object.keys(parentState).length ? (
+                    <span className="block my-2">No styles</span>
+                  ) : (
+                    Object.keys(parentState).map((e: string) => (
+                      <InputTailwindClass
+                        id={parentId}
+                        key={`${parentId}-${e}`}
+                        payload={{
+                          [e]: parentState[e],
+                        }}
+                        viewportKey={viewportKey}
+                        allowOverride={false}
+                        handleChangeEditInPlace={handleChangeEditInPlace}
+                      />
+                    ))
+                  )}
+                  <div className="mt-2 inline-flex items-center">
+                    <label
+                      htmlFor={`add---${parentId}`}
+                      className="pr-2 block text-sm leading-6 text-black"
+                    >
+                      Add&nbsp;Style
+                    </label>
+                    <select
+                      id={`addd---${parentId}`}
+                      name={`add---${parentId}`}
+                      className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
+                      onChange={(e) => handleChangeEditInPlace(e)}
+                      value={` `}
+                    >
+                      <option>{` `}</option>
+                      {tailwindAllowedClasses.map((e) => (
+                        <option key={e} value={e}>
+                          {tailwindSpecialTitle[e]}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      ) : null}
-      {(modalData.length && !hasBgColour) ||
-      (hasBreaks && !hasBgColour) ||
-      (!modalData.length && !hasBreaks) ? (
-        <div className="px-4 py-5 p-6">
-          <div className="block mb-4">
-            <div className="grid grid-cols-2">
-              <div className="mt-2 inline-flex items-center">
-                <label
-                  htmlFor={`add---special`}
-                  className="pr-2 block text-sm leading-6 text-black"
-                >
-                  Add
-                </label>
-                <select
-                  id={`add---special`}
-                  name={`add---special`}
-                  className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
-                  onChange={(e) => handleChangeEditInPlace(e)}
-                  value={` `}
-                >
-                  <option>{` `}</option>
-                  {!hasBgColourId ? (
-                    <option value="bgColour--0">Background Colour</option>
-                  ) : null}
-                  {stateLivePreviewMarkdown.markdownId &&
-                  !textShapeOutside &&
-                  !modalData.length ? (
-                    <option value="bgPaneShapeOutside--0">
-                      Inside Shape on Text
-                    </option>
-                  ) : null}
-                  {!hasBreaks && !modalData.length ? (
-                    <>
-                      <option value="bgPane--0">Background Shape</option>
-                      <option value="bgPaneArtPack--0">
-                        Shape with Art Pack fill
-                      </option>
-                    </>
-                  ) : null}
-                </select>
+          ) : null}
+          {hasBgColourId ? (
+            <div className="mb-4 bg-white shadow rounded-lg w-full max-w-md">
+              <div className="px-4 py-5 p-6">
+                <div className="block mb-4">
+                  <div className="grid grid-cols-2">
+                    <span className="font-action">Background Colour</span>
+                    <div>
+                      <label
+                        htmlFor={`bgColour--${hasBgColourId}`}
+                        className="sr-only"
+                      >
+                        Background Colour
+                      </label>
+                      <div className="inline-flex">
+                        <div className="flex w-20 rounded-md bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
+                          <input
+                            type="color"
+                            name={`bgColour--${hasBgColourId}`}
+                            id={`bgColour--${hasBgColourId}`}
+                            className="block h-12 flex-1 border-0 bg-transparent focus:ring-0"
+                            value={bgColour}
+                            onChange={(e) => handleChangeEditInPlace(e)}
+                          />
+                        </div>
+                        <button
+                          onClick={() =>
+                            handleChangeEditInPlace({
+                              target: {
+                                name: `bgColour--${hasBgColourId}`,
+                                value: null,
+                              },
+                            })
+                          }
+                        >
+                          <XMarkIcon
+                            className="ml-2 my-auto w-3 h-3 text-myorange hover:text-black"
+                            title="Remove"
+                          />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      ) : null}
+          ) : null}
+          {(modalData.length && !hasBgColour) ||
+          (hasBreaks && !hasBgColour) ||
+          (!modalData.length && !hasBreaks) ? (
+            <div className="px-4 py-5 p-6">
+              <div className="block mb-4">
+                <div className="grid grid-cols-2">
+                  <div className="mt-2 inline-flex items-center">
+                    <label
+                      htmlFor={`add---special`}
+                      className="pr-2 block text-sm leading-6 text-black"
+                    >
+                      Add
+                    </label>
+                    <select
+                      id={`add---special`}
+                      name={`add---special`}
+                      className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
+                      onChange={(e) => handleChangeEditInPlace(e)}
+                      value={` `}
+                    >
+                      <option>{` `}</option>
+                      {!hasBgColourId ? (
+                        <option value="bgColour--0">Background Colour</option>
+                      ) : null}
+                      {stateLivePreviewMarkdown.markdownId &&
+                      !textShapeOutside &&
+                      !modalData.length ? (
+                        <option value="bgPaneShapeOutside--0">
+                          Inside Shape on Text
+                        </option>
+                      ) : null}
+                      {!hasBreaks && !modalData.length ? (
+                        <>
+                          <option value="bgPane--0">Background Shape</option>
+                          <option value="bgPaneArtPack--0">
+                            Shape with Art Pack fill
+                          </option>
+                        </>
+                      ) : null}
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : null}
+        </>
+      )}
     </>
   )
 }

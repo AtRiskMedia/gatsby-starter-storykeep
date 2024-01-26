@@ -67,6 +67,9 @@ const PaneForm = ({ uuid, payload, flags, fn }: IPaneForm) => {
     handleChange,
     setSaved,
     handleDelete,
+    handleUnsavedImage,
+    setLocked,
+    setShowImageLibrary,
   } = fn
   const [toggleAdvOpt, setToggleAdvOpt] = useState(false)
   const [interceptMode, setInterceptMode] = useState(`edit`)
@@ -122,6 +125,9 @@ const PaneForm = ({ uuid, payload, flags, fn }: IPaneForm) => {
     handleChangeEditInPlace,
     setViewportKey,
     setWidth,
+    handleUnsavedImage,
+    setLocked,
+    setShowImageLibrary,
   }
   const passFlags = {
     interceptMode,
@@ -134,6 +140,10 @@ const PaneForm = ({ uuid, payload, flags, fn }: IPaneForm) => {
       innerViewportTablet,
       innerViewportDesktop,
     ],
+    unsavedMarkdownImages: flags.unsavedMarkdownImages,
+    unsavedMarkdownImageSvgs: flags.unsavedMarkdownImageSvgs,
+    locked: flags.locked,
+    showImageLibrary: flags.showImageLibrary,
   }
 
   useEffect(() => {

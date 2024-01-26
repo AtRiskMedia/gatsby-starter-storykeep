@@ -55,6 +55,9 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
   const [statePaneFragments, setStatePaneFragments] = useState(
     payload.initialStatePaneFragments,
   )
+  const [unsavedMarkdownImages, setUnsavedMarkdownImages] = useState({})
+  const [unsavedMarkdownImageSvgs, setUnsavedMarkdownImageSvgs] = useState({})
+  console.log(unsavedMarkdownImages, unsavedMarkdownImageSvgs)
   const [lastSavedState, setLastSavedState] = useState(payload)
   const [saved, setSaved] = useState(false)
   const [state, setState] = useState(payload.initialState)
@@ -73,6 +76,8 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
   const [updatePanePayload, setUpdatePanePayload]: any = useState([])
   const [saveStage, setSaveStage] = useState(SaveStages.Booting)
   const [toggleCheck, setToggleCheck] = useState(false)
+  const [locked, setLocked] = useState(false)
+  const [showImageLibrary, setShowImageLibrary] = useState(false)
   const deepEqual = require(`deep-equal`)
   const embeddedEdit = useDrupalStore((state) => state.embeddedEdit)
   const setEmbeddedEdit = useDrupalStore((state) => state.setEmbeddedEdit)
@@ -208,6 +213,8 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         payload: Object.values(paneFragmentsPayload),
         allMarkdown: thisMarkdown,
         allFiles,
+        unsavedMarkdownImages,
+        unsavedMarkdownImageSvgs,
       })
       setStateLivePreviewMarkdown(initialStateLivePreviewMarkdown)
       setStateLivePreview(initialStateLivePreview)
@@ -252,6 +259,8 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       stateLivePreviewMarkdown?.paneFragmentId,
       statePaneFragments,
       stateWithheldBeliefs,
+      unsavedMarkdownImageSvgs,
+      unsavedMarkdownImages,
     ],
   )
 
@@ -453,7 +462,45 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       // setToggleCheck(true)
     }
   }
-*/
+  */
+
+  const handleUnsavedImage = (
+    fileId: string,
+    nth: number,
+    childNth: number,
+    childGlobalNth: number,
+    isSvg?: boolean,
+  ) => {
+    if (!isSvg)
+      setUnsavedMarkdownImages((prev: any) => {
+        return { ...prev, [fileId]: allFiles[fileId] }
+      })
+    else
+      setUnsavedMarkdownImageSvgs((prev: any) => {
+        return { ...prev, [fileId]: allFiles[fileId] }
+      })
+    console.log(
+      `handleUnsavedImage`,
+      fileId,
+      nth,
+      childNth,
+      childGlobalNth,
+      isSvg,
+    )
+    const oldArray = stateLivePreviewMarkdown.markdownArray
+    // const oldValue = oldArray[nth].split(/\n/)[childNth]
+    const newArray = [...oldArray]
+    // replace ImagePlaceholder in nth , childNth with * ![Descriptive title for this image](filename)
+    const pre = stateLivePreviewMarkdown.markdownTags[nth] === `ol` ? `1.` : `*`
+    const oldValue = `${pre} ![Descriptive title for this image](${allFiles[fileId].filename})`
+    const override = oldArray[nth].split(/\n/).filter((n: any) => n)
+    override[childNth] = oldValue
+    newArray[nth] = `${override.join(`\n`)}\n`
+    console.log(newArray)
+    handleEditMarkdown(newArray)
+    setLocked(false)
+    setShowImageLibrary(false)
+  }
 
   const handleChange = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const { name, value } = e.target as HTMLInputElement
@@ -558,6 +605,8 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       payload: Object.values(paneFragmentsPayload),
       allMarkdown: thisMarkdown,
       allFiles,
+      unsavedMarkdownImages,
+      unsavedMarkdownImageSvgs,
     })
     setStateLivePreviewMarkdown(initialStateLivePreviewMarkdown)
     setStateLivePreview(initialStateLivePreview)
@@ -632,6 +681,8 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       payload: Object.values(paneFragmentsPayload),
       allMarkdown: thisMarkdown,
       allFiles,
+      unsavedMarkdownImages,
+      unsavedMarkdownImageSvgs,
     })
     setStateLivePreviewMarkdown(initialStateLivePreviewMarkdown)
     setStateLivePreview(initialStateLivePreview)
@@ -667,6 +718,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
 
   const handleChangeEditInPlace = (e: any) => {
     let { name, value } = e.target
+    console.log(`handleChangeEditInPlace`, name, value)
     if (name === `add---special`) {
       name = value
       value = null
@@ -2357,6 +2409,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
   }
 
   const handleEditMarkdown = (markdownArray: any) => {
+    console.log(`handleEditMarkdown`, markdownArray)
     const paneFragmentId = stateLivePreviewMarkdown.paneFragmentId
     const markdownId = stateLivePreviewMarkdown.markdownId
     const markdownBody = markdownArray.join(`\n`)
@@ -2416,6 +2469,8 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       payload: Object.values(currentStatePaneFragments),
       allMarkdown: thisMarkdown,
       allFiles,
+      unsavedMarkdownImages,
+      unsavedMarkdownImageSvgs,
     })
     setStateLivePreviewMarkdown(initialStateLivePreviewMarkdown)
     setStateLivePreview(initialStateLivePreview)
@@ -2451,6 +2506,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
     mode: string,
     tag?: string,
   ) => {
+    console.log(`handleMutateMarkdown`, nth, childNth, mode, tag)
     const insertTag = tag || `p`
     const prefixes = {
       p: ``,
@@ -2807,6 +2863,8 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       ],
       allMarkdown: thisMarkdown,
       allFiles,
+      unsavedMarkdownImages,
+      unsavedMarkdownImageSvgs,
     })
     setStateLivePreview(initialStateLivePreview)
     setStateLivePreviewMarkdown(initialStateLivePreviewMarkdown)
@@ -3396,6 +3454,10 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         slugCollision,
         drupalNid: thisPane?.drupalNid,
         isUsed,
+        unsavedMarkdownImages,
+        unsavedMarkdownImageSvgs,
+        locked,
+        showImageLibrary,
       }}
       fn={{
         toggleBelief,
@@ -3409,6 +3471,9 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         handleChange,
         setSaved,
         handleDelete,
+        handleUnsavedImage,
+        setLocked,
+        setShowImageLibrary,
       }}
     />
   )
