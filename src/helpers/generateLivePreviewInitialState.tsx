@@ -11,7 +11,6 @@ export function generateLivePreviewInitialState({
   unsavedMarkdownImages,
   unsavedMarkdownImageSvgs,
 }: any) {
-  console.log(`generateLivePreviewInitialState`, payload)
   const initialStateLivePreviewMarkdown: any = {}
   let initialStateLivePreview: any = {}
   const initialStatePaneFragments: any = {}
@@ -45,8 +44,6 @@ export function generateLivePreviewInitialState({
             ),
         )
         .filter((e) => e)
-      console.log(imagesData)
-      console.log(unsavedMarkdownImages, unsavedMarkdownImageSvgs)
       if (payload[e] && Object.keys(payload[e]).length !== 0) {
         initialStatePaneFragments[payload[e].id] = payload[e]
         if (typeof payload[e].optionsPayload !== `undefined`) {

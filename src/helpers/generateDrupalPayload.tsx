@@ -194,13 +194,53 @@ export function panePayload(
 export function markdownPayload(
   statePaneFragments: any,
   allMarkdown: any, // FIX
-  // allFiles: any, // FIX
+  unsavedMarkdownImages: any, // FIX
+  unsavedMarkdownImageSvgs: any, // FIX
 ) {
+  const relationships = (images: string[], imageSvgs: string[]) => {
+    const val: any = {}
+    if (images.length)
+      val.field_image = {
+        data: images.map((p: string) => {
+          return {
+            type: `file--file`,
+            id: p,
+          }
+        }),
+      }
+    if (imageSvgs.length)
+      val.field_image_svg = {
+        data: imageSvgs.map((p: string) => {
+          return {
+            type: `file--file`,
+            id: p,
+          }
+        }),
+      }
+    return { relationships: val }
+  }
+
   return Object.keys(statePaneFragments)
     .map((f: any) => {
       const e = statePaneFragments[f]
       if (e?.type === `markdown` || e?.internal?.type === `markdown`) {
         const g = allMarkdown[e.markdownId]
+        const addUnsavedImages =
+          unsavedMarkdownImages &&
+          Object.keys(unsavedMarkdownImages)
+            .map((e) => {
+              return e
+            })
+            .concat(g.images)
+            .filter((e) => e)
+        const addUnsavedImageSvgs =
+          unsavedMarkdownImageSvgs &&
+          Object.keys(unsavedMarkdownImageSvgs)
+            .map((e) => {
+              return e
+            })
+            .concat(g.imageSvgs)
+            .filter((e) => e)
         return {
           id: e.markdownId,
           type: `node--markdown`,
@@ -212,8 +252,7 @@ export function markdownPayload(
             field_markdown_body:
               typeof e.markdownBody === `string` ? e.markdownBody : ``,
           },
-          // relationships: g.relationships, *** THIS NEEDS WORK: field_image, field_image_svg
-          // FOR NOW, the relationships are untouched on save
+          ...relationships(addUnsavedImages, addUnsavedImageSvgs),
         }
       }
       return null

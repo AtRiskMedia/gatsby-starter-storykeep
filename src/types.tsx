@@ -245,6 +245,7 @@ export interface IStoryKeepConfig {
   openDemo: boolean
   messageDelay: number
   home: string
+  slogan: string
 }
 
 export interface IUseDrupalJSONAPI {
@@ -677,4 +678,19 @@ export interface IBuilderPaneProps {
   hasMaxHScreen: boolean
   handleToggle: Function
   editPaneEnabled: string
+}
+
+export interface IPaneState {
+  uuid: string
+  payload: {
+    initialState: any
+    initialStateHeldBeliefs: any
+    initialStateImpressions: any
+    initialStateLivePreview: any
+    initialStateLivePreviewMarkdown: any
+    initialStatePaneFragments: any
+    initialStateWithheldBeliefs: any
+  }
+  flags: IEditFlags
+  fn: { setEditStage: Function }
 }

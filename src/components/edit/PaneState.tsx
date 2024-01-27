@@ -18,22 +18,8 @@ import {
 } from '../../helpers/allowedShapeNames'
 import { starterTemplate } from '../../helpers/starterTemplates'
 import PaneForm from './PaneForm'
-import { IEditFlags, IEmbeddedEdit, EditStages, SaveStages } from '../../types'
+import { IPaneState, IEmbeddedEdit, EditStages, SaveStages } from '../../types'
 
-export interface IPaneState {
-  uuid: string
-  payload: {
-    initialState: any
-    initialStateHeldBeliefs: any
-    initialStateImpressions: any
-    initialStateLivePreview: any
-    initialStateLivePreviewMarkdown: any
-    initialStatePaneFragments: any
-    initialStateWithheldBeliefs: any
-  }
-  flags: IEditFlags
-  fn: { setEditStage: Function }
-}
 const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
   // const apiBase = process.env.DRUPAL_APIBASE
   const { setEditStage } = fn
@@ -57,7 +43,6 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
   )
   const [unsavedMarkdownImages, setUnsavedMarkdownImages] = useState({})
   const [unsavedMarkdownImageSvgs, setUnsavedMarkdownImageSvgs] = useState({})
-  console.log(unsavedMarkdownImages, unsavedMarkdownImageSvgs)
   const [lastSavedState, setLastSavedState] = useState(payload)
   const [saved, setSaved] = useState(false)
   const [state, setState] = useState(payload.initialState)
@@ -76,6 +61,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
   const [updatePanePayload, setUpdatePanePayload]: any = useState([])
   const [saveStage, setSaveStage] = useState(SaveStages.Booting)
   const [toggleCheck, setToggleCheck] = useState(false)
+  const [imageUpdatedMarkdown, setImageUpdatedMarkdown]: any = useState([])
   const [locked, setLocked] = useState(false)
   const [showImageLibrary, setShowImageLibrary] = useState(false)
   const deepEqual = require(`deep-equal`)
@@ -496,10 +482,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
     const override = oldArray[nth].split(/\n/).filter((n: any) => n)
     override[childNth] = oldValue
     newArray[nth] = `${override.join(`\n`)}\n`
-    console.log(newArray)
-    handleEditMarkdown(newArray)
-    setLocked(false)
-    setShowImageLibrary(false)
+    setImageUpdatedMarkdown(newArray)
   }
 
   const handleChange = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -718,7 +701,6 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
 
   const handleChangeEditInPlace = (e: any) => {
     let { name, value } = e.target
-    console.log(`handleChangeEditInPlace`, name, value)
     if (name === `add---special`) {
       name = value
       value = null
@@ -2408,97 +2390,113 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
     }
   }
 
-  const handleEditMarkdown = (markdownArray: any) => {
-    console.log(`handleEditMarkdown`, markdownArray)
-    const paneFragmentId = stateLivePreviewMarkdown.paneFragmentId
-    const markdownId = stateLivePreviewMarkdown.markdownId
-    const markdownBody = markdownArray.join(`\n`)
-    const currentButtonsPayload = {
-      ...statePaneFragments[paneFragmentId].optionsPayload.buttons,
-    }
-    const mdAst = fromMarkdown(markdownBody)
-    // scan for any new links; add to payload
-    mdAst?.children.forEach((e: any) => {
-      e?.children.forEach((f: any) => {
-        if (f.type === `link`) {
-          let found = false
-          Object.keys(stateLivePreviewMarkdown.links).forEach((g) => {
-            if (stateLivePreviewMarkdown.links[g].target === f.url) found = true
-          })
-          if (!found) {
-            currentButtonsPayload[f.url] = {
-              callbackPayload: ``,
-              className: ``,
-              classNamesPayload: {
-                button: {
-                  classes: {},
+  const handleEditMarkdown = useCallback(
+    (markdownArray: string[]) => {
+      const paneFragmentId = stateLivePreviewMarkdown.paneFragmentId
+      const markdownId = stateLivePreviewMarkdown.markdownId
+      const markdownBody = markdownArray.join(`\n`)
+      const currentButtonsPayload = {
+        ...statePaneFragments[paneFragmentId].optionsPayload.buttons,
+      }
+      const mdAst = fromMarkdown(markdownBody)
+      // scan for any new links; add to payload
+      mdAst?.children.forEach((e: any) => {
+        e?.children.forEach((f: any) => {
+          if (f.type === `link`) {
+            let found = false
+            Object.keys(stateLivePreviewMarkdown.links).forEach((g) => {
+              if (stateLivePreviewMarkdown.links[g].target === f.url)
+                found = true
+            })
+            if (!found) {
+              currentButtonsPayload[f.url] = {
+                callbackPayload: ``,
+                className: ``,
+                classNamesPayload: {
+                  button: {
+                    classes: {},
+                  },
+                  hover: {
+                    classes: {},
+                  },
                 },
-                hover: {
-                  classes: {},
-                },
-              },
-              urlTarget: ``,
+                urlTarget: ``,
+              }
             }
           }
+        })
+      })
+      // must override payload in paneFragment optionsPayload
+      const thisOptionsPayload = {
+        ...statePaneFragments[paneFragmentId].optionsPayload,
+        buttons: currentButtonsPayload,
+      }
+      const currentStatePaneFragments = {
+        ...statePaneFragments,
+        [paneFragmentId]: {
+          ...statePaneFragments[paneFragmentId],
+          optionsPayload: thisOptionsPayload,
+        },
+      }
+      const thisMarkdown = {
+        [markdownId]: {
+          ...allMarkdown[markdownId],
+          markdownBody,
+        },
+      }
+      const {
+        initialStateLivePreviewMarkdown,
+        initialStateLivePreview,
+        initialStatePaneFragments,
+      } = generateLivePreviewInitialState({
+        payload: Object.values(currentStatePaneFragments),
+        allMarkdown: thisMarkdown,
+        allFiles,
+        unsavedMarkdownImages,
+        unsavedMarkdownImageSvgs,
+      })
+      setStateLivePreviewMarkdown(initialStateLivePreviewMarkdown)
+      setStateLivePreview(initialStateLivePreview)
+      const newStatePaneFragments = {
+        ...statePaneFragments,
+        [paneFragmentId]: initialStatePaneFragments[paneFragmentId],
+      }
+      setStatePaneFragments(newStatePaneFragments)
+      const impressionsPayload = stateImpressions?.title
+        ? {
+            [stateImpressions.id]: stateImpressions,
+          }
+        : null
+      const newOptionsPayload = {
+        heldBeliefs: stateHeldBeliefs,
+        withheldBeliefs: stateWithheldBeliefs,
+        impressions: impressionsPayload,
+        paneFragmentsPayload: Object.values(newStatePaneFragments),
+        hiddenPane: state.hiddenPane,
+      }
+      setState((prev: any) => {
+        return {
+          ...prev,
+          optionsPayloadString: JSON.stringify(newOptionsPayload),
         }
       })
-    })
-    // must override payload in paneFragment optionsPayload
-    const thisOptionsPayload = {
-      ...statePaneFragments[paneFragmentId].optionsPayload,
-      buttons: currentButtonsPayload,
-    }
-    const currentStatePaneFragments = {
-      ...statePaneFragments,
-      [paneFragmentId]: {
-        ...statePaneFragments[paneFragmentId],
-        optionsPayload: thisOptionsPayload,
-      },
-    }
-    const thisMarkdown = {
-      [markdownId]: {
-        ...allMarkdown[markdownId],
-        markdownBody,
-      },
-    }
-    const {
-      initialStateLivePreviewMarkdown,
-      initialStateLivePreview,
-      initialStatePaneFragments,
-    } = generateLivePreviewInitialState({
-      payload: Object.values(currentStatePaneFragments),
-      allMarkdown: thisMarkdown,
+      setToggleCheck(true)
+    },
+    [
       allFiles,
-      unsavedMarkdownImages,
+      allMarkdown,
+      state.hiddenPane,
+      stateHeldBeliefs,
+      stateImpressions,
+      stateLivePreviewMarkdown.links,
+      stateLivePreviewMarkdown.markdownId,
+      stateLivePreviewMarkdown.paneFragmentId,
+      statePaneFragments,
+      stateWithheldBeliefs,
       unsavedMarkdownImageSvgs,
-    })
-    setStateLivePreviewMarkdown(initialStateLivePreviewMarkdown)
-    setStateLivePreview(initialStateLivePreview)
-    const newStatePaneFragments = {
-      ...statePaneFragments,
-      [paneFragmentId]: initialStatePaneFragments[paneFragmentId],
-    }
-    setStatePaneFragments(newStatePaneFragments)
-    const impressionsPayload = stateImpressions?.title
-      ? {
-          [stateImpressions.id]: stateImpressions,
-        }
-      : null
-    const newOptionsPayload = {
-      heldBeliefs: stateHeldBeliefs,
-      withheldBeliefs: stateWithheldBeliefs,
-      impressions: impressionsPayload,
-      paneFragmentsPayload: Object.values(newStatePaneFragments),
-      hiddenPane: state.hiddenPane,
-    }
-    setState((prev: any) => {
-      return {
-        ...prev,
-        optionsPayloadString: JSON.stringify(newOptionsPayload),
-      }
-    })
-    setToggleCheck(true)
-  }
+      unsavedMarkdownImages,
+    ],
+  )
 
   const handleMutateMarkdown = (
     nth: any,
@@ -2506,7 +2504,6 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
     mode: string,
     tag?: string,
   ) => {
-    console.log(`handleMutateMarkdown`, nth, childNth, mode, tag)
     const insertTag = tag || `p`
     const prefixes = {
       p: ``,
@@ -2960,8 +2957,27 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       }
 
       case SaveStages.PrepareNodes: {
-        // for now, not touching files
         if (stateLivePreviewMarkdown?.markdownId) {
+          const addUnsavedImages =
+            unsavedMarkdownImages &&
+            Object.keys(unsavedMarkdownImages)
+              .map((e) => {
+                return e
+              })
+              .concat(
+                allMarkdown[stateLivePreviewMarkdown.markdownId].relationships
+                  .images,
+              )
+          const addUnsavedImageSvgs =
+            unsavedMarkdownImageSvgs &&
+            Object.keys(unsavedMarkdownImageSvgs)
+              .map((e) => {
+                return e
+              })
+              .concat(
+                allMarkdown[stateLivePreviewMarkdown.markdownId].relationships
+                  .imageSvgs,
+              )
           const newMarkdown = {
             ...allMarkdown[stateLivePreviewMarkdown.markdownId],
             id: stateLivePreviewMarkdown.markdownId,
@@ -2969,9 +2985,24 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
             title: `Copy for ${state.title}`,
             slug: state.slug,
           }
+          if (addUnsavedImages.length)
+            newMarkdown.relationships = {
+              ...newMarkdown.relationships,
+              images: addUnsavedImages,
+            }
+          if (addUnsavedImageSvgs.length)
+            newMarkdown.relationships = {
+              ...newMarkdown.relationships,
+              imageSvgs: addUnsavedImageSvgs,
+            }
           setUpdateMarkdownPayload([newMarkdown])
           if (!flags.isOpenDemo) {
-            const markdown = markdownPayload(statePaneFragments, allMarkdown)
+            const markdown = markdownPayload(
+              statePaneFragments,
+              allMarkdown,
+              unsavedMarkdownImages,
+              unsavedMarkdownImageSvgs,
+            )
             if (typeof markdown[0] !== `undefined`)
               setDrupalPreSaveQueue(
                 markdown[0],
@@ -3113,6 +3144,8 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
     removeMarkdown,
     embeddedEdit,
     setNewEmbeddedPayload,
+    unsavedMarkdownImageSvgs,
+    unsavedMarkdownImages,
   ])
 
   // delete from from drupal
@@ -3414,6 +3447,20 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       )
     }
   }, [setEmbeddedEdit, newEmbeddedPayload, setNewEmbeddedPayload])
+
+  useEffect(() => {
+    if (imageUpdatedMarkdown && imageUpdatedMarkdown.length) {
+      handleEditMarkdown(imageUpdatedMarkdown)
+      setLocked(false)
+      setShowImageLibrary(false)
+      setImageUpdatedMarkdown([])
+    }
+  }, [
+    handleEditMarkdown,
+    imageUpdatedMarkdown,
+    unsavedMarkdownImageSvgs,
+    unsavedMarkdownImages,
+  ])
 
   // set initial state
   useEffect(() => {
