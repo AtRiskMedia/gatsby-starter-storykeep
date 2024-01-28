@@ -110,7 +110,6 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
     type: string,
     uuid: string,
     drupalNid: number,
-    wait?: boolean,
     markdownId?: string,
     oldMarkdownId?: string,
   ) =>
@@ -121,7 +120,6 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
           [uuid]: {
             payload,
             drupalNid,
-            wait: typeof wait === `boolean` ? wait : false,
             markdownId: typeof markdownId === `string` ? markdownId : undefined,
             oldMarkdownId:
               typeof oldMarkdownId === `string` ? oldMarkdownId : undefined,
@@ -163,7 +161,19 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
   ) => {
     const apiBase = process.env.DRUPAL_APIBASE
     const setDrupalQueue = get().setDrupalQueue
-    if (drupalNid > -1) {
+
+    if (payload?.binary) {
+      // binary payload; will be intercepted and passed correctly
+      const fullPayload = {
+        endpoint: `${apiBase}/node/${type}/${uuid}`,
+        method: `POST`,
+        body: {
+          data: payload,
+        },
+      }
+      setDrupalQueue(uuid, fullPayload)
+      return null
+    } else if (drupalNid > -1) {
       const fullPayload = {
         endpoint: `${apiBase}/node/${type}/${uuid}`,
         method: `PATCH`,
@@ -329,7 +339,24 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
         break
       }
 
-      case `file`:
+      /*
+       * can't ingest without uuid! (not using fake one for files)
+      case `file`: {
+        const updateFiles = get().updateFiles
+        const newFile = {
+          id: payload.id,
+          title: payload.attributes.filename,
+          filemime: payload.attributes.filemime,
+          filename: payload.attributes.filename,
+          localFile: {
+            publicURL: payload.attributes.uri.url,
+          },
+        }
+        updateFiles(newFile)
+        break
+      }
+      */
+
       case `menu`:
         console.log(`todo SaveDrupalNode`, type)
         break

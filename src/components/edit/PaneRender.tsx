@@ -161,6 +161,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
     handleUnsavedImage,
     setLocked,
     setShowImageLibrary,
+    setNewImage,
   } = fn
   const {
     innerWidth,
@@ -172,6 +173,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
     unsavedMarkdownImageSvgs,
     locked,
     showImageLibrary,
+    isOpenDemo,
   } = flags
   const [pageStylesPagination, setPageStylesPagination] = useState(-1)
   const thisPane = previewPayload.state
@@ -721,7 +723,6 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
         } else return null
       })
       .filter((e: any) => e)
-
     const panePayloadRaw = generateLivePreviewPayload(uuid, previewPayload)
     const panesPayload = [
       {
@@ -954,6 +955,8 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
                 handleUnsavedImage={handleUnsavedImage}
                 setShowImageLibrary={setShowImageLibrary}
                 showImageLibrary={showImageLibrary}
+                isOpenDemo={isOpenDemo}
+                setNewImage={setNewImage}
               />
             </>
           </div>

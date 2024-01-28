@@ -64,6 +64,8 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
   const [imageUpdatedMarkdown, setImageUpdatedMarkdown]: any = useState([])
   const [locked, setLocked] = useState(false)
   const [showImageLibrary, setShowImageLibrary] = useState(false)
+  const [newImage, setNewImage]: any = useState(null)
+  const [newImagePos, setNewImagePos]: any = useState(null)
   const deepEqual = require(`deep-equal`)
   const embeddedEdit = useDrupalStore((state) => state.embeddedEdit)
   const setEmbeddedEdit = useDrupalStore((state) => state.setEmbeddedEdit)
@@ -74,6 +76,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
   const allStoryFragments = useDrupalStore((state) => state.allStoryFragments)
   const allTractStacks = useDrupalStore((state) => state.allTractStacks)
   const updateMarkdown = useDrupalStore((state) => state.updateMarkdown)
+  const updateFiles = useDrupalStore((state) => state.updateFiles)
   const drupalPreSaveQueue = useDrupalStore((state) => state.drupalPreSaveQueue)
   const setDrupalDeleteNode = useDrupalStore(
     (state) => state.setDrupalDeleteNode,
@@ -450,40 +453,42 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
   }
   */
 
-  const handleUnsavedImage = (
-    fileId: string,
-    nth: number,
-    childNth: number,
-    childGlobalNth: number,
-    isSvg?: boolean,
-  ) => {
-    if (!isSvg)
-      setUnsavedMarkdownImages((prev: any) => {
-        return { ...prev, [fileId]: allFiles[fileId] }
-      })
-    else
-      setUnsavedMarkdownImageSvgs((prev: any) => {
-        return { ...prev, [fileId]: allFiles[fileId] }
-      })
-    console.log(
-      `handleUnsavedImage`,
-      fileId,
-      nth,
-      childNth,
-      childGlobalNth,
-      isSvg,
-    )
-    const oldArray = stateLivePreviewMarkdown.markdownArray
-    // const oldValue = oldArray[nth].split(/\n/)[childNth]
-    const newArray = [...oldArray]
-    // replace ImagePlaceholder in nth , childNth with * ![Descriptive title for this image](filename)
-    const pre = stateLivePreviewMarkdown.markdownTags[nth] === `ol` ? `1.` : `*`
-    const oldValue = `${pre} ![Descriptive title for this image](${allFiles[fileId].filename})`
-    const override = oldArray[nth].split(/\n/).filter((n: any) => n)
-    override[childNth] = oldValue
-    newArray[nth] = `${override.join(`\n`)}\n`
-    setImageUpdatedMarkdown(newArray)
-  }
+  const handleUnsavedImage = useCallback(
+    (
+      fileId: string,
+      nth: number,
+      childNth: number,
+      childGlobalNth: number,
+      isSvg?: boolean,
+      filename?: string,
+      alreadyUnsaved?: boolean = false,
+    ) => {
+      if (!isSvg && !alreadyUnsaved)
+        setUnsavedMarkdownImages((prev: any) => {
+          return { ...prev, [fileId]: allFiles[fileId] }
+        })
+      else if (!alreadyUnsaved)
+        setUnsavedMarkdownImageSvgs((prev: any) => {
+          return { ...prev, [fileId]: allFiles[fileId] }
+        })
+      const oldArray = stateLivePreviewMarkdown.markdownArray
+      const newArray = [...oldArray]
+      const pre =
+        stateLivePreviewMarkdown.markdownTags[nth] === `ol` ? `1.` : `*`
+      const oldValue = `${pre} ![Descriptive title for this image](${
+        filename || allFiles[fileId].filename
+      })`
+      const override = oldArray[nth].split(/\n/).filter((n: any) => n)
+      override[childNth] = oldValue
+      newArray[nth] = `${override.join(`\n`)}\n`
+      setImageUpdatedMarkdown(newArray)
+    },
+    [
+      allFiles,
+      stateLivePreviewMarkdown?.markdownArray,
+      stateLivePreviewMarkdown?.markdownTags,
+    ],
+  )
 
   const handleChange = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const { name, value } = e.target as HTMLInputElement
@@ -3049,10 +3054,10 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         break
       }
 
-      case SaveStages.SaveFiles:
-        break
-
-      case SaveStages.SavedFiles:
+      // drupal api save image; see https://www.drupal.org/node/3024331
+      case SaveStages.SavedNewFile:
+        setSaveStage(SaveStages.UnsavedChanges)
+        setToggleCheck(true)
         break
 
       case SaveStages.FilesUpdateAffectedNodes:
@@ -3120,6 +3125,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
     }
   }, [
     flags.isOpenDemo,
+    newImage,
     saveStage,
     setNavLocked,
     uuid,
@@ -3147,6 +3153,161 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
     unsavedMarkdownImageSvgs,
     unsavedMarkdownImages,
   ])
+
+  useEffect(() => {
+    // re-used image from allFiles; must update markdown node (unsaved changes)
+    if (!newImage && imageUpdatedMarkdown && imageUpdatedMarkdown.length) {
+      handleEditMarkdown(imageUpdatedMarkdown)
+      setLocked(false)
+      setShowImageLibrary(false)
+      setImageUpdatedMarkdown([])
+    }
+  }, [
+    newImage,
+    handleEditMarkdown,
+    imageUpdatedMarkdown,
+    unsavedMarkdownImageSvgs,
+    unsavedMarkdownImages,
+  ])
+
+  // toggle SaveNewFile to save this file to Drupal
+  useEffect(() => {
+    if (newImage && saveStage < SaveStages.SaveNewFile) {
+      if (!flags.isOpenDemo) {
+        const endpoint =
+          newImage.filetype === `image/svg+xml`
+            ? `${stateLivePreviewMarkdown.markdownId}/field_image_svg`
+            : `${stateLivePreviewMarkdown.markdownId}/field_image`
+        setDrupalPreSaveQueue(
+          {
+            filename: newImage.filename,
+            binary: newImage.binary,
+            nth: newImage.nth,
+            childNth: newImage.childNth,
+            childGlobalNth: newImage.childGlobalNth,
+          },
+          `markdown`,
+          endpoint,
+          -1,
+        )
+      }
+      setNewImage(null)
+      setSaveStage(SaveStages.SaveNewFile)
+    }
+  }, [
+    newImage,
+    saveStage,
+    flags.isOpenDemo,
+    setDrupalPreSaveQueue,
+    uuid,
+    stateLivePreviewMarkdown?.markdownId,
+  ])
+
+  // save file to drupal
+  useEffect(() => {
+    // first pass save to drupal
+    if (
+      !flags.isOpenDemo &&
+      saveStage === SaveStages.SaveNewFile &&
+      typeof drupalPreSaveQueue?.markdown !== `undefined` &&
+      Object.keys(drupalPreSaveQueue?.markdown).length
+    ) {
+      Object.keys(drupalPreSaveQueue.markdown).forEach((endpoint: string) => {
+        setNewImagePos({
+          nth: drupalPreSaveQueue.markdown[endpoint].payload.nth,
+          childNth: drupalPreSaveQueue.markdown[endpoint].payload.childNth,
+          childGlobalNth:
+            drupalPreSaveQueue.markdown[endpoint].payload.childGlobalNth,
+          isSvg:
+            drupalPreSaveQueue.markdown[endpoint].payload.filename.includes(
+              `svg`,
+            ),
+          filename: drupalPreSaveQueue.markdown[endpoint].payload.filename,
+        })
+        setDrupalSaveNode(
+          drupalPreSaveQueue.markdown[endpoint].payload,
+          `markdown`,
+          endpoint,
+          -1,
+        )
+        removeDrupalPreSaveQueue(endpoint, `markdown`)
+      })
+      setSaveStage(SaveStages.SavingNewFile)
+    }
+    // second pass, intercept / process response, get uuid from Drupal for new node
+    if (
+      !flags.isOpenDemo &&
+      saveStage === SaveStages.SavingNewFile &&
+      Object.keys(newImagePos).length &&
+      drupalResponse &&
+      Object.keys(drupalResponse).length
+    ) {
+      Object.keys(drupalResponse).forEach((endpoint: string) => {
+        drupalResponse[endpoint].data.forEach((newFile: any) => {
+          if (newFile.attributes.filename === newImagePos.filename) {
+            const newFileDatum = {
+              title: newFile.attributes.filename,
+              filemime: newFile.attributes.filemime,
+              filename: newFile.attributes.filename,
+              localFile: {
+                publicURL: newFile.attributes.uri.url,
+              },
+            }
+            if (!newFile.attributes.filename.includes(`svg`))
+              setUnsavedMarkdownImages((prev: any) => {
+                return { ...prev, [newFile.id]: newFileDatum }
+              })
+            else
+              setUnsavedMarkdownImageSvgs((prev: any) => {
+                return { ...prev, [newFile.id]: newFileDatum }
+              })
+            updateFiles(newFile)
+            handleUnsavedImage(
+              newFile.id,
+              newImagePos.nth,
+              newImagePos.childNth,
+              newImagePos.childGlobalNth,
+              newImagePos.isSvg,
+              newImagePos.filename,
+              true,
+            )
+          }
+        })
+        setCleanerQueue(endpoint)
+        removeDrupalResponse(endpoint)
+      })
+      setSaveStage(SaveStages.SavedNewFile)
+    }
+  }, [
+    flags.isOpenDemo,
+    saveStage,
+    uuid,
+    handleUnsavedImage,
+    drupalPreSaveQueue?.markdown,
+    drupalResponse,
+    removeDrupalPreSaveQueue,
+    removeDrupalResponse,
+    setCleanerQueue,
+    setDrupalSaveNode,
+    updateFiles,
+    newImagePos,
+  ])
+
+  /*
+  // update file on save
+  useEffect(() => {
+    if (
+      saveStage === SaveStages.SavingResource &&
+      updateResourcePayload.length
+    ) {
+      updateResourcePayload.forEach((e: any) => {
+        setResource(e.id, e.payload)
+      })
+      setUpdateResourcePayload([])
+      setSaveStage(SaveStages.SavedResource)
+    }
+  }, [saveStage, updateResourcePayload, setResource])
+*/
 
   // delete from from drupal
   useEffect(() => {
@@ -3250,7 +3411,6 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
           `pane`,
           uuid,
           thisPane?.drupalNid,
-          true,
           newMarkdown.id,
           stateLivePreviewMarkdown.markdownId,
         )
@@ -3448,20 +3608,6 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
     }
   }, [setEmbeddedEdit, newEmbeddedPayload, setNewEmbeddedPayload])
 
-  useEffect(() => {
-    if (imageUpdatedMarkdown && imageUpdatedMarkdown.length) {
-      handleEditMarkdown(imageUpdatedMarkdown)
-      setLocked(false)
-      setShowImageLibrary(false)
-      setImageUpdatedMarkdown([])
-    }
-  }, [
-    handleEditMarkdown,
-    imageUpdatedMarkdown,
-    unsavedMarkdownImageSvgs,
-    unsavedMarkdownImages,
-  ])
-
   // set initial state
   useEffect(() => {
     if (
@@ -3481,6 +3627,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
   // )
   // console.log(`childClasses`, stateLivePreview.childClasses)
   // console.log(stateLivePreviewMarkdown)
+
   return (
     <PaneForm
       uuid={uuid}
@@ -3505,6 +3652,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         unsavedMarkdownImageSvgs,
         locked,
         showImageLibrary,
+        isOpenDemo: flags.isOpenDemo,
       }}
       fn={{
         toggleBelief,
@@ -3521,6 +3669,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         handleUnsavedImage,
         setLocked,
         setShowImageLibrary,
+        setNewImage,
       }}
     />
   )

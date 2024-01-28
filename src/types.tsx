@@ -52,9 +52,9 @@ export enum SaveStages {
   UnsavedChanges,
   PrepareSave,
   PrepareNodes,
-  SaveFiles,
-  SavingFiles,
-  SavedFiles,
+  SaveNewFile,
+  SavingNewFile,
+  SavedNewFile,
   FilesUpdateAffectedNodes,
   SaveMarkdown,
   PreSavingMarkdown,
@@ -132,6 +132,7 @@ export interface IPaneRender {
     handleUnsavedImage: Function
     setLocked: Function
     setShowImageLibrary: Function
+    setNewImage: Function
   }
   flags: {
     interceptMode: string
@@ -144,6 +145,7 @@ export interface IPaneRender {
     unsavedMarkdownImageSvgs: any // FIX
     locked: boolean
     showImageLibrary: boolean
+    isOpenDemo: boolean
   }
 }
 
@@ -480,6 +482,7 @@ export interface IPaneForm {
     handleUnsavedImage: Function
     setLocked: Function
     setShowImageLibrary: Function
+    setNewImage: Function
   }
 }
 
@@ -638,6 +641,8 @@ export interface IEditInPlaceControls {
   handleUnsavedImage: Function
   showImageLibrary: Boolean
   setShowImageLibrary: Function
+  isOpenDemo: Boolean
+  setNewImage: Function
 }
 
 export interface IAxiosClientProps {

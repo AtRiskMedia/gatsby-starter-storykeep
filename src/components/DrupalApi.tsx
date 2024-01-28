@@ -57,10 +57,8 @@ const DrupalAPI = ({ children }: IReactChild) => {
       removeDrupalQueue(drupalLocked)
       setApiStage(ApiStages.Success)
     }
-    if (error) {
+    if (error)
       setApiStage(ApiStages.Error)
-      console.log(`error in api call to drupal`, error)
-    }
   }, [
     drupalLocked,
     removeDrupalQueue,

@@ -2,7 +2,6 @@
 import React, { ChangeEvent, useState } from 'react'
 import { InformationCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { classNames } from '@tractstack/helpers'
-import { Buffer } from 'buffer/'
 
 import { useDrupalStore } from '../../stores/drupal'
 import { IEditInPlaceControls } from '../../types'
@@ -1103,6 +1102,8 @@ const PaneEditInPlace = ({
   handleUnsavedImage,
   showImageLibrary,
   setShowImageLibrary,
+  isOpenDemo,
+  setNewImage,
 }: IEditInPlaceControls) => {
   const allFiles = useDrupalStore((state) => state.allFiles)
   const [filterString, setFilterString] = useState(``)
@@ -1231,15 +1232,34 @@ const PaneEditInPlace = ({
       }
     })
   }
+  const converterDataURItoBlob = (dataURI: string) => {
+    let byteString
+    if (dataURI.split(`,`)[0].indexOf(`base64`) >= 0) {
+      byteString = atob(dataURI.split(`,`)[1])
+    } else {
+      byteString = encodeURI(dataURI.split(`,`)[1])
+    }
+    const mimeString = dataURI.split(`,`)[0].split(`:`)[1].split(`;`)[0]
+    const ia = new Uint8Array(byteString.length)
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i)
+    }
+    return new Blob([ia], { type: mimeString })
+  }
 
   const handleFileRead = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event?.target?.files?.length ? event?.target?.files[0] : null
     if (file) {
       const base64 = await convertBase64(file)
-      console.log(`base64`, base64)
-      const data = Buffer.from(base64 as string, `base64`)
-      const d = data.toString(`utf8`)
-      console.log(`utf-8`, d)
+      const binary = converterDataURItoBlob(base64 as string)
+      setNewImage({
+        filename: `${Math.random().toString(36).substr(2, 4)}-${file.name}`,
+        filetype: file.type,
+        binary,
+        nth,
+        childNth,
+        childGlobalNth,
+      })
     }
   }
   const files =
@@ -1380,13 +1400,15 @@ const PaneEditInPlace = ({
                   <>
                     {imageData.alt === `ImagePlaceholder` ? (
                       <>
-                        <input
-                          type="file"
-                          id={`file-${childGlobalNth}`}
-                          accept="image/*"
-                          className="mb-3"
-                          onChange={(e) => handleFileRead(e)}
-                        />
+                        {isOpenDemo ? null : (
+                          <input
+                            type="file"
+                            id={`file-${childGlobalNth}`}
+                            accept="image/*"
+                            className="mb-3"
+                            onChange={(e) => handleFileRead(e)}
+                          />
+                        )}
                         <div className="clear mb-4">
                           <p>
                             or select from{` `}
