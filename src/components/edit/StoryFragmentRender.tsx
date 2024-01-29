@@ -11,6 +11,7 @@ import {
 import { classNames, Compositor } from '@tractstack/helpers'
 import { IStoryFragmentId } from '@tractstack/types'
 
+import { config } from '../../../data/SiteConfig'
 import { IAdd } from '../../types'
 import { useDrupalStore } from '../../stores/drupal'
 import StoryFragmentPaneRender from './StoryFragmentPaneRender'
@@ -175,6 +176,7 @@ const StoryFragmentRender = ({
         tractStackTitle: thisTractStack.title,
         tractStackSlug: thisTractStack.slug,
         isBuilderPreview: true,
+        home: config.home,
       },
     }
     return Compositor(compositorPayload)

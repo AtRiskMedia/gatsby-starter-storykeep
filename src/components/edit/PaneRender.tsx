@@ -15,6 +15,7 @@ import { fromMarkdown } from 'mdast-util-from-markdown'
 import { toHast } from 'mdast-util-to-hast'
 import ContentEditable from 'react-contenteditable'
 
+import { config } from '../../../data/SiteConfig'
 import PaneEditInPlace from './PaneEditInPlace'
 import { generateLivePreviewPayload } from '../../helpers/generateLivePreviewPayload'
 import { htmlToMarkdown } from '../../helpers/htmlToMarkdown'
@@ -770,6 +771,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
         tractStackTitle: `builder`,
         tractStackSlug: `builder`,
         isBuilderPreview: true,
+        home: config.home,
       },
     }
 

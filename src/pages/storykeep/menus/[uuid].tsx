@@ -92,12 +92,8 @@ export default function EditMenu({ params }: { params: { uuid: string } }) {
     if (editStage === EditStages.SetInitialState) {
       setEditStage(EditStages.SettingInitialState)
       const initialState = {
-        title: thisMenu?.title,
-        slug: thisMenu?.slug,
-        categorySlug: thisMenu.categorySlug,
-        actionLisp: thisMenu.actionLisp,
-        drupalNid: thisMenu.drupalNid,
-        oneliner: thisMenu.oneliner,
+        title: thisMenu.title,
+        theme: thisMenu.theme,
         optionsPayload: thisMenu.optionsPayload,
       }
       const payload = {
@@ -110,12 +106,8 @@ export default function EditMenu({ params }: { params: { uuid: string } }) {
   }, [
     editStage,
     setEditStage,
-    thisMenu?.slug,
     thisMenu?.title,
-    thisMenu?.actionLisp,
-    thisMenu?.categorySlug,
-    thisMenu?.drupalNid,
-    thisMenu?.oneliner,
+    thisMenu?.theme,
     thisMenu?.optionsPayload,
     uuid,
   ])

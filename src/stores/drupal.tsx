@@ -726,12 +726,6 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
       title: payload.attributes.title,
       theme: payload.attributes.field_theme,
       optionsPayload: payload.attributes.field_options,
-      svgLogoFile: payload?.relationships?.field_svg_logo?.data?.id,
-      imageLogoFile: payload?.relationships?.field_image?.data
-        ?.map((f: any) => {
-          return f.id
-        })
-        .filter((e: string) => e !== `missing`),
     }
     set((state) => ({
       allMenus: { ...state.allMenus, [payload.id]: thisMenu },

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { navigate } from 'gatsby'
 import { v4 as uuidv4 } from 'uuid'
 
+import { config } from '../../../data/SiteConfig'
 import { useDrupalStore } from '../../stores/drupal'
 import StoryFragmentForm from './StoryFragmentForm'
 import {
@@ -77,6 +78,7 @@ const StoryFragmentState = ({
     tractStackId: thisStoryFragment?.tractstack,
     tractStackTitle: thisTractStack?.title,
     tractStackSlug: thisTractStack?.slug,
+    home: config.home,
   }
   const allStoryFragmentSlugs = Object.keys(allStoryFragments)
     .map((e) => {

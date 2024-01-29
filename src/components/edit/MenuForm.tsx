@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-import React from 'react'
+import React, { useEffect } from 'react'
 import { classNames } from '@tractstack/helpers'
 import { navigate } from 'gatsby'
 import {
@@ -12,6 +12,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { CheckIcon, TrashIcon } from '@heroicons/react/20/solid'
 
+import { config } from '../../../data/SiteConfig'
 import { SaveStages, IFlags } from '../../types'
 
 const MenuForm = ({
@@ -21,10 +22,15 @@ const MenuForm = ({
 }: {
   payload: any
   flags: IFlags
-  fn: { handleChange: Function; handleSubmit: Function; handleDelete: Function }
+  fn: {
+    handleChange: Function
+    handleSubmit: Function
+    handleDelete: Function
+    setSaved: Function
+  }
 }) => {
   const { state } = payload
-  const { handleChange, handleSubmit, handleDelete } = fn
+  const { handleChange, handleSubmit, handleDelete, setSaved } = fn
   const AuthorIcon =
     flags.isAuthor || flags.isAdmin || flags.isBuilder
       ? LockOpenIcon
@@ -46,6 +52,12 @@ const MenuForm = ({
       : !flags.isOpenDemo
         ? `No edit privileges`
         : `Safe mode enabled`
+
+  useEffect(() => {
+    if (flags.saved) {
+      setTimeout(() => setSaved(false), config.messageDelay)
+    }
+  }, [flags.saved, setSaved])
 
   return (
     <>
@@ -77,6 +89,18 @@ const MenuForm = ({
                       aria-hidden="true"
                     />
                     {authorDescription}
+                  </div>
+                  <div className="mt-2 flex items-center">
+                    {flags.saved ? (
+                      <span className="inline-flex items-center rounded-md bg-red-500 px-2 py-1 text-sm text-white ring-1 ring-inset ring-mydarkgrey/10">
+                        SAVED
+                      </span>
+                    ) : flags.saveStage > SaveStages.NoChanges &&
+                      flags.saveStage < SaveStages.Success ? (
+                      <span className="inline-flex items-center rounded-md bg-yellow-300/20 px-2 py-1 text-sm text-black ring-1 ring-inset ring-mydarkgrey/10">
+                        Unsaved changes
+                      </span>
+                    ) : null}
                   </div>
                 </div>
               </div>

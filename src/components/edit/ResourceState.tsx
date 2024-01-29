@@ -308,6 +308,7 @@ const ResourceState = ({
         handleChange,
         handleSubmit,
         handleDelete,
+        setSaved,
       }}
     />
   )

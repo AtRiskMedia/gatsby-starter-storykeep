@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-import React from 'react'
+import React, { useEffect } from 'react'
 import { classNames } from '@tractstack/helpers'
 import { navigate } from 'gatsby'
 import {
@@ -12,6 +12,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { CheckIcon, LinkIcon, TrashIcon } from '@heroicons/react/20/solid'
 
+import { config } from '../../../data/SiteConfig'
 import { SaveStages, IFlags } from '../../types'
 
 const ResourceForm = ({
@@ -21,10 +22,15 @@ const ResourceForm = ({
 }: {
   payload: any
   flags: IFlags
-  fn: { handleChange: Function; handleSubmit: Function; handleDelete: Function }
+  fn: {
+    handleChange: Function
+    handleSubmit: Function
+    handleDelete: Function
+    setSaved: Function
+  }
 }) => {
   const { state } = payload
-  const { handleChange, handleSubmit, handleDelete } = fn
+  const { handleChange, handleSubmit, handleDelete, setSaved } = fn
   const AuthorIcon =
     flags.isAuthor || flags.isAdmin || flags.isBuilder
       ? LockOpenIcon
@@ -46,6 +52,12 @@ const ResourceForm = ({
       : !flags.isOpenDemo
         ? `No edit privileges`
         : `Safe mode enabled`
+
+  useEffect(() => {
+    if (flags.saved) {
+      setTimeout(() => setSaved(false), config.messageDelay)
+    }
+  }, [flags.saved, setSaved])
 
   return (
     <>
