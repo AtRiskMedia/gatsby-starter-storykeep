@@ -94,7 +94,6 @@ const MenuState = ({
 
   // handle stages
   useEffect(() => {
-    console.log(SaveStages[saveStage])
     switch (saveStage) {
       case SaveStages.NoChanges:
         Object.keys(cleanerQueue).forEach((e: string) => {

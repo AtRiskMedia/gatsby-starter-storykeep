@@ -126,6 +126,11 @@ const TractStackForm = ({
       name: `Story Fragment`,
       enabled: selectedCollection === `storyfragment`,
     },
+    {
+      id: `menu`,
+      name: `Menu`,
+      enabled: selectedCollection === `menu`,
+    },
   ]
   const rowOneHeading =
     selectedCollection === `storyfragment`
@@ -1095,6 +1100,8 @@ const TractStackForm = ({
                                 navigate(`/storykeep/storyfragments/${record}`)
                               else if (selectedCollection === `resource`)
                                 navigate(`/storykeep/resources/${record}`)
+                              else if (selectedCollection === `menu`)
+                                navigate(`/storykeep/menus/${record}`)
                               else console.log(`goto`, selectedCollection)
                             }}
                             className="text-myblue underline underline-offset-2 text-sm hover:text-myorange"

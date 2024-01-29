@@ -142,6 +142,7 @@ const TractStackState = ({
   const allTractStacks = useDrupalStore((state) => state.allTractStacks)
   const updatePanes = useDrupalStore((state) => state.updatePanes)
   const updateResources = useDrupalStore((state) => state.updateResources)
+  const updateMenus = useDrupalStore((state) => state.updateMenus)
   const updateStoryFragments = useDrupalStore(
     (state) => state.updateStoryFragments,
   )
@@ -238,6 +239,20 @@ const TractStackState = ({
         }
         updateResources(newResource)
         navigate(`/storykeep/resources/${newUuid}`)
+        break
+      }
+
+      case `menu`: {
+        const newUuid = uuidv4()
+        const newMenu = {
+          id: newUuid,
+          drupalNid: -1,
+          title: `Untitled`,
+          theme: `default`,
+          optionsPayload: `{}`,
+        }
+        updateMenus(newMenu)
+        navigate(`/storykeep/menus/${newUuid}`)
         break
       }
     }

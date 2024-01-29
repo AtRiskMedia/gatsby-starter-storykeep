@@ -137,6 +137,7 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
     const removeTractStack = get().removeTractStack
     const removeStoryFragment = get().removeStoryFragment
     const removePane = get().removePane
+    const removeMenu = get().removeMenu
     const removeResource = get().removeResource
     const fullPayload = {
       endpoint: `${apiBase}/node/${type}/${uuid}`,
@@ -155,6 +156,10 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
         break
       case `tractstack`:
         removeTractStack(uuid)
+        break
+      case `menu`:
+        removeMenu(uuid)
+        break
     }
   },
   setDrupalSaveNode: (
@@ -318,12 +323,6 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
         const newResource = {
           ...thisResource,
           id: uuid,
-          title: payload?.attributes?.title,
-          actionLisp: payload?.attributes?.field_action_lisp,
-          categorySlug: payload?.attributes?.field_category_slug,
-          oneliner: payload?.attributes?.field_oneliner,
-          optionsPayload: payload?.attributes?.field_options,
-          slug: payload?.attributes?.field_slug,
         }
         if (payload.attributes.title !== thisResource.title)
           newResource.title = payload.attributes.title
@@ -361,9 +360,22 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
       }
       */
 
-      case `menu`:
-        console.log(`todo SaveDrupalNode`, type)
+      case `menu`: {
+        const updateMenus = get().updateMenus
+        const thisMenu = get().allMenus[uuid]
+        const newMenu = {
+          ...thisMenu,
+          id: uuid,
+        }
+        if (payload.attributes.title !== thisMenu.title)
+          newMenu.title = payload.attributes.title
+        if (payload.attributes.field_theme !== thisMenu.theme)
+          newMenu.theme = payload.attributes.field_theme
+        if (payload.attributes.field_options !== thisMenu.optionsPayload)
+          newMenu.optionsPayload = payload.attributes.field_options
+        updateMenus(newMenu)
         break
+      }
     }
   },
   setDrupalLocked: (drupalLocked: string) =>
@@ -722,10 +734,12 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
   updateMenus: (payload: any) => {
     // FIX
     const thisMenu = {
-      nid: payload.attributes.drupal_internal__nid,
-      title: payload.attributes.title,
-      theme: payload.attributes.field_theme,
-      optionsPayload: payload.attributes.field_options,
+      drupalNid:
+        payload?.attributes?.drupal_internal__nid || payload?.drupalNid,
+      title: payload?.attributes?.title || payload?.title,
+      theme: payload?.attributes?.field_theme || payload?.theme,
+      optionsPayload:
+        payload?.attributes?.field_options || payload?.optionsPayload,
     }
     set((state) => ({
       allMenus: { ...state.allMenus, [payload.id]: thisMenu },
