@@ -57,6 +57,7 @@ const TractStackForm = ({
     (state) => state.setSelectedCollection,
   )
   const allPanes = useDrupalStore((state) => state.allPanes)
+  const allMenus = useDrupalStore((state) => state.allMenus)
   const allResources = useDrupalStore((state) => state.allResources)
   const allStoryFragments = useDrupalStore((state) => state.allStoryFragments)
   const thisAllStoryFragments = Object.keys(allStoryFragments)
@@ -76,13 +77,13 @@ const TractStackForm = ({
         ? allPanes
         : selectedCollection === `resource`
           ? allResources
-          : // : selectedCollection === `files`
-            //  ? allFiles
-            // : selectedCollection === `markdown`
-            //  ? allMarkdown
-            //  : selectedCollection === `menu`
-            //    ? allMenus
-            {}
+          : selectedCollection === `menu`
+            ? allMenus
+            : // : selectedCollection === `files`
+              //  ? allFiles
+              // : selectedCollection === `markdown`
+              //  ? allMarkdown
+              {}
   const AuthorIcon =
     flags.isAuthor || flags.isAdmin || flags.isBuilder
       ? LockOpenIcon
@@ -151,6 +152,12 @@ const TractStackForm = ({
       count: Object.keys(allResources).length,
       current: selectedCollection === `resource`,
     },
+    {
+      id: `menu`,
+      name: `Menus`,
+      count: Object.keys(allMenus).length,
+      current: selectedCollection === `menu`,
+    },
     // {
     //  id: `markdown`,
     //  name: `Markdown`,
@@ -162,12 +169,6 @@ const TractStackForm = ({
     //  name: `Files`,
     //  count: Object.keys(allFiles).length,
     //  current: selectedCollection === `file`,
-    // },
-    // {
-    //  id: `menu`,
-    //  name: `Menus`,
-    //  count: Object.keys(allMenus).length,
-    //  current: selectedCollection === `menu`,
     // },
   ]
   const noTags = tags.filter((t) => t.count).length === 0
@@ -765,7 +766,7 @@ const TractStackForm = ({
                       scope="col"
                       className="hidden whitespace-nowrap px-3 py-4 text-left text-sm text-mydarkgrey md:table-cell"
                     >
-                      Slug
+                      {selectedCollection !== `menu` ? `Slug` : null}
                     </th>
                     <th scope="col" className="relative py-3.5 pl-3 pr-4">
                       <span className="sr-only">Edit</span>
@@ -832,6 +833,8 @@ const TractStackForm = ({
                                 navigate(`/storykeep/storyfragments/${record}`)
                               else if (selectedCollection === `resource`)
                                 navigate(`/storykeep/resources/${record}`)
+                              else if (selectedCollection === `menu`)
+                                navigate(`/storykeep/menus/${record}`)
                               else
                                 console.log(`miss on collection`, [
                                   selectedCollection,

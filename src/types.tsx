@@ -73,6 +73,11 @@ export enum SaveStages {
   SavingStoryFragment,
   SavedStoryFragment,
   StoryFragmentUpdateAffectedNodes,
+  PreSavingMenu,
+  PreSavedMenu,
+  SaveMenu,
+  SavingMenu,
+  SavedMenu,
   PreSavingResource,
   PreSavedResource,
   SaveResource,
@@ -371,6 +376,7 @@ export interface IDrupalState {
   setStoryFragment: Function
   setTractStack: Function
   setResource: Function
+  setMenu: Function
   setPane: Function
   viewportKey: string
   setViewportKey: Function
@@ -399,6 +405,7 @@ export interface IDrupalState {
   allCollections: any // FIX
   removeTractStack: Function
   removeResource: Function
+  removeMenu: Function
   removePane: Function
   removeMarkdown: Function
   removeStoryFragment: Function
@@ -440,9 +447,9 @@ export interface IFlags {
   isAdmin: boolean
   isBuilder: boolean
   isOpenDemo: boolean
-  slugCollision: boolean
   saved: boolean
   saveStage: number
+  slugCollision?: boolean
   isEmpty?: boolean
 }
 export interface IFlagsPaneForm {

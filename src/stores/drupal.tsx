@@ -74,6 +74,10 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
     set((state) => ({
       allResources: { ...state.allResources, [uuid]: payload },
     })),
+  setMenu: (uuid: string, payload: any) =>
+    set((state) => ({
+      allMenus: { ...state.allMenus, [uuid]: payload },
+    })),
   setPane: (uuid: string, payload: any) =>
     set((state) => ({
       allPanes: { ...state.allPanes, [uuid]: payload },
@@ -614,6 +618,12 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
     const newPayload = { ...allPanes }
     delete newPayload[uuid]
     set((state) => ({ ...state, allPanes: newPayload }))
+  },
+  removeMenu: (uuid: string) => {
+    const allMenus = get().allMenus
+    const newPayload = { ...allMenus }
+    delete newPayload[uuid]
+    set((state) => ({ ...state, allMenus: newPayload }))
   },
   removeMarkdown: (uuid: string) => {
     const allMarkdown = get().allMarkdown

@@ -1,3 +1,20 @@
+export function menuPayload(
+  state: any, // FIX
+  uuid: string,
+) {
+  return {
+    type: `node--menu`,
+    id: uuid,
+    attributes: {
+      title: state.title,
+      drupalNid: state.drupalNid,
+      field_theme: state.theme,
+      field_options: state.optionsPayload || `{}`,
+    },
+    // also add relationships
+  }
+}
+
 export function resourcePayload(
   state: any, // FIX
   uuid: string,
