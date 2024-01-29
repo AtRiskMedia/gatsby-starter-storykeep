@@ -461,7 +461,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       childGlobalNth: number,
       isSvg?: boolean,
       filename?: string,
-      alreadyUnsaved?: boolean = false,
+      alreadyUnsaved: boolean = false,
     ) => {
       if (!isSvg && !alreadyUnsaved)
         setUnsavedMarkdownImages((prev: any) => {
@@ -913,7 +913,6 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
                                             (value || viewport === `remove`)
                                           ? `updateSelector`
                                           : null
-
     switch (mode) {
       case `starter`: {
         if ([`titleText`, `text`, `borderedText`].includes(value)) {
@@ -974,31 +973,54 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
 
       case `addParentStyle`: {
         const thisNth = result[2]
-        const current = {
-          ...statePaneFragments[stateLivePreviewMarkdown.paneFragmentId]
-            .optionsPayload?.classNamesPayload.parent.classes[thisNth],
-        }
-        current[value] = [``]
-        const newClassNamesPayload = {
-          ...statePaneFragments[paneFragmentId].optionsPayload
-            .classNamesPayload,
-          parent: {
+        if (!value) {
+          const newClassNamesPayload = {
             ...statePaneFragments[paneFragmentId].optionsPayload
-              .classNamesPayload.parent,
-            classes: {
+              .classNamesPayload,
+            parent: {
               ...statePaneFragments[paneFragmentId].optionsPayload
-                .classNamesPayload.parent.classes,
-              [thisNth]: current,
+                .classNamesPayload?.parent,
+              classes: {
+                ...statePaneFragments[paneFragmentId].optionsPayload
+                  .classNamesPayload.parent?.classes,
+                [thisNth]: {},
+              },
             },
-          },
+          }
+          const reduced = reduceTailwindClasses(newClassNamesPayload)
+          const newOptionsPayload = {
+            ...statePaneFragments[paneFragmentId].optionsPayload,
+            classNamesPayload: newClassNamesPayload,
+            classNames: reduced.classNames,
+          }
+          regenerateState(newOptionsPayload)
+        } else {
+          const current = {
+            ...statePaneFragments[stateLivePreviewMarkdown.paneFragmentId]
+              .optionsPayload?.classNamesPayload.parent.classes[thisNth],
+          }
+          current[value] = [``]
+          const newClassNamesPayload = {
+            ...statePaneFragments[paneFragmentId].optionsPayload
+              .classNamesPayload,
+            parent: {
+              ...statePaneFragments[paneFragmentId].optionsPayload
+                .classNamesPayload.parent,
+              classes: {
+                ...statePaneFragments[paneFragmentId].optionsPayload
+                  .classNamesPayload.parent.classes,
+                [thisNth]: current,
+              },
+            },
+          }
+          const reduced = reduceTailwindClasses(newClassNamesPayload)
+          const newOptionsPayload = {
+            ...statePaneFragments[paneFragmentId].optionsPayload,
+            classNamesPayload: newClassNamesPayload,
+            classNames: reduced.classNames,
+          }
+          regenerateState(newOptionsPayload)
         }
-        const reduced = reduceTailwindClasses(newClassNamesPayload)
-        const newOptionsPayload = {
-          ...statePaneFragments[paneFragmentId].optionsPayload,
-          classNamesPayload: newClassNamesPayload,
-          classNames: reduced.classNames,
-        }
-        regenerateState(newOptionsPayload)
         break
       }
 
@@ -2598,11 +2620,14 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       Object.keys(stateLivePreviewMarkdown.listItems).forEach((e: string) => {
         if (
           ([`pre`, `imagePre`].includes(mode) &&
-            stateLivePreviewMarkdown.listItems[e].parentNth < nth) ||
+            stateLivePreviewMarkdown.listItems[e].parentNth <= nth &&
+            stateLivePreviewMarkdown.listItems[e].childNth < childNth) ||
           ([`post`, `imagePost`].includes(mode) &&
-            stateLivePreviewMarkdown.listItems[e].parentNth <= nth)
-        )
+            stateLivePreviewMarkdown.listItems[e].parentNth <= nth &&
+            stateLivePreviewMarkdown.listItems[e].childNth <= childNth)
+        ) {
           listItemNth++
+        }
       })
       // insert ul|ol or img in li, must account for +1 li
       Object.keys(thisClassNamesPayloadInner.override).forEach((e: any) => {
@@ -2613,12 +2638,14 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
             if (
               ([`pre`, `imagePre`].includes(mode) && +f >= listItemNth) ||
               ([`post`, `imagePost`].includes(mode) && +f >= listItemNth)
-            )
+            ) {
               thatOverrideInner = {
                 ...thatOverrideInner,
                 [`${+f + 1}`]: thisVal,
               }
-            else thatOverrideInner = { ...thatOverrideInner, [f]: thisVal }
+            } else {
+              thatOverrideInner = { ...thatOverrideInner, [f]: thisVal }
+            }
           },
         )
         thisOverrideInner = { ...thisOverrideInner, [e]: thatOverrideInner }
@@ -3620,12 +3647,10 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
 
   if (saveStage < SaveStages.NoChanges) return null
 
-  // console.log(
-  //  `classNamesPayload`,
-  //  statePaneFragments[stateLivePreviewMarkdown.paneFragmentId].optionsPayload
-  //    .classNamesPayload,
-  // )
-  // console.log(`childClasses`, stateLivePreview.childClasses)
+  //console.log(
+  //  statePaneFragments[stateLivePreviewMarkdown.paneFragmentId].optionsPayload,
+  //)
+  // console.log(stateLivePreview)
   // console.log(stateLivePreviewMarkdown)
 
   return (

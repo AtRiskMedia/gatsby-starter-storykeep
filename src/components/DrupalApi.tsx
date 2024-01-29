@@ -57,8 +57,7 @@ const DrupalAPI = ({ children }: IReactChild) => {
       removeDrupalQueue(drupalLocked)
       setApiStage(ApiStages.Success)
     }
-    if (error)
-      setApiStage(ApiStages.Error)
+    if (error) setApiStage(ApiStages.Error)
   }, [
     drupalLocked,
     removeDrupalQueue,

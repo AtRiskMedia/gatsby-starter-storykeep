@@ -599,6 +599,7 @@ const animate = [`fadeInUp`]
 const shadowSIZE = [`sm`, `TRUE`, `md`, `lg`, `xl`, `2xl`, `inner`, `none`]
 
 const strokeSIZE = [0, 1, 2]
+const borderStrokeSIZE = [0, 2, 4, 8]
 
 const overflow = [
   `auto`,
@@ -675,7 +676,7 @@ export const tailwindSpecialTitle: { [index: string]: string } = {
   border: `Border`,
   borderSTYLE: `Border Style`,
   borderCOLOR: `Border Color`,
-  borderSIZE: `Border Size`,
+  // borderSIZE: `Border Size`,
   borderSTROKE: `Border Stroke Size`,
   display: `Display`,
   stroke: `Stroke`,
@@ -726,7 +727,7 @@ const tailwindAllowedValues: { [index: string]: any } = {
   bgCOLOR: colors,
   border: tf,
   borderSTYLE,
-  borderSTROKE: strokeSIZE,
+  borderSTROKE: borderStrokeSIZE,
   borderCOLOR: colors,
   // borderSIZE:
   display,

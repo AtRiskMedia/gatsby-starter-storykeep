@@ -1786,7 +1786,7 @@ const PaneEditInPlace = ({
               </div>
             </div>
           ) : null}
-          {hasParentClasses && pageStylesPagination === -1 ? (
+          {pageStylesPagination === -1 ? (
             <div className="mb-4 bg-white shadow rounded-lg w-full max-w-md">
               <div className="px-4 py-5 p-6">
                 <span className="pr-2 font-action">Pane Styles</span>
@@ -1801,7 +1801,7 @@ const PaneEditInPlace = ({
                 </button>
               </div>
             </div>
-          ) : hasParentClasses && pageStylesPagination > -1 ? (
+          ) : pageStylesPagination > -1 ? (
             <div className="mb-4 bg-white shadow rounded-lg w-full max-w-md">
               <div className="px-4 py-5 p-6">
                 <div className="inline-block">
@@ -1814,7 +1814,7 @@ const PaneEditInPlace = ({
                     Hide
                   </button>
                 </div>
-                <div className="inline-block">
+                <div>
                   <span className="pr-2 text-xs font-action">Layer</span>
                   {hasParentClasses &&
                     Object.keys(parentClasses).map((e) => (
@@ -1839,55 +1839,66 @@ const PaneEditInPlace = ({
                     ))}
                   <button
                     key={`add---${parentId}`}
-                    onClick={() => {
-                      console.log(`todo add parentStyle`)
-                    }}
+                    onClick={() =>
+                      handleChangeEditInPlace({
+                        target: {
+                          name: `add---${
+                            Object.keys(parentClasses).length
+                          }--parent`,
+                          value: null,
+                        },
+                      })
+                    }
                     className="text-black hover:bg-myorange px-3 py-2 text-sm font-action"
                     title="Add layer"
                   >
                     +
                   </button>
-                  {parentState &&
-                  parentId &&
-                  !Object.keys(parentState).length ? (
-                    <span className="block my-2">No styles</span>
-                  ) : (
-                    Object.keys(parentState).map((e: string) => (
-                      <InputTailwindClass
-                        id={parentId}
-                        key={`${parentId}-${e}`}
-                        payload={{
-                          [e]: parentState[e],
-                        }}
-                        viewportKey={viewportKey}
-                        allowOverride={false}
-                        handleChangeEditInPlace={handleChangeEditInPlace}
-                      />
-                    ))
-                  )}
-                  <div className="mt-2 inline-flex items-center">
-                    <label
-                      htmlFor={`add---${parentId}`}
-                      className="pr-2 block text-sm leading-6 text-black"
-                    >
-                      Add&nbsp;Style
-                    </label>
-                    <select
-                      id={`addd---${parentId}`}
-                      name={`add---${parentId}`}
-                      className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
-                      onChange={(e) => handleChangeEditInPlace(e)}
-                      value={` `}
-                    >
-                      <option>{` `}</option>
-                      {tailwindAllowedClasses.map((e) => (
-                        <option key={e} value={e}>
-                          {tailwindSpecialTitle[e]}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
                 </div>
+                {hasParentClasses ? (
+                  <div>
+                    {parentState &&
+                    parentId &&
+                    !Object.keys(parentState).length ? (
+                      <span className="block my-2">No styles</span>
+                    ) : (
+                      Object.keys(parentState).map((e: string) => (
+                        <InputTailwindClass
+                          id={parentId}
+                          key={`${parentId}-${e}`}
+                          payload={{
+                            [e]: parentState[e],
+                          }}
+                          viewportKey={viewportKey}
+                          allowOverride={false}
+                          handleChangeEditInPlace={handleChangeEditInPlace}
+                        />
+                      ))
+                    )}
+                    <div className="mt-2 inline-flex items-center">
+                      <label
+                        htmlFor={`add---${parentId}`}
+                        className="pr-2 block text-sm leading-6 text-black"
+                      >
+                        Add&nbsp;Style
+                      </label>
+                      <select
+                        id={`add---${parentId}`}
+                        name={`add---${parentId}`}
+                        className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
+                        onChange={(e) => handleChangeEditInPlace(e)}
+                        value={` `}
+                      >
+                        <option>{` `}</option>
+                        {tailwindAllowedClasses.map((e) => (
+                          <option key={e} value={e}>
+                            {tailwindSpecialTitle[e]}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                ) : null}
               </div>
             </div>
           ) : null}
