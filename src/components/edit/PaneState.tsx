@@ -3647,11 +3647,11 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
 
   if (saveStage < SaveStages.NoChanges) return null
 
-  // console.log(
-  //  statePaneFragments[stateLivePreviewMarkdown.paneFragmentId].optionsPayload,
-  // )
-  // console.log(stateLivePreview)
-  // console.log(stateLivePreviewMarkdown)
+  //console.log(
+  // statePaneFragments[stateLivePreviewMarkdown.paneFragmentId].optionsPayload,
+  //)
+  //console.log(stateLivePreview)
+  //console.log(stateLivePreviewMarkdown)
 
   return (
     <PaneForm

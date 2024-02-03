@@ -19,6 +19,7 @@ const reduceClassNameArray = (selector: string, tuple: any) => {
     .join(` `)
 }
 const reduceClassName = (selector: string, v: any, idx: number) => {
+  if(selector===`flex`)
   if (!selector && typeof selector !== `number`) {
     console.log(`FIX THIS: bad selector`, selector, v, idx)
     return null
@@ -30,6 +31,8 @@ const reduceClassName = (selector: string, v: any, idx: number) => {
   if (v || (typeof v === `number` && v === 0)) {
     if (typeof v === `boolean`) return `${modifier}${thisSelector}`
     else if (typeof v === `boolean`) return `${modifier}${thisSelector}`
+    else if (typeof v === `string` && v === `true`)
+      return `${modifier}${thisSelector}`
     else if (typeof v === `string` && v[0] === `!`)
       return `${modifier}-${thisSelector}-${v.substring(1)}`
     else if (
