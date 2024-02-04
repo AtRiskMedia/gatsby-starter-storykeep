@@ -19,11 +19,11 @@ const reduceClassNameArray = (selector: string, tuple: any) => {
     .join(` `)
 }
 const reduceClassName = (selector: string, v: any, idx: number) => {
-  if(selector===`flex`)
-  if (!selector && typeof selector !== `number`) {
-    console.log(`FIX THIS: bad selector`, selector, v, idx)
-    return null
-  }
+  if (selector === `flex`)
+    if (!selector && typeof selector !== `number`) {
+      console.log(`FIX THIS: bad selector`, selector, v, idx)
+      return null
+    }
   const modifier = idx === -1 ? `` : tailwindModifier[idx]
   const truncated =
     isShorty.includes(selector) && typeof truncateShorty[selector] === `string`
@@ -150,7 +150,6 @@ ${typeof classNamesButtonHover === `string` ? classNamesButtonHover : ``}`
         })
       : null
   const parentClasses = classes?.parent?.classes
-  const parentClassesMulti = parentClasses ? parentClasses?.length > 1 : null
   const classNamesParentObject = parentClasses
     ? Object.keys(parentClasses).map((e: any) => {
         const thisTuples = parentClasses[e]
@@ -164,6 +163,9 @@ ${typeof classNamesButtonHover === `string` ? classNamesButtonHover : ``}`
           return processTuplesAllViewports(thisTuples, i)
         })
       })
+    : null
+  const parentClassesMulti = classNamesParentObject
+    ? classNamesParentObject?.length > 1
     : null
   const classNamesObject: any = {}
   const classNamesObjectMobile: any = {}
@@ -367,7 +369,7 @@ ${typeof classNamesButtonHover === `string` ? classNamesButtonHover : ``}`
     payload = { ...payload, button: newClassNameString }
   if (classNamesObject && Object.keys(classNamesObject).length)
     payload = { ...payload, classNames: { all: classNamesObject } }
-  if (classNamesParentObject && Object.keys(classNamesParentObject).length)
+  if (classNamesParentObject && Object.keys(classNamesParentObject).length) {
     payload = {
       ...payload,
       classNamesParent: {
@@ -376,6 +378,7 @@ ${typeof classNamesButtonHover === `string` ? classNamesButtonHover : ``}`
           : classNamesParentObject[0],
       },
     }
+  }
   if (classNamesModalObject && Object.keys(classNamesModalObject).length)
     payload = {
       ...payload,
@@ -416,5 +419,6 @@ ${typeof classNamesButtonHover === `string` ? classNamesButtonHover : ``}`
         desktop: classNamesModalAllViewports[2],
       },
     }
+
   return payload
 }
