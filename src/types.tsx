@@ -573,7 +573,6 @@ export interface IAxiosTriggerPublishProps {
 export interface IContentEditableContainer {
   initialValue: any
   useRefCallback: Function
-  className: string
   title: string
   nth: number
   parent?: number

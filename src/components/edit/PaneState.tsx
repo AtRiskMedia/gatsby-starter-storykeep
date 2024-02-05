@@ -913,6 +913,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
                                             (value || viewport === `remove`)
                                           ? `updateSelector`
                                           : null
+
     switch (mode) {
       case `starter`: {
         if ([`titleText`, `text`, `borderedText`].includes(value)) {
@@ -1540,7 +1541,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
           const newOptionsPayload = {
             ...statePaneFragments[paneFragmentId].optionsPayload,
             classNamesPayload: newClassNamesPayload,
-            classNames: reduced.classNames,
+            classNamesParent: reduced.classNamesParent,
           }
           regenerateState(newOptionsPayload)
         }
@@ -1702,6 +1703,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       }
 
       case `updateLinkHoverSelector`: {
+        console.log(1)
         // links payload is derived from statePaneFragments[paneFragmentId].optionsPayload.buttons[thisLink.target]
         const buttons =
           statePaneFragments[paneFragmentId].optionsPayload?.buttons
@@ -1770,6 +1772,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
             },
           }
           const reduced = reduceTailwindClasses(newButtonClassNamesPayload)
+          console.log(reduced)
           const newOptionsPayload = {
             ...statePaneFragments[paneFragmentId].optionsPayload,
             buttons: {
@@ -2009,17 +2012,34 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         const thisGlobalNth =
           stateLivePreviewMarkdown.linksLookup[thisNth][thisChildNth]
         const thisLink = stateLivePreviewMarkdown.links[thisGlobalNth]
-        const markdown = stateLivePreviewMarkdown.markdownArray[thisNth]
-        const regexpLink = `(.*?)[(${thisLink.value})]((${thisLink.target}))(.*)`
+        const current = [`ol`, `ul`].includes(
+          stateLivePreviewMarkdown.markdownTags[thisNth],
+        )
+          ? [...stateLivePreviewMarkdown.markdownArray][nth]
+              .split(`\n`)
+              .filter((n: any) => n)
+          : null
+        const markdown = !current
+          ? stateLivePreviewMarkdown.markdownArray[thisNth]
+          : current[thisChildNth]
+        // eslint-disable-next-line no-useless-escape
+        const regexpLink = /([^[]*)?\[([^\]]*)\]\(([^\)]*)\)(.*)?/
         if (selector === `title`) {
           const prematch = markdown.match(regexpLink)
-          const postmatch = prematch[1].replace(
-            `[${thisLink.value}]`,
-            `[${value}](${thisLink.target}`,
-          )
-          const newValue = `${postmatch}${prematch[4]}`
+          const newValue = `${prematch[1] || ``}[${value}](${thisLink.target})${
+            prematch[4] || ``
+          }`
           const newMarkdownArray = [...stateLivePreviewMarkdown.markdownArray]
-          newMarkdownArray[thisNth] = `${newValue}\n`
+          if (stateLivePreviewMarkdown.markdownTags[thisNth] === `p`)
+            newMarkdownArray[thisNth] = `${newValue}\n`
+          else {
+            const newCurrent = [
+              ...current.slice(0, thisChildNth),
+              newValue,
+              ...current.slice(thisChildNth + 1),
+            ]
+            newMarkdownArray[nth] = `${newCurrent.join(`\n`)}\n`
+          }
           const markdownBody = newMarkdownArray.join(`\n`)
           const mdAst = fromMarkdown(markdownBody)
           setStateLivePreviewMarkdown((prev: any) => {
@@ -2064,6 +2084,14 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
           })
           setToggleCheck(true)
         } else if (selector === `callback`) {
+          const newStatePaneFragments = {
+            ...statePaneFragments,
+            [paneFragmentId]: {
+              ...statePaneFragments[paneFragmentId],
+            },
+          }
+          console.log( statePaneFragments[paneFragmentId].optionsPayload.buttons[thisLink.target] )
+
           setStateLivePreviewMarkdown((prev: any) => {
             return {
               ...prev,
@@ -2451,6 +2479,54 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
               }
             }
           }
+          f?.children?.forEach((h: any) => {
+            if (h.type === `link`) {
+              let found = false
+              Object.keys(stateLivePreviewMarkdown.links).forEach((g) => {
+                if (stateLivePreviewMarkdown.links[g].target === h.url)
+                  found = true
+              })
+              if (!found) {
+                currentButtonsPayload[h.url] = {
+                  callbackPayload: ``,
+                  className: ``,
+                  classNamesPayload: {
+                    button: {
+                      classes: {},
+                    },
+                    hover: {
+                      classes: {},
+                    },
+                  },
+                  urlTarget: ``,
+                }
+              }
+            }
+            h?.children?.forEach((i: any) => {
+              if (i.type === `link`) {
+                let found = false
+                Object.keys(stateLivePreviewMarkdown.links).forEach((g) => {
+                  if (stateLivePreviewMarkdown.links[g].target === i.url)
+                    found = true
+                })
+                if (!found) {
+                  currentButtonsPayload[i.url] = {
+                    callbackPayload: ``,
+                    className: ``,
+                    classNamesPayload: {
+                      button: {
+                        classes: {},
+                      },
+                      hover: {
+                        classes: {},
+                      },
+                    },
+                    urlTarget: ``,
+                  }
+                }
+              }
+            })
+          })
         })
       })
       // must override payload in paneFragment optionsPayload
@@ -2942,7 +3018,23 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
 
   useEffect(() => {
     if (toggleCheck) {
-      const hasChanges = !deepEqual(state, lastSavedState.initialState)
+      const hasChanges =
+        !deepEqual(state, lastSavedState.initialState) ||
+        !deepEqual(
+          statePaneFragments,
+          lastSavedState.initialStatePaneFragments,
+        ) ||
+        !deepEqual(stateImpressions, lastSavedState.initialStateImpressions) ||
+        !deepEqual(stateHeldBeliefs, lastSavedState.initialStateHeldBeliefs) ||
+        !deepEqual(
+          stateWithheldBeliefs,
+          lastSavedState.initialStateWithheldBeliefs,
+        ) ||
+        !deepEqual(stateLivePreview, lastSavedState.initialStateLivePreview) ||
+        !deepEqual(
+          stateLivePreviewMarkdown,
+          lastSavedState.initialStateLivePreviewMarkdown,
+        )
       if (hasChanges && saveStage === SaveStages.NoChanges) {
         setSaveStage(SaveStages.UnsavedChanges)
         setNavLocked(true)
@@ -2958,6 +3050,18 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
     state,
     setNavLocked,
     lastSavedState.initialState,
+    lastSavedState.initialStateImpressions,
+    lastSavedState.initialStateLivePreview,
+    lastSavedState.initialStateLivePreviewMarkdown,
+    lastSavedState.initialStatePaneFragments,
+    lastSavedState.initialStateHeldBeliefs,
+    lastSavedState.initialStateWithheldBeliefs,
+    stateHeldBeliefs,
+    stateImpressions,
+    stateLivePreview,
+    stateLivePreviewMarkdown,
+    statePaneFragments,
+    stateWithheldBeliefs,
   ])
 
   // handle stages
@@ -3648,7 +3752,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
   if (saveStage < SaveStages.NoChanges) return null
 
   // console.log(
-  // statePaneFragments[stateLivePreviewMarkdown.paneFragmentId].optionsPayload,
+  // statePaneFragments[stateLivePreviewMarkdown.paneFragmentId].optionsPayload.classNamesParent,
   // )
   // console.log(stateLivePreview)
   // console.log(stateLivePreviewMarkdown)

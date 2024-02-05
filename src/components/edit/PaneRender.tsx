@@ -219,7 +219,6 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
     function ContentEditableContainer({
       initialValue,
       useRefCallback,
-      className,
       title,
       nth,
       parent,
@@ -306,7 +305,6 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
         <ContentEditable
           html={text}
           title={title}
-          className={className}
           onBlur={handleBlur}
           onKeyDown={(e) => {
             const keyCode = e.code
@@ -516,7 +514,6 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
         return (
           <ContentEditableContainer
             initialValue={html}
-            className={className}
             title={`Edit this ${thisTagType}`}
             useRefCallback={useRefCallback}
             nth={nth}
@@ -666,7 +663,8 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
             <div className={className}>{value}</div>
           </>
         )
-      } else return <div className={className}>{value}</div>
+        // } else return <div className={className}>{value}</div>
+      } else return <>{value}</>
     }
 
     // generates live preview using data from state

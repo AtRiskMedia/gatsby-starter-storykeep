@@ -1126,7 +1126,7 @@ const PaneEditInPlace = ({
   const links = stateLivePreviewMarkdown.links
   const linksLookup = stateLivePreviewMarkdown.linksLookup
   const linksData =
-    tag === `p` && linksLookup && typeof linksLookup[nth] !== `undefined`
+    linksLookup && typeof linksLookup[nth] !== `undefined`
       ? Object.keys(linksLookup[nth])?.map(
           (l: any) => links[linksLookup[nth][l]],
         )

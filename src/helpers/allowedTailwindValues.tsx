@@ -14,6 +14,7 @@ export const tailwindSpecial: { [index: string]: string } = {
   strokeSTYLE: `stroke`,
   strokeCOLOR: `stroke`,
   justifyCONTENT: `justify`,
+  alignITEMS: `items`,
   fillCOLOR: `fill`,
   underlineSTYLE: `underline`,
   maxW: `max-w`,
@@ -656,6 +657,8 @@ const justifyCONTENT = [
   `stretch`,
 ]
 
+const alignITEMS = [`start`, `end`, `center`, `baseline`, `stretch`]
+
 // removes initial part of selector from className
 export const isShorty = [`display`, `flexWRAP`]
 export const truncateShorty: { [index: string]: string } = {
@@ -684,6 +687,7 @@ export const tailwindSpecialTitle: { [index: string]: string } = {
   strokeSTYLE: `Stroke Style`,
   strokeCOLOR: `Stroke Color`,
   justifyCONTENT: `Justify Content`,
+  alignITEMS: `Align Items`,
   fill: `Fill`,
   fillCOLOR: `Fill Color`,
   flex: `Flex`,
@@ -736,6 +740,7 @@ const tailwindAllowedValues: { [index: string]: any } = {
   stroke: [`none`, `inheret`, `current`, `transparent`],
   strokeCOLOR: colors,
   justifyCONTENT,
+  alignITEMS,
   flex: tf,
   flexWRAP: [`wrap`, `wrap-reverse`, `nowrap`],
   fill: [`none`, `inheret`, `current`, `transparent`, ...colors],
@@ -786,6 +791,7 @@ export const tailwindAllowedClasses = [
   `stroke`,
   `strokeCOLOR`,
   `justifyCONTENT`,
+  `alignITEMS`,
   `flex`,
   `flexWRAP`,
   `fill`,

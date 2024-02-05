@@ -93,6 +93,51 @@ export function generateLivePreviewInitialState({
               if (f.type === `list` || f.type === `paragraph`) {
                 let localCount = 0
                 f.children.forEach((g: any) => {
+                  g?.children?.forEach((j: any) => {
+                    j?.children?.forEach((i: any) => {
+                      if (i.type === `link`) {
+                        if (typeof linksLookup[idx] === `undefined`)
+                          linksLookup[idx] = { [localCount]: linksIndex }
+                        else
+                          linksLookup[idx] = {
+                            ...linksLookup[idx],
+                            [localCount]: linksIndex,
+                          }
+                        const value =
+                          typeof i.children[0] !== `undefined`
+                            ? i.children[0].value
+                            : null
+                        const thisButtonData =
+                          buttonData &&
+                          Object.keys(buttonData)
+                            .map((e: any) => {
+                              if (e === i.url) return buttonData[e]
+                              return null
+                            })
+                            .filter((n) => n)
+                        links = {
+                          ...links,
+                          [linksIndex++]: {
+                            parentNth: idx,
+                            target: i.url,
+                            value,
+                            callbackPayload:
+                              thisButtonData &&
+                              typeof thisButtonData[0] !== `undefined`
+                                ? thisButtonData[0].callbackPayload
+                                : ``,
+                            classNamesPayload:
+                              thisButtonData &&
+                              typeof thisButtonData[0] !== `undefined`
+                                ? thisButtonData[0].classNamesPayload
+                                : ``,
+                          },
+                        }
+                        localCount++
+                      }
+                    })
+                  })
+
                   if (g.type === `link`) {
                     if (typeof linksLookup[idx] === `undefined`)
                       linksLookup[idx] = { [localCount]: linksIndex }
