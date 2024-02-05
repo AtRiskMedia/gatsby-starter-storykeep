@@ -134,7 +134,9 @@ export const reduceTailwindClasses = (classes: any) => {
       : ``
   const newClassNameString = `${
     typeof classNamesButton === `string` ? classNamesButton : ``
-  }${` `}${typeof classNamesButtonHover === `string` ? classNamesButtonHover : ``}`
+  }${` `}${
+    typeof classNamesButtonHover === `string` ? classNamesButtonHover : ``
+  }`
   const classNamesModalObject =
     typeof classes?.modal?.classes !== `undefined` &&
     typeof classes?.modal?.classes[0] !== `undefined`

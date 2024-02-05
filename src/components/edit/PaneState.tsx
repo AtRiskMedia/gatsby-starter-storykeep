@@ -1772,7 +1772,6 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
             },
           }
           const reduced = reduceTailwindClasses(newButtonClassNamesPayload)
-          console.log(reduced)
           const newOptionsPayload = {
             ...statePaneFragments[paneFragmentId].optionsPayload,
             buttons: {
@@ -2023,11 +2022,11 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
           ? stateLivePreviewMarkdown.markdownArray[thisNth]
           : current[thisChildNth]
         // eslint-disable-next-line no-useless-escape
-        const regexpLink = /([^[]*)?\[([^\]]*)\]\(([^\)]*)\)(.*)?/
+        const regexpLink = `^(.*?)(${thisLink.value})\]\(([^)]*)\)(.*)?`
         if (selector === `title`) {
           const prematch = markdown.match(regexpLink)
-          const newValue = `${prematch[1] || ``}[${value}](${thisLink.target})${
-            prematch[4] || ``
+          const newValue = `${prematch[1] || `[`}${value}](${thisLink.target}${
+            prematch[5] || `)`
           }`
           const newMarkdownArray = [...stateLivePreviewMarkdown.markdownArray]
           if (stateLivePreviewMarkdown.markdownTags[thisNth] === `p`)
@@ -2084,14 +2083,14 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
           })
           setToggleCheck(true)
         } else if (selector === `callback`) {
+          /*
           const newStatePaneFragments = {
             ...statePaneFragments,
             [paneFragmentId]: {
               ...statePaneFragments[paneFragmentId],
             },
           }
-          console.log( statePaneFragments[paneFragmentId].optionsPayload.buttons[thisLink.target] )
-
+          */
           setStateLivePreviewMarkdown((prev: any) => {
             return {
               ...prev,
