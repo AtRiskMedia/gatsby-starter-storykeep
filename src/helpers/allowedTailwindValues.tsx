@@ -660,6 +660,15 @@ const justifyCONTENT = [
   `stretch`,
 ]
 
+const whitespace = [
+  `normal`,
+  `nowrap`,
+  `pre`,
+  `pre-line`,
+  `pre-wrap`,
+  `break-spaces`,
+]
+
 const alignITEMS = [`start`, `end`, `center`, `baseline`, `stretch`]
 
 // removes initial part of selector from className
@@ -685,6 +694,7 @@ export const tailwindSpecialTitle: { [index: string]: string } = {
   borderCOLOR: `Border Color`,
   // borderSIZE: `Border Size`,
   borderSTROKE: `Border Stroke Size`,
+  whitespace: `Whitespace`,
   display: `Display`,
   stroke: `Stroke`,
   strokeSIZE: `Stroke Size`,
@@ -740,6 +750,7 @@ const tailwindAllowedValues: { [index: string]: any } = {
   borderCOLOR: colors,
   // borderSIZE:
   display,
+  whitespace,
   strokeSIZE,
   // strokeSTYLE:
   stroke: [`none`, `inheret`, `current`, `transparent`],
@@ -793,6 +804,7 @@ export const tailwindAllowedClasses = [
   `borderSTROKE`,
   `borderCOLOR`,
   `display`,
+  `whitespace`,
   `strokeSIZE`,
   `stroke`,
   `strokeCOLOR`,
