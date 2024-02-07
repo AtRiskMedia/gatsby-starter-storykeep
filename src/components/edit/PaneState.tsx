@@ -228,6 +228,19 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
           newStatePaneFragments,
         )
       if (state.hiddenPane) newOptionsPayload.hiddenPane = state.hiddenPane
+      if (state.hasCodeHook) {
+        newOptionsPayload.codeHook = {}
+        if (state.codeHookTarget)
+          newOptionsPayload.codeHook.target = state.codeHookTarget
+        if (state.codeHookTargetUrl)
+          newOptionsPayload.codeHook.url = state.codeHookTargetUrl
+        if (state.codeHookHeight)
+          newOptionsPayload.codeHook.height = state.codeHookHeight
+        if (state.codeHookWidth)
+          newOptionsPayload.codeHook.width = state.codeHookWidth
+      }
+      if (state.overflowHidden)
+        newOptionsPayload.overflowHidden = state.overflowHidden
       setState((prev: any) => {
         return {
           ...prev,
@@ -241,6 +254,12 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       allFiles,
       allMarkdown,
       state?.hiddenPane,
+      state?.overflowHidden,
+      state?.codeHookTarget,
+      state?.codeHookTargetUrl,
+      state?.codeHookHeight,
+      state?.codeHookWidth,
+      state?.hasCodeHook,
       stateHeldBeliefs,
       stateImpressions,
       stateLivePreviewMarkdown?.markdownArray,
@@ -272,6 +291,19 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       newOptionsPayload.withheldBeliefs = stateWithheldBeliefs
     newOptionsPayload.paneFragmentsPayload = Object.values(statePaneFragments)
     if (state.hiddenPane) newOptionsPayload.hiddenPane = state.hiddenPane
+    if (state.hasCodeHook) {
+      newOptionsPayload.codeHook = {}
+      if (state.codeHookTarget)
+        newOptionsPayload.codeHook.target = state.codeHookTarget
+      if (state.codeHookTargetUrl)
+        newOptionsPayload.codeHook.url = state.codeHookTargetUrl
+      if (state.codeHookHeight)
+        newOptionsPayload.codeHook.height = state.codeHookHeight
+      if (state.codeHookWidth)
+        newOptionsPayload.codeHook.width = state.codeHookWidth
+    }
+    if (state.overflowHidden)
+      newOptionsPayload.overflowHidden = state.overflowHidden
     setState((prev: any) => {
       return {
         ...prev,
@@ -312,6 +344,19 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       newOptionsPayload.withheldBeliefs = stateWithheldBeliefs
     newOptionsPayload.paneFragmentsPayload = Object.values(statePaneFragments)
     if (state.hiddenPane) newOptionsPayload.hiddenPane = state.hiddenPane
+    if (state.hasCodeHook) {
+      newOptionsPayload.codeHook = {}
+      if (state.codeHookTarget)
+        newOptionsPayload.codeHook.target = state.codeHookTarget
+      if (state.codeHookTargetUrl)
+        newOptionsPayload.codeHook.url = state.codeHookTargetUrl
+      if (state.codeHookHeight)
+        newOptionsPayload.codeHook.height = state.codeHookHeight
+      if (state.codeHookWidth)
+        newOptionsPayload.codeHook.width = state.codeHookWidth
+    }
+    if (state.overflowHidden)
+      newOptionsPayload.overflowHidden = state.overflowHidden
     setState((prev: any) => {
       return {
         ...prev,
@@ -410,6 +455,19 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       newOptionsPayload.withheldBeliefs = stateWithheldBeliefs
     newOptionsPayload.paneFragmentsPayload = Object.values(statePaneFragments)
     if (state.hiddenPane) newOptionsPayload.hiddenPane = state.hiddenPane
+    if (state.hasCodeHook) {
+      newOptionsPayload.codeHook = {}
+      if (state.codeHookTarget)
+        newOptionsPayload.codeHook.target = state.codeHookTarget
+      if (state.codeHookTargetUrl)
+        newOptionsPayload.codeHook.url = state.codeHookTargetUrl
+      if (state.codeHookHeight)
+        newOptionsPayload.codeHook.height = state.codeHookHeight
+      if (state.codeHookWidth)
+        newOptionsPayload.codeHook.width = state.codeHookWidth
+    }
+    if (state.overflowHidden)
+      newOptionsPayload.overflowHidden = state.overflowHidden
     setState((prev: any) => {
       return {
         ...prev,
@@ -506,9 +564,6 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
     const thisValue =
       name !== `slug` ? value : validateSlug(value.toLowerCase())
     if (thisValue !== null) {
-      setState((prev: any) => {
-        return { ...prev, [name]: thisValue }
-      })
       const impressionsPayload = stateImpressions?.title
         ? {
             [stateImpressions.id]: stateImpressions,
@@ -522,10 +577,32 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         newOptionsPayload.withheldBeliefs = stateWithheldBeliefs
       newOptionsPayload.paneFragmentsPayload = Object.values(statePaneFragments)
       if (state.hiddenPane) newOptionsPayload.hiddenPane = state.hiddenPane
+      if (state.hasCodeHook) {
+        newOptionsPayload.codeHook = {}
+        if (state.codeHookTarget)
+          newOptionsPayload.codeHook.target = state.codeHookTarget
+        if (state.codeHookTargetUrl)
+          newOptionsPayload.codeHook.url = state.codeHookTargetUrl
+        if (state.codeHookHeight)
+          newOptionsPayload.codeHook.height = state.codeHookHeight
+        if (state.codeHookWidth)
+          newOptionsPayload.codeHook.width = state.codeHookWidth
+        if (name === `codeHookTarget`)
+          newOptionsPayload.codeHook.target = thisValue
+        if (name === `codeHookTargetUrl`)
+          newOptionsPayload.codeHook.url = thisValue
+        if (name === `codeHookWidth`)
+          newOptionsPayload.codeHook.width = thisValue
+        if (name === `codeHookHeight`)
+          newOptionsPayload.codeHook.height = thisValue
+      }
+      if (state.overflowHidden)
+        newOptionsPayload.overflowHidden = state.overflowHidden
       setState((prev: any) => {
         return {
           ...prev,
           optionsPayloadString: JSON.stringify(newOptionsPayload),
+          [name]: thisValue,
         }
       })
       setToggleCheck(true)
@@ -688,6 +765,19 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       newOptionsPayload.withheldBeliefs = stateWithheldBeliefs
     newOptionsPayload.paneFragmentsPayload = Object.values(statePaneFragments)
     if (state.hiddenPane) newOptionsPayload.hiddenPane = state.hiddenPane
+    if (state.hasCodeHook) {
+      newOptionsPayload.codeHook = {}
+      if (state.codeHookTarget)
+        newOptionsPayload.codeHook.target = state.codeHookTarget
+      if (state.codeHookTargetUrl)
+        newOptionsPayload.codeHook.url = state.codeHookTargetUrl
+      if (state.codeHookHeight)
+        newOptionsPayload.codeHook.height = state.codeHookHeight
+      if (state.codeHookWidth)
+        newOptionsPayload.codeHook.width = state.codeHookWidth
+    }
+    if (state.overflowHidden)
+      newOptionsPayload.overflowHidden = state.overflowHidden
     setState((prev: any) => {
       if (isBgColour)
         return {
@@ -1892,18 +1982,37 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
                   [stateImpressions.id]: stateImpressions,
                 }
               : null
-            const newOptionsPayload = {
-              heldBeliefs: stateHeldBeliefs,
-              withheldBeliefs: stateWithheldBeliefs,
-              impressions: impressionsPayload,
-              paneFragmentsPayload: Object.values(newStatePaneFragments),
-              hiddenPane: state.hiddenPane,
+            const newOptionsPayload: any = {}
+            if (impressionsPayload)
+              newOptionsPayload.impressions = impressionsPayload
+            if (Object.keys(stateHeldBeliefs).length)
+              newOptionsPayload.heldBeliefs = stateHeldBeliefs
+            if (Object.keys(stateWithheldBeliefs).length)
+              newOptionsPayload.withheldBeliefs = stateWithheldBeliefs
+            if (newStatePaneFragments)
+              newOptionsPayload.paneFragmentsPayload = Object.values(
+                newStatePaneFragments,
+              )
+            if (state.hiddenPane)
+              newOptionsPayload.hiddenPane = state.hiddenPane
+            if (state.hasCodeHook) {
+              newOptionsPayload.codeHook = {}
+              if (state.codeHookTarget)
+                newOptionsPayload.codeHook.target = state.codeHookTarget
+              if (state.codeHookTargetUrl)
+                newOptionsPayload.codeHook.targetUrl = state.codeHookTargetUrl
+              if (state.codeHookHeight)
+                newOptionsPayload.codeHook.height = state.codeHookHeight
+              if (state.codeHookWidth)
+                newOptionsPayload.codeHook.width = state.codeHookWidth
             }
+            if (state.overflowHidden)
+              newOptionsPayload.overflowHidden = state.overflowHidden
             setState((prev: any) => {
               return {
                 ...prev,
-                hasBgColour: value,
                 optionsPayloadString: JSON.stringify(newOptionsPayload),
+                hasBgColour: value,
               }
             })
             setToggleCheck(true)
@@ -1926,19 +2035,38 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
                   [stateImpressions.id]: stateImpressions,
                 }
               : null
-            const newOptionsPayload = {
-              heldBeliefs: stateHeldBeliefs,
-              withheldBeliefs: stateWithheldBeliefs,
-              impressions: impressionsPayload,
-              paneFragmentsPayload: Object.values(newStatePaneFragments),
-              hiddenPane: state.hiddenPane,
+            const newOptionsPayload: any = {}
+            if (impressionsPayload)
+              newOptionsPayload.impressions = impressionsPayload
+            if (Object.keys(stateHeldBeliefs).length)
+              newOptionsPayload.heldBeliefs = stateHeldBeliefs
+            if (Object.keys(stateWithheldBeliefs).length)
+              newOptionsPayload.withheldBeliefs = stateWithheldBeliefs
+            if (newStatePaneFragments)
+              newOptionsPayload.paneFragmentsPayload = Object.values(
+                newStatePaneFragments,
+              )
+            if (state.hiddenPane)
+              newOptionsPayload.hiddenPane = state.hiddenPane
+            if (state.hasCodeHook) {
+              newOptionsPayload.codeHook = {}
+              if (state.codeHookTarget)
+                newOptionsPayload.codeHook.target = state.codeHookTarget
+              if (state.codeHookTargetUrl)
+                newOptionsPayload.codeHook.url = state.codeHookTargetUrl
+              if (state.codeHookHeight)
+                newOptionsPayload.codeHook.height = state.codeHookHeight
+              if (state.codeHookWidth)
+                newOptionsPayload.codeHook.width = state.codeHookWidth
             }
+            if (state.overflowHidden)
+              newOptionsPayload.overflowHidden = state.overflowHidden
             setState((prev: any) => {
               return {
                 ...prev,
+                optionsPayloadString: JSON.stringify(newOptionsPayload),
                 hasBgColour: `#ffffff`,
                 hasBgColourId: newPaneFragmentId,
-                optionsPayloadString: JSON.stringify(newOptionsPayload),
               }
             })
             setToggleCheck(true)
@@ -1989,13 +2117,31 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
               [stateImpressions.id]: stateImpressions,
             }
           : null
-        const newOptionsPayload = {
-          heldBeliefs: stateHeldBeliefs,
-          withheldBeliefs: stateWithheldBeliefs,
-          impressions: impressionsPayload,
-          paneFragmentsPayload: Object.values(newStatePaneFragments),
-          hiddenPane: state.hiddenPane,
+        const newOptionsPayload: any = {}
+        if (impressionsPayload)
+          newOptionsPayload.impressions = impressionsPayload
+        if (Object.keys(stateHeldBeliefs).length)
+          newOptionsPayload.heldBeliefs = stateHeldBeliefs
+        if (Object.keys(stateWithheldBeliefs).length)
+          newOptionsPayload.withheldBeliefs = stateWithheldBeliefs
+        if (newStatePaneFragments)
+          newOptionsPayload.paneFragmentsPayload = Object.values(
+            newStatePaneFragments,
+          )
+        if (state.hiddenPane) newOptionsPayload.hiddenPane = state.hiddenPane
+        if (state.hasCodeHook) {
+          newOptionsPayload.codeHook = {}
+          if (state.codeHookTarget)
+            newOptionsPayload.codeHook.target = state.codeHookTarget
+          if (state.codeHookTargetUrl)
+            newOptionsPayload.codeHook.url = state.codeHookTargetUrl
+          if (state.codeHookHeight)
+            newOptionsPayload.codeHook.height = state.codeHookHeight
+          if (state.codeHookWidth)
+            newOptionsPayload.codeHook.width = state.codeHookWidth
         }
+        if (state.overflowHidden)
+          newOptionsPayload.overflowHidden = state.overflowHidden
         setState((prev: any) => {
           return {
             ...prev,
@@ -2069,13 +2215,31 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
                 [stateImpressions.id]: stateImpressions,
               }
             : null
-          const newOptionsPayload = {
-            heldBeliefs: stateHeldBeliefs,
-            withheldBeliefs: stateWithheldBeliefs,
-            impressions: impressionsPayload,
-            paneFragmentsPayload: Object.values(newStatePaneFragments),
-            hiddenPane: state.hiddenPane,
+          const newOptionsPayload: any = {}
+          if (impressionsPayload)
+            newOptionsPayload.impressions = impressionsPayload
+          if (Object.keys(stateHeldBeliefs).length)
+            newOptionsPayload.heldBeliefs = stateHeldBeliefs
+          if (Object.keys(stateWithheldBeliefs).length)
+            newOptionsPayload.withheldBeliefs = stateWithheldBeliefs
+          if (newStatePaneFragments)
+            newOptionsPayload.paneFragmentsPayload = Object.values(
+              newStatePaneFragments,
+            )
+          if (state.hiddenPane) newOptionsPayload.hiddenPane = state.hiddenPane
+          if (state.hasCodeHook) {
+            newOptionsPayload.codeHook = {}
+            if (state.codeHookTarget)
+              newOptionsPayload.codeHook.target = state.codeHookTarget
+            if (state.codeHookTargetUrl)
+              newOptionsPayload.codeHook.url = state.codeHookTargetUrl
+            if (state.codeHookHeight)
+              newOptionsPayload.codeHook.height = state.codeHookHeight
+            if (state.codeHookWidth)
+              newOptionsPayload.codeHook.width = state.codeHookWidth
           }
+          if (state.overflowHidden)
+            newOptionsPayload.overflowHidden = state.overflowHidden
           setState((prev: any) => {
             return {
               ...prev,
@@ -2112,20 +2276,38 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
                 [stateImpressions.id]: stateImpressions,
               }
             : null
-          const newOptionsPayload = {
-            heldBeliefs: stateHeldBeliefs,
-            withheldBeliefs: stateWithheldBeliefs,
-            impressions: impressionsPayload,
-            paneFragmentsPayload: Object.values(newStatePaneFragments),
-            hiddenPane: state.hiddenPane,
+          const newOptionsPayload: any = {}
+          if (impressionsPayload)
+            newOptionsPayload.impressions = impressionsPayload
+          if (Object.keys(stateHeldBeliefs).length)
+            newOptionsPayload.heldBeliefs = stateHeldBeliefs
+          if (Object.keys(stateWithheldBeliefs).length)
+            newOptionsPayload.withheldBeliefs = stateWithheldBeliefs
+          if (newStatePaneFragments)
+            newOptionsPayload.paneFragmentsPayload = Object.values(
+              newStatePaneFragments,
+            )
+          if (state.hiddenPane) newOptionsPayload.hiddenPane = state.hiddenPane
+          if (state.hasCodeHook) {
+            newOptionsPayload.codeHook = {}
+            if (state.codeHookTarget)
+              newOptionsPayload.codeHook.target = state.codeHookTarget
+            if (state.codeHookTargetUrl)
+              newOptionsPayload.codeHook.url = state.codeHookTargetUrl
+            if (state.codeHookHeight)
+              newOptionsPayload.codeHook.height = state.codeHookHeight
+            if (state.codeHookWidth)
+              newOptionsPayload.codeHook.width = state.codeHookWidth
           }
-          setStatePaneFragments(newStatePaneFragments)
+          if (state.overflowHidden)
+            newOptionsPayload.overflowHidden = state.overflowHidden
           setState((prev: any) => {
             return {
               ...prev,
               optionsPayloadString: JSON.stringify(newOptionsPayload),
             }
           })
+          setStatePaneFragments(newStatePaneFragments)
           setStateLivePreviewMarkdown((prev: any) => {
             return {
               ...prev,
@@ -2187,13 +2369,31 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
               [stateImpressions.id]: stateImpressions,
             }
           : null
-        const newOptionsPayload = {
-          heldBeliefs: stateHeldBeliefs,
-          withheldBeliefs: stateWithheldBeliefs,
-          impressions: impressionsPayload,
-          paneFragmentsPayload: Object.values(newStatePaneFragments),
-          hiddenPane: state.hiddenPane,
+        const newOptionsPayload: any = {}
+        if (impressionsPayload)
+          newOptionsPayload.impressions = impressionsPayload
+        if (Object.keys(stateHeldBeliefs).length)
+          newOptionsPayload.heldBeliefs = stateHeldBeliefs
+        if (Object.keys(stateWithheldBeliefs).length)
+          newOptionsPayload.withheldBeliefs = stateWithheldBeliefs
+        if (newStatePaneFragments)
+          newOptionsPayload.paneFragmentsPayload = Object.values(
+            newStatePaneFragments,
+          )
+        if (state.hiddenPane) newOptionsPayload.hiddenPane = state.hiddenPane
+        if (state.hasCodeHook) {
+          newOptionsPayload.codeHook = {}
+          if (state.codeHookTarget)
+            newOptionsPayload.codeHook.target = state.codeHookTarget
+          if (state.codeHookTargetUrl)
+            newOptionsPayload.codeHook.url = state.codeHookTargetUrl
+          if (state.codeHookHeight)
+            newOptionsPayload.codeHook.height = state.codeHookHeight
+          if (state.codeHookWidth)
+            newOptionsPayload.codeHook.width = state.codeHookWidth
         }
+        if (state.overflowHidden)
+          newOptionsPayload.overflowHidden = state.overflowHidden
         setState((prev: any) => {
           return {
             ...prev,
@@ -2604,13 +2804,30 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
             [stateImpressions.id]: stateImpressions,
           }
         : null
-      const newOptionsPayload = {
-        heldBeliefs: stateHeldBeliefs,
-        withheldBeliefs: stateWithheldBeliefs,
-        impressions: impressionsPayload,
-        paneFragmentsPayload: Object.values(newStatePaneFragments),
-        hiddenPane: state.hiddenPane,
+      const newOptionsPayload: any = {}
+      if (impressionsPayload) newOptionsPayload.impressions = impressionsPayload
+      if (Object.keys(stateHeldBeliefs).length)
+        newOptionsPayload.heldBeliefs = stateHeldBeliefs
+      if (Object.keys(stateWithheldBeliefs).length)
+        newOptionsPayload.withheldBeliefs = stateWithheldBeliefs
+      if (newStatePaneFragments)
+        newOptionsPayload.paneFragmentsPayload = Object.values(
+          newStatePaneFragments,
+        )
+      if (state.hiddenPane) newOptionsPayload.hiddenPane = state.hiddenPane
+      if (state.hasCodeHook) {
+        newOptionsPayload.codeHook = {}
+        if (state.codeHookTarget)
+          newOptionsPayload.codeHook.target = state.codeHookTarget
+        if (state.codeHookTargetUrl)
+          newOptionsPayload.codeHook.url = state.codeHookTargetUrl
+        if (state.codeHookHeight)
+          newOptionsPayload.codeHook.height = state.codeHookHeight
+        if (state.codeHookWidth)
+          newOptionsPayload.codeHook.width = state.codeHookWidth
       }
+      if (state.overflowHidden)
+        newOptionsPayload.overflowHidden = state.overflowHidden
       setState((prev: any) => {
         return {
           ...prev,
@@ -2622,7 +2839,13 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
     [
       allFiles,
       allMarkdown,
-      state.hiddenPane,
+      state?.hiddenPane,
+      state?.overflowHidden,
+      state?.codeHookTarget,
+      state?.codeHookTargetUrl,
+      state?.codeHookWidth,
+      state?.codeHookHeight,
+      state?.hasCodeHook,
       stateHeldBeliefs,
       stateImpressions,
       stateLivePreviewMarkdown.links,
@@ -3030,6 +3253,19 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         newStatePaneFragments,
       )
     if (state.hiddenPane) newOptionsPayload.hiddenPane = state.hiddenPane
+    if (state.hasCodeHook) {
+      newOptionsPayload.codeHook = {}
+      if (state.codeHookTarget)
+        newOptionsPayload.codeHook.target = state.codeHookTarget
+      if (state.codeHookTargetUrl)
+        newOptionsPayload.codeHook.url = state.codeHookTargetUrl
+      if (state.codeHookHeight)
+        newOptionsPayload.codeHook.height = state.codeHookHeight
+      if (state.codeHookWidth)
+        newOptionsPayload.codeHook.width = state.codeHookWidth
+    }
+    if (state.overflowHidden)
+      newOptionsPayload.overflowHidden = state.overflowHidden
     setState((prev: any) => {
       return {
         ...prev,
@@ -3430,22 +3666,6 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
     newImagePos,
   ])
 
-  /*
-  // update file on save
-  useEffect(() => {
-    if (
-      saveStage === SaveStages.SavingResource &&
-      updateResourcePayload.length
-    ) {
-      updateResourcePayload.forEach((e: any) => {
-        setResource(e.id, e.payload)
-      })
-      setUpdateResourcePayload([])
-      setSaveStage(SaveStages.SavedResource)
-    }
-  }, [saveStage, updateResourcePayload, setResource])
-*/
-
   // delete from from drupal
   useEffect(() => {
     // markdown
@@ -3762,6 +3982,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
   // )
   // console.log(stateLivePreview)
   // console.log(stateLivePreviewMarkdown)
+  // console.log(state)
 
   return (
     <PaneForm

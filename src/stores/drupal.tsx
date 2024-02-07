@@ -170,7 +170,6 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
   ) => {
     const apiBase = process.env.DRUPAL_APIBASE
     const setDrupalQueue = get().setDrupalQueue
-
     if (payload?.binary) {
       // binary payload; will be intercepted and passed correctly
       const fullPayload = {

@@ -179,6 +179,10 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
         )
       if (typeof thisPaneOptions?.hiddenPane === `boolean`)
         newOptionsPayload.hiddenPane = thisPaneOptions.hiddenPane
+      if (typeof thisPaneOptions?.overflowHidden === `boolean`)
+        newOptionsPayload.overflowHidden = thisPaneOptions.overflowHidden
+      if (typeof thisPaneOptions?.codeHook === `object`)
+        newOptionsPayload.codeHook = thisPaneOptions.codeHook
       const initialState = {
         title: thisPane.title,
         slug: thisPane.slug,
@@ -190,14 +194,14 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
         heightRatioTablet: thisPane.heightRatioTablet,
         heightRatioMobile: thisPane.heightRatioMobile,
         isContextPane: thisPane.isContextPane,
-        hasCodeHook:
-          typeof thisPaneOptions?.codeHook === `object`
-            ? thisPaneOptions.codeHook
-            : false,
         hasH5P: !!(
           thisPaneOptions?.codeHook &&
           thisPaneOptions?.codeHook?.target === `h5p`
         ),
+        hasCodeHook:
+          typeof thisPaneOptions?.codeHook === `object`
+            ? thisPaneOptions.codeHook
+            : false,
         codeHookTarget:
           typeof thisPaneOptions?.codeHook?.target === `string`
             ? thisPaneOptions.codeHook.target

@@ -167,6 +167,16 @@ export function panePayload(
   if (state?.hiddenPane) thisOptionsRaw.hiddenPane = true
   if (state?.overflowHidden) thisOptionsRaw.overflowHidden = true
   if (state?.maxHeightScreen) thisOptionsRaw[`max-h-screen`] = true
+  if (state.hasCodeHook) {
+    thisOptionsRaw.codeHook = {}
+    if (state.codeHookTarget)
+      thisOptionsRaw.codeHook.target = state.codeHookTarget
+    if (state.codeHookTargetUrl)
+      thisOptionsRaw.codeHook.url = state.codeHookTargetUrl
+    if (state.codeHookHeight)
+      thisOptionsRaw.codeHook.height = state.codeHookHeight
+    if (state.codeHookWidth) thisOptionsRaw.codeHook.width = state.codeHookWidth
+  }
   let markdownId = null
   Object.keys(paneFragments).forEach((e: any) => {
     if (paneFragments[e].internal?.type === `markdown`)

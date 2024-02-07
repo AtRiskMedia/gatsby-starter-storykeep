@@ -26,7 +26,7 @@ const PreLaunchHero = ({ viewportKey, storyFragmentId }: IViewportKeyProps) => {
       : Svg(`kCzlowcutwide2`, viewportKey, `herolowcutwide2`)
 
   const branding = (
-    <div className="py-24 mx-auto max-w-xs md:max-w-sm relative z-10">
+    <div className="py-24 mx-auto max-w-xs md:max-w-sm relative z-1">
       <div className="flex flex-col w-fit mx-auto">
         <Logo className="h-16 mb-2" />
         <Wordmark className="h-10 fill-black" />
