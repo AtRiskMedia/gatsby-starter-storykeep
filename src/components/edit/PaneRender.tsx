@@ -551,7 +551,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
                 })
               }
             ></button>
-            <div className={className}>{value}</div>
+            <ThisTag>{value}</ThisTag>
           </>
         )
       } else if (
@@ -583,7 +583,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
                 })
               }
             ></button>
-            <div className={className}>{value}</div>
+            <ThisTag>{value}</ThisTag>
           </>
         )
       } else if (
@@ -626,7 +626,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
                 }
               ></button>
             ) : null}
-            <div className={className}>{value}</div>
+            <ThisTag>{value}</ThisTag>
           </>
         )
       } else if (
@@ -660,7 +660,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
                 })
               }
             ></button>
-            <div className={className}>{value}</div>
+            <ThisTag>{value}</ThisTag>
           </>
         )
         // } else return <div className={className}>{value}</div>
@@ -803,7 +803,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
     function handleResize() {
       const thisWidth = elementRef?.current?.offsetWidth || 0
       const viewportWidth =
-        viewportKey === `desktop` ? 1922 : viewportKey === `tablet` ? 1082 : 602
+        viewportKey === `desktop` ? 1920 : viewportKey === `tablet` ? 1080 : 600
       const thisScale = (thisWidth - 2) / viewportWidth
       document.documentElement.style.setProperty(
         `--scale`,
@@ -892,7 +892,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
         <StyledWrapperDiv
           key={`${viewportKey}-${uuid}-wrapper-outer`}
           className={classNames(
-            `bg-mylightgrey/20 sticky top-22`,
+            `bg-mylightgrey/20 sticky top-24`,
             viewportClasses,
           )}
           ref={elementRef as React.RefObject<HTMLDivElement>}

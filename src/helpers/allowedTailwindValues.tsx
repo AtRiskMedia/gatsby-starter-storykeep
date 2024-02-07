@@ -3,6 +3,7 @@ export const tailwindModifier = [``, `md:`, `xl:`]
 export const tailwindSpecial: { [index: string]: string } = {
   textCOLOR: `text`,
   textSIZE: `text`,
+  textALIGN: `text`,
   fontFACE: `font`,
   fontSTYLE: `font`,
   bgCOLOR: `bg`,
@@ -389,6 +390,8 @@ const rotate = [
   `!180`,
 ]
 
+const textALIGN = [`left`, `center`, `right`, `justify`, `start`, `end`]
+
 const textSIZE = [
   `xs`,
   `sm`,
@@ -672,6 +675,7 @@ export const tailwindSpecialTitle: { [index: string]: string } = {
   w: `Width`,
   h: `Height`,
   textCOLOR: `Text Color`,
+  textALIGN: `Text Align`,
   textSIZE: `Text Size`,
   fontFACE: `Font Face`,
   fontSTYLE: `Font Style`,
@@ -725,6 +729,7 @@ const tailwindAllowedValues: { [index: string]: any } = {
   w: [...spacingExtraW, ...spacing],
   h: [...spacingExtraH, ...spacing],
   textCOLOR: colors,
+  textALIGN,
   textSIZE,
   fontFACE,
   fontSTYLE,
@@ -778,6 +783,7 @@ export const tailwindAllowedClasses = [
   `w`,
   `h`,
   `textCOLOR`,
+  `textALIGN`,
   `textSIZE`,
   `fontFACE`,
   `fontSTYLE`,

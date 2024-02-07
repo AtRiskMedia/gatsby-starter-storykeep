@@ -1615,6 +1615,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       }
 
       case `updateLinkSelector`: {
+        const thisNth = result[1]
         // links payload is derived from statePaneFragments[paneFragmentId].optionsPayload.buttons[thisLink.target]
         const buttons =
           statePaneFragments[paneFragmentId].optionsPayload?.buttons
@@ -1703,8 +1704,8 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       }
 
       case `updateLinkHoverSelector`: {
-        console.log(1)
         // links payload is derived from statePaneFragments[paneFragmentId].optionsPayload.buttons[thisLink.target]
+        const thisNth = result[1]
         const buttons =
           statePaneFragments[paneFragmentId].optionsPayload?.buttons
         const thisLink =
@@ -2083,14 +2084,48 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
           })
           setToggleCheck(true)
         } else if (selector === `callback`) {
-          /*
+          const newButtonPayload = {
+            ...statePaneFragments[paneFragmentId].optionsPayload.buttons[
+              thisLink.target
+            ],
+          }
+          newButtonPayload.callbackPayload = value
+          const newPaneFragmentOptionsPayload = {
+            ...statePaneFragments[paneFragmentId].optionsPayload,
+            buttons: {
+              ...statePaneFragments[paneFragmentId].optionsPayload.buttons,
+              [thisLink.target]: newButtonPayload,
+            },
+          }
           const newStatePaneFragments = {
             ...statePaneFragments,
             [paneFragmentId]: {
               ...statePaneFragments[paneFragmentId],
+              optionsPayload: newPaneFragmentOptionsPayload,
+              optionsPayloadString: JSON.stringify(
+                newPaneFragmentOptionsPayload,
+              ),
             },
           }
-          */
+          const impressionsPayload = stateImpressions?.title
+            ? {
+                [stateImpressions.id]: stateImpressions,
+              }
+            : null
+          const newOptionsPayload = {
+            heldBeliefs: stateHeldBeliefs,
+            withheldBeliefs: stateWithheldBeliefs,
+            impressions: impressionsPayload,
+            paneFragmentsPayload: Object.values(newStatePaneFragments),
+            hiddenPane: state.hiddenPane,
+          }
+          setStatePaneFragments(newStatePaneFragments)
+          setState((prev: any) => {
+            return {
+              ...prev,
+              optionsPayloadString: JSON.stringify(newOptionsPayload),
+            }
+          })
           setStateLivePreviewMarkdown((prev: any) => {
             return {
               ...prev,
@@ -3017,23 +3052,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
 
   useEffect(() => {
     if (toggleCheck) {
-      const hasChanges =
-        !deepEqual(state, lastSavedState.initialState) ||
-        !deepEqual(
-          statePaneFragments,
-          lastSavedState.initialStatePaneFragments,
-        ) ||
-        !deepEqual(stateImpressions, lastSavedState.initialStateImpressions) ||
-        !deepEqual(stateHeldBeliefs, lastSavedState.initialStateHeldBeliefs) ||
-        !deepEqual(
-          stateWithheldBeliefs,
-          lastSavedState.initialStateWithheldBeliefs,
-        ) ||
-        !deepEqual(stateLivePreview, lastSavedState.initialStateLivePreview) ||
-        !deepEqual(
-          stateLivePreviewMarkdown,
-          lastSavedState.initialStateLivePreviewMarkdown,
-        )
+      const hasChanges = !deepEqual(state, lastSavedState.initialState)
       if (hasChanges && saveStage === SaveStages.NoChanges) {
         setSaveStage(SaveStages.UnsavedChanges)
         setNavLocked(true)
@@ -3049,18 +3068,6 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
     state,
     setNavLocked,
     lastSavedState.initialState,
-    lastSavedState.initialStateImpressions,
-    lastSavedState.initialStateLivePreview,
-    lastSavedState.initialStateLivePreviewMarkdown,
-    lastSavedState.initialStatePaneFragments,
-    lastSavedState.initialStateHeldBeliefs,
-    lastSavedState.initialStateWithheldBeliefs,
-    stateHeldBeliefs,
-    stateImpressions,
-    stateLivePreview,
-    stateLivePreviewMarkdown,
-    statePaneFragments,
-    stateWithheldBeliefs,
   ])
 
   // handle stages
@@ -3751,7 +3758,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
   if (saveStage < SaveStages.NoChanges) return null
 
   // console.log(
-  // statePaneFragments[stateLivePreviewMarkdown.paneFragmentId].optionsPayload.classNamesParent,
+  //  statePaneFragments[stateLivePreviewMarkdown.paneFragmentId].optionsPayload
   // )
   // console.log(stateLivePreview)
   // console.log(stateLivePreviewMarkdown)

@@ -230,7 +230,7 @@ const StoryFragmentRender = ({
     function handleResize() {
       const thisWidth = elementRef?.current?.offsetWidth || 0
       const viewportWidth =
-        viewportKey === `desktop` ? 1928 : viewportKey === `tablet` ? 1088 : 608
+        viewportKey === `desktop` ? 1920 : viewportKey === `tablet` ? 1080 : 600
       const thisScale = (thisWidth - 8) / viewportWidth
       document.documentElement.style.setProperty(
         `--scale`,
