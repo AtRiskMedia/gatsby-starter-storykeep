@@ -2899,10 +2899,15 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
                   )
                 ? `li`
                 : stateLivePreviewMarkdown.markdownTags[nth]
-    const actualTag =
-      thisTag !== `imageContainer`
-        ? stateLivePreviewMarkdown.markdownTags[nth]
-        : `ul`
+    const actualTag = [
+      `imageContainer`,
+      `youtube`,
+      `resource`,
+      `toggle`,
+      `belief`,
+    ].includes(thisTag)
+      ? `ul`
+      : stateLivePreviewMarkdown.markdownTags[nth]
     const listPrefix = actualTag === `ul` ? `*` : actualTag === `ol` ? `1.` : ``
     const sliceOffset = [`parentpost`, `post`].includes(mode) ? nth + 1 : nth
     const tagsCount = stateLivePreviewMarkdown.markdownTags.slice(
@@ -2931,7 +2936,16 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
     const hasOverride = typeof thisClassNamesPayload?.override !== `undefined`
     const thisClassNamesPayloadInner =
       [`pre`, `post`, `imagePre`, `imagePost`].includes(mode) &&
-      [`ul`, `ol`, `imageContainer`, `img`].includes(thisTag) &&
+      [
+        `ul`,
+        `ol`,
+        `imageContainer`,
+        `youtube`,
+        `resource`,
+        `toggle`,
+        `belief`,
+        `img`,
+      ].includes(thisTag) &&
       typeof classNamesPayload.li !== `undefined`
         ? classNamesPayload.li
         : null
@@ -2946,7 +2960,16 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
     // )
     if (
       [`pre`, `post`, `imagePre`, `imagePost`].includes(mode) &&
-      [`ol`, `ul`, `imageContainer`, `img`].includes(thisTag) &&
+      [
+        `ol`,
+        `ul`,
+        `imageContainer`,
+        `youtube`,
+        `resource`,
+        `toggle`,
+        `belief`,
+        `img`,
+      ].includes(thisTag) &&
       hasOverrideInner
     ) {
       let listItemNth = 0
@@ -2984,34 +3007,6 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         thisOverrideInner = { ...thisOverrideInner, [e]: thatOverrideInner }
       })
     }
-    /*
-    else if (
-      mode === `delete` &&
-      [`ol`, `ul`, `imageContainer`].includes(thisTag) &&
-      hasOverrideInner
-    ) {
-      console.log(`inner pass delete`)
-      // delete ul|ol, must account for listItems
-      Object.keys(thisClassNamesPayloadInner.override).forEach((e: any) => {
-        console.log(e)
-        let thatOverrideInner = {}
-        Object.keys(thisClassNamesPayloadInner.override[e]).forEach(
-          (f: any) => {
-            console.log(+f, childGlobalNth, mode)
-            const thisVal = thisClassNamesPayloadInner.override[e][f]
-            if ((mode === `pre` && +f >= childGlobalNth) || (mode===`post`&& +f >= childGlobalNth) )
-              thatOverrideInner = {
-                ...thatOverrideInner,
-                [`${+f + 1}`]: thisVal,
-              }
-            else thatOverrideInner = { ...thatOverrideInner, [f]: thisVal }
-          },
-        )
-        thisOverrideInner = { ...thisOverrideInner, [e]: thatOverrideInner }
-        console.log(thisOverrideInner)
-      })
-    }
-*/
 
     if (hasOverride) {
       let overrideNth = 0
@@ -3143,6 +3138,39 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         `* ![ImagePlaceholder](ImagePlaceholder)\n`,
         ...oldMarkdownArray.slice(nth + 1),
       ]
+    } else if (
+      childNth === -1 &&
+      [`pre`, `post`].includes(mode) &&
+      typeof tag === `string` &&
+      [`youtube`, `resource`, `toggle`, `belief`].includes(tag)
+    ) {
+      let hook = ``
+      switch (tag) {
+        case `youtube`:
+          hook = `youtube(tag|Title)`
+          break
+        case `resource`:
+          hook = `resource(type|variation)`
+          break
+        case `toggle`:
+          hook = `toggle(BELIEF_TAG|BELIEF_SCALE|question)`
+          break
+        case `belief`:
+          hook = `belief(BELIEF_TAG|BELIEF_SCALE|question)`
+          break
+      }
+      if (tag && mode === `pre`)
+        newMarkdownArray = [
+          ...oldMarkdownArray.slice(0, nth),
+          `* \`${hook}\`\n`,
+          ...oldMarkdownArray.slice(nth),
+        ]
+      else if (tag)
+        newMarkdownArray = [
+          ...oldMarkdownArray.slice(0, nth + 1),
+          `* \`${hook}\`\n`,
+          ...oldMarkdownArray.slice(nth + 1),
+        ]
     } else if (
       (childNth === -1 && mode === `pre`) ||
       (childNth > -1 && mode === `parentpre`)

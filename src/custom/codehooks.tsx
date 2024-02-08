@@ -8,7 +8,7 @@ const codeHooks: ICodeHookDict = {
   PreLaunchHero,
   AtRiskMedia,
   FeaturesGrid,
-  Branding
+  Branding,
 }
 
 export default codeHooks

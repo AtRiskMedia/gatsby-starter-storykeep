@@ -415,26 +415,24 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
       className,
     }: IEditInPlace) => {
       const thisNth = parent && parent > -1 ? parent : nth
-      let specialMode = ``
       let specialModeOn = false
       let specialModePre = true
       let specialModePost = true
       const thisTagType = typeof tags[Tag] !== `undefined` ? tags[Tag] : null
       if (!thisTagType) return null
-      const ThisTag = Tag === `img` ? `p` : Tag
 
       switch (interceptModeTag) {
         case `li`:
-          specialMode = `listItem`
           if (Tag === `li`) specialModeOn = true
           break
 
         case `ul`:
         case `ol`:
         case `imageContainer`:
-          if (interceptModeTag === `imageContainer`)
-            specialMode = `imageContainer`
-          else specialMode = `list`
+        case `belief`:
+        case `toggle`:
+        case `resource`:
+        case `youtube`:
           specialModeOn = true
           if (
             [`ul`, `ol`].includes(
@@ -469,7 +467,6 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
         case `h5`:
         case `h6`:
           if (Tag !== `li`) {
-            specialMode = `insert`
             specialModeOn = true
           }
           break
@@ -586,12 +583,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
             {value}
           </>
         )
-      } else if (
-        interceptMode === `insert` &&
-        specialMode &&
-        specialModeOn &&
-        Tag !== `img`
-      ) {
+      } else if (interceptMode === `insert` && specialModeOn && Tag !== `img`) {
         return (
           <>
             {specialModePre ? (
@@ -605,7 +597,10 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
                       typeof parent === `number` && parent > -1 ? parent : nth,
                     childNth:
                       typeof parent === `number` && parent > -1 ? nth : -1,
-                    mode: specialMode === `parent` ? `parentpre` : `pre`,
+                    mode:
+                      typeof parent === `number` && parent > -1
+                        ? `parentpre`
+                        : `pre`,
                   })
                 }
               ></button>
@@ -621,7 +616,10 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
                       typeof parent === `number` && parent > -1 ? parent : nth,
                     childNth:
                       typeof parent === `number` && parent > -1 ? nth : -1,
-                    mode: specialMode === `parent` ? `parentpost` : `post`,
+                    mode:
+                      typeof parent === `number` && parent > -1
+                        ? `parentpost`
+                        : `post`,
                   })
                 }
               ></button>
