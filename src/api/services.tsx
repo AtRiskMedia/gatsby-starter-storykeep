@@ -27,28 +27,24 @@ export async function getPaneDetailsPie({
   }
   if (process.env.NODE_ENV !== `development`)
     return client.post(`/builder/paneDetailsPie`, payload)
-  console.log(`dev mode: skipping paneDetailsPie`)
   return null
 }
 
 export async function getStoryFragmentDaysSince() {
   if (process.env.NODE_ENV !== `development`)
     return client.get(`/builder/storyFragmentDaysSince`)
-  console.log(`dev mode: skipping storyFragmentDaysSince`)
   return null
 }
 
 export async function getPanesDaysSince() {
   if (process.env.NODE_ENV !== `development`)
     return client.get(`/builder/panesDaysSince`)
-  console.log(`dev mode: skipping panesDaysSince`)
   return null
 }
 
 export async function getDashboardPayloads() {
   if (process.env.NODE_ENV !== `development`)
     return client.get(`/builder/dashboard`)
-  console.log(`dev mode: skipping getDashboardPayloads`)
   return null
 }
 
@@ -60,28 +56,23 @@ export async function getTriggerPublish({
   }
   if (process.env.NODE_ENV !== `development`)
     return client.post(`/builder/publish`, payload)
-  console.log(`dev mode: skipping triggerPublish`)
   return null
 }
 
 export async function getSettings() {
   if (process.env.NODE_ENV !== `development`)
     return client.get(`/builder/settings`)
-  console.log(`dev mode: skipping settings`)
   return null
 }
 
 export async function postSettings({ payload }: any) {
   if (process.env.NODE_ENV !== `development`)
     return client.post(`/builder/settings`, payload)
-  console.log(`dev mode: skipping post settings`)
   return null
 }
 
 export async function postPublish({ payload }: any) {
-  console.log(payload)
   if (process.env.NODE_ENV !== `development`)
     return client.post(`/builder/publish`, payload)
-  console.log(`dev mode: skipping publish`)
   return null
 }
