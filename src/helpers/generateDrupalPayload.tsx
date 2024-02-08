@@ -1,3 +1,10 @@
+function unique(arr: string[]) {
+  const a = []
+  for (let i = 0, l = arr.length; i < l; i++)
+    if (a.indexOf(arr[i]) === -1 && arr[i] !== ``) a.push(arr[i])
+  return a
+}
+
 export function menuPayload(
   state: any, // FIX
   uuid: string,
@@ -65,7 +72,7 @@ export function tractStackPayload(
       field_slug: state.slug,
       field_social_image_path: state?.socialImagePath || ``,
     },
-    ...relationships(state.contextPanes, state.storyFragments),
+    ...relationships(unique(state.contextPanes), unique(state.storyFragments)),
   }
 }
 
@@ -115,7 +122,11 @@ export function storyFragmentPayload(
       field_social_image_path: state.socialImagePath,
       field_tailwind_background_colour: state?.tailwindBgColour || ``,
     },
-    ...relationships(state.panes, state.contextPanes, state.tractstack),
+    ...relationships(
+      unique(state.panes),
+      unique(state.contextPanes),
+      state.tractstack,
+    ),
   }
 }
 

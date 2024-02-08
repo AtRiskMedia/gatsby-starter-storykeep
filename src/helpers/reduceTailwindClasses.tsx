@@ -6,10 +6,7 @@ import {
 } from './allowedTailwindValues'
 
 const reduceClassNameArray = (selector: string, tuple: any) => {
-  if (!tuple) {
-    console.log(`FIX THIS: bad tuple`, selector, tuple)
-    return null
-  }
+  if (!tuple) return null
   return Object.keys(tuple)
     .map((e: string, idx: number) => {
       const value = typeof tuple[e] !== `undefined` ? tuple[e] : null
