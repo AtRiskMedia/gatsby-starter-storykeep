@@ -43,6 +43,10 @@ const insertModeTags = [
   { name: `h4`, title: `Heading 4` },
   { name: `h5`, title: `Heading 5` },
   { name: `h6`, title: `Heading 6` },
+  //{ name: `youtube`, title: `Youtube Video Embed` },
+  //{ name: `resource`, title: `Resource` },
+  //{ name: `belief`, title: `Belief widget` },
+  //{ name: `toggle`, title: `Toggle Belief widget` },
 ]
 
 const PaneForm = ({ uuid, payload, flags, fn }: IPaneForm) => {

@@ -506,7 +506,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
                   setChildGlobalNth(codeItemsLookup[parent][nth])
               }}
             ></button>
-            <ThisTag>{value}</ThisTag>
+            {value}
           </>
         )
       else if (interceptMode === `edit` && ![`ul`, `ol`].includes(Tag)) {
@@ -551,7 +551,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
                 })
               }
             ></button>
-            <ThisTag>{value}</ThisTag>
+            {value}
           </>
         )
       } else if (
@@ -583,7 +583,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
                 })
               }
             ></button>
-            <ThisTag>{value}</ThisTag>
+            {value}
           </>
         )
       } else if (
@@ -626,7 +626,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
                 }
               ></button>
             ) : null}
-            <ThisTag>{value}</ThisTag>
+            {value}
           </>
         )
       } else if (
@@ -660,7 +660,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
                 })
               }
             ></button>
-            <ThisTag>{value}</ThisTag>
+            {value}
           </>
         )
         // } else return <div className={className}>{value}</div>
