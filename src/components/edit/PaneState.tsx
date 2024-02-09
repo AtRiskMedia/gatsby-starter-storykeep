@@ -1003,7 +1003,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
                                             (value || viewport === `remove`)
                                           ? `updateSelector`
                                           : null
-
+    console.log(result, mode, name, value)
     switch (mode) {
       case `starter`: {
         if ([`titleText`, `text`, `borderedText`].includes(value)) {
@@ -1273,18 +1273,24 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       }
 
       case `updateSelector`: {
-        const thisLookup = [`li`, `img`].includes(tag)
-          ? childGlobalNth
-          : thisNth
+        const thisTag =
+          typeof stateLivePreviewMarkdown.codeItems[childGlobalNth] ===
+          `undefined`
+            ? tag
+            : `code`
+        const thisLookup =
+          [`li`, `img`].includes(tag) || thisTag === `code`
+            ? childGlobalNth
+            : thisNth
         const hasOverride =
-          stateLivePreview.childClasses[tag][thisLookup][selector][3]
+          stateLivePreview.childClasses[thisTag][thisLookup][selector][3]
         const hasOverridePayload =
           typeof statePaneFragments[paneFragmentId].optionsPayload
-            .classNamesPayload[tag].override !== `undefined`
+            .classNamesPayload[thisTag].override !== `undefined`
         const hasOverrideSelectorPayload =
           hasOverridePayload &&
           typeof statePaneFragments[paneFragmentId].optionsPayload
-            .classNamesPayload[tag].override[selector] !== `undefined`
+            .classNamesPayload[thisTag].override[selector] !== `undefined`
         if (
           viewport === `remove` &&
           hasOverride &&
@@ -1309,7 +1315,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         ) {
           const current = {
             ...statePaneFragments[paneFragmentId].optionsPayload
-              .classNamesPayload[tag],
+              .classNamesPayload[thisTag],
           }
           delete current.override[selector][childGlobalNth]
           if (Object.keys(current.override[selector]).length === 0) {
@@ -1319,7 +1325,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
           const newClassNamesPayload = {
             ...statePaneFragments[paneFragmentId].optionsPayload
               .classNamesPayload,
-            [tag]: current,
+            [thisTag]: current,
           }
           const reduced = reduceTailwindClasses(newClassNamesPayload)
           const newOptionsPayload = {
@@ -1331,15 +1337,15 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         } else if (viewport === `remove`) {
           const current = {
             ...statePaneFragments[paneFragmentId].optionsPayload
-              .classNamesPayload[tag].classes,
+              .classNamesPayload[thisTag].classes,
           }
           delete current[selector]
           const newClassNamesPayload = {
             ...statePaneFragments[paneFragmentId].optionsPayload
               .classNamesPayload,
-            [tag]: {
+            [thisTag]: {
               ...statePaneFragments[paneFragmentId].optionsPayload
-                .classNamesPayload[tag],
+                .classNamesPayload[thisTag],
               classes: current,
             },
           }
@@ -1356,15 +1362,18 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
           const tuple = !hasOverride
             ? [
                 ...statePaneFragments[paneFragmentId].optionsPayload
-                  .classNamesPayload[tag].classes[selector],
+                  .classNamesPayload[thisTag].classes[selector],
               ]
             : hasOverrideSelectorPayload &&
                 typeof statePaneFragments[paneFragmentId].optionsPayload
-                  .classNamesPayload[tag].override[selector][childGlobalNth] !==
-                  `undefined`
+                  .classNamesPayload[thisTag].override[selector][
+                  childGlobalNth
+                ] !== `undefined`
               ? [
                   ...statePaneFragments[paneFragmentId].optionsPayload
-                    .classNamesPayload[tag].override[selector][childGlobalNth],
+                    .classNamesPayload[thisTag].override[selector][
+                    childGlobalNth
+                  ],
                 ]
               : []
           tuple[viewportOffset] = newValue
@@ -1376,16 +1385,16 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
           if (hasOverride) {
             const noPayload =
               typeof statePaneFragments[paneFragmentId].optionsPayload
-                .classNamesPayload[tag] !== `undefined` &&
+                .classNamesPayload[thisTag] !== `undefined` &&
               statePaneFragments[paneFragmentId].optionsPayload
-                .classNamesPayload[tag].override === `undefined`
+                .classNamesPayload[thisTag].override === `undefined`
             const alreadyExists = noPayload
               ? false
               : !noPayload &&
                 typeof statePaneFragments[paneFragmentId].optionsPayload
-                  .classNamesPayload[tag].override !== `undefined` &&
+                  .classNamesPayload[thisTag].override !== `undefined` &&
                 statePaneFragments[paneFragmentId].optionsPayload
-                  .classNamesPayload[tag].override[selector] !== `undefined`
+                  .classNamesPayload[thisTag].override[selector] !== `undefined`
             const overrideCount = [
               `ul`,
               `ol`,
@@ -1396,30 +1405,30 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
               `h4`,
               `h5`,
               `h6`,
-            ].includes(tag)
+            ].includes(thisTag)
               ? stateLivePreviewMarkdown.markdownTags.filter(
-                  (n: string) => n === tag,
+                  (n: string) => n === thisTag,
                 ).length
-              : tag === `li`
+              : thisTag === `li`
                 ? Object.keys(stateLivePreviewMarkdown.listItems).length
-                : tag === `img`
+                : thisTag === `img`
                   ? Object.keys(stateLivePreviewMarkdown.images).length
-                  : tag === `code`
+                  : thisTag === `code`
                     ? Object.keys(stateLivePreviewMarkdown.codeItems).length
                     : 1
             const newClassNamesPayload = alreadyExists
               ? {
                   ...statePaneFragments[paneFragmentId].optionsPayload
                     .classNamesPayload,
-                  [tag]: {
+                  [thisTag]: {
                     ...statePaneFragments[paneFragmentId].optionsPayload
-                      .classNamesPayload[tag],
+                      .classNamesPayload[thisTag],
                     override: {
                       ...statePaneFragments[paneFragmentId].optionsPayload
-                        .classNamesPayload[tag].override,
+                        .classNamesPayload[thisTag].override,
                       [selector]: {
                         ...statePaneFragments[paneFragmentId].optionsPayload
-                          .classNamesPayload[tag].override[selector],
+                          .classNamesPayload[thisTag].override[selector],
                         [childGlobalNth]: thisTuple,
                       },
                     },
@@ -1428,13 +1437,13 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
               : {
                   ...statePaneFragments[paneFragmentId].optionsPayload
                     .classNamesPayload,
-                  [tag]: {
+                  [thisTag]: {
                     ...statePaneFragments[paneFragmentId].optionsPayload
-                      .classNamesPayload[tag],
+                      .classNamesPayload[thisTag],
                     count: overrideCount,
                     override: {
                       ...statePaneFragments[paneFragmentId].optionsPayload
-                        .classNamesPayload[tag].override,
+                        .classNamesPayload[thisTag].override,
                       [selector]: {
                         [childGlobalNth]: thisTuple,
                       },
@@ -1452,12 +1461,12 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
             const newClassNamesPayload = {
               ...statePaneFragments[paneFragmentId].optionsPayload
                 .classNamesPayload,
-              [tag]: {
+              [thisTag]: {
                 ...statePaneFragments[paneFragmentId].optionsPayload
-                  .classNamesPayload[tag],
+                  .classNamesPayload[thisTag],
                 classes: {
                   ...statePaneFragments[paneFragmentId].optionsPayload
-                    .classNamesPayload[tag].classes,
+                    .classNamesPayload[thisTag].classes,
                   [selector]: thisTuple,
                 },
               },
@@ -4007,7 +4016,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
   if (saveStage < SaveStages.NoChanges) return null
 
   // console.log(
-  //  statePaneFragments[stateLivePreviewMarkdown.paneFragmentId].optionsPayload
+  //   statePaneFragments[stateLivePreviewMarkdown.paneFragmentId].optionsPayload,
   // )
   // console.log(stateLivePreview)
   // console.log(stateLivePreviewMarkdown)

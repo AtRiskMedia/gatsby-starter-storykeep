@@ -1461,10 +1461,11 @@ const PaneEditInPlace = ({
     tag === `code` &&
     childNth > -1 &&
     childGlobalNth > -1 &&
-    typeof stateLivePreview?.childClasses.ul !== `undefined` &&
-    typeof stateLivePreview?.childClasses.ul[nth] !== `undefined`
-      ? stateLivePreview.childClasses.ul[nth]
+    typeof stateLivePreview?.childClasses.code !== `undefined` &&
+    typeof stateLivePreview?.childClasses.code[childGlobalNth] !== `undefined`
+      ? stateLivePreview.childClasses.code[childGlobalNth]
       : {}
+  console.log(outerCodeState, tag, nth, childNth, childGlobalNth)
   const outerCodeId = tag === `code` ? `${nth}--ul` : null
   const bgColour = typeof hasBgColour === `string` ? hasBgColour : `#ffffff`
   const textShapeOutside = stateLivePreviewMarkdown?.hasTextShapeOutside
@@ -1786,7 +1787,7 @@ const PaneEditInPlace = ({
                       />
                     )}
 
-                    <span className="h-8"></span>
+                    <div className="h-4"></div>
                     <span className="font-action my-auto">Outer Container</span>
                     {!Object.keys(outerCodeState).length ? (
                       <span className="block my-2">No outer styles</span>
