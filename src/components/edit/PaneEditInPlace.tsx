@@ -1465,7 +1465,6 @@ const PaneEditInPlace = ({
     typeof stateLivePreview?.childClasses.code[childGlobalNth] !== `undefined`
       ? stateLivePreview.childClasses.code[childGlobalNth]
       : {}
-  console.log(outerCodeState, tag, nth, childNth, childGlobalNth)
   const outerCodeId = tag === `code` ? `${nth}--ul` : null
   const bgColour = typeof hasBgColour === `string` ? hasBgColour : `#ffffff`
   const textShapeOutside = stateLivePreviewMarkdown?.hasTextShapeOutside

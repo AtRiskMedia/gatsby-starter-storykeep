@@ -1003,7 +1003,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
                                             (value || viewport === `remove`)
                                           ? `updateSelector`
                                           : null
-    console.log(result, mode, name, value)
+    //console.log(result, mode, name, value)
     switch (mode) {
       case `starter`: {
         if ([`titleText`, `text`, `borderedText`].includes(value)) {

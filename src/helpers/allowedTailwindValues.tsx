@@ -17,6 +17,7 @@ export const tailwindSpecial: { [index: string]: string } = {
   justifyCONTENT: `justify`,
   alignITEMS: `items`,
   fillCOLOR: `fill`,
+  shadowSIZE: `shadow`,
   underlineSTYLE: `underline`,
   maxW: `max-w`,
   maxH: `max-h`,
