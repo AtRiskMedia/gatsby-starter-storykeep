@@ -108,6 +108,246 @@ const EditCodeHook = ({
   )
 }
 
+const EditCodeHookBelief = ({
+  id,
+  payload,
+  handleChangeEditInPlace,
+}: {
+  id: string
+  payload: any
+  handleChangeEditInPlace: Function
+}) => {
+  return (
+    <div key={id}>
+      <div className="my-2">
+        <label
+          htmlFor={`${id}--val1`}
+          className="block text-sm leading-6 text-black"
+        >
+          Belief Slug
+        </label>
+        <input
+          type="text"
+          name={`${id}--val1`}
+          id={`${id}--val1`}
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
+          onChange={(e) => handleChangeEditInPlace(e)}
+          value={
+            typeof payload.values[0] !== `undefined` ? payload.values[0] : ``
+          }
+        />
+      </div>
+      <div className="my-2">
+        <label
+          htmlFor={`${id}--val2`}
+          className="block text-sm leading-6 text-black"
+        >
+          Scale
+        </label>
+        <input
+          type="text"
+          name={`${id}--val2`}
+          id={`${id}--val2`}
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
+          onChange={(e) => handleChangeEditInPlace(e)}
+          value={
+            typeof payload.values[1] !== `undefined` ? payload.values[1] : ``
+          }
+        />
+      </div>
+      <div className="my-2">
+        <label
+          htmlFor={`${id}--val3`}
+          className="block text-sm leading-6 text-black"
+        >
+          Question Prompt
+        </label>
+        <input
+          type="text"
+          name={`${id}--val3`}
+          id={`${id}--val3`}
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
+          onChange={(e) => handleChangeEditInPlace(e)}
+          value={
+            typeof payload.values[2] !== `undefined` ? payload.values[2] : ``
+          }
+        />
+      </div>
+    </div>
+  )
+}
+
+const EditCodeHookToggleBelief = ({
+  id,
+  payload,
+  handleChangeEditInPlace,
+}: {
+  id: string
+  payload: any
+  handleChangeEditInPlace: Function
+}) => {
+  return (
+    <div key={id}>
+      <div className="my-2">
+        <label
+          htmlFor={`${id}--val1`}
+          className="block text-sm leading-6 text-black"
+        >
+          Belief Slug
+        </label>
+        <input
+          type="text"
+          name={`${id}--val1`}
+          id={`${id}--val1`}
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
+          onChange={(e) => handleChangeEditInPlace(e)}
+          value={
+            typeof payload.values[0] !== `undefined` ? payload.values[0] : ``
+          }
+        />
+      </div>
+      <div className="my-2">
+        <label
+          htmlFor={`${id}--val2`}
+          className="block text-sm leading-6 text-black"
+        >
+          Target Value
+        </label>
+        <input
+          type="text"
+          name={`${id}--val2`}
+          id={`${id}--val2`}
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
+          onChange={(e) => handleChangeEditInPlace(e)}
+          value={
+            typeof payload.values[1] !== `undefined` ? payload.values[1] : ``
+          }
+        />
+      </div>
+      <div className="my-2">
+        <label
+          htmlFor={`${id}--val3`}
+          className="block text-sm leading-6 text-black"
+        >
+          Question Prompt
+        </label>
+        <input
+          type="text"
+          name={`${id}--val3`}
+          id={`${id}--val3`}
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
+          onChange={(e) => handleChangeEditInPlace(e)}
+          value={
+            typeof payload.values[2] !== `undefined` ? payload.values[2] : ``
+          }
+        />
+      </div>
+    </div>
+  )
+}
+
+const EditCodeHookYouTube = ({
+  id,
+  payload,
+  handleChangeEditInPlace,
+}: {
+  id: string
+  payload: any
+  handleChangeEditInPlace: Function
+}) => {
+  return (
+    <div key={id}>
+      <div className="my-2">
+        <label
+          htmlFor={`${id}--val1`}
+          className="block text-sm leading-6 text-black"
+        >
+          Embed Code
+        </label>
+        <input
+          type="text"
+          name={`${id}--val1`}
+          id={`${id}--val1`}
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
+          onChange={(e) => handleChangeEditInPlace(e)}
+          value={
+            typeof payload.values[0] !== `undefined` ? payload.values[0] : ``
+          }
+        />
+      </div>
+      <div className="my-2">
+        <label
+          htmlFor={`${id}--val2`}
+          className="block text-sm leading-6 text-black"
+        >
+          Title
+        </label>
+        <input
+          type="text"
+          name={`${id}--val2`}
+          id={`${id}--val2`}
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
+          onChange={(e) => handleChangeEditInPlace(e)}
+          value={
+            typeof payload.values[1] !== `undefined` ? payload.values[1] : ``
+          }
+        />
+      </div>
+    </div>
+  )
+}
+
+const EditCodeHookResource = ({
+  id,
+  payload,
+  handleChangeEditInPlace,
+}: {
+  id: string
+  payload: any
+  handleChangeEditInPlace: Function
+}) => {
+  return (
+    <div key={id}>
+      <div className="my-2">
+        <label
+          htmlFor={`${id}--val1`}
+          className="block text-sm leading-6 text-black"
+        >
+          Slug
+        </label>
+        <input
+          type="text"
+          name={`${id}--val1`}
+          id={`${id}--val1`}
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
+          onChange={(e) => handleChangeEditInPlace(e)}
+          value={
+            typeof payload.values[0] !== `undefined` ? payload.values[0] : ``
+          }
+        />
+      </div>
+      <div className="my-2">
+        <label
+          htmlFor={`${id}--val2`}
+          className="block text-sm leading-6 text-black"
+        >
+          Template
+        </label>
+        <input
+          type="text"
+          name={`${id}--val2`}
+          id={`${id}--val2`}
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
+          onChange={(e) => handleChangeEditInPlace(e)}
+          value={
+            typeof payload.values[1] !== `undefined` ? payload.values[1] : ``
+          }
+        />
+      </div>
+    </div>
+  )
+}
+
 const EditLink = ({
   id,
   payload,
@@ -1154,6 +1394,17 @@ const PaneEditInPlace = ({
       : {}
   const parentId =
     pageStylesPagination > -1 ? `${pageStylesPagination}--parent` : `0--parent`
+  const tagTypeTitle = !codeHook
+    ? tagType
+    : codeHook?.hook === `youtube`
+      ? `YouTube Video Embed`
+      : codeHook?.hook === `resource`
+        ? `Resource Embed`
+        : codeHook?.hook === `belief`
+          ? `Belief Widget`
+          : codeHook?.hook === `toggle`
+            ? `Toggle Belief Widget`
+            : `Code Hook`
   const state =
     childNth === -1 &&
     stateLivePreview?.childClasses &&
@@ -1378,14 +1629,20 @@ const PaneEditInPlace = ({
           {state && id && tag ? (
             <div className="mb-4 bg-white shadow rounded-lg max-w-md">
               <div className="px-3 py-5 p-6">
-                {tagType ? (
+                {tagTypeTitle ? (
                   <div className="inline-flex">
-                    <span className="font-action my-auto">This {tagType}</span>
-                    <span className="w-1"></span>
-                    <InformationCircleIcon
-                      className="my-auto w-5 h-5 text-myblue hover:text-myorange"
-                      title={`By default styles are applied to all ${tagType}.`}
-                    />
+                    <span className="font-action my-auto">
+                      This {tagTypeTitle}
+                    </span>
+                    {!codeHook ? (
+                      <>
+                        <span className="w-1"></span>
+                        <InformationCircleIcon
+                          className="my-auto w-5 h-5 text-myblue hover:text-myorange"
+                          title={`By default styles are applied to all ${tagTypeTitle}.`}
+                        />
+                      </>
+                    ) : null}
                     <span className="w-2"></span>
                     <button
                       className="bg-transparent text-mydarkgrey hover:bg-myorange rounded-md px-3 py-2 text-xs font-action"
@@ -1497,12 +1754,39 @@ const PaneEditInPlace = ({
 
                 {codeHook ? (
                   <>
-                    <EditCodeHook
-                      id={`${id}`}
-                      payload={codeHook}
-                      handleChangeEditInPlace={handleChangeEditInPlace}
-                    />
-                    <br />
+                    {codeHook.hook === `youtube` ? (
+                      <EditCodeHookYouTube
+                        id={`${id}`}
+                        payload={codeHook}
+                        handleChangeEditInPlace={handleChangeEditInPlace}
+                      />
+                    ) : codeHook.hook === `resource` ? (
+                      <EditCodeHookResource
+                        id={`${id}`}
+                        payload={codeHook}
+                        handleChangeEditInPlace={handleChangeEditInPlace}
+                      />
+                    ) : codeHook.hook === `belief` ? (
+                      <EditCodeHookBelief
+                        id={`${id}`}
+                        payload={codeHook}
+                        handleChangeEditInPlace={handleChangeEditInPlace}
+                      />
+                    ) : codeHook.hook === `toggle` ? (
+                      <EditCodeHookToggleBelief
+                        id={`${id}`}
+                        payload={codeHook}
+                        handleChangeEditInPlace={handleChangeEditInPlace}
+                      />
+                    ) : (
+                      <EditCodeHook
+                        id={`${id}`}
+                        payload={codeHook}
+                        handleChangeEditInPlace={handleChangeEditInPlace}
+                      />
+                    )}
+
+                    <span className="h-8"></span>
                     <span className="font-action my-auto">Outer Container</span>
                     {!Object.keys(outerCodeState).length ? (
                       <span className="block my-2">No outer styles</span>

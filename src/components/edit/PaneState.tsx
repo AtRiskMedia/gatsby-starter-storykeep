@@ -2326,6 +2326,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       }
 
       case `updateCodePayload`: {
+        const thisNth = result[1]
         const thisGlobalNth = stateLivePreviewMarkdown.codeItemsLookup[nth][0]
         const thisCodeItem = stateLivePreviewMarkdown.codeItems[thisGlobalNth]
         const thisHook = selector === `title` ? value : thisCodeItem.hook
