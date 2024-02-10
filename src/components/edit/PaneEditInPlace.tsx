@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 import React, { ChangeEvent, useState } from 'react'
 import { InformationCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { classNames } from '@tractstack/helpers'
+import { heldBeliefsScales, classNames } from '@tractstack/helpers'
 
 import { useDrupalStore } from '../../stores/drupal'
 import { IEditInPlaceControls } from '../../types'
@@ -140,20 +140,25 @@ const EditCodeHookBelief = ({
       <div className="my-2">
         <label
           htmlFor={`${id}--val2`}
-          className="block text-sm leading-6 text-black"
+          className="pr-2 block text-sm leading-6 text-black"
         >
           Scale
         </label>
-        <input
-          type="text"
-          name={`${id}--val2`}
+        <select
           id={`${id}--val2`}
-          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
+          name={`${id}--val2`}
+          className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
           onChange={(e) => handleChangeEditInPlace(e)}
           value={
             typeof payload.values[1] !== `undefined` ? payload.values[1] : ``
           }
-        />
+        >
+          {Object.keys(heldBeliefsScales).map((e) => (
+            <option key={e} value={e}>
+              {e}
+            </option>
+          ))}
+        </select>
       </div>
       <div className="my-2">
         <label
@@ -186,6 +191,11 @@ const EditCodeHookToggleBelief = ({
   payload: any
   handleChangeEditInPlace: Function
 }) => {
+  const lookup: keyof typeof heldBeliefsScales = payload.values[1]
+  const scales = heldBeliefsScales[lookup]
+  const possibleValues = scales.map((e: any) => {
+    return e.slug
+  })
   return (
     <div key={id}>
       <div className="my-2">
@@ -209,36 +219,64 @@ const EditCodeHookToggleBelief = ({
       <div className="my-2">
         <label
           htmlFor={`${id}--val2`}
-          className="block text-sm leading-6 text-black"
+          className="pr-2 block text-sm leading-6 text-black"
         >
-          Target Value
+          Scale
         </label>
-        <input
-          type="text"
-          name={`${id}--val2`}
+        <select
           id={`${id}--val2`}
-          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
+          name={`${id}--val2`}
+          className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
           onChange={(e) => handleChangeEditInPlace(e)}
           value={
             typeof payload.values[1] !== `undefined` ? payload.values[1] : ``
           }
-        />
+        >
+          {Object.keys(heldBeliefsScales).map((e) => (
+            <option key={e} value={e}>
+              {e}
+            </option>
+          ))}
+        </select>
       </div>
       <div className="my-2">
         <label
-          htmlFor={`${id}--val3`}
+          htmlFor={`${id}--val2`}
+          className="pr-2 block text-sm leading-6 text-black"
+        >
+          Target Value
+        </label>
+        <select
+          id={`${id}--val2`}
+          name={`${id}--val2`}
+          className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-black ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen xs:text-sm xs:leading-6"
+          onChange={(e) => handleChangeEditInPlace(e)}
+          value={
+            typeof payload.values[2] !== `undefined` ? payload.values[2] : ``
+          }
+        >
+          {possibleValues.map((e: string) => (
+            <option key={e} value={e}>
+              {e}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="my-2">
+        <label
+          htmlFor={`${id}--val4`}
           className="block text-sm leading-6 text-black"
         >
           Question Prompt
         </label>
         <input
           type="text"
-          name={`${id}--val3`}
-          id={`${id}--val3`}
+          name={`${id}--val4`}
+          id={`${id}--val4`}
           className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
           onChange={(e) => handleChangeEditInPlace(e)}
           value={
-            typeof payload.values[2] !== `undefined` ? payload.values[2] : ``
+            typeof payload.values[3] !== `undefined` ? payload.values[3] : ``
           }
         />
       </div>

@@ -137,6 +137,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       paneExtra?: any,
       newMarkdownId?: string,
     ) => {
+      console.log(`regen`, payload, id, extra, paneExtra, newMarkdownId)
       const paneFragmentId = id || stateLivePreviewMarkdown.paneFragmentId
       const markdownPaneFragmentId = stateLivePreviewMarkdown?.paneFragmentId
       const isMarkdown = paneFragmentId === markdownPaneFragmentId
@@ -1003,7 +1004,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
                                             (value || viewport === `remove`)
                                           ? `updateSelector`
                                           : null
-    //console.log(result, mode, name, value)
+    // console.log(result, mode, name, value)
     switch (mode) {
       case `starter`: {
         if ([`titleText`, `text`, `borderedText`].includes(value)) {
@@ -1082,7 +1083,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
           const newOptionsPayload = {
             ...statePaneFragments[paneFragmentId].optionsPayload,
             classNamesPayload: newClassNamesPayload,
-            classNames: reduced.classNames,
+            classNamesParent: reduced.classNamesParent,
           }
           regenerateState(newOptionsPayload)
         } else {
@@ -1108,7 +1109,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
           const newOptionsPayload = {
             ...statePaneFragments[paneFragmentId].optionsPayload,
             classNamesPayload: newClassNamesPayload,
-            classNames: reduced.classNames,
+            classNamesParent: reduced.classNamesParent,
           }
           regenerateState(newOptionsPayload)
         }
@@ -3163,10 +3164,10 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
           hook = `resource(type|variation)`
           break
         case `toggle`:
-          hook = `toggle(BELIEF_TAG|BELIEF_SCALE|question)`
+          hook = `toggle(BeliefTag|likert|question)`
           break
         case `belief`:
-          hook = `belief(BELIEF_TAG|BELIEF_SCALE|question)`
+          hook = `belief(BeliefTag|likert|question)`
           break
       }
       if (tag && mode === `pre`)
@@ -4015,9 +4016,9 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
 
   if (saveStage < SaveStages.NoChanges) return null
 
-  // console.log(
-  //   statePaneFragments[stateLivePreviewMarkdown.paneFragmentId].optionsPayload,
-  // )
+  console.log(
+    statePaneFragments[stateLivePreviewMarkdown.paneFragmentId].optionsPayload,
+  )
   // console.log(stateLivePreview)
   // console.log(stateLivePreviewMarkdown)
   // console.log(state)

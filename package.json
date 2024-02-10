@@ -43,7 +43,7 @@
     "@headlessui/react": "1.7.17",
     "@heroicons/react": "2.0.18",
     "@tractstack/drupal-react-oauth-provider": "0.1.2",
-    "@tractstack/helpers": "0.1.22",
+    "@tractstack/helpers": "0.1.25",
     "@tractstack/nivo": "0.1.11",
     "@tractstack/types": "0.1.13",
     "babel-plugin-styled-components": "2.1.4",

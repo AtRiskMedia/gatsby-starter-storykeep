@@ -89,7 +89,7 @@ const StoryKeep = () => {
                       record === tractStackSelected
                         ? `bg-myorange/5`
                         : `bg-slate-50`,
-                      `group relative block w-full max-w-md rounded-lg shadow-md hover:shadow-none hover:border-dashed border-2 border-dotted border-mylightgrey/20 p-6 text-center hover:border-myblue/20 hover:bg-myorange/10 focus:outline-none focus:ring-2 focus:ring-myorange focus:ring-offset-2`,
+                      `whitespace-normal group relative block w-full max-w-md rounded-lg shadow-md hover:shadow-none hover:border-dashed border-2 border-dotted border-mylightgrey/20 p-6 text-center hover:border-myblue/20 hover:bg-myorange/10 focus:outline-none focus:ring-2 focus:ring-myorange focus:ring-offset-2`,
                     )}
                     onClick={() => {
                       setTractStackSelected(record)
