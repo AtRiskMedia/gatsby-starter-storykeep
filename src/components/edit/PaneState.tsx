@@ -137,7 +137,6 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       paneExtra?: any,
       newMarkdownId?: string,
     ) => {
-      console.log(`regen`, payload, id, extra, paneExtra, newMarkdownId)
       const paneFragmentId = id || stateLivePreviewMarkdown.paneFragmentId
       const markdownPaneFragmentId = stateLivePreviewMarkdown?.paneFragmentId
       const isMarkdown = paneFragmentId === markdownPaneFragmentId
@@ -4016,9 +4015,9 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
 
   if (saveStage < SaveStages.NoChanges) return null
 
-  console.log(
-    statePaneFragments[stateLivePreviewMarkdown.paneFragmentId].optionsPayload,
-  )
+  // console.log(
+  //   statePaneFragments[stateLivePreviewMarkdown.paneFragmentId].optionsPayload,
+  // )
   // console.log(stateLivePreview)
   // console.log(stateLivePreviewMarkdown)
   // console.log(state)

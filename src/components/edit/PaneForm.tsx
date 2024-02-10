@@ -263,6 +263,56 @@ const PaneForm = ({ uuid, payload, flags, fn }: IPaneForm) => {
                             className="flex items-center justify-between"
                           >
                             <Switch
+                              checked={state.isContextPane}
+                              onChange={() =>
+                                handleChange({
+                                  target: {
+                                    name: `isContextPane`,
+                                    value: !state.isContextPane,
+                                  },
+                                })
+                              }
+                              className={classNames(
+                                state.isContextPane
+                                  ? `bg-myorange`
+                                  : `bg-slate-300`,
+                                `relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-myorange focus:ring-offset-2`,
+                              )}
+                            >
+                              <span
+                                aria-hidden="true"
+                                className={classNames(
+                                  state.isContextPane
+                                    ? `translate-x-5`
+                                    : `translate-x-0`,
+                                  `pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out`,
+                                )}
+                              />
+                            </Switch>
+                            <span className="ml-4 flex flex-grow flex-col">
+                              <Switch.Label
+                                as="span"
+                                className="text-sm leading-6 text-black"
+                                passive
+                              >
+                                Context Pane
+                              </Switch.Label>
+                              <Switch.Description
+                                as="span"
+                                className="text-sm text-slate-500"
+                              >
+                                Special case | loads under /context/slug
+                              </Switch.Description>
+                            </span>
+                          </Switch.Group>
+                        </div>
+
+                        <div className="mt-2 xs:col-span-full">
+                          <Switch.Group
+                            as="div"
+                            className="flex items-center justify-between"
+                          >
+                            <Switch
                               checked={state.hasCodeHook}
                               onChange={() =>
                                 handleChange({

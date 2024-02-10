@@ -323,7 +323,6 @@ export function paneFragmentsPayload(paneFragments: any) {
           hiddenViewports: e.hiddenViewports,
           optionsPayload: JSON.parse(e.optionsPayloadString),
           isModal: e.isModal || false,
-          isContextPane: e.isContextPane || false,
           internal: {
             type: `markdown`,
           },
