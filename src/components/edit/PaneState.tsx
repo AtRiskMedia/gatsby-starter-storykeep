@@ -110,21 +110,13 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
     allTractStacks &&
     Object.keys(allTractStacks)
       .map((e: string) => {
-        if (
-          allTractStacks[e].contextPanes.includes(uuid) ||
-          allTractStacks[e].storyFragments.includes(uuid)
-        )
-          return true
+        if (allTractStacks[e].storyFragments.includes(uuid)) return true
         return null
       })
       .filter((n: boolean | null) => n).length + allStoryFragments &&
     Object.keys(allStoryFragments)
       .map((e: string) => {
-        if (
-          allStoryFragments[e].contextPanes.includes(uuid) ||
-          allStoryFragments[e].panes.includes(uuid)
-        )
-          return true
+        if (allStoryFragments[e].panes.includes(uuid)) return true
         return null
       })
       .filter((n: boolean | null) => n).length

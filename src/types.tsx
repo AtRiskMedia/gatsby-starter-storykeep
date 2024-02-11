@@ -203,7 +203,6 @@ export interface IEditTractStackInitialFlags {
   isOpenDemo: boolean
   isEmpty: boolean
   hasStoryFragments: boolean
-  hasContextPanes: boolean
   storyFragmentDaysSinceData: undefined | IActivityDetails
   panesDaysSinceData: undefined | IActivityDetails
 }
@@ -214,7 +213,6 @@ export interface IEditTractStackFlags {
   isOpenDemo: boolean
   isEmpty: boolean
   hasStoryFragments: boolean
-  hasContextPanes: boolean
   editStage: number
   storyFragmentDaysSinceData: undefined | IActivityDetails
   panesDaysSinceData: undefined | IActivityDetails
@@ -228,7 +226,6 @@ export interface IEditTractStackFormFlags {
   isOpenDemo: boolean
   isEmpty: boolean
   hasStoryFragments: boolean
-  hasContextPanes: boolean
   saveStage: number
   editStage: number
   storyFragmentDaysSinceData: IActivityDetails
@@ -241,7 +238,6 @@ export interface IEditStoryFragmentFormFlags {
   isAdmin: boolean
   isBuilder: boolean
   isOpenDemo: boolean
-  hasContextPanes: boolean
   saveStage: number
   editStage: number
   drupalNid: number

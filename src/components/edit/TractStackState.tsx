@@ -215,7 +215,6 @@ const TractStackState = ({
           slug: ``,
           tailwindBgColour: ``,
           socialImagePath: ``,
-          contextPanes: [],
           tractstack: uuid,
           panes: [],
           menu: null,
@@ -415,7 +414,6 @@ const TractStackState = ({
           socialImagePath: state?.socialImagePath || ``,
           slug: state.slug,
           storyFragments: state.storyFragments,
-          contextPanes: state.contextPanes,
         }
         setUpdateTractStackPayload([{ id: uuid, payload: newTractStack }])
         if (!flags.isOpenDemo) {

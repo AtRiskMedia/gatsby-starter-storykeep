@@ -249,12 +249,6 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
         const newStoryFragment = {
           ...thisStoryFragment,
           id: uuid,
-          contextPanes:
-            payload?.relationships?.field_context_panes?.data
-              ?.map((f: any) => {
-                return f.id
-              })
-              .filter((e: string) => e !== `missing`) || [],
           tractstack: payload?.relationships?.field_tract_stack?.data?.id,
           panes: payload?.relationships?.field_panes?.data
             ?.map((f: any) => {
@@ -289,12 +283,6 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
         const newTractStack = {
           ...thisTractStack,
           id: uuid,
-          contextPanes:
-            payload?.relationships?.field_context_panes?.data
-              ?.map((f: any) => {
-                return f.id
-              })
-              .filter((e: string) => e !== `missing`) || [],
           storyFragments:
             payload?.relationships?.field_story_fragments?.data
               ?.map((f: any) => {
@@ -481,12 +469,6 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
         payload?.attributes?.field_social_image_path ||
         payload?.socialImagePath,
       slug: payload?.attributes?.field_slug || payload?.slug,
-      contextPanes:
-        payload?.relationships?.field_context_panes?.data
-          ?.map((f: any) => {
-            return f.id
-          })
-          .filter((e: string) => e !== `missing`) || payload.contextPanes,
       tailwindBgColour:
         payload?.attributes?.field_tailwind_background_colour ||
         payload?.tailwindBgColour,
@@ -518,14 +500,6 @@ export const useDrupalStore = create<IDrupalState>((set, get) => ({
         payload?.attributes?.field_social_image_path ||
         payload?.socialImagePath,
       slug: payload?.attributes?.field_slug || payload?.slug,
-      contextPanes:
-        typeof payload?.relationships?.field_context_panes?.data !== `undefined`
-          ? payload.relationships.field_context_panes.data
-              ?.map((f: any) => {
-                return f.id
-              })
-              .filter((e: string) => e !== `missing`)
-          : payload.contextPanes || [],
       storyFragments:
         typeof payload?.relationships?.field_story_fragments?.data !==
         `undefined`

@@ -120,7 +120,6 @@ export default function EditStoryFragment({
         socialImagePath: thisStoryFragment?.socialImagePath || ``,
         tailwindBgColour: thisStoryFragment?.tailwindBgColour || ``,
         panes: thisStoryFragment?.panes || {},
-        contextPanes: thisStoryFragment?.contextPanes || {},
         menu: thisMenu,
         tractstack: thisStoryFragment?.tractstack,
       }
@@ -140,7 +139,6 @@ export default function EditStoryFragment({
     thisStoryFragment?.title,
     uuid,
     thisMenu,
-    thisStoryFragment?.contextPanes,
     thisStoryFragment?.panes,
     thisStoryFragment?.socialImagePath,
     thisStoryFragment?.tailwindBgColour,

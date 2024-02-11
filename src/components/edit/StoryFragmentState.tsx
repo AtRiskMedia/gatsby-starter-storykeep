@@ -87,9 +87,6 @@ const StoryFragmentState = ({
       return null
     })
     .filter((e) => e)
-  const hasContextPanes = thisStoryFragment?.contextPanes
-    ? Object.keys(thisStoryFragment?.contextPanes).length > 0
-    : false
 
   const handleChange = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const { name, value } = e.target as HTMLInputElement
@@ -221,7 +218,6 @@ const StoryFragmentState = ({
           title: state.title,
           socialImagePath: state?.socialImagePath || ``,
           slug: state.slug,
-          contextPanes: state.contextPanes,
           tailwindBgColour: state?.tailwindBgColour || ``,
           tractstack: state.tractstack,
           panes: state.panes,
@@ -403,7 +399,6 @@ const StoryFragmentState = ({
           title: state.title,
           socialImagePath: state?.socialImagePath || ``,
           slug: state.slug,
-          contextPanes: state.contextPanes,
           tailwindBgColour: state?.tailwindBgColour || ``,
           tractstack: state.tractstack,
           panes: state.panes,
@@ -429,7 +424,6 @@ const StoryFragmentState = ({
     setCleanerQueue,
     setDrupalSaveNode,
     thisStoryFragment,
-    state?.contextPanes,
     state?.menu,
     state?.panes,
     state?.slug,
@@ -581,7 +575,6 @@ const StoryFragmentState = ({
         ...flags,
         saveStage,
         saved,
-        hasContextPanes,
         slugCollision,
         storyFragmentId,
         drupalNid: thisStoryFragment?.drupalNid,

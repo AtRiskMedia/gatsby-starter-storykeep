@@ -312,51 +312,6 @@ const StoryFragmentForm = ({
 
                       <div className="xs:col-span-full">
                         <p className="block text-sm leading-6 text-black">
-                          Context Panes
-                        </p>
-                        {flags.hasContextPanes ? (
-                          state.contextPanes?.map((e: any) => {
-                            return (
-                              <div
-                                key={e}
-                                className="mt-2 flex items-center gap-x-3"
-                              >
-                                {allPanes[e].title}
-                                <button
-                                  type="button"
-                                  className="rounded-md bg-white px-2.5 py-1.5 text-sm font-bold text-black shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-50"
-                                  onClick={() => {
-                                    if (
-                                      flags.saveStage ===
-                                        SaveStages.NoChanges ||
-                                      (flags.saveStage ===
-                                        SaveStages.UnsavedChanges &&
-                                        window.confirm(
-                                          `There are Unsaved Changes. Proceed?`,
-                                        ))
-                                    ) {
-                                      setEmbeddedEdit(
-                                        e,
-                                        `panes`,
-                                        uuid,
-                                        `storyfragments`,
-                                      )
-                                      navigate(`/storykeep/panes/${e}`)
-                                    }
-                                  }}
-                                >
-                                  edit
-                                </button>
-                              </div>
-                            )
-                          })
-                        ) : (
-                          <p>none</p>
-                        )}
-                      </div>
-
-                      <div className="xs:col-span-full">
-                        <p className="block text-sm leading-6 text-black">
                           Menu
                         </p>
                         {state.menu ? (

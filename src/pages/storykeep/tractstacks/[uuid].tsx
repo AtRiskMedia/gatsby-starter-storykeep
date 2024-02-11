@@ -48,11 +48,8 @@ export default function EditTractStack({
     isAdmin: false,
     isBuilder: false,
     isOpenDemo: openDemoEnabled,
-    isEmpty:
-      !!thisTractStack?.contextPanes?.length &&
-      !!thisTractStack?.storyFragments?.length,
+    isEmpty: !!thisTractStack?.storyFragments?.length,
     hasStoryFragments: !!thisTractStack?.storyFragments?.length,
-    hasContextPanes: !!thisTractStack?.contextPanes?.length,
     storyFragmentDaysSinceData: undefined,
     panesDaysSinceData: undefined,
   })
@@ -118,7 +115,6 @@ export default function EditTractStack({
         slug: thisTractStack?.slug,
         socialImagePath: thisTractStack?.socialImagePath || ``,
         storyFragments: thisTractStack?.storyFragments || [],
-        contextPanes: thisTractStack?.contextPanes || [],
       }
       const payload = {
         initialState,
@@ -132,7 +128,6 @@ export default function EditTractStack({
     setEditStage,
     thisTractStack?.slug,
     thisTractStack?.title,
-    thisTractStack?.contextPanes,
     thisTractStack?.storyFragments,
     thisTractStack?.socialImagePath,
     uuid,

@@ -38,7 +38,6 @@ const StoryKeep = () => {
       title: state.title,
       slug: state.slug,
       socialImagePath: ``,
-      contextPanes: [],
       storyFragments: [],
     }
     updateTractStacks(newTractStack)

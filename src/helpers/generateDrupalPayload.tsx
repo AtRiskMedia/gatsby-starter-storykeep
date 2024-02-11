@@ -42,22 +42,13 @@ export function tractStackPayload(
   state: any, // FIX
   uuid: string,
 ) {
-  const relationships = (contextPanes: string[], storyFragments: string[]) => {
+  const relationships = (storyFragments: string[]) => {
     const val: any = {}
     if (storyFragments.length)
       val.field_story_fragments = {
         data: storyFragments.map((p: string) => {
           return {
             type: `node--story_fragment`,
-            id: p,
-          }
-        }),
-      }
-    if (contextPanes.length)
-      val.field_context_panes = {
-        data: contextPanes.map((p: string) => {
-          return {
-            type: `node--pane`,
             id: p,
           }
         }),
@@ -72,7 +63,7 @@ export function tractStackPayload(
       field_slug: state.slug,
       field_social_image_path: state?.socialImagePath || ``,
     },
-    ...relationships(unique(state.contextPanes), unique(state.storyFragments)),
+    ...relationships(unique(state.storyFragments)),
   }
 }
 
@@ -80,11 +71,7 @@ export function storyFragmentPayload(
   state: any, // FIX
   uuid: string,
 ) {
-  const relationships = (
-    panes: string[],
-    contextPanes: string[],
-    tractStackId: string,
-  ) => {
+  const relationships = (panes: string[], tractStackId: string) => {
     const val: any = {
       field_tract_stack: {
         data: {
@@ -102,15 +89,6 @@ export function storyFragmentPayload(
           }
         }),
       }
-    if (contextPanes.length)
-      val.field_context_panes = {
-        data: contextPanes.map((p: string) => {
-          return {
-            type: `node--pane`,
-            id: p,
-          }
-        }),
-      }
     return { relationships: val }
   }
   return {
@@ -122,11 +100,7 @@ export function storyFragmentPayload(
       field_social_image_path: state.socialImagePath,
       field_tailwind_background_colour: state?.tailwindBgColour || ``,
     },
-    ...relationships(
-      unique(state.panes),
-      unique(state.contextPanes),
-      state.tractstack,
-    ),
+    ...relationships(unique(state.panes), state.tractstack),
   }
 }
 
