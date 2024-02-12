@@ -46,6 +46,7 @@ const insertModeTags = [
   { name: `youtube`, title: `Youtube Video Embed` },
   { name: `resource`, title: `Resource` },
   { name: `belief`, title: `Belief widget` },
+  { name: `identifyAs`, title: `IdentifyAs widget` },
   { name: `toggle`, title: `Toggle Belief widget` },
 ]
 

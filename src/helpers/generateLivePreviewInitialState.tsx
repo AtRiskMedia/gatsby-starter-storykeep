@@ -194,7 +194,7 @@ export function generateLivePreviewInitialState({
                               [idx2]: codeItemsIndex,
                             }
                           const regexpHook =
-                            /(youtube|toggle|resource|belief)\((.*?)\)/
+                            /(identifyAs|youtube|toggle|resource|belief)\((.*?)\)/
                           const regexpValues = /((?:[^\\|]+|\\\|?)+)/g
                           const thisHookRaw = j.value.match(regexpHook)
                           const hook =

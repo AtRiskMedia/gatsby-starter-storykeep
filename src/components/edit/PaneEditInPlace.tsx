@@ -108,6 +108,75 @@ const EditCodeHook = ({
   )
 }
 
+const EditCodeHookIdentifyAs = ({
+  id,
+  payload,
+  handleChangeEditInPlace,
+}: {
+  id: string
+  payload: any
+  handleChangeEditInPlace: Function
+}) => {
+  return (
+    <div key={id}>
+      <div className="my-2">
+        <label
+          htmlFor={`${id}--val1`}
+          className="block text-sm leading-6 text-black"
+        >
+          Belief Tag
+        </label>
+        <input
+          type="text"
+          name={`${id}--val1`}
+          id={`${id}--val1`}
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
+          onChange={(e) => handleChangeEditInPlace(e)}
+          value={
+            typeof payload.values[0] !== `undefined` ? payload.values[0] : ``
+          }
+        />
+      </div>
+      <div className="my-2">
+        <label
+          htmlFor={`${id}--val2`}
+          className="block text-sm leading-6 text-black"
+        >
+          Identify As target
+        </label>
+        <input
+          type="text"
+          name={`${id}--val2`}
+          id={`${id}--val2`}
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
+          onChange={(e) => handleChangeEditInPlace(e)}
+          value={
+            typeof payload.values[1] !== `undefined` ? payload.values[1] : ``
+          }
+        />
+      </div>
+      <div className="my-2">
+        <label
+          htmlFor={`${id}--val3`}
+          className="block text-sm leading-6 text-black"
+        >
+          Question Prompt
+        </label>
+        <input
+          type="text"
+          name={`${id}--val3`}
+          id={`${id}--val3`}
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
+          onChange={(e) => handleChangeEditInPlace(e)}
+          value={
+            typeof payload.values[2] !== `undefined` ? payload.values[2] : ``
+          }
+        />
+      </div>
+    </div>
+  )
+}
+
 const EditCodeHookBelief = ({
   id,
   payload,
@@ -1438,11 +1507,13 @@ const PaneEditInPlace = ({
       ? `YouTube Video Embed`
       : codeHook?.hook === `resource`
         ? `Resource Embed`
-        : codeHook?.hook === `belief`
-          ? `Belief Widget`
-          : codeHook?.hook === `toggle`
-            ? `Toggle Belief Widget`
-            : `Code Hook`
+        : codeHook?.hook === `identifyAs`
+          ? `IdentifyAs Widget`
+          : codeHook?.hook === `belief`
+            ? `Belief Widget`
+            : codeHook?.hook === `toggle`
+              ? `Toggle Belief Widget`
+              : `Code Hook`
   const state =
     childNth === -1 &&
     stateLivePreview?.childClasses &&
@@ -1800,6 +1871,12 @@ const PaneEditInPlace = ({
                       />
                     ) : codeHook.hook === `resource` ? (
                       <EditCodeHookResource
+                        id={`${id}`}
+                        payload={codeHook}
+                        handleChangeEditInPlace={handleChangeEditInPlace}
+                      />
+                    ) : codeHook.hook === `identifyAs` ? (
+                      <EditCodeHookIdentifyAs
                         id={`${id}`}
                         payload={codeHook}
                         handleChangeEditInPlace={handleChangeEditInPlace}

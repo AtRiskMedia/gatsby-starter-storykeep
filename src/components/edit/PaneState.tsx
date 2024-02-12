@@ -2907,6 +2907,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       `resource`,
       `toggle`,
       `belief`,
+      `identifyAs`,
     ].includes(thisTag)
       ? `ul`
       : stateLivePreviewMarkdown.markdownTags[nth]
@@ -2946,6 +2947,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         `resource`,
         `toggle`,
         `belief`,
+        `identifyAs`,
         `img`,
       ].includes(thisTag) &&
       typeof classNamesPayload.li !== `undefined`
@@ -2970,6 +2972,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         `resource`,
         `toggle`,
         `belief`,
+        `identifyAs`,
         `img`,
       ].includes(thisTag) &&
       hasOverrideInner
@@ -3144,7 +3147,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       childNth === -1 &&
       [`pre`, `post`].includes(mode) &&
       typeof tag === `string` &&
-      [`youtube`, `resource`, `toggle`, `belief`].includes(tag)
+      [`youtube`, `resource`, `toggle`, `identifyAs`, `belief`].includes(tag)
     ) {
       let hook = ``
       switch (tag) {
@@ -3156,6 +3159,9 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
           break
         case `toggle`:
           hook = `toggle(BeliefTag|likert|question)`
+          break
+        case `identifyAs`:
+          hook = `identifyAs(BeliefTag|TARGET_VALUE|question)`
           break
         case `belief`:
           hook = `belief(BeliefTag|likert|question)`

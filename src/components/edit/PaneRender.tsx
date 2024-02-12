@@ -430,6 +430,7 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
         case `ol`:
         case `imageContainer`:
         case `belief`:
+        case `identifyAs`:
         case `toggle`:
         case `resource`:
         case `youtube`:
