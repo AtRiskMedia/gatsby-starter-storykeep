@@ -1266,13 +1266,13 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
 
       case `updateSelector`: {
         const thisTag =
-          typeof stateLivePreviewMarkdown.codeItemsLookup[childGlobalNth] ===
-          `undefined`
+          typeof stateLivePreviewMarkdown.codeItemsLookup[nth] === `undefined`
             ? tag
             : `code`
-        const thisLookup =
-          [`li`, `img`].includes(tag) || thisTag === `code`
-            ? childGlobalNth
+        const thisLookup = [`li`, `img`].includes(tag)
+          ? childGlobalNth
+          : thisTag === `code`
+            ? stateLivePreviewMarkdown.codeItemsLookup[nth][0]
             : thisNth
         const hasOverride =
           stateLivePreview.childClasses[thisTag][thisLookup][selector][3]
