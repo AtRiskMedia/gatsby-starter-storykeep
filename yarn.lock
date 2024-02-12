@@ -2768,12 +2768,12 @@
   resolved "https://registry.yarnpkg.com/@tractstack/drupal-react-oauth-provider/-/drupal-react-oauth-provider-0.1.2.tgz#706c254e0bfd631606292dbaa284709b4c22d905"
   integrity sha512-SiU4osDUZZoVSkwM3u6yJEklx0ugF5vsaVQDHe/vfu6v/tEVOPde6ZPRhrR1+jqLRMQ4CZdjPM5Y/L1B9QLD5w==
 
-"@tractstack/helpers@0.1.25":
-  version "0.1.25"
-  resolved "https://registry.yarnpkg.com/@tractstack/helpers/-/helpers-0.1.25.tgz#9f9f93036b17c3254719b76ca059cfa9c4f11ba0"
-  integrity sha512-biZPWCwzGr4ADVYuVTkVn2oaNWTMxeOFyuxPUU8YfUH7j0XB0D3T4fdx4KHHm7itQYDxIce8J/DeAJKs8wyunw==
+"@tractstack/helpers@0.1.26":
+  version "0.1.26"
+  resolved "https://registry.yarnpkg.com/@tractstack/helpers/-/helpers-0.1.26.tgz#4005f24386b764cb2411e17b7177e4c0d69ad81d"
+  integrity sha512-TB5W4G9PkXh6fBJtoGwaHCJRPAU4399NZLpHdj3JHZ8gupBT2KviiL7N+0P0xm2Tv9vccNG4+/v7h5ImuI9pFg==
   dependencies:
-    "@tractstack/types" "^0.1.13"
+    "@tractstack/types" "^0.1.14"
     buffer "^6.0.3"
 
 "@tractstack/nivo@0.1.11":
@@ -2787,10 +2787,10 @@
     "@nivo/pie" "^0.84.0"
     "@nivo/swarmplot" "^0.84.0"
 
-"@tractstack/types@0.1.13", "@tractstack/types@^0.1.13":
-  version "0.1.13"
-  resolved "https://registry.yarnpkg.com/@tractstack/types/-/types-0.1.13.tgz#b4c58098044c5bed45357bdc34ba80432c91f52a"
-  integrity sha512-4TYqk9xRiUrKfPHTwtdtAKbKjUl4aR/bfyQzOqQ9SI1hJNTYQx564gg9jdTCnnEgIKmFanAv1QwLrNF57ozNmg==
+"@tractstack/types@0.1.14", "@tractstack/types@^0.1.14":
+  version "0.1.14"
+  resolved "https://registry.yarnpkg.com/@tractstack/types/-/types-0.1.14.tgz#21ff73d9a5a43d95fbc5210fc8c0fc4d71683b56"
+  integrity sha512-tG93BV5eFYTVe+xZRyP7doyNINLpCbA7k/20p7FBwDx0ZN7qRdh5XgDd4+MtJIheNvdQwIDXcNShmKwDADLVcg==
   dependencies:
     tslib "^2.3.0"
 
