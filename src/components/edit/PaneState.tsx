@@ -1266,7 +1266,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
 
       case `updateSelector`: {
         const thisTag =
-          typeof stateLivePreviewMarkdown.codeItems[childGlobalNth] ===
+          typeof stateLivePreviewMarkdown.codeItemsLookup[childGlobalNth] ===
           `undefined`
             ? tag
             : `code`
