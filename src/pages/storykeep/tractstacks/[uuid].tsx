@@ -151,7 +151,7 @@ export default function EditTractStack({
           setEditStage(EditStages.Activated)
           break
       }
-    else if (editStage === EditStages.Deleted) navigate(`/storykeep`)
+    else if (editStage === EditStages.Deleted) navigate(`/storykeep`, { replace: true })
   }, [
     thisTractStack,
     editStage,
@@ -169,14 +169,14 @@ export default function EditTractStack({
       stage === Stages.Activated
     )
       setStage(Stages.Initialize)
-    if (stage < Stages.Initialize) navigate(`/login`)
+    if (stage < Stages.Initialize) navigate(`/login`, { replace: true })
   }, [stage, validToken, setStage])
 
   // SSR + valid data check
   useEffect(() => {
     if (isSSR && typeof window !== `undefined`) {
       if (thisTractStack) setIsSSR(false)
-      else navigate(`/storykeep`)
+      else navigate(`/storykeep`, { replace: true })
     }
   }, [thisTractStack, isSSR])
 

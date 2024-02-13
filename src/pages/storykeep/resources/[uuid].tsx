@@ -142,7 +142,7 @@ export default function EditResource({ params }: { params: { uuid: string } }) {
           setEditStage(EditStages.Activated)
           break
       }
-    else if (editStage === EditStages.Deleted) navigate(`/storykeep`)
+    else if (editStage === EditStages.Deleted) navigate(`/storykeep`, { replace: true })
   }, [
     thisResource,
     editStage,
@@ -156,7 +156,7 @@ export default function EditResource({ params }: { params: { uuid: string } }) {
   useEffect(() => {
     if (isSSR && typeof window !== `undefined`) {
       if (thisResource) setIsSSR(false)
-      else navigate(`/storykeep`)
+      else navigate(`/storykeep`, { replace: true })
     }
   }, [thisResource, isSSR])
 

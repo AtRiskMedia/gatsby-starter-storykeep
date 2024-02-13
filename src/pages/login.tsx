@@ -109,7 +109,7 @@ const LoginPage = () => {
         break
 
       case Stages.Activated:
-        navigate(`/`)
+        navigate(`/`, { replace: true })
         break
     }
   }, [stage, setStage, openDemoEnabled])

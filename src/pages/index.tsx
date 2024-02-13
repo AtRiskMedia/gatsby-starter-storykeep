@@ -25,7 +25,7 @@ const DashboardPage = () => {
       stage === Stages.Activated
     )
       setStage(Stages.Initialize)
-    if (stage < Stages.Initialize) navigate(`/login`)
+    if (stage < Stages.Initialize) navigate(`/login`, { replace: true })
   }, [isSSR, stage, validToken, setStage])
 
   if (isSSR) return null

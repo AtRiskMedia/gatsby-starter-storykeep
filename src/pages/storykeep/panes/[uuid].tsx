@@ -293,14 +293,14 @@ export default function EditPane({ params }: { params: { uuid: string } }) {
           setEditStage(EditStages.Activated)
           break
       }
-    else if (editStage === EditStages.Deleted) navigate(`/storykeep`)
+    else if (editStage === EditStages.Deleted) navigate(`/storykeep`, { replace: true })
   }, [thisPane, editStage, setEditStage, openDemoEnabled, setNavLocked, uuid])
 
   // SSR + valid data check
   useEffect(() => {
     if (isSSR && typeof window !== `undefined`) {
       if (thisPane) setIsSSR(false)
-      else navigate(`/storykeep`)
+      else navigate(`/storykeep`, { replace: true })
     }
   }, [thisPane, isSSR])
 

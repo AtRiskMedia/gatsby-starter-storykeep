@@ -163,7 +163,7 @@ export default function EditStoryFragment({
           setEditStage(EditStages.Activated)
           break
       }
-    else if (editStage === EditStages.Deleted) navigate(`/storykeep`)
+    else if (editStage === EditStages.Deleted) navigate(`/storykeep`, { replace: true })
   }, [
     thisStoryFragment,
     editStage,
@@ -177,7 +177,7 @@ export default function EditStoryFragment({
   useEffect(() => {
     if (isSSR && typeof window !== `undefined`) {
       if (thisStoryFragment) setIsSSR(false)
-      else navigate(`/storykeep`)
+      else navigate(`/storykeep`, { replace: true })
     }
   }, [thisStoryFragment, isSSR])
 
