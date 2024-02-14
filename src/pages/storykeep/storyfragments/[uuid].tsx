@@ -163,7 +163,8 @@ export default function EditStoryFragment({
           setEditStage(EditStages.Activated)
           break
       }
-    else if (editStage === EditStages.Deleted) navigate(`/storykeep`, { replace: true })
+    else if (editStage === EditStages.Deleted)
+      navigate(`/storykeep`, { replace: true })
   }, [
     thisStoryFragment,
     editStage,

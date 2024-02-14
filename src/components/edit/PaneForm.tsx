@@ -245,6 +245,7 @@ const PaneForm = ({ uuid, payload, flags, fn }: IPaneForm) => {
                               type="text"
                               name="slug"
                               id="slug"
+                              maxLength={32}
                               pattern="[a-zA-Z\-]+"
                               className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-black placeholder:text-mylightgrey focus:ring-0 xs:text-sm xs:leading-6"
                               value={state.slug}

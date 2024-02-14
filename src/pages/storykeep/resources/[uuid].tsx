@@ -142,7 +142,8 @@ export default function EditResource({ params }: { params: { uuid: string } }) {
           setEditStage(EditStages.Activated)
           break
       }
-    else if (editStage === EditStages.Deleted) navigate(`/storykeep`, { replace: true })
+    else if (editStage === EditStages.Deleted)
+      navigate(`/storykeep`, { replace: true })
   }, [
     thisResource,
     editStage,

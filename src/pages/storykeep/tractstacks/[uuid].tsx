@@ -151,7 +151,8 @@ export default function EditTractStack({
           setEditStage(EditStages.Activated)
           break
       }
-    else if (editStage === EditStages.Deleted) navigate(`/storykeep`, { replace: true })
+    else if (editStage === EditStages.Deleted)
+      navigate(`/storykeep`, { replace: true })
   }, [
     thisTractStack,
     editStage,

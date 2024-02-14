@@ -130,7 +130,8 @@ export default function EditMenu({ params }: { params: { uuid: string } }) {
           setEditStage(EditStages.Activated)
           break
       }
-    else if (editStage === EditStages.Deleted) navigate(`/storykeep`, { replace: true })
+    else if (editStage === EditStages.Deleted)
+      navigate(`/storykeep`, { replace: true })
   }, [thisMenu, editStage, setEditStage, openDemoEnabled, setNavLocked, uuid])
 
   // SSR + valid data check
