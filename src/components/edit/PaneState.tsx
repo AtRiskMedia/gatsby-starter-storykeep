@@ -1596,7 +1596,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
           const newOptionsPayload = {
             ...statePaneFragments[paneFragmentId].optionsPayload,
             classNamesPayload: newClassNamesPayload,
-            classNames: reduced.classNames,
+            classNamesParent: reduced.classNamesParent,
           }
           regenerateState(newOptionsPayload)
         } else {
@@ -2619,7 +2619,12 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
                   },
                 },
               }
-              newOptionsPayload.classNamesPayload = newClassNamesPayload
+              const reduced = reduceTailwindClasses(newClassNamesPayload)
+              const newOptionsPayload = {
+                ...statePaneFragments[paneFragmentId].optionsPayload,
+                classNamesPayload: newClassNamesPayload,
+                classNamesParent: reduced.classNamesParent,
+              }
               regenerateState(newOptionsPayload, thisPaneFragmentId)
               break
             }
@@ -4013,6 +4018,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
 
   if (saveStage < SaveStages.NoChanges) return null
 
+  // console.log(statePaneFragments)
   // console.log(
   //   statePaneFragments[stateLivePreviewMarkdown.paneFragmentId].optionsPayload,
   // )
