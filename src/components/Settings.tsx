@@ -196,6 +196,48 @@ const Settings = () => {
             <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="sm:col-span-full">
                 <label
+                  htmlFor="TITLE"
+                  className="block text-sm leading-6 text-mydarkgrey font-bold"
+                >
+                  Site Title
+                </label>
+                <div className="mt-2">
+                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
+                    <input
+                      type="text"
+                      name="TITLE"
+                      id="TITLE"
+                      className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                      onChange={(e) => handleChange(e)}
+                      value={settingsData?.TITLE}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="sm:col-span-full">
+                <label
+                  htmlFor="AUTHOR"
+                  className="block text-sm leading-6 text-mydarkgrey font-bold"
+                >
+                  Author / Company
+                </label>
+                <div className="mt-2">
+                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
+                    <input
+                      type="text"
+                      name="AUTHOR"
+                      id="AUTHOR"
+                      className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                      onChange={(e) => handleChange(e)}
+                      value={settingsData?.AUTHOR}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="sm:col-span-full">
+                <label
                   htmlFor="SLOGAN"
                   className="block text-sm leading-6 text-mydarkgrey font-bold"
                 >
