@@ -38,3 +38,11 @@ yarn-error.log*
 
 # site data
 data/SiteConfig.tsx
+
+# site assets
+/assets
+!/assets/hexa.svg
+
+# site static
+/static
+!/static/kCz-artpack
