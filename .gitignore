@@ -40,9 +40,9 @@ yarn-error.log*
 data/SiteConfig.tsx
 
 # site assets
-/assets
+/assets/*
 !/assets/hexa.svg
 
 # site static
-/static
+/static/*
 !/static/kCz-artpack
