@@ -83,7 +83,7 @@ const Branding = ({ viewportKey, storyFragmentId }: IViewportKeyProps) => {
           <Hexa className="w-[40rem] ml-[10rem] md:w-[60rem] md:ml-[10rem] xl:ml-[30rem] fill-white" />
         </div>
 
-        <div className="mx-auto max-w-5xl md:max-w-7xl xl:px-8 my-12 md:my-18">
+        <div className="mx-auto max-w-5xl md:max-w-7xl xl:px-8 mt-12 md:mt-18 mb-18 md:mb-24">
           <p className="relative mt-16 mb-12 text-2xl xl:text-3xl text-myblack text-center font-action font-bold tracking-wider leading-10 max-w-sm mx-auto">
             {config.slogan}
           </p>
@@ -113,7 +113,7 @@ const Branding = ({ viewportKey, storyFragmentId }: IViewportKeyProps) => {
       </div>
       <StyledDiv
         css={`
-          margin-top: ${viewportKey === `mobile` ? `-30` : `-50`}px;
+          margin-top: ${viewportKey === `mobile` ? `50` : `-80`}px;
           position: relative;
           background: none;
           svg {
