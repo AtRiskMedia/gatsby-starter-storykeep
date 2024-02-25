@@ -2,6 +2,7 @@
 import React from 'react'
 
 import { IPaneStarter } from '../../types'
+import { starters } from '../../helpers/starterTemplates'
 
 const PaneStarter = ({ state, fn, flags }: IPaneStarter) => {
   const { handleChangeEditInPlace, handleChange } = fn
@@ -104,161 +105,30 @@ const PaneStarter = ({ state, fn, flags }: IPaneStarter) => {
             </span>
           </div>
           <ul className="col-span-3 grid grid-cols-2 gap-x-6 gap-y-6 md:grid-cols-3 xl:gap-x-8">
-            <li className="group">
-              <button
-                onClick={() =>
-                  handleChangeEditInPlace({
-                    target: {
-                      name: `starter--0`,
-                      value: `titleText`,
-                    },
-                  })
-                }
-              >
-                <div className="relative aspect-[2/1] overflow-hidden rounded-lg bg-slate-100 ring-1 ring-black/10">
-                  <img
-                    className="group-hover:scale-125"
-                    src="/posters/title-text.png"
-                  />
-                </div>
-                <h4 className="mt-4 text-sm text-mydarkgrey ">
-                  Title with paragraph
-                </h4>
-                <p className="relative mt-1.5 text-xs text-mydarkgrey">
-                  Includes heading 2 and paragraph styles
-                </p>
-              </button>
-            </li>
-
-            <li className="group">
-              <button
-                onClick={() =>
-                  handleChangeEditInPlace({
-                    target: {
-                      name: `starter--0`,
-                      value: `text`,
-                    },
-                  })
-                }
-              >
-                <div className="relative aspect-[2/1] overflow-hidden rounded-lg bg-slate-100 ring-1 ring-black/10">
-                  <img
-                    className="group-hover:scale-125"
-                    src="/posters/text.png"
-                  />
-                </div>
-                <h4 className="mt-4 text-sm text-mydarkgrey group-hover:text-black">
-                  Paragraphs
-                </h4>
-                <p className="relative mt-1.5 text-xs text-mydarkgrey">
-                  Includes paragraph styles only
-                </p>
-              </button>
-            </li>
-
-            <li className="group">
-              <button
-                onClick={() =>
-                  handleChangeEditInPlace({
-                    target: {
-                      name: `starter--0`,
-                      value: `modal`,
-                    },
-                  })
-                }
-              >
-                <div className="relative aspect-[2/1] overflow-hidden rounded-lg bg-slate-100 ring-1 ring-black/10">
-                  <img
-                    className="group-hover:scale-125"
-                    src="/posters/modal.png"
-                  />
-                </div>
-                <h4 className="mt-4 text-sm text-mydarkgrey group-hover:text-black">
-                  Modal with title
-                </h4>
-                <p className="relative mt-1.5 text-xs text-mydarkgrey">
-                  Pick a modal; includes heading 2 styles
-                </p>
-              </button>
-            </li>
-
-            <li className="group">
-              <button
-                onClick={() =>
-                  handleChangeEditInPlace({
-                    target: {
-                      name: `starter--0`,
-                      value: `fancy`,
-                    },
-                  })
-                }
-              >
-                <div className="relative aspect-[2/1] overflow-hidden rounded-lg bg-slate-100 ring-1 ring-black/10">
-                  <img
-                    className="group-hover:scale-125"
-                    src="/posters/fancy.png"
-                  />
-                </div>
-                <h4 className="mt-4 text-sm text-mydarkgrey group-hover:text-black">
-                  Fancy title section
-                </h4>
-                <p className="relative mt-1.5 text-xs text-mydarkgrey">
-                  The works; includes shapes and heading 2 + paragraph styles
-                </p>
-              </button>
-            </li>
-
-            <li className="group">
-              <button
-                onClick={() =>
-                  handleChangeEditInPlace({
-                    target: {
-                      name: `starter--0`,
-                      value: `borderedText`,
-                    },
-                  })
-                }
-              >
-                <div className="relative aspect-[2/1] overflow-hidden rounded-lg bg-slate-100 ring-1 ring-black/10">
-                  <img
-                    className="group-hover:scale-125"
-                    src="/posters/bordered-text.png"
-                  />
-                </div>
-                <h4 className="mt-4 text-sm text-mydarkgrey group-hover:text-black">
-                  Bordered paragraphs
-                </h4>
-                <p className="relative mt-1.5 text-xs text-mydarkgrey">
-                  Includes parent and paragraph styles
-                </p>
-              </button>
-            </li>
-
-            <li className="group">
-              <button
-                onClick={() =>
-                  handleChangeEditInPlace({
-                    target: {
-                      name: `starter--0`,
-                      value: `breaks`,
-                    },
-                  })
-                }
-              >
-                <div className="relative aspect-[2/1] overflow-hidden rounded-lg bg-slate-100 ring-1 ring-black/10">
-                  <img
-                    className="group-hover:scale-125"
-                    src="/posters/breaks.png"
-                  />
-                </div>
-                <h4 className="mt-4 text-sm text-mydarkgrey group-hover:text-black">
-                  Transition Shape
-                </h4>
-                <p className="relative mt-1.5 text-xs text-mydarkgrey">
-                  Add some personality...
-                </p>
-              </button>
-            </li>
+            {starters.map((item) => (
+              <li key={item.id} className="group">
+                <button
+                  onClick={() =>
+                    handleChangeEditInPlace({
+                      target: {
+                        name: `starter--0`,
+                        value: item.id,
+                      },
+                    })
+                  }
+                >
+                  <div className="relative aspect-[2/1] overflow-hidden rounded-lg bg-slate-100 ring-1 ring-black/10">
+                    <img className="group-hover:scale-125" src={item.image} />
+                  </div>
+                  <h4 className="mt-4 text-sm text-mydarkgrey ">
+                    {item.title}
+                  </h4>
+                  <p className="relative mt-1.5 text-xs text-mydarkgrey">
+                    {item.description}
+                  </p>
+                </button>
+              </li>
+            ))}
           </ul>
         </>
       ) : (

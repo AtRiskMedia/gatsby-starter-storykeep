@@ -11,6 +11,44 @@ const reduced = reduceTailwindClasses(newClassNamesPayload)
       classNamesPayload: newClassNamesPayload,
     }
 */
+export const starters = [
+  {
+    id: `titleText`,
+    image: `/posters/title-text.png`,
+    title: `Title with paragraph`,
+    description: `Includes heading 2 and paragraph styles`,
+  },
+  {
+    id: `text`,
+    image: `/posters/text.png`,
+    title: `Paraphgraphs`,
+    description: `Includes paragraph styles only`,
+  },
+  {
+    id: `modal`,
+    image: `/posters/modal.png`,
+    title: `Modal with title`,
+    description: `Pick a modal; includes heading 2 styles`,
+  },
+  {
+    id: `fancy`,
+    image: `/posters/fancy.png`,
+    title: `Fancy title section`,
+    description: `The works; includes shapes and heading 2 + paragraph styles`,
+  },
+  {
+    id: `borderedText`,
+    image: `/posters/bordered-text.png`,
+    title: `Bordered paragraphs`,
+    description: `Includes parent and paragraph styles`,
+  },
+  {
+    id: `breaks`,
+    image: `/posters/breaks.png`,
+    title: `Transition Shape`,
+    description: `Add some personality...`,
+  },
+]
 
 export const starterTemplate = (key: string, title: string, slug: string) => {
   switch (key) {
