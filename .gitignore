@@ -46,3 +46,4 @@ data/SiteConfig.tsx
 # site static
 /static/*
 !/static/kCz-artpack
+!/static/posters
