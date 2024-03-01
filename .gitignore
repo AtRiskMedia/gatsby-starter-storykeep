@@ -33,12 +33,6 @@ yarn-error.log*
 # local env files
 .env*
 
-# tailwind classes whitelist
-#tailwind.whitelist
-
-# site data
-data/SiteConfig.tsx
-
 # site assets
 /assets/*
 !/assets/hexa.svg
@@ -47,3 +41,6 @@ data/SiteConfig.tsx
 /static/*
 !/static/kCz-artpack
 !/static/posters
+
+# custom styles (not this file must exist!)
+/src/styles/custom.css
