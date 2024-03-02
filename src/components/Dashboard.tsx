@@ -9,7 +9,6 @@ import {
 
 import { useAuthStore } from '../stores/authStore'
 import { useDrupalStore } from '../stores/drupal'
-import { useProductData } from '../hooks/use-product-data'
 import { getDashboardPayloads } from '../api/services'
 
 const goGetDashboardPayloads = async () => {
@@ -143,7 +142,6 @@ const Dashboard = () => {
   const allFiles = useDrupalStore((state) => state.allFiles)
   const allMenus = useDrupalStore((state) => state.allMenus)
   const allMarkdown = useDrupalStore((state) => state.allMarkdown)
-  const allProducts = useProductData()
   const setTractStackSelect = useDrupalStore(
     (state) => state.setTractStackSelect,
   )
@@ -180,7 +178,6 @@ const Dashboard = () => {
     },
     { id: `file`, name: `Files`, value: Object.keys(allFiles).length },
     { id: `menu`, name: `Menus`, value: Object.keys(allMenus).length },
-    { id: `product`, name: `Products`, value: Object.keys(allProducts).length },
   ]
 
   const [recentDailyActivityData, setRecentDailyActivityData]: any = useState(

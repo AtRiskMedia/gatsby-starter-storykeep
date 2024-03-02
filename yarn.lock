@@ -7467,7 +7467,7 @@ gatsby-sharp@^1.12.1:
   dependencies:
     sharp "^0.32.6"
 
-gatsby-source-filesystem@5.12.1, gatsby-source-filesystem@^5.12.1:
+gatsby-source-filesystem@5.12.1:
   version "5.12.1"
   resolved "https://registry.yarnpkg.com/gatsby-source-filesystem/-/gatsby-source-filesystem-5.12.1.tgz#200b141620e632bcefd23bd0fc468b070cfd89aa"
   integrity sha512-JV6lttId7cBDasVaweFbKuDQP9VH8fFgI1Mg0sM/tfydfKTLXiEbBadKgEHbvbwAZsYjK+/KvT7A58dzrzDdXw==
@@ -7481,19 +7481,6 @@ gatsby-source-filesystem@5.12.1, gatsby-source-filesystem@^5.12.1:
     pretty-bytes "^5.6.0"
     valid-url "^1.0.9"
     xstate "^4.38.0"
-
-gatsby-source-shopify@8.12.3:
-  version "8.12.3"
-  resolved "https://registry.yarnpkg.com/gatsby-source-shopify/-/gatsby-source-shopify-8.12.3.tgz#bd070d1e119557d3e95b18efd36db23dce6ebff8"
-  integrity sha512-7FAuLbuLAU//7UzdGeO0FjzmgjxyceiMlHAbZihO0JtmaCkfhBjeW88ehyizuh8vhC9BFw5o4WgIYUoOrb5eRg==
-  dependencies:
-    "@babel/runtime" "^7.20.13"
-    gatsby-core-utils "^4.12.1"
-    gatsby-plugin-utils "^4.12.3"
-    gatsby-source-filesystem "^5.12.1"
-    node-fetch "^2.6.11"
-    sharp "^0.32.6"
-    shift-left "^0.1.5"
 
 gatsby-telemetry@^4.12.1:
   version "4.12.1"
@@ -12285,11 +12272,6 @@ shell-quote@^1.7.3:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/shell-quote/-/shell-quote-1.8.0.tgz#20d078d0eaf71d54f43bd2ba14a1b5b9bfa5c8ba"
   integrity sha512-QHsz8GgQIGKlRi24yFc6a6lN69Idnx634w49ay6+jA5yFh7a1UY+4Rp6HPx/L/1zcEDPEij8cIsiqR6bQsE5VQ==
-
-shift-left@^0.1.5:
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/shift-left/-/shift-left-0.1.5.tgz#4a61a9d0412b1b32f9abbd97f72466c9c74a6be1"
-  integrity sha512-55d8QaP1YmuL1D52fhgq8CT1tXksM/2WPZ6980RtkMbl0Cze++kuJy50GLMnXwostk/YG9hasaJmP3r+d3yUtQ==
 
 side-channel@^1.0.4:
   version "1.0.4"

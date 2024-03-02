@@ -6,15 +6,11 @@ require('dotenv').config({
 
 const config: GatsbyConfig = {
   siteMetadata: {
-    title: `Tract Stack Story Keep by At Risk Media`,
-    description: `Tract Stack Story Keep: SaaS by At Risk Media | Intelligent no-code landing pages for product-market-fit validation`,
     author: `@AtRiskMedia`,
-    siteUrl: `https://tractstack.com/`,
-    image: 'tractstack-2023-social.png',
   },
-  flags: {
-    DEV_SSR: true,
-  },
+  //flags: {
+  //  DEV_SSR: true,
+  //},
   plugins: [
     `gatsby-plugin-styled-components`,
     `gatsby-plugin-typescript`,
@@ -24,14 +20,6 @@ const config: GatsbyConfig = {
       options: {
         name: `images`,
         path: `${__dirname}/src/images`,
-      },
-    },
-    {
-      resolve: 'gatsby-source-shopify',
-      options: {
-        password: process.env.SHOPIFY_SHOP_PASSWORD_BACK,
-        storeUrl: process.env.GATSBY_SHOPIFY_STORE_URL,
-        shopifyConnections: ['collections'],
       },
     },
     {
@@ -66,6 +54,7 @@ const config: GatsbyConfig = {
     },
     'gatsby-plugin-postcss',
   ],
+
   jsxRuntime: `automatic`,
 }
 
