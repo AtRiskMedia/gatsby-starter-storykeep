@@ -42,25 +42,26 @@ const processRecentDailyActivity = (data: any) => {
   const val = [
     {
       id: `clicked`,
-      data: payload.clicked,
+      data: payload.clicked || 0,
     },
     {
       id: `discovered`,
-      data: payload.discovered,
+      data: payload.discovered || 0,
     },
     {
       id: `entered`,
-      data: payload.entered,
+      data: payload.entered || 0,
     },
     {
       id: `glossed`,
-      data: payload.glossed,
+      data: payload.glossed || 0,
     },
     {
       id: `read`,
-      data: payload.red,
+      data: payload.red || 0,
     },
   ]
+  if (Object.keys(payload).length === 0) return null
   return val
 }
 
@@ -282,7 +283,7 @@ const Dashboard = () => {
               </h3>
             </div>
             <div className="h-80 m-3">
-              {loadedDashboardPayloads ? (
+              {loadedDashboardPayloads && recentDailyActivityData ? (
                 <RecentDailyActivity data={recentDailyActivityData} />
               ) : null}
             </div>
@@ -297,7 +298,7 @@ const Dashboard = () => {
                 </h3>
               </div>
               <div className="h-80 m-3">
-                {loadedDashboardPayloads ? (
+                {loadedDashboardPayloads && storyFragmentActivityData.length ? (
                   <StoryFragmentActivitySwarm
                     handleClick={(e) => handleClick(e)}
                     data={{
@@ -315,7 +316,7 @@ const Dashboard = () => {
                 </h3>
               </div>
               <div className="h-80 mt-2">
-                {loadedDashboardPayloads ? (
+                {loadedDashboardPayloads && paneActivityData.length ? (
                   <PaneActivitySwarm
                     handleClick={(e) => handleClick(e)}
                     data={{ data: paneActivityData, groups: [`pane`] }}
