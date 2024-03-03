@@ -44,3 +44,7 @@ yarn-error.log*
 
 # custom styles (not this file must exist!)
 /src/styles/custom.css
+
+# code templates
+/src/custom/*
+!/src/custom/codehooks.tsx.example
