@@ -9,6 +9,9 @@ import { useAuthStore } from '../stores/authStore'
 const goGetGraph = async () => {
   try {
     const response = await getGraph()
+    if (response?.data?.data === null) {
+      return { graph: null, error: null }
+    }
     const data =
       typeof response?.data !== `undefined`
         ? processGraphPayload(response?.data)
