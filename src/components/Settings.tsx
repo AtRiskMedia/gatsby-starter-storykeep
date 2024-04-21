@@ -196,49 +196,7 @@ const Settings = () => {
             <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="sm:col-span-full">
                 <label
-                  htmlFor="TITLE"
-                  className="block text-sm leading-6 text-mydarkgrey font-bold"
-                >
-                  Site Title
-                </label>
-                <div className="mt-2">
-                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
-                    <input
-                      type="text"
-                      name="TITLE"
-                      id="TITLE"
-                      className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
-                      onChange={(e) => handleChange(e)}
-                      value={settingsData?.TITLE}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="sm:col-span-full">
-                <label
-                  htmlFor="AUTHOR"
-                  className="block text-sm leading-6 text-mydarkgrey font-bold"
-                >
-                  Author / Company
-                </label>
-                <div className="mt-2">
-                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
-                    <input
-                      type="text"
-                      name="AUTHOR"
-                      id="AUTHOR"
-                      className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
-                      onChange={(e) => handleChange(e)}
-                      value={settingsData?.AUTHOR}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="sm:col-span-full">
-                <label
-                  htmlFor="SLOGAN"
+                  htmlFor="PUBLIC_SLOGAN"
                   className="block text-sm leading-6 text-mydarkgrey font-bold"
                 >
                   Slogan
@@ -247,11 +205,11 @@ const Settings = () => {
                   <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                     <input
                       type="text"
-                      name="SLOGAN"
-                      id="SLOGAN"
+                      name="PUBLIC_SLOGAN"
+                      id="PUBLIC_SLOGAN"
                       className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
                       onChange={(e) => handleChange(e)}
-                      value={settingsData?.SLOGAN}
+                      value={settingsData?.PUBLIC_SLOGAN}
                     />
                   </div>
                 </div>
@@ -259,7 +217,7 @@ const Settings = () => {
 
               <div className="sm:col-span-full">
                 <label
-                  htmlFor="FOOTER"
+                  htmlFor="PUBLIC_FOOTER"
                   className="block text-sm leading-6 text-mydarkgrey font-bold"
                 >
                   Footer Text
@@ -268,11 +226,11 @@ const Settings = () => {
                   <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                     <input
                       type="text"
-                      name="FOOTER"
-                      id="FOOTER"
+                      name="PUBLIC_FOOTER"
+                      id="PUBLIC_FOOTER"
                       className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
                       onChange={(e) => handleChange(e)}
-                      value={settingsData?.FOOTER}
+                      value={settingsData?.PUBLIC_FOOTER}
                     />
                   </div>
                 </div>
@@ -280,7 +238,7 @@ const Settings = () => {
 
               <div className="sm:col-span-2">
                 <label
-                  htmlFor="HOMEPAGE"
+                  htmlFor="PUBLIC_HOME"
                   className="block text-sm leading-6 text-mydarkgrey font-bold"
                 >
                   Slug of Story Fragment to use as homepage
@@ -289,11 +247,11 @@ const Settings = () => {
                   <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                     <input
                       type="text"
-                      name="HOMEPAGE"
-                      id="HOMEPAGE"
+                      name="PUBLIC_HOME"
+                      id="PUBLIC_HOME"
                       className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
                       onChange={(e) => handleChange(e)}
-                      value={settingsData?.HOMEPAGE}
+                      value={settingsData?.PUBLIC_HOME}
                     />
                   </div>
                 </div>
@@ -301,28 +259,7 @@ const Settings = () => {
 
               <div className="sm:col-span-2">
                 <label
-                  htmlFor="ACTION"
-                  className="block text-sm leading-6 text-mydarkgrey font-bold"
-                >
-                  Conversion Action for Email Sign-up
-                </label>
-                <div className="mt-2">
-                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
-                    <input
-                      type="text"
-                      name="ACTION"
-                      id="ACTION"
-                      className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
-                      onChange={(e) => handleChange(e)}
-                      value={settingsData?.ACTION}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="sm:col-span-2">
-                <label
-                  htmlFor="READ_THRESHOLD"
+                  htmlFor="PUBLIC_READ_THRESHOLD"
                   className="block text-sm leading-6 text-mydarkgrey font-bold"
                 >
                   Read Threshold
@@ -333,12 +270,12 @@ const Settings = () => {
                       type="number"
                       min="1"
                       max="600000"
-                      name="READ_THRESHOLD"
-                      id="READ_THRESHOLD"
+                      name="PUBLIC_READ_THRESHOLD"
+                      id="PUBLIC_READ_THRESHOLD"
                       className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
                       placeholder="42000"
                       onChange={(e) => handleChange(e)}
-                      value={settingsData?.READ_THRESHOLD}
+                      value={settingsData?.PUBLIC_READ_THRESHOLD}
                     />
                   </div>
                 </div>
@@ -346,7 +283,7 @@ const Settings = () => {
 
               <div className="sm:col-span-2">
                 <label
-                  htmlFor="SOFT_READ_THRESHOLD"
+                  htmlFor="PUBLIC_SOFT_READ_THRESHOLD"
                   className="block text-sm leading-6 text-mydarkgrey font-bold"
                 >
                   (Soft) Read Threshold
@@ -357,12 +294,12 @@ const Settings = () => {
                       type="number"
                       min="1"
                       max="600000"
-                      name="SOFT_READ_THRESHOLD"
-                      id="SOFT_READ_THRESHOLD"
+                      name="PUBLIC_SOFT_READ_THRESHOLD"
+                      id="PUBLIC_SOFT_READ_THRESHOLD"
                       className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
                       placeholder="7000"
                       onChange={(e) => handleChange(e)}
-                      value={settingsData?.SOFT_READ_THRESHOLD}
+                      value={settingsData?.PUBLIC_SOFT_READ_THRESHOLD}
                     />
                   </div>
                 </div>
@@ -370,56 +307,7 @@ const Settings = () => {
 
               <div className="sm:col-span-2">
                 <label
-                  htmlFor="CONCIERGE_SYNC"
-                  className="block text-sm leading-6 text-mydarkgrey font-bold"
-                >
-                  Concierge Sync frequency (milliseconds)
-                </label>
-                <div className="mt-2">
-                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
-                    <input
-                      type="number"
-                      min="1"
-                      max="600000"
-                      name="CONCIERGE_SYNC"
-                      id="CONCIERGE_SYNC"
-                      className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
-                      placeholder="45000"
-                      onChange={(e) => handleChange(e)}
-                      value={settingsData?.CONCIERGE_SYNC}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="sm:col-span-2">
-                <label
-                  htmlFor="CONCIERGE_FORCE_INTERVAL"
-                  className="block text-sm leading-6 text-mydarkgrey font-bold"
-                >
-                  Multiplier to force immediate eventStream on page load
-                </label>
-                <div className="mt-2">
-                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
-                    <input
-                      type="number"
-                      min="1.5"
-                      step=".1"
-                      max="3"
-                      name="CONCIERGE_FORCE_INTERVAL"
-                      id="CONCIERGE_FORCE_INTERVAL"
-                      className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
-                      placeholder="1.5"
-                      onChange={(e) => handleChange(e)}
-                      value={settingsData?.CONCIERGE_FORCE_INTERVAL}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="sm:col-span-2">
-                <label
-                  htmlFor="IMPRESSIONS_DELAY"
+                  htmlFor="PUBLIC_IMPRESSIONS_DELAY"
                   className="block text-sm leading-6 text-mydarkgrey font-bold"
                 >
                   Cycle impressions delay interval (milliseconds)
@@ -430,12 +318,12 @@ const Settings = () => {
                       type="number"
                       min="1"
                       max="600000"
-                      name="IMPRESSIONS_DELAY"
-                      id="IMPRESSIONS_DELAY"
+                      name="PUBLIC_IMPRESSIONS_DELAY"
+                      id="PUBLIC_IMPRESSIONS_DELAY"
                       className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
                       placeholder="22000"
                       onChange={(e) => handleChange(e)}
-                      value={settingsData?.IMPRESSIONS_DELAY}
+                      value={settingsData?.PUBLIC_IMPRESSIONS_DELAY}
                     />
                   </div>
                 </div>
@@ -443,7 +331,7 @@ const Settings = () => {
 
               <div className="sm:col-span-full">
                 <label
-                  htmlFor="SOCIAL"
+                  htmlFor="PUBLIC_SOCIALS"
                   className="block text-sm leading-6 text-mydarkgrey"
                 >
                   <span className="font-bold">Social Links payload</span> | must
@@ -453,13 +341,13 @@ const Settings = () => {
                 <div className="mt-2">
                   <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen sm:max-w-xl">
                     <textarea
-                      name="SOCIAL"
-                      id="SOCIAL"
+                      name="PUBLIC_SOCIALS"
+                      id="PUBLIC_SOCIALS"
                       rows={4}
                       className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
                       defaultValue=""
                       onChange={(e) => handleChange(e)}
-                      value={settingsData?.SOCIAL}
+                      value={settingsData?.PUBLIC_SOCIALS}
                     />
                   </div>
                 </div>

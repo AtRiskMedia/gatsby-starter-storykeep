@@ -192,7 +192,7 @@ const Account = () => {
             <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="sm:col-span-2">
                 <label
-                  htmlFor="SITE_URL"
+                  htmlFor="PUBLIC_SITE_URL"
                   className="block text-sm leading-6 text-mydarkgrey font-bold"
                 >
                   Site URL
@@ -201,10 +201,10 @@ const Account = () => {
                   <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                     <input
                       type="text"
-                      name="SITE_URL"
-                      id="SITE_URL"
+                      name="PUBLIC_SITE_URL"
+                      id="PUBLIC_SITE_URL"
                       className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
-                      value={settingsData?.SITE_URL}
+                      value={settingsData?.PUBLIC_SITE_URL}
                       onChange={(e) => handleChange(e)}
                     />
                   </div>
@@ -244,7 +244,7 @@ const Account = () => {
             <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="sm:col-span-2">
                 <label
-                  htmlFor="STORYKEEP_URL"
+                  htmlFor="PUBLIC_STORYKEEP_URL"
                   className="block text-sm leading-6 text-mydarkgrey font-bold"
                 >
                   Story Keep URL
@@ -253,10 +253,10 @@ const Account = () => {
                   <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                     <input
                       type="text"
-                      name="STORYKEEP_URL"
-                      id="STORYKEEP_URL"
+                      name="PUBLIC_STORYKEEP_URL"
+                      id="PUBLIC_STORYKEEP_URL"
                       className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
-                      value={settingsData?.STORYKEEP_URL}
+                      value={settingsData?.PUBLIC_STORYKEEP_URL}
                       onChange={(e) => handleChange(e)}
                     />
                   </div>
@@ -317,7 +317,7 @@ const Account = () => {
 
               <div className="sm:col-span-2">
                 <label
-                  htmlFor="CONCIERGE_BASE_URL_FRONT"
+                  htmlFor="PUBLIC_CONCIERGE_BASE_URL"
                   className="block text-sm leading-6 text-mydarkgrey font-bold"
                 >
                   Concierge Base URL | front-end
@@ -326,10 +326,10 @@ const Account = () => {
                   <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                     <input
                       type="text"
-                      name="CONCIERGE_BASE_URL_FRONT"
-                      id="CONCIERGE_BASE_URL_FRONT"
+                      name="PUBLIC_CONCIERGE_BASE_URL"
+                      id="PUBLIC_CONCIERGE_BASE_URL"
                       className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
-                      value={settingsData?.CONCIERGE_BASE_URL_FRONT}
+                      value={settingsData?.PUBLIC_CONCIERGE_BASE_URL}
                       onChange={(e) => handleChange(e)}
                     />
                   </div>
@@ -338,7 +338,7 @@ const Account = () => {
 
               <div className="sm:col-span-2">
                 <label
-                  htmlFor="CONCIERGE_REFRESH_TOKEN_URL_FRONT"
+                  htmlFor="PUBLIC_CONCIERGE_REFRESH_TOKEN_URL"
                   className="block text-sm leading-6 text-mydarkgrey font-bold"
                 >
                   Concierge Refresh Token URL | front-end
@@ -347,10 +347,10 @@ const Account = () => {
                   <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                     <input
                       type="text"
-                      name="CONCIERGE_REFRESH_TOKEN_URL_FRONT"
-                      id="CONCIERGE_REFRESH_TOKEN_URL_FRONT"
+                      name="PUBLIC_CONCIERGE_REFRESH_TOKEN_URL"
+                      id="PUBLIC_CONCIERGE_REFRESH_TOKEN_URL"
                       className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
-                      value={settingsData?.CONCIERGE_REFRESH_TOKEN_URL_FRONT}
+                      value={settingsData?.PUBLIC_CONCIERGE_REFRESH_TOKEN_URL}
                       onChange={(e) => handleChange(e)}
                     />
                   </div>
@@ -472,29 +472,6 @@ const Account = () => {
             </p>
             <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="sm:col-span-2">
-                <div className="flex items-center gap-x-3">
-                  <input
-                    id="INITIALIZE_SHOPIFY"
-                    name="INITIALIZE_SHOPIFY"
-                    type="checkbox"
-                    className="h-4 w-4 border-mylightgrey text-myorange focus:ring-myorange"
-                    checked={settingsData?.INITIALIZE_SHOPIFY}
-                    onChange={() =>
-                      handleToggle(
-                        `INITIALIZE_SHOPIFY`,
-                        !settingsData?.INITIALIZE_SHOPIFY,
-                      )
-                    }
-                  />
-                  <label
-                    htmlFor="initializeShopify"
-                    className="pl-2 block text-md leading-6 text-mydarkgrey font-bold"
-                  >
-                    Enable Shopify Integration
-                  </label>
-                </div>
-              </div>
-              <div className="sm:col-span-2">
                 <label
                   htmlFor="shopifyStoreUrl"
                   className="block text-sm leading-6 text-mydarkgrey font-bold"
@@ -508,7 +485,7 @@ const Account = () => {
                       name="shopifyStoreUrl"
                       id="shopifyStoreUrl"
                       className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
-                      value={settingsData?.GATSBY_SHOPIFY_STORE_URL}
+                      value={settingsData?.PUBLIC_SHOPIFY_SHOP}
                       onChange={(e) => handleChange(e)}
                     />
                   </div>
@@ -517,7 +494,7 @@ const Account = () => {
 
               <div className="sm:col-span-2">
                 <label
-                  htmlFor="SHOPIFY_SHOP_PASSWORD_FRONT"
+                  htmlFor="PRIVATE_SHOPIFY_STOREFRONT_ACCESS_TOKEN"
                   className="block text-sm leading-6 text-mydarkgrey font-bold"
                 >
                   Shopify Shop Password | front-end
@@ -526,10 +503,12 @@ const Account = () => {
                   <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                     <input
                       type="password"
-                      name="SHOPIFY_SHOP_PASSWORD_FRONT"
-                      id="SHOPIFY_SHOP_PASSWORD_FRONT"
+                      name="PRIVATE_SHOPIFY_STOREFRONT_ACCESS_TOKEN"
+                      id="PRIVATE_SHOPIFY_STOREFRONT_ACCESS_TOKEN"
                       className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
-                      value={settingsData?.SHOPIFY_SHOP_PASSWORD_FRONT}
+                      value={
+                        settingsData?.PRIVATE_SHOPIFY_STOREFRONT_ACCESS_TOKEN
+                      }
                       onChange={(e) => handleChange(e)}
                     />
                   </div>
@@ -559,7 +538,7 @@ const Account = () => {
 
               <div className="sm:col-span-2">
                 <label
-                  htmlFor="GATSBY_STOREFRONT_ACCESS_TOKEN"
+                  htmlFor="PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN"
                   className="block text-sm leading-6 text-mydarkgrey font-bold"
                 >
                   Shopify Storefront Access Token
@@ -568,32 +547,12 @@ const Account = () => {
                   <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                     <input
                       type="password"
-                      name="GATSBY_STOREFRONT_ACCESS_TOKEN"
-                      id="GATSBY_STOREFRONT_ACCESS_TOKEN"
+                      name="PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN"
+                      id="PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN"
                       className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
-                      value={settingsData?.GATSBY_STOREFRONT_ACCESS_TOKEN}
-                      onChange={(e) => handleChange(e)}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="sm:col-span-2">
-                <label
-                  htmlFor="LOCAL_STORAGE_KEY"
-                  className="block text-sm leading-6 text-mydarkgrey font-bold"
-                >
-                  Shopify localStorageKey
-                </label>
-                <div className="mt-2">
-                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
-                    <input
-                      type="text"
-                      name="LOCAL_STORAGE_KEY"
-                      id="LOCAL_STORAGE_KEY"
-                      className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
-                      placeholder="localStorageKey"
-                      value={settingsData?.LOCAL_STORAGE_KEY}
+                      value={
+                        settingsData?.PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN
+                      }
                       onChange={(e) => handleChange(e)}
                     />
                   </div>
@@ -826,20 +785,41 @@ const Account = () => {
 
               <div className="sm:col-span-2">
                 <label
-                  htmlFor="DRUPAL_URL_FRONT"
+                  htmlFor="PUBLIC_IMAGE_URL"
                   className="block text-sm leading-6 text-mydarkgrey font-bold"
                 >
-                  Drupal URL | front-end
+                  Drupal domain | for images
                 </label>
                 <div className="mt-2">
                   <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
                     <input
                       type="text"
-                      name="DRUPAL_URL_FRONT"
-                      id="DRUPAL_URL_FRONT"
+                      name="PUBLIC_IMAGE_URL"
+                      id="PUBLIC_IMAGE_URL"
                       className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
                       onChange={(e) => handleChange(e)}
-                      value={settingsData?.DRUPAL_URL_FRONT}
+                      value={settingsData?.PUBLIC_IMAGE_URL}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="sm:col-span-2">
+                <label
+                  htmlFor="DRUPAL_BASE_URL"
+                  className="block text-sm leading-6 text-mydarkgrey font-bold"
+                >
+                  Drupal base URL
+                </label>
+                <div className="mt-2">
+                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
+                    <input
+                      type="text"
+                      name="DRUPAL_BASE_URL"
+                      id="DRUPAL_BASE_URL"
+                      className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
+                      onChange={(e) => handleChange(e)}
+                      value={settingsData?.DRUPAL_BASE_URL}
                     />
                   </div>
                 </div>
