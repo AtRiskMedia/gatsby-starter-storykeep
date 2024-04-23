@@ -1,4 +1,4 @@
-export const tailwindModifier = [``, `md:`, `xl:`]
+export const tailwindModifier = [`xs:`, `md:`, `xl:`]
 
 export const tailwindSpecial: { [index: string]: string } = {
   textCOLOR: `text`,
