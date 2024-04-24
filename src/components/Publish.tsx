@@ -10,7 +10,7 @@ import { config } from '../../data/SiteConfig'
 
 const Publish = () => {
   const [maxAttempts, setMaxAttempts] = useState<undefined | boolean>(undefined)
-  const [target, setTarget] = useState(`front`)
+  const [target, setTarget] = useState(`tailwind`)
   const [publishing, setPublishing] = useState(false)
   const [publish, setPublish] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -164,6 +164,7 @@ const Publish = () => {
                   setTarget((e.target as HTMLInputElement).value)
                 }}
               >
+                <option>tailwind</option>
                 <option>front</option>
                 <option>back</option>
                 <option>all</option>
