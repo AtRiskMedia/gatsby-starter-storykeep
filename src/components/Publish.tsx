@@ -159,7 +159,7 @@ const Publish = () => {
                 id="target"
                 name="target"
                 className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-mydarkgrey ring-1 ring-inset ring-mylightgrey focus:ring-2 focus:ring-mygreen sm:text-sm sm:leading-6"
-                defaultValue="front"
+                defaultValue="tailwind"
                 onClick={(e: MouseEvent) => {
                   setTarget((e.target as HTMLInputElement).value)
                 }}
