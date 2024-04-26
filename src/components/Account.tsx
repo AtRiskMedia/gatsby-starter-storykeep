@@ -338,27 +338,6 @@ const Account = () => {
 
               <div className="sm:col-span-2">
                 <label
-                  htmlFor="PUBLIC_CONCIERGE_REFRESH_TOKEN_URL"
-                  className="block text-sm leading-6 text-mydarkgrey font-bold"
-                >
-                  Concierge Refresh Token URL | front-end
-                </label>
-                <div className="mt-2">
-                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-mylightgrey focus-within:ring-2 focus-within:ring-inset focus-within:ring-mygreen">
-                    <input
-                      type="text"
-                      name="PUBLIC_CONCIERGE_REFRESH_TOKEN_URL"
-                      id="PUBLIC_CONCIERGE_REFRESH_TOKEN_URL"
-                      className="block flex-1 border-0 bg-transparent py-1.5 px-3 text-myblack placeholder:text-black/50 focus:ring-0 sm:text-sm sm:leading-6"
-                      value={settingsData?.PUBLIC_CONCIERGE_REFRESH_TOKEN_URL}
-                      onChange={(e) => handleChange(e)}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="sm:col-span-2">
-                <label
                   htmlFor="CONCIERGE_BASE_URL_BACK"
                   className="block text-sm leading-6 text-mydarkgrey font-bold"
                 >
