@@ -54,6 +54,7 @@ const processTuples = (thisTuples: any) => {
       let thisTailwindString = ``
       const thisTuple = thisTuples[f]
       thisTuple.forEach((v: any, idx: number) => {
+        const noMod = thisTuple.length === 1
         const isSpecial = !!(typeof tailwindSpecial[f] !== `undefined`)
         const hasSpecialSelector = isSpecial ? tailwindSpecial[f] : null
         const thisSelector = isSpecial ? hasSpecialSelector : f
@@ -61,7 +62,7 @@ const processTuples = (thisTuples: any) => {
           ? ``
           : [`true`, `TRUE`].includes(v)
             ? f
-            : reduceClassName(thisSelector, v, idx)
+            : reduceClassName(thisSelector, v, noMod ? -1 : idx)
         thisTailwindString = thisTailwindString.length
           ? `${thisTailwindString} ${thisClass}`
           : `${thisClass}`
