@@ -7,7 +7,128 @@ module.exports = {
     './src/shopify-components/**/*.{js,jsx,tsx}',
     './src/custom/**/*.{js,jsx,tsx}',
     './src/templates/**/*.{js,jsx,tsx}',
-    './tailwind.whitelist',
+  ],
+  safelist: [
+    //variants: ['xs', 'md', 'xl'],
+    {
+      pattern:
+        /^(w|min-w|h|min-h|basis|grow|col|auto-cols|justify-items|self|flex|shrink|grid-rows|auto-rows|justify-self|place-content|order|row|gap|content|place-items|grid-cols|grid-flow|justify|items|place-self)-/,
+    },
+    {
+      pattern: /^(rotate|scale)-/,
+      variants: ['hover', 'focus'],
+    },
+    {
+      pattern: /^(p|px|py|pt|pr|pb|pl|m|mx|my|mt|mr|mb|ml)-/,
+    },
+    {
+      pattern:
+        /^text-(center|left|right|justify|start|end|xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|8xl|9xl|ellipsis|clip|wrap|nowrap|balance|pretty)$/,
+    },
+    {
+      pattern: /^text-(inherit|current|transparent|black|white|[a-z]*-\d*)$/,
+      variants: ['hover', 'focus'],
+    },
+    {
+      pattern:
+        /^bg-(bottom|center|left|left-bottom|left-top|right|right-bottom|right-top|top|repeat|no-repeat|repeat-x|repeat-y|repeat-round|repeat-space|auto|cover|contain)$/,
+    },
+    {
+      pattern: /^(bg|text)-my[a-z]*$/,
+      variants: ['hover', 'focus'],
+    },
+    {
+      pattern: /^bg-(inherit|current|transparent|black|white|[a-z]*-\d*)$/,
+      variants: ['hover', 'focus'],
+    },
+    {
+      pattern:
+        /^decoration-(inherit|current|transparent|black|white|[a-z]*-\d*)$/,
+      variants: ['hover', 'focus'],
+    },
+    {
+      pattern: /^shadow-(inherit|current|transparent|black|white|[a-z]*-\d*)$/,
+      variants: ['hover', 'focus'],
+    },
+    {
+      pattern: /^shadow-(sm|md|lg|xl|2xl|inner|none)$/,
+      variants: ['hover', 'focus'],
+    },
+    {
+      pattern:
+        /^decoration-([01248]|from-front|auto|dotted|double|dashed|wavy)$/,
+      variants: ['hover', 'focus'],
+    },
+    {
+      pattern: /^outline-([01248]|none|dashed|dotted|double|offset-\d)$/,
+      variants: ['hover', 'focus'],
+    },
+    {
+      pattern: /^outline-(inherit|current|transparent|black|white|[a-z]*-\d*)$/,
+      variants: ['hover', 'focus'],
+    },
+    {
+      pattern: /^ring-(\d|inset)$/,
+      variants: ['hover', 'focus'],
+    },
+    {
+      pattern: /^ring-offset-\d$/,
+      variants: ['hover', 'focus'],
+    },
+    {
+      pattern:
+        /^ring-offset-(inherit|current|transparent|black|white|[a-z]*-\d*)$/,
+      variants: ['hover', 'focus'],
+    },
+    {
+      pattern: /^ring-(inherit|current|transparent|black|white|[a-z]*-\d*)$/,
+      variants: ['hover', 'focus'],
+    },
+    {
+      pattern: /^border-(-[xylrtb])?(\d|[xylrtb]|([xylrtb]-\d))$/,
+      variants: ['hover', 'focus'],
+    },
+    {
+      pattern: /^border-(solid|dashed|dotted|double|hidden|none)$/,
+      variants: ['hover', 'focus'],
+    },
+    {
+      pattern: /^border-(inherit|current|transparent|black|white|[a-z]*-\d*)$/,
+      variants: ['hover', 'focus'],
+    },
+    {
+      pattern: /^stroke-\d$/,
+    },
+    {
+      pattern: /^underline-offset-(auto|[01248])$/,
+      variants: ['hover', 'focus'],
+    },
+    {
+      pattern: /^leading-([3456789]|10|none|tight|snug|normal|relaxed|loose)$/,
+    },
+    {
+      pattern: /^stroke-(inherit|current|transparent|black|white|[a-z]*-\d*)$/,
+    },
+    {
+      pattern: /^fill-(inherit|current|transparent|black|white|[a-z]*-\d*)$/,
+    },
+    {
+      pattern:
+        /^(ring|outline|border|underline|no-underline|overline|line-through|shadow)$/,
+      variants: ['hover', 'focus'],
+    },
+    {
+      pattern:
+        /^(sr-only|not-sr-only|transition|shrink|grow|rounded|truncate|italic|not-italic|uppercase|lowercase|capitalize|normal-case|static|fixed|absolute|relative|sticky|visible|invisible|collapse|isolate)$/,
+    },
+    {
+      pattern:
+        /^(block|inline-block|inline|flex|inline-flex|table|inline-table|table-caption|table-cell|table-column|table-column-group|table-footer-group|table-header-group|table-row-group|table-row|flow-root|grid|inline-grid|contents|list-item|hidden)$/,
+    },
+    {
+      pattern:
+        /^(animate|transition|duration|ease|delay|rounded|gap|pointer-events|font|leading|whitespace|break|tracking|list|indent|line-clamp|align|opacity|aspect|object|float|object|columns|clear|overflow|box|isolation|overscroll|z|inset|start|end|top|right|bottom|left)-/,
+    },
   ],
   theme: {
     extend: {
