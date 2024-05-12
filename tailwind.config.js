@@ -15,11 +15,7 @@ module.exports = {
         /^(w|min-w|h|min-h|basis|grow|col|auto-cols|justify-items|self|flex|shrink|grid-rows|auto-rows|justify-self|place-content|order|row|gap|content|place-items|grid-cols|grid-flow|justify|items|place-self)-/,
     },
     {
-      pattern: /^\!?(rotate)-/,
-      variants: ['hover', 'focus'],
-    },
-    {
-      pattern: /^(scale)-/,
+      pattern: /^(rotate|-rotate|scale)-/,
       variants: ['hover', 'focus'],
     },
     {
