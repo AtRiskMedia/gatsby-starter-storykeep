@@ -240,7 +240,7 @@ export function markdownPayload(
             .map((e) => {
               return e
             })
-            .concat(g.images)
+            .concat(g.relationships.images)
             .filter((e) => e)
         const addUnsavedImageSvgs =
           unsavedMarkdownImageSvgs &&
@@ -248,7 +248,7 @@ export function markdownPayload(
             .map((e) => {
               return e
             })
-            .concat(g.imageSvgs)
+            .concat(g.relationships.imageSvgs)
             .filter((e) => e)
         return {
           id: e.markdownId,
