@@ -3163,7 +3163,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
           hook = `resource(type|variation)`
           break
         case `toggle`:
-          hook = `toggle(BeliefTag|likert|question)`
+          hook = `toggle(BeliefTag|question prompt?)`
           break
         case `identifyAs`:
           hook = `identifyAs(BeliefTag|TARGET_VALUE|question)`
