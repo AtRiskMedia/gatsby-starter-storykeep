@@ -38,6 +38,9 @@ module.exports = {
       variants: ['hover', 'focus'],
     },
     {
+      pattern: /^(fill|stroke)-my[a-z]*$/,
+    },
+    {
       pattern: /^bg-(inherit|current|transparent|black|white|[a-z]*-\d*)$/,
       variants: ['hover', 'focus'],
     },
