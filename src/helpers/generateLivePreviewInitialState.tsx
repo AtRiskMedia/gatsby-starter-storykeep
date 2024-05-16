@@ -235,6 +235,16 @@ export function generateLivePreviewInitialState({
                             typeof thisImage[0] !== `undefined`
                               ? thisImage[0].localFile?.publicURL
                               : null
+                          const fileId =
+                            hasFiles
+                              .map((z) => {
+                                return allFiles[z].filename === j?.url
+                                  ? z
+                                  : null
+                              })
+                              .filter((z) => z)
+                              .at(0) || null
+
                           images = {
                             ...images,
                             [imagesIndex++]: {
@@ -243,6 +253,7 @@ export function generateLivePreviewInitialState({
                               url: j?.url,
                               alt: j?.alt,
                               publicURL,
+                              id: fileId,
                             },
                           }
                         }

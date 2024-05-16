@@ -41,6 +41,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
   const [statePaneFragments, setStatePaneFragments] = useState(
     payload.initialStatePaneFragments,
   )
+  const [unremovedMarkdownImages, setUnremovedMarkdownImages] = useState({})
   const [unsavedMarkdownImages, setUnsavedMarkdownImages] = useState({})
   const [unsavedMarkdownImageSvgs, setUnsavedMarkdownImageSvgs] = useState({})
   const [lastSavedState, setLastSavedState] = useState(payload)
@@ -3244,13 +3245,53 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
     }
     const markdownBody = newMarkdownArray?.join(`\n`)
 
+    // handle deleted image
+    const removeImage =
+      (mode === `delete` &&
+        !!stateLivePreviewMarkdown?.images &&
+        Object.keys(stateLivePreviewMarkdown.images)
+          .map((e) => {
+            return stateLivePreviewMarkdown.images[e].parentNth === nth &&
+              stateLivePreviewMarkdown.images[e].childNth === childNth
+              ? stateLivePreviewMarkdown.images[e].id
+              : null
+          })
+          .filter((n) => n)) ||
+      []
+    const removeImageId = removeImage.length ? removeImage.at(0) : null
+    if (removeImageId)
+      setUnremovedMarkdownImages({
+        ...unremovedMarkdownImages,
+        [removeImageId]: true,
+      })
+
+    // override images
+    const relationships = removeImageId
+      ? {
+          images: [...allMarkdown[markdownId].relationships.images].filter(
+            (e) =>
+              e !== removeImageId &&
+              typeof unremovedMarkdownImages[e] === `undefined`,
+          ),
+          imagesSvg: [
+            ...allMarkdown[markdownId].relationships.imagesSvg,
+          ].filter(
+            (e) =>
+              e !== removeImageId &&
+              typeof unremovedMarkdownImages[e] === `undefined`,
+          ),
+        }
+      : allMarkdown[markdownId].relationships
+
     // then pass through original generateState fn
     const thisMarkdown = {
       [markdownId]: {
         ...allMarkdown[markdownId],
         markdownBody,
+        relationships,
       },
     }
+
     const {
       initialStateLivePreview,
       initialStateLivePreviewMarkdown,
@@ -3278,6 +3319,8 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       },
     }
     setStatePaneFragments(newStatePaneFragments)
+    console.log(`===`, initialStateLivePreviewMarkdown)
+    console.log(`===`, newStatePaneFragments)
     const impressionsPayload = stateImpressions?.title
       ? {
           [stateImpressions.id]: stateImpressions,
@@ -3414,11 +3457,22 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
               ...newMarkdown.relationships,
               imageSvgs: addUnsavedImageSvgs,
             }
+          // filter out any deleted images
+          if (Object.keys(unremovedMarkdownImages).length) {
+            Object.keys(unremovedMarkdownImages).forEach((e) => {
+              if (newMarkdown.relationships.images.includes(e))
+                newMarkdown.relationships.images =
+                  newMarkdown.relationships.images.filter((f) => f !== e)
+              if (newMarkdown.relationships.imagesSvg.includes(e))
+                newMarkdown.relationships.imagesSvg =
+                  newMarkdown.relationships.imagesSvg.filter((f) => f !== e)
+            })
+          }
           setUpdateMarkdownPayload([newMarkdown])
           if (!flags.isOpenDemo) {
             const markdown = markdownPayload(
               statePaneFragments,
-              allMarkdown,
+              { [stateLivePreviewMarkdown.markdownId]: newMarkdown },
               unsavedMarkdownImages,
               unsavedMarkdownImageSvgs,
             )
@@ -3566,6 +3620,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
     setNewEmbeddedPayload,
     unsavedMarkdownImageSvgs,
     unsavedMarkdownImages,
+    unremovedMarkdownImages,
   ])
 
   useEffect(() => {

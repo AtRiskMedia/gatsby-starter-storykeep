@@ -206,7 +206,9 @@ export function markdownPayload(
   unsavedMarkdownImages: any, // FIX
   unsavedMarkdownImageSvgs: any, // FIX
 ) {
-  const relationships = (images: string[], imageSvgs: string[]) => {
+  const relationships = (_images: string[], _imageSvgs: string[]) => {
+    const images = Array.from(new Set(_images))
+    const imageSvgs = Array.from(new Set(_imageSvgs))
     const val: any = {}
     if (images.length)
       val.field_image = {
