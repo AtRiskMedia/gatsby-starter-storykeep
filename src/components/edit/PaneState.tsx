@@ -3319,8 +3319,6 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       },
     }
     setStatePaneFragments(newStatePaneFragments)
-    console.log(`===`, initialStateLivePreviewMarkdown)
-    console.log(`===`, newStatePaneFragments)
     const impressionsPayload = stateImpressions?.title
       ? {
           [stateImpressions.id]: stateImpressions,
