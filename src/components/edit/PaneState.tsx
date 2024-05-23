@@ -996,6 +996,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
                                             (value || viewport === `remove`)
                                           ? `updateSelector`
                                           : null
+
     // console.log(result, mode, name, value)
     switch (mode) {
       case `starter`: {
@@ -2883,6 +2884,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       h6: `###### `,
       ul: `* `,
       ol: `1. `,
+      li: `1. `,
     }
     const prefix = prefixes[insertTag as keyof typeof prefixes]
     const paneFragmentId = stateLivePreviewMarkdown.paneFragmentId
@@ -2968,6 +2970,7 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
     // console.log(
     //  `handleMutateMarkdown mode:${mode} nth:${nth} childNth:${childNth} tag:${thisTag} thisTag:${thisTag} overrideTag:${overrideTag} childGlobalNth:${childGlobalNth}`,
     // )
+
     if (
       [`pre`, `post`, `imagePre`, `imagePost`].includes(mode) &&
       [

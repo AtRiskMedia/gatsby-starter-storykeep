@@ -127,11 +127,11 @@ const tags = {
   h5: `Heading`,
   h6: `Heading`,
   p: `Paragraph`,
-  li: `List Item`,
+  li: `Text Container Item`,
   img: `Image`,
   code: `Code Hook`,
   ul: `Unordered List`,
-  ol: `Ordered List`,
+  ol: `Text Container`,
 }
 
 const useRefCallback = <T extends any[]>(
@@ -421,56 +421,36 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
       const thisTagType = typeof tags[Tag] !== `undefined` ? tags[Tag] : null
       if (!thisTagType) return null
 
-      switch (interceptModeTag) {
-        case `li`:
-          if (Tag === `li`) specialModeOn = true
-          break
-
-        case `ul`:
-        case `ol`:
-        case `imageContainer`:
-        case `belief`:
-        case `identifyAs`:
-        case `toggle`:
-        case `resource`:
-        case `youtube`:
-          specialModeOn = true
-          if (
-            [`ul`, `ol`].includes(
-              stateLivePreviewMarkdown.markdownTags[thisNth],
-            )
-          ) {
-            specialModePre = false
-            specialModePost = false
-          }
-          if (
-            typeof stateLivePreviewMarkdown.markdownTags[thisNth - 1] ===
-              `string` &&
-            [`ul`, `ol`].includes(
-              stateLivePreviewMarkdown.markdownTags[thisNth - 1],
-            )
-          )
-            specialModePre = false
-          if (
-            typeof stateLivePreviewMarkdown.markdownTags[thisNth + 1] ===
-              `string` &&
-            [`ul`, `ol`].includes(
-              stateLivePreviewMarkdown.markdownTags[thisNth + 1],
-            )
-          )
-            specialModePost = false
-          break
-
-        case `p`:
-        case `h2`:
-        case `h3`:
-        case `h4`:
-        case `h5`:
-        case `h6`:
-          if (Tag !== `li`) {
-            specialModeOn = true
-          }
-          break
+      if (
+        [
+          `ul`,
+          `ol`,
+          `imageContainer`,
+          `belief`,
+          `identifyAs`,
+          `toggle`,
+          `resource`,
+          `youtube`,
+        ].includes(interceptModeTag)
+      ) {
+        specialModeOn = true
+        const match = interceptModeTag === `ol` ? `ol` : `ul`
+        if (stateLivePreviewMarkdown.markdownTags[thisNth] === match) {
+          specialModePre = false
+          specialModePost = false
+        }
+        if (
+          typeof stateLivePreviewMarkdown.markdownTags[thisNth - 1] ===
+            `string` &&
+          stateLivePreviewMarkdown.markdownTags[thisNth - 1] === match
+        )
+          specialModePre = false
+        if (
+          typeof stateLivePreviewMarkdown.markdownTags[thisNth + 1] ===
+            `string` &&
+          stateLivePreviewMarkdown.markdownTags[thisNth + 1] === match
+        )
+          specialModePost = false
       }
 
       if (interceptMode === `edit` && [`img`, `code`].includes(Tag))
@@ -546,38 +526,6 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
                   childNth:
                     typeof parent === `number` && parent > -1 ? nth : -1,
                   mode: `delete`,
-                })
-              }
-            ></button>
-            {value}
-          </>
-        )
-      } else if (
-        interceptMode === `insert` &&
-        [`ul`, `ol`].includes(Tag) &&
-        [`p`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6`].includes(interceptModeTag)
-      ) {
-        return (
-          <>
-            <button
-              className="absolute top-0 left-0 w-1/2 h-full border border-transparent hover:border-myorange border-dashed z-8 hover:bg-myorange hover:bg-opacity-20"
-              title={`Insert before ${thisTagType}`}
-              onClick={() =>
-                interceptInsert({
-                  nth,
-                  childNth: -1,
-                  mode: `pre`,
-                })
-              }
-            ></button>
-            <button
-              className="absolute top-0 right-0 w-1/2 h-full border border-transparent hover:border-myorange border-dashed z-8 hover:bg-myorange hover:bg-opacity-20"
-              title={`Insert after ${thisTagType}`}
-              onClick={() =>
-                interceptInsert({
-                  nth,
-                  childNth: -1,
-                  mode: `post`,
                 })
               }
             ></button>
@@ -662,8 +610,74 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
             {value}
           </>
         )
-        // } else return <div className={className}>{value}</div>
-      } else return <>{value}</>
+      } else if (
+        interceptMode === `insert` &&
+        Tag === `li` &&
+        interceptModeTag === `li`
+      ) {
+        return (
+          <>
+            <button
+              className="absolute top-0 left-0 w-1/2 h-full border border-transparent hover:border-myorange border-dashed z-8 hover:bg-myorange hover:bg-opacity-20"
+              title={`Insert before ${thisTagType}`}
+              onClick={() =>
+                interceptInsert({
+                  nth: typeof parent === `number` && parent > -1 ? parent : nth,
+                  childNth:
+                    typeof parent === `number` && parent > -1 ? nth : -1,
+                  mode: `pre`,
+                })
+              }
+            ></button>
+            <button
+              className="absolute top-0 right-0 w-1/2 h-full border border-transparent hover:border-myorange border-dashed z-8 hover:bg-myorange hover:bg-opacity-20"
+              title={`Insert after ${thisTagType}`}
+              onClick={() =>
+                interceptInsert({
+                  nth: typeof parent === `number` && parent > -1 ? parent : nth,
+                  childNth:
+                    typeof parent === `number` && parent > -1 ? nth : -1,
+                  mode: `post`,
+                })
+              }
+            ></button>
+            {value}
+          </>
+        )
+      } else if (
+        interceptMode === `insert` &&
+        [`p`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6`].includes(interceptModeTag)
+      ) {
+        return (
+          <>
+            <button
+              className="absolute top-0 left-0 w-1/2 h-full border border-transparent hover:border-myorange border-dashed z-8 hover:bg-myorange hover:bg-opacity-20"
+              title={`Insert before ${thisTagType}`}
+              onClick={() =>
+                interceptInsert({
+                  nth,
+                  childNth: -1,
+                  mode: `pre`,
+                })
+              }
+            ></button>
+            <button
+              className="absolute top-0 right-0 w-1/2 h-full border border-transparent hover:border-myorange border-dashed z-8 hover:bg-myorange hover:bg-opacity-20"
+              title={`Insert after ${thisTagType}`}
+              onClick={() =>
+                interceptInsert({
+                  nth,
+                  childNth: -1,
+                  mode: `post`,
+                })
+              }
+            ></button>
+            {value}
+          </>
+        )
+      } else {
+        return <>{value}</>
+      }
     }
 
     // generates live preview using data from state
