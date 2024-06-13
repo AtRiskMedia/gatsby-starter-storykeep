@@ -431,6 +431,8 @@ const PaneRender = ({ uuid, previewPayload, fn, flags }: IPaneRender) => {
           `toggle`,
           `resource`,
           `youtube`,
+          `bunny`,
+          `bunnyContext`,
         ].includes(interceptModeTag)
       ) {
         specialModeOn = true

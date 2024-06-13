@@ -2912,6 +2912,8 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
     const actualTag = [
       `imageContainer`,
       `youtube`,
+      `bunny`,
+      `bunnyContext`,
       `resource`,
       `toggle`,
       `belief`,
@@ -2952,6 +2954,8 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         `ol`,
         `imageContainer`,
         `youtube`,
+        `bunny`,
+        `bunnyContext`,
         `resource`,
         `toggle`,
         `belief`,
@@ -2978,6 +2982,8 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
         `ul`,
         `imageContainer`,
         `youtube`,
+        `bunny`,
+        `bunnyContext`,
         `resource`,
         `toggle`,
         `belief`,
@@ -3156,10 +3162,24 @@ const PaneState = ({ uuid, payload, flags, fn }: IPaneState) => {
       childNth === -1 &&
       [`pre`, `post`].includes(mode) &&
       typeof tag === `string` &&
-      [`youtube`, `resource`, `toggle`, `identifyAs`, `belief`].includes(tag)
+      [
+        `youtube`,
+        `bunny`,
+        `bunnyContext`,
+        `resource`,
+        `toggle`,
+        `identifyAs`,
+        `belief`,
+      ].includes(tag)
     ) {
       let hook = ``
       switch (tag) {
+        case `bunny`:
+          hook = `bunny(url|Title)`
+          break
+        case `bunnyContext`:
+          hook = `bunnyContext(url|Title)`
+          break
         case `youtube`:
           hook = `youtube(tag|Title)`
           break

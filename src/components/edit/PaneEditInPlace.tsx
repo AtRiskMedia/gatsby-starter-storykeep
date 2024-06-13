@@ -358,6 +358,57 @@ const EditCodeHookYouTube = ({
   )
 }
 
+const EditCodeHookBunny = ({
+  id,
+  payload,
+  handleChangeEditInPlace,
+}: {
+  id: string
+  payload: any
+  handleChangeEditInPlace: Function
+}) => {
+  return (
+    <div key={id}>
+      <div className="my-2">
+        <label
+          htmlFor={`${id}--val1`}
+          className="block text-sm leading-6 text-black"
+        >
+          Video Url
+        </label>
+        <input
+          type="text"
+          name={`${id}--val1`}
+          id={`${id}--val1`}
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
+          onChange={(e) => handleChangeEditInPlace(e)}
+          value={
+            typeof payload.values[0] !== `undefined` ? payload.values[0] : ``
+          }
+        />
+      </div>
+      <div className="my-2">
+        <label
+          htmlFor={`${id}--val2`}
+          className="block text-sm leading-6 text-black"
+        >
+          Title
+        </label>
+        <input
+          type="text"
+          name={`${id}--val2`}
+          id={`${id}--val2`}
+          className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-mylightgrey placeholder:text-mydarkgrey focus:ring-2 focus:ring-inset focus:ring-myorange xs:text-sm xs:leading-6"
+          onChange={(e) => handleChangeEditInPlace(e)}
+          value={
+            typeof payload.values[1] !== `undefined` ? payload.values[1] : ``
+          }
+        />
+      </div>
+    </div>
+  )
+}
+
 const EditCodeHookResource = ({
   id,
   payload,
@@ -1457,17 +1508,21 @@ const PaneEditInPlace = ({
     pageStylesPagination > -1 ? `${pageStylesPagination}--parent` : `0--parent`
   const tagTypeTitle = !codeHook
     ? tagType
-    : codeHook?.hook === `youtube`
-      ? `YouTube Video Embed`
-      : codeHook?.hook === `resource`
-        ? `Resource Embed`
-        : codeHook?.hook === `identifyAs`
-          ? `IdentifyAs Widget`
-          : codeHook?.hook === `belief`
-            ? `Belief Widget`
-            : codeHook?.hook === `toggle`
-              ? `Toggle Belief Widget`
-              : `Code Hook`
+    : codeHook?.hook === `bunny`
+      ? `Bunny Video Embed - Story Fragment`
+      : codeHook?.hook === `bunnyContext`
+        ? `Bunny Video Embed - Context Pane`
+        : codeHook?.hook === `youtube`
+          ? `YouTube Video Embed`
+          : codeHook?.hook === `resource`
+            ? `Resource Embed`
+            : codeHook?.hook === `identifyAs`
+              ? `IdentifyAs Widget`
+              : codeHook?.hook === `belief`
+                ? `Belief Widget`
+                : codeHook?.hook === `toggle`
+                  ? `Toggle Belief Widget`
+                  : `Code Hook`
   const state =
     childNth === -1 &&
     stateLivePreview?.childClasses &&
@@ -1817,7 +1872,19 @@ const PaneEditInPlace = ({
 
                 {codeHook ? (
                   <>
-                    {codeHook.hook === `youtube` ? (
+                    {codeHook.hook === `bunny` ? (
+                      <EditCodeHookBunny
+                        id={`${id}`}
+                        payload={codeHook}
+                        handleChangeEditInPlace={handleChangeEditInPlace}
+                      />
+                    ) : codeHook.hook === `bunnyContext` ? (
+                      <EditCodeHookBunny
+                        id={`${id}`}
+                        payload={codeHook}
+                        handleChangeEditInPlace={handleChangeEditInPlace}
+                      />
+                    ) : codeHook.hook === `youtube` ? (
                       <EditCodeHookYouTube
                         id={`${id}`}
                         payload={codeHook}
