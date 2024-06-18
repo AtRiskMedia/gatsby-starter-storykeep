@@ -44,6 +44,8 @@ const insertModeTags = [
   { name: `h5`, title: `Heading 5` },
   { name: `h6`, title: `Heading 6` },
   { name: `youtube`, title: `Youtube Video Embed` },
+  { name: `bunny`, title: `Bunny Video Embed - StoryFragment` },
+  { name: `bunnyContext`, title: `Bunny Video Embed - Context Page` },
   { name: `resource`, title: `Resource` },
   { name: `belief`, title: `Belief widget` },
   { name: `identifyAs`, title: `IdentifyAs widget` },
